@@ -1,7 +1,7 @@
 ---
 name: "✨FEATURE"
 about: Feature 작업 사항을 입력해주세요
-title: ''
+title: ex. [Feat] 새로운 기능
 labels: ''
 assignees: ''
 
