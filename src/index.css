@@ -1,1 +1,32 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Pretendard Variable';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/PretendardVariable.woff2') format('woff2-variations');
+}
+
+@theme {
+  --font-pretendard: 'Pretendard Variable';
+
+  /* Colors */
+  --color-main-pink: #ff6b7a; /* 메인컬러 */
+  --color-sub-green: #4a9b8e; /* 서브컬러 */
+  --color-point-gold: #d4a574; /* 포인트 컬러 */
+  --color-bg-white: #fefefe; /* 배경컬러 */
+  --color-main-text-navy: #2c3e50; /* 메인텍스트 */
+  --color-sub-text-gray: #8b9dc3; /* 서브텍스트 */
+  --color-bg-section: #f8f9fa; /* 섹션배경 */
+  --color-outline-gray: #e2e8f0; /* 외곽선 */
+  --color-hover-gray: #f3f4f6; /* 호버 */
+  --color-error-red: #e53e3e; /* 에러 */
+  --color-ph-gray: #a0aec0; /* 플레이스 홀더 컬러 */
+  --color-tag-bg: #f7fafc; /* 태그 배경 */
+
+  /* Shadows */
+  --shadow-light: 0 2px 8px rgba(100, 116, 139, 0.08); /* 라이트 그림자 */
+  --shadow-medium: 0 4px 16px rgba(100, 116, 139, 0.12); /* 미디움 그림자 */
+  --shadow-large: 0 8px 32px rgba(100, 116, 139, 0.16); /* 헤비 그림자 */
+}
