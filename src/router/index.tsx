@@ -6,6 +6,7 @@ import ToastMessage from '@/components/common/ToastMessage';
 import defaultLayout from '@/layouts/defaultLayout';
 import Header from '@/components/header/Header';
 import SearchHeader from '@/components/header/SearchHeader';
+import SearchBar from '@/components/searchBar/SearchBar';
 
 // 컴포넌트 테스트용 페이지
 const TestPage = () => {
@@ -23,6 +24,8 @@ const TestPage = () => {
       <ToastMessage message='테스트' />
       <Header />
       <SearchHeader />
+      <SearchBar placeholder='왈랄랄라' />
+      <SearchBar height='h-12' />
     </>
   );
 };
