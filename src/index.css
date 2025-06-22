@@ -13,6 +13,7 @@
 
   /* Colors */
   --color-main-pink: #ff6b7a; /* 메인컬러 */
+  --color-main-hover-pink: #ff5566; /* 메인컬러 */
   --color-sub-green: #4a9b8e; /* 서브컬러 */
   --color-point-gold: #d4a574; /* 포인트 컬러 */
   --color-bg-white: #fefefe; /* 배경컬러 */

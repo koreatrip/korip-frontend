@@ -59,7 +59,7 @@ const AuthInput = forwardRef<HTMLInputElement, TInputProps>(
         <div
           ref={containerRef}
           className={twMerge(
-            'bg-bg-white flex w-[440px] items-center rounded-lg border px-4 py-3 transition-all duration-200',
+            'bg-bg-white flex w-full items-center rounded-lg border px-4 py-3 transition-all duration-200',
             isFocused
               ? 'border-main-pink shadow-light'
               : 'shadow-light border-outline-gray hover:border-hover-gray'
