@@ -4,9 +4,14 @@ import Input from '@/components/common/Input';
 import ToastMessage from '@/components/common/ToastMessage';
 import Header from '@/components/header/Header';
 import SearchHeader from '@/components/header/SearchHeader';
+import ProfileCard from '@/components/MyPage/ProfileCard';
 import SearchBar from '@/components/searchBar/SearchBar';
 import defaultLayout from '@/layouts/defaultLayout';
 import MyPage from '@/pages/myPage';
+import FavoritePlacesPage from '@/pages/myPage/places';
+import TravelPlanPage from '@/pages/myPage/plan';
+import FavoriteRegionsPage from '@/pages/myPage/regions';
+
 import { createBrowserRouter } from 'react-router-dom';
 
 // 컴포넌트 테스트용 페이지
@@ -40,7 +45,16 @@ export const router = createBrowserRouter([
         index: true, // 또는 path: ''
         element: <TestPage />,
       },
-      { path: 'mypage', element: <MyPage /> }, // 테스트 페이지
+      {
+        path: 'mypage',
+        element: <MyPage />,
+        children: [
+          { index: true, element: <ProfileCard /> },
+          { path: 'plan', element: <TravelPlanPage /> },
+          { path: 'places', element: <FavoritePlacesPage /> },
+          { path: 'regions', element: <FavoriteRegionsPage /> },
+        ],
+      },
     ],
   },
 ]);
