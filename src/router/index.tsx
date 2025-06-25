@@ -1,12 +1,13 @@
-import { createBrowserRouter } from 'react-router-dom';
 import AuthInput from '@/components/auth/AuthInput';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import ToastMessage from '@/components/common/ToastMessage';
-import defaultLayout from '@/layouts/defaultLayout';
 import Header from '@/components/header/Header';
 import SearchHeader from '@/components/header/SearchHeader';
 import SearchBar from '@/components/searchBar/SearchBar';
+import defaultLayout from '@/layouts/defaultLayout';
+import MyPage from '@/pages/myPage';
+import { createBrowserRouter } from 'react-router-dom';
 
 // 컴포넌트 테스트용 페이지
 const TestPage = () => {
@@ -39,6 +40,7 @@ export const router = createBrowserRouter([
         index: true, // 또는 path: ''
         element: <TestPage />,
       },
+      { path: 'mypage', element: <MyPage /> }, // 테스트 페이지
     ],
   },
 ]);
