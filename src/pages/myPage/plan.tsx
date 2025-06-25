@@ -2,15 +2,15 @@ const TravelPlanPage = () => {
   const travelPlans = [
     {
       id: 1,
-      title: '서울 3박 4일 여행',
-      date: '2025-07-10 ~ 2025-07-13',
-      description: '맛집 탐방과 한강 자전거 코스 돌기!',
+      title: '경주 1박 2일 여행',
+      date: '2025-07-11 ~ 2025-07-12',
+      description: '맛집 탐방과 4발 자전거 코스 돌기!마작도, 술도 고기도! ',
     },
     {
       id: 2,
-      title: '제주도 2박 3일 여행',
-      date: '2025-08-01 ~ 2025-08-03',
-      description: '오름 등반, 바다 드라이브, 흑돼지 먹기',
+      title: '면접 보러가기,',
+      date: '2025-07-01 ~',
+      description: '두근두근 설렘설렘',
     },
   ];
 
