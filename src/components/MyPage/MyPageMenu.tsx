@@ -2,19 +2,19 @@ import { NavLink } from 'react-router-dom';
 
 const MyPageMenu = () => {
   return (
-    <nav className='w-full rounded-md bg-white p-6 shadow-md'>
+    <nav className='h-64 w-full rounded-lg bg-white p-6 shadow-md'>
       {/* 사용자 이름 */}
-      <div className='mb-6 text-xl font-bold text-slate-800'>김태율</div>
+      <div className='mb-6 text-4xl font-normal text-slate-800'>김태율</div>
 
       {/* 메뉴 목록 */}
-      <ul className='flex flex-col gap-4 text-sm'>
+      <ul className='m-4 flex flex-col gap-4 text-sm'>
         <li>
           <NavLink
             to='/mypage'
             end
             className={({ isActive }) =>
               isActive
-                ? 'font-semibold text-red-500'
+                ? 'font-semibold text-red-400'
                 : 'text-gray-700 hover:text-red-400'
             }
           >
@@ -26,7 +26,7 @@ const MyPageMenu = () => {
             to='/mypage/plan'
             className={({ isActive }) =>
               isActive
-                ? 'font-semibold text-red-500'
+                ? 'font-semibold text-red-400'
                 : 'text-gray-700 hover:text-red-400'
             }
           >
@@ -38,7 +38,7 @@ const MyPageMenu = () => {
             to='/mypage/places'
             className={({ isActive }) =>
               isActive
-                ? 'font-semibold text-red-500'
+                ? 'font-semibold text-red-400'
                 : 'text-gray-700 hover:text-red-400'
             }
           >
@@ -50,7 +50,7 @@ const MyPageMenu = () => {
             to='/mypage/regions'
             className={({ isActive }) =>
               isActive
-                ? 'font-semibold text-red-500'
+                ? 'font-semibold text-red-400'
                 : 'text-gray-700 hover:text-red-400'
             }
           >
