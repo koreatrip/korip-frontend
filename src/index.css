@@ -27,7 +27,16 @@
   --color-tag-bg: #f7fafc; /* 태그 배경 */
 
   /* Shadows */
-  --shadow-light: 0 2px 8px rgba(100, 116, 139, 0.08); /* 라이트 그림자 */
-  --shadow-medium: 0 4px 16px rgba(100, 116, 139, 0.12); /* 미디움 그림자 */
-  --shadow-large: 0 8px 32px rgba(100, 116, 139, 0.16); /* 헤비 그림자 */
+--shadow-light: 0 2px 8px #64748B14; /* 라이트 그림자 */
+--shadow-medium: 0 4px 16px #64748B1F; /* 미디움 그림자 */
+--shadow-large: 0 8px 32px #64748B29; /* 헤비 그림자 */
+
+/* Font Sizes and Line Heights */
+  --font-size-textMobile: 14px;
+  --font-size-textTabletAndDesktop: 16px;
+
+  /* 브레이크포인트 정의 */
+  --breakpoint-tablet-bp: 768px;
+  --breakpoint-desktop-bp: 1024px;
+
 }
