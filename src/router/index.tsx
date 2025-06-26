@@ -8,6 +8,8 @@ import Header from '@/components/header/Header';
 import SearchHeader from '@/components/header/SearchHeader';
 import SearchBar from '@/components/searchBar/SearchBar';
 
+import LoginPage from '../pages/loginPage';
+
 // 컴포넌트 테스트용 페이지
 const TestPage = () => {
   return (
@@ -32,12 +34,16 @@ const TestPage = () => {
 
 export const router = createBrowserRouter([
   {
-    path: '/', // path 추가
-    Component: defaultLayout, // 띄어쓰기 수정
+    path: '/',
+    Component: defaultLayout,
     children: [
       {
-        index: true, // 또는 path: ''
+        index: true,
         element: <TestPage />,
+      },
+      {
+        path: 'login',
+        element: <LoginPage />,
       },
     ],
   },
