@@ -6,11 +6,13 @@ import Header from '@/components/header/Header';
 import SearchHeader from '@/components/header/SearchHeader';
 import ProfileCard from '@/components/MyPage/ProfileCard';
 import SearchBar from '@/components/searchBar/SearchBar';
+
 import defaultLayout from '@/layouts/defaultLayout';
 import MyPage from '@/pages/myPage';
 import FavoritePlacesPage from '@/pages/myPage/places';
 import TravelPlanPage from '@/pages/myPage/plan';
 import FavoriteRegionsPage from '@/pages/myPage/regions';
+import LoginPage from '../pages/loginPage';
 
 import { createBrowserRouter } from 'react-router-dom';
 
@@ -38,18 +40,35 @@ const TestPage = () => {
 
 export const router = createBrowserRouter([
   {
-    path: '/', // path 추가
-    Component: defaultLayout, // 띄어쓰기 수정
+    path: '/',
+    Component: defaultLayout,
     children: [
       {
-        index: true, // 또는 path: ''
+        index: true,
         element: <TestPage />,
+      },
+      {
+        path: 'login',
+        element: <LoginPage />,
       },
       {
         path: 'mypage',
         element: <MyPage />,
         children: [
-          { index: true, element: <ProfileCard /> },
+          {
+            index: true,
+            element: (
+              <ProfileCard
+                onSave={(data) => {
+                  console.log('프로필 저장:', data);
+                  // 나중에 API 호출 로직 추가
+                }}
+                onCancel={() => {
+                  console.log('프로필 수정 취소');
+                }}
+              />
+            ),
+          },
           { path: 'plan', element: <TravelPlanPage /> },
           { path: 'places', element: <FavoritePlacesPage /> },
           { path: 'regions', element: <FavoriteRegionsPage /> },
