@@ -7,6 +7,8 @@ import defaultLayout from '@/layouts/defaultLayout';
 import Header from '@/components/header/Header';
 import SearchHeader from '@/components/header/SearchHeader';
 import SearchBar from '@/components/searchBar/SearchBar';
+import SearchLayout from '@/layouts/searchLayout';
+import RegionsPage from '@/pages/regionsPage';
 
 import LoginPage from '../pages/loginPage';
 
@@ -44,6 +46,16 @@ export const router = createBrowserRouter([
       {
         path: 'login',
         element: <LoginPage />,
+      },
+    ],
+  },
+  {
+    path: '/regions',
+    Component: SearchLayout,
+    children: [
+      {
+        path: '/regions/explore',
+        element: <RegionsPage />,
       },
     ],
   },
