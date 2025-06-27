@@ -49,23 +49,21 @@ const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
       isOpen={isOpen}
       onClose={handleClose}
       title='계정 탈퇴'
-      maxWidth='sm'
+      maxWidth='lg'
     >
       <div className='space-y-6'>
         {/* 안내 문구 */}
-        <div className='rounded-2xl border-2 border-orange-200 bg-orange-100 px-2 text-sm leading-relaxed font-light text-gray-600'>
+        <div className='rounded-2xl border-2 border-orange-200 bg-orange-50 p-2 px-4 text-lg leading-relaxed font-medium text-gray-600'>
           <p className='mb-2'>
             <span className='font-medium text-gray-950'>⚠ 주의:</span> 계정을
             삭제하면 모든 여행 계획, 즐겨찾기,
           </p>
-          <p>
-            개인정보가 영구적으로 삭제됩니다. 이 작업은 복구가 불가능합니다.
-          </p>
+          <p>개인정보가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.</p>
         </div>
 
         {/* 탈퇴 사유 선택 */}
         <div>
-          <h4 className='mb-3 text-sm font-medium text-gray-700'>
+          <h4 className='mb-3 text-lg font-medium text-gray-700'>
             탈퇴 사유를 선택해주세요
           </h4>
           <div className='space-y-3'>
@@ -75,29 +73,13 @@ const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
                   type='checkbox'
                   checked={selectedReasons.includes(reason)}
                   onChange={() => handleReasonToggle(reason)}
-                  className='text-main-pink focus:ring-main-pink h-4 w-4 rounded border-gray-300 focus:ring-2'
+                  className='text-main-pink focus:ring-main-pink h-4 w-4 rounded focus:ring-2'
                 />
                 <span className='ml-3 text-sm text-gray-700'>{reason}</span>
               </label>
             ))}
           </div>
         </div>
-
-        {/* 기타 사유 입력 */}
-        {selectedReasons.includes('기타') && (
-          <div>
-            <label className='mb-2 block text-sm font-medium text-gray-700'>
-              기타 사유를 입력해주세요
-            </label>
-            <textarea
-              value={customReason}
-              onChange={(e) => setCustomReason(e.target.value)}
-              placeholder='기타 탈퇴 사유를 구체적으로 입력해주세요'
-              className='focus:ring-main-pink focus:border-main-pink w-full resize-none rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2'
-              rows={3}
-            />
-          </div>
-        )}
 
         {/* 버튼들 */}
         <div className='gap-3 pt-4'>

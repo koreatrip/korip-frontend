@@ -41,11 +41,11 @@ const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   const maxWidthClasses = {
-    sm: 'max-w-sm',
-    md: 'max-w-md',
-    lg: 'max-w-lg',
-    xl: 'max-w-xl',
-    '2xl': 'max-w-2xl',
+    sm: 'w-[512px]',
+    md: 'w-[512px]',
+    lg: 'w-[512px]',
+    xl: 'w-[512px]',
+    '2xl': 'w-[512px]',
   };
 
   return (
@@ -60,31 +60,36 @@ const Modal: React.FC<ModalProps> = ({
 
       {/* 모달 컨텐츠 */}
       <div
-        className={`relative w-full ${maxWidthClasses[maxWidth]} mx-4 transform rounded-lg bg-white shadow-xl transition-all`}
+        className={`relative ${maxWidthClasses[maxWidth]} mx-4 flex h-[634px] transform flex-col rounded-lg bg-white shadow-xl transition-all`}
         role='dialog'
         aria-modal='true'
         onClick={(e) => e.stopPropagation()}
       >
         {/* 헤더 */}
         {(title || showCloseButton) && (
-          <div className='flex items-center justify-between border-b border-gray-200 p-6'>
-            <h3 className='text-main-text-navy text-lg font-semibold'>
-              {title}
-            </h3>
-            {showCloseButton && (
-              <button
-                onClick={onClose}
-                className='rounded-full p-1 text-black transition-colors'
-                aria-label='모달 닫기'
-              >
-                <XMarkIcon className='h-6 w-6' />
-              </button>
-            )}
+          <div className='flex-shrink-0'>
+            <div className='mx-4 mt-4 -mb-4 flex items-center justify-between p-6'>
+              <h3 className='text-main-text-navy text-2xl font-semibold'>
+                {title}
+              </h3>
+              {showCloseButton && (
+                <button
+                  onClick={onClose}
+                  className='rounded-full p-1 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-600'
+                  aria-label='모달 닫기'
+                >
+                  <XMarkIcon className='h-8 w-8 stroke-3' />
+                </button>
+              )}
+            </div>
+            <hr className='mx-10 border-1 border-gray-100' />
           </div>
         )}
 
         {/* 바디 */}
-        <div className='p-6'>{children}</div>
+        <div className='-mt-4 flex-1 overflow-y-auto p-10 font-medium'>
+          {children}
+        </div>
       </div>
     </div>
   );
