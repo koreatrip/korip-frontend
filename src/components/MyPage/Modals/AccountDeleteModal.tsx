@@ -16,12 +16,10 @@ const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [customReason, setCustomReason] = useState('');
 
-  // 피그마에서 보이는 탈퇴 사유들
   const deleteReasons = [
-    '서비스 이용빈도가 낮아서',
-    '개인정보 보호를 위해서',
-    '서비스에서 오류가 많아서',
-    '원하는 정보 부족',
+    '서비스를 사용하지 않음',
+    '서비스에 불만족',
+    '개인정보 보호 우려',
     '기타',
   ];
 
