@@ -6,6 +6,8 @@ import Header from '@/components/header/Header';
 import SearchHeader from '@/components/header/SearchHeader';
 import ProfileCard from '@/components/MyPage/ProfileCard';
 import SearchBar from '@/components/searchBar/SearchBar';
+import SearchLayout from '@/layouts/searchLayout';
+import RegionsPage from '@/pages/regionsPage';
 
 import defaultLayout from '@/layouts/defaultLayout';
 import MyPage from '@/pages/myPage';
@@ -73,6 +75,16 @@ export const router = createBrowserRouter([
           { path: 'places', element: <FavoritePlacesPage /> },
           { path: 'regions', element: <FavoriteRegionsPage /> },
         ],
+      },
+    ],
+  },
+  {
+    path: '/regions',
+    Component: SearchLayout,
+    children: [
+      {
+        path: '/regions/explore',
+        element: <RegionsPage />,
       },
     ],
   },
