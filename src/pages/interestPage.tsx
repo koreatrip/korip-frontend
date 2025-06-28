@@ -1,17 +1,37 @@
 import Button from '@/components/common/Button';
 import Container from '@/components/common/Container';
 import Input from '@/components/common/Input';
+import SelectButtonGroup from '@/components/common/selectButton/SelectButtonGroup';
 
 import WelcomeCard from '@/components/domain/login/WelcomeCard';
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const InterestPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+  };
+
+  const interests = [
+    { id: 'travel', label: '여행' },
+    { id: 'food', label: '맛집' },
+    { id: 'sports', label: '운동' },
+    { id: 'music', label: '음악' },
+    { id: 'art', label: '미술' },
+    { id: 'tech', label: 'IT' },
+    { id: 'book', label: '도서' },
+    { id: 'movie', label: '영화' },
+    { id: 'fashion', label: '패션' },
+    { id: 'game', label: '게임' },
+  ];
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+
+  const handleInterestsSelectionChange = (newSelectedIds: string[]) => {
+    setSelectedInterests(newSelectedIds);
+    console.log('선택된 관심사 ID:', newSelectedIds);
   };
 
   return (
@@ -45,6 +65,15 @@ const InterestPage = () => {
         </div>
 
         {/* 해시태그 필터링 */}
+
+        <SelectButtonGroup
+          options={interests}
+          initialSelectedIds={selectedInterests}
+          onSelectionChange={handleInterestsSelectionChange}
+          singleSelect={false}
+          className='py-2'
+        />
+
         {/* 디테일 카드 */}
         {/* 선택한 관심사 */}
 
