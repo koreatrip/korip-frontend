@@ -21,8 +21,6 @@ import DistrictListPage from '@/pages/districtListPage';
 import PlannerPage from '@/pages/plannerPage';
 import TravelTipsPage from '@/pages/travelTipsPage';
 
-import { createBrowserRouter } from 'react-router-dom';
-
 // 컴포넌트 테스트용 페이지
 const TestPage = () => {
   return (
@@ -85,27 +83,21 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: '/regions',
-    Component: SearchLayout,
-    children: [
 
-      {
-        path: 'explore/regions',
-        element: <RegionsPage />,
-      },
-      {
-        path: 'explore/districts',
-        element: <DistrictListPage />,
-      },
-      {
-        path: 'planner',
-        element: <PlannerPage />,
-      },
-      {
-        path: 'tips',
-        element: <TravelTipsPage />,
-      },
-    ],
+  {
+    path: 'explore/regions',
+    element: <RegionsPage />,
+  },
+  {
+    path: 'explore/districts',
+    element: <DistrictListPage />,
+  },
+  {
+    path: 'planner',
+    element: <PlannerPage />,
+  },
+  {
+    path: 'tips',
+    element: <TravelTipsPage />,
   },
 ]);
