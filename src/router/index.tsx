@@ -19,6 +19,7 @@ import PlannerPage from '@/pages/plannerPage';
 import RegionsPage from '@/pages/regionsPage';
 import SignUpPage from '@/pages/signUpPage';
 import TravelTipsPage from '@/pages/travelTipsPage';
+
 import { createBrowserRouter } from 'react-router-dom';
 import LoginPage from '../pages/loginPage';
 
