@@ -9,6 +9,7 @@ const LoginPage = () => {
     <div className='w-full flex-col items-center justify-center p-8'>
       <Container>
         <WelcomeCard
+          mainText='Welcome to Korip.'
           accountQuestionText="Don't have an account?"
           linkText='Sign Up'
           linkHref='/signup'

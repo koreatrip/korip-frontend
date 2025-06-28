@@ -13,6 +13,7 @@ import ExamplePage from '@/pages/examplePage';
 import DistrictListPage from '@/pages/districtListPage';
 import PlannerPage from '@/pages/plannerPage';
 import TravelTipsPage from '@/pages/travelTipsPage';
+import InterestPage from '@/pages/interestPage';
 
 // 컴포넌트 테스트용 페이지
 const TestPage = () => {
@@ -65,6 +66,10 @@ export const router = createBrowserRouter([
       {
         path: 'tips',
         element: <TravelTipsPage />,
+      },
+      {
+        path: 'interest',
+        element: <InterestPage />,
       },
     ],
   },
