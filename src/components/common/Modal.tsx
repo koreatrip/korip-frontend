@@ -1,4 +1,4 @@
-import { XMarkIcon } from '@heroicons/react/24/outline';
+
 import React, { createContext, useContext } from 'react';
 
 type TModalContextType = {
@@ -75,6 +75,7 @@ export const Footer = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className='flex justify-end space-x-3 rounded-b-2xl px-9 pb-8'>
       {children}
+
     </div>
   );
 };
@@ -85,3 +86,4 @@ export const Footer = ({ children }: { children: React.ReactNode }) => {
 Modal.Header = Header;
 Modal.Body = Body;
 Modal.Footer = Footer;
+
