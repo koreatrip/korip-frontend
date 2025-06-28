@@ -8,6 +8,7 @@ type TModalContextType = {
 type TModalProps = {
   isOpen: boolean;
   onClose: () => void;
+
   children: React.ReactNode;
 };
 
