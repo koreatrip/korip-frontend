@@ -1,13 +1,21 @@
-import type { DropdownItem } from '@/stores/useHeaderStore';
 import { motion, AnimatePresence } from 'framer-motion';
-type TDropdownProps = {
+
+export type TDropdownItem = {
+  value: string;
+  label: string;
+  onClick?: () => void;
+  href?: string;
+};
+
+export type TDropdownProps = {
   isOpen: boolean;
-  items: DropdownItem[];
+  items: TDropdownItem[];
   onClose: () => void;
   className?: string;
   position?: 'left' | 'right';
   width?: string;
 };
+
 const Dropdown = ({
   isOpen,
   items,
