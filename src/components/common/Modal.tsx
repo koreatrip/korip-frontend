@@ -1,98 +1,89 @@
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import React, { useEffect } from 'react';
 
-interface ModalProps {
+import React, { createContext, useContext } from 'react';
+
+type TModalContextType = {
+  onClose: () => void;
+};
+
+type TModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  title?: string;
   children: React.ReactNode;
-  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  showCloseButton?: boolean;
-}
+};
 
-const Modal: React.FC<ModalProps> = ({
-  isOpen,
-  onClose,
-  title,
-  children,
-  maxWidth = 'md',
-  showCloseButton = true,
-}) => {
-  // ESC 키로 모달 닫기
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
+/**
+ * --- Context 생성 ---
+ * onClose 함수를 자식들에게 물려주기 위해 Context를 사용 (Prop Drilling 방지)
+ * */
+const ModalContext = createContext<TModalContextType | null>(null);
 
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      // 배경 스크롤 방지
-      document.body.style.overflow = 'hidden';
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen, onClose]);
-
+/**
+ * 메인 Modal 컴포넌트
+ */
+export const Modal = ({ isOpen, onClose, children }: TModalProps) => {
   if (!isOpen) return null;
 
-  const maxWidthClasses = {
-    sm: 'w-[512px]',
-    md: 'w-[512px]',
-    lg: 'w-[512px]',
-    xl: 'w-[512px]',
-    '2xl': 'w-[512px]',
-  };
-
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center'>
-      {/* 배경 오버레이 */}
+    <ModalContext.Provider value={{ onClose }}>
+      {/* Modal Backdrop (배경) */}
       <div
-        className='fixed inset-0 transition-opacity'
-        style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+        className='bg-main-text-navy/40 fixed inset-0 z-50 flex items-center justify-center'
         onClick={onClose}
-        aria-hidden='true'
-      />
-
-      {/* 모달 컨텐츠 */}
-      <div
-        className={`relative ${maxWidthClasses[maxWidth]} mx-4 flex h-[634px] transform flex-col rounded-lg bg-white shadow-xl transition-all`}
-        role='dialog'
-        aria-modal='true'
-        onClick={(e) => e.stopPropagation()}
       >
-        {/* 헤더 */}
-        {(title || showCloseButton) && (
-          <div className='flex-shrink-0'>
-            <div className='mx-4 mt-4 -mb-4 flex items-center justify-between p-6'>
-              <h3 className='text-main-text-navy text-2xl font-semibold'>
-                {title}
-              </h3>
-              {showCloseButton && (
-                <button
-                  onClick={onClose}
-                  className='rounded-full p-1 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-600'
-                  aria-label='모달 닫기'
-                >
-                  <XMarkIcon className='h-8 w-8 stroke-3' />
-                </button>
-              )}
-            </div>
-            <hr className='mx-10 border-1 border-gray-100' />
-          </div>
-        )}
-
-        {/* 바디 */}
-        <div className='-mt-4 flex-1 overflow-y-auto p-10 font-medium'>
+        {/* Modal Panel (내용이 들어가는 흰색 박스) */}
+        <div
+          className='bg-bg-white shadow-medium relative flex w-full max-w-lg flex-col rounded-2xl'
+          onClick={(e) => e.stopPropagation()} // 모달 내부 클릭 시 닫히는 현상 방지
+        >
           {children}
         </div>
+      </div>
+    </ModalContext.Provider>
+  );
+};
+
+// --- Modal Header ---
+export const Header = ({ children }: { children?: React.ReactNode }) => {
+  const { onClose } = useContext(ModalContext)!;
+  return (
+    <div className='flex items-center px-9 pt-8 pb-5'>
+      <div className='border-outline-gray flex w-full items-center justify-between border-b pb-4'>
+        <h3 className='text-2xl font-semibold text-gray-800'>{children}</h3>
+        <button onClick={onClose} className='cursor-pointer'>
+          <XMarkIcon className='text-main-text-navy h-8 w-8 stroke-2' />
+        </button>
       </div>
     </div>
   );
 };
 
-export default Modal;
+/**
+ * 모달 바디
+ * @param param0
+ * @returns
+ */
+export const Body = ({ children }: { children: React.ReactNode }) => {
+  return <div className='overflow-y-auto px-9'>{children}</div>;
+};
+
+/**
+ * 모달 푸터
+ * @param param0 버튼
+ * @returns
+ */
+export const Footer = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className='flex justify-end space-x-3 rounded-b-2xl px-9 pb-8'>
+      {children}
+
+    </div>
+  );
+};
+
+/**
+ * 컴파운드 컴포넌트로 사용하기 위해 각 컴포넌트를 Modal의 속성으로 할당
+ */
+Modal.Header = Header;
+Modal.Body = Body;
+Modal.Footer = Footer;
+

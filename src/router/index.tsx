@@ -1,12 +1,13 @@
-import AuthInput from '@/components/auth/AuthInput';
+import ProfileCard from '@/components/MyPage/ProfileCard';
+import { createBrowserRouter } from 'react-router-dom';
+import AuthInput from '@/components/domain/auth/AuthInput';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import ToastMessage from '@/components/common/ToastMessage';
-import Header from '@/components/header/Header';
-import SearchHeader from '@/components/header/SearchHeader';
-import ProfileCard from '@/components/MyPage/ProfileCard';
-import SearchBar from '@/components/searchBar/SearchBar';
-import SearchLayout from '@/layouts/searchLayout';
+
+import Header from '@/components/common/Header';
+import SearchBar from '@/components/common/searchBar/SearchBar';
+
 import RegionsPage from '@/pages/regionsPage';
 
 import defaultLayout from '@/layouts/defaultLayout';
@@ -15,6 +16,10 @@ import FavoritePlacesPage from '@/pages/myPage/places';
 import TravelPlanPage from '@/pages/myPage/plan';
 import FavoriteRegionsPage from '@/pages/myPage/regions';
 import LoginPage from '../pages/loginPage';
+import ExamplePage from '@/pages/examplePage';
+import DistrictListPage from '@/pages/districtListPage';
+import PlannerPage from '@/pages/plannerPage';
+import TravelTipsPage from '@/pages/travelTipsPage';
 
 import { createBrowserRouter } from 'react-router-dom';
 
@@ -33,9 +38,10 @@ const TestPage = () => {
       <Input />
       <ToastMessage message='테스트' />
       <Header />
-      <SearchHeader />
+      <Header variant='search' />
       <SearchBar placeholder='왈랄랄라' />
       <SearchBar height='h-12' />
+      <ExamplePage />
     </>
   );
 };
@@ -53,6 +59,7 @@ export const router = createBrowserRouter([
         path: 'login',
         element: <LoginPage />,
       },
+
       {
         path: 'mypage',
         element: <MyPage />,
@@ -82,9 +89,22 @@ export const router = createBrowserRouter([
     path: '/regions',
     Component: SearchLayout,
     children: [
+
       {
-        path: '/regions/explore',
+        path: 'explore/regions',
         element: <RegionsPage />,
+      },
+      {
+        path: 'explore/districts',
+        element: <DistrictListPage />,
+      },
+      {
+        path: 'planner',
+        element: <PlannerPage />,
+      },
+      {
+        path: 'tips',
+        element: <TravelTipsPage />,
       },
     ],
   },
