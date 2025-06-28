@@ -54,7 +54,7 @@ const InfoCard = ({
         {/* 즐겨찾기(별) 버튼 */}
         <button
           onClick={onFavorite}
-          className='absolute top-3 right-3 z-50 cursor-pointer'
+          className='absolute top-3 right-3 z-30 cursor-pointer'
         >
           <img src={star} alt='star' />
         </button>
