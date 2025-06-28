@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import AccountDeleteModal from './Modals/AccountDeleteModal';
 import PasswordChangeModal from './Modals/PasswordChangeModal';
@@ -5,6 +6,14 @@ import AccountStatsSection from './Sections/AccountStatsSection';
 import BasicInfoSection from './Sections/BasicInfoSection';
 import SecuritySection from './Sections/SecuritySection';
 
+=======
+import { CameraIcon } from '@heroicons/react/24/outline';
+import React, { useState } from 'react';
+import Button from '../common/Button';
+import Input from '../common/Input';
+
+// 타입 정의 (나중에 types/user.ts로 이동)
+>>>>>>> 1b8f815 (feat: 마이페이지 작업중2)
 interface UserProfile {
   name: string;
   email: string;
@@ -31,9 +40,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   onCancel,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
+<<<<<<< HEAD
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+=======
+>>>>>>> 1b8f815 (feat: 마이페이지 작업중2)
   const [formData, setFormData] = useState<UserProfile>(
     initialData || {
       name: 'Taeyul',
@@ -41,15 +53,31 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       phone: '010-1234-5678',
       interests: ['K-POP', '한식', '여행'],
       joinDate: '2025.06.07',
+<<<<<<< HEAD
       stats: { travelPlans: 3, favorites: 12, visitedPlaces: 28 },
+=======
+      stats: {
+        travelPlans: 3,
+        favorites: 12,
+        visitedPlaces: 28,
+      },
+>>>>>>> 1b8f815 (feat: 마이페이지 작업중2)
     }
   );
 
   const [tempFormData, setTempFormData] = useState<UserProfile>(formData);
 
+<<<<<<< HEAD
   // 핸들러 함수들
   const handleInputChange = (field: keyof UserProfile, value: string) => {
     setTempFormData((prev) => ({ ...prev, [field]: value }));
+=======
+  const handleInputChange = (field: keyof UserProfile, value: string) => {
+    setTempFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+>>>>>>> 1b8f815 (feat: 마이페이지 작업중2)
   };
 
   const handleInterestAdd = (interest: string) => {
