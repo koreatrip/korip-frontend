@@ -5,7 +5,6 @@ import AccountStatsSection from './Sections/AccountStatsSection';
 import BasicInfoSection from './Sections/BasicInfoSection';
 import SecuritySection from './Sections/SecuritySection';
 
-// 타입 정의 (나중에 types/user.ts로 이동)
 interface UserProfile {
   name: string;
   email: string;
