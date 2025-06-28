@@ -38,4 +38,6 @@
   /* 브레이크포인트 정의 */
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
+  --breakpoint-tablet-bp: 768px;
+  --breakpoint-desktop-bp: 1024px;
 }
