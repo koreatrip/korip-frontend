@@ -1,4 +1,4 @@
-import MyPageLayout from '@/components/MyPage/MyPageLayout';
+import MyPageLayout from '@/components/domain/myPage/MyPageLayout';
 import { Outlet } from 'react-router-dom';
 
 const MyPage = () => {
