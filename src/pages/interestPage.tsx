@@ -2,9 +2,7 @@ import Button from '@/components/common/Button';
 import Container from '@/components/common/Container';
 import Input from '@/components/common/Input';
 import SelectButtonGroup from '@/components/common/selectButton/SelectButtonGroup';
-
 import WelcomeCard from '@/components/domain/login/WelcomeCard';
-
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 
@@ -36,7 +34,7 @@ const InterestPage = () => {
 
   return (
     <Container>
-      <div className='m-auto max-w-[440px]'>
+      <div className='m-auto max-w-[540px] flex-col items-center justify-center p-8'>
         <WelcomeCard
           mainText='관심사를 선택하세요'
           accountQuestionText='Korip에서 추천하는 관심사예요.'
@@ -65,7 +63,6 @@ const InterestPage = () => {
         </div>
 
         {/* 해시태그 필터링 */}
-
         <SelectButtonGroup
           options={interests}
           initialSelectedIds={selectedInterests}
@@ -73,7 +70,6 @@ const InterestPage = () => {
           singleSelect={false}
           className='py-2'
         />
-
         {/* 디테일 카드 */}
         {/* 선택한 관심사 */}
 
