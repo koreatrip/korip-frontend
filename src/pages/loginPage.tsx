@@ -6,19 +6,19 @@ import Container from '@/components/common/Container';
 
 const LogInPage = () => {
   return (
-    <div className='w-full flex-col items-center justify-center p-8'>
-      <Container>
+    <Container>
+      <div className='m-auto max-w-[540px] flex-col items-center justify-center p-8'>
         <WelcomeCard
-          mainText='Welcome to Korip'
+          mainText='Welcome to Korip.'
           accountQuestionText="Don't have an account?"
           linkText='Sign Up'
-          linkHref='/signup'
+          linkHref='/register'
         />
         <LoginForm />
         <HorizonLine text='Or continue with  ' />
         <SocialLoginButtons />
-      </Container>
-    </div>
+      </div>
+    </Container>
   );
 };
 

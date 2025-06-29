@@ -20,6 +20,8 @@ import ExamplePage from '@/pages/examplePage';
 import DistrictListPage from '@/pages/districtListPage';
 import PlannerPage from '@/pages/plannerPage';
 import TravelTipsPage from '@/pages/travelTipsPage';
+import InterestPage from '@/pages/interestPage';
+import SignUpPage from '@/pages/signUpPage';
 
 // 컴포넌트 테스트용 페이지
 const TestPage = () => {
@@ -57,6 +59,10 @@ export const router = createBrowserRouter([
         path: 'login',
         element: <LoginPage />,
       },
+        {
+        path: 'register',
+        element: <SignUpPage />,
+      },
       {
         path: 'mypage',
         element: <MyPage />,
@@ -79,6 +85,10 @@ export const router = createBrowserRouter([
           { path: 'places', element: <FavoritePlacesPage /> },
           { path: 'regions', element: <FavoriteRegionsPage /> },
         ],
+      },
+      {
+        path: 'interest',
+        element: <InterestPage />,
       },
     ],
   },

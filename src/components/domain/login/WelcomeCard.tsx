@@ -3,10 +3,9 @@ import Logo from '@/assets/header/logo_sm.svg';
 type WelcomeCardProps = {
   mainText: string;
   accountQuestionText: string | React.ReactNode;
-  linkText: string;
-  linkHref: string;
+  linkText?: string;
+  linkHref?: string;
 };
-
 const WelcomeCard = ({
   mainText,
   accountQuestionText,
@@ -20,20 +19,22 @@ const WelcomeCard = ({
         alt='Small Logo'
         width='117'
         height='30'
-        className='mb-8'
+        className='mb-4'
       />
-      <h1 className='p-2 text-2xl font-bold text-gray-800 md:text-3xl'>
+      <h1 className='text-main-text-navy p-2 text-2xl font-bold md:text-3xl'>
         {mainText}
       </h1>
-      <p className='md:text-md text-sm text-gray-600'>
+      <p className='md:text-md text-sub-text-gray text-sm'>
         {' '}
         {accountQuestionText}{' '}
-        <a
-          href={linkHref}
-          className='text-gray-800 underline hover:text-gray-900'
-        >
-          {linkText}
-        </a>
+        {linkText && linkHref && (
+          <a
+            href={linkHref}
+            className='text-sub-text-gray hover:text-main-text-navy underline'
+          >
+            {linkText}
+          </a>
+        )}
       </p>
     </div>
   );
