@@ -1,4 +1,10 @@
-import React, { type ReactNode, forwardRef, useRef, useState } from 'react';
+import React, {
+  type ReactNode,
+  forwardRef,
+  useRef,
+  useState,
+  useEffect,
+} from 'react';
 import { twMerge } from 'tailwind-merge';
 import { XCircleIcon } from '@heroicons/react/24/outline';
 
@@ -10,13 +16,37 @@ type TInputProps = Omit<React.ComponentPropsWithoutRef<'input'>, 'type'> & {
 };
 
 const AuthInput = forwardRef<HTMLInputElement, TInputProps>(
-  ({ label, children, className, onBlur, onClear, ...rest }, ref) => {
+  ({ label, children, className, onBlur, onClear, value, ...rest }, ref) => {
     const [isFocused, setIsFocused] = useState(false);
     const [inputValue, setInputValue] = useState(
-      rest.value || rest.defaultValue || ''
+      value !== undefined
+        ? value
+        : rest.defaultValue !== undefined
+          ? rest.defaultValue
+          : '' // 초기값 설정 수정
     );
     const inputRef = useRef<HTMLInputElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+
+    const mergedRef = React.useMemo(() => {
+      if (!ref) return inputRef; // 외부 ref가 없으면 내부 ref 사용
+      return (instance: HTMLInputElement | null) => {
+        inputRef.current = instance; // 내부 ref 설정
+        if (typeof ref === 'function') {
+          ref(instance); // 함수 ref 호출
+        } else if (ref) {
+          (ref as React.MutableRefObject<HTMLInputElement | null>).current =
+            instance; // RefObject 설정
+        }
+      };
+    }, [ref, inputRef]);
+
+    // [중요] props.value가 변경될 때 inputValue를 동기화하는 useEffect
+    useEffect(() => {
+      if (value !== undefined && value !== inputValue) {
+        setInputValue(value);
+      }
+    }, [value, inputValue]);
 
     const handleContainerClick = () => {
       inputRef.current?.focus();
@@ -68,7 +98,7 @@ const AuthInput = forwardRef<HTMLInputElement, TInputProps>(
           tabIndex={0}
         >
           <input
-            ref={inputRef}
+            ref={mergedRef}
             className={twMerge(
               'placeholder:text-ph-gray text-main-text-navy flex-1 border-0 bg-transparent outline-none',
               className
@@ -76,6 +106,8 @@ const AuthInput = forwardRef<HTMLInputElement, TInputProps>(
             onFocus={() => setIsFocused(true)}
             onBlur={handleBlur}
             onChange={handleInputChange}
+            value={value !== undefined ? inputValue : undefined}
+            defaultValue={value === undefined ? rest.defaultValue : undefined}
             {...rest}
           />
 
