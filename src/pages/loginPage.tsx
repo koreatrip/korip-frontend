@@ -4,7 +4,7 @@ import WelcomeCard from '@/components/domain/login/WelcomeCard';
 import SocialLoginButtons from '@/components/domain/login/SocialLoginButtons';
 import Container from '@/components/common/Container';
 
-const LoginPage = () => {
+const LogInPage = () => {
   return (
     <div className='w-full flex-col items-center justify-center p-8'>
       <Container>
@@ -22,4 +22,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LogInPage;

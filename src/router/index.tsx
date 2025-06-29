@@ -1,14 +1,21 @@
+import ProfileCard from '@/components/MyPage/ProfileCard';
 import { createBrowserRouter } from 'react-router-dom';
 import AuthInput from '@/components/domain/auth/AuthInput';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import ToastMessage from '@/components/common/ToastMessage';
-import defaultLayout from '@/layouts/defaultLayout';
+
 import Header from '@/components/common/Header';
 import SearchBar from '@/components/common/searchBar/SearchBar';
+
 import RegionsPage from '@/pages/regionsPage';
 
-import LoginPage from '../pages/loginPage';
+import defaultLayout from '@/layouts/defaultLayout';
+import MyPage from '@/pages/myPage';
+import FavoritePlacesPage from '@/pages/myPage/places';
+import TravelPlanPage from '@/pages/myPage/plan';
+import FavoriteRegionsPage from '@/pages/myPage/regions';
+import LoginPage from '@/pages/loginPage';
 import ExamplePage from '@/pages/examplePage';
 import DistrictListPage from '@/pages/districtListPage';
 import PlannerPage from '@/pages/plannerPage';
@@ -52,25 +59,49 @@ export const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
-        path: 'explore/regions',
-        element: <RegionsPage />,
-      },
-      {
-        path: 'explore/districts',
-        element: <DistrictListPage />,
-      },
-      {
-        path: 'planner',
-        element: <PlannerPage />,
-      },
-      {
-        path: 'tips',
-        element: <TravelTipsPage />,
+        path: 'mypage',
+        element: <MyPage />,
+        children: [
+          {
+            index: true,
+            element: (
+              <ProfileCard
+                onSave={(data) => {
+                  console.log('프로필 저장:', data);
+                  // 나중에 API 호출 로직 추가
+                }}
+                onCancel={() => {
+                  console.log('프로필 수정 취소');
+                }}
+              />
+            ),
+          },
+          { path: 'plan', element: <TravelPlanPage /> },
+          { path: 'places', element: <FavoritePlacesPage /> },
+          { path: 'regions', element: <FavoriteRegionsPage /> },
+        ],
       },
       {
         path: 'interest',
         element: <InterestPage />,
       },
     ],
+  },
+
+  {
+    path: 'explore/regions',
+    element: <RegionsPage />,
+  },
+  {
+    path: 'explore/districts',
+    element: <DistrictListPage />,
+  },
+  {
+    path: 'planner',
+    element: <PlannerPage />,
+  },
+  {
+    path: 'tips',
+    element: <TravelTipsPage />,
   },
 ]);

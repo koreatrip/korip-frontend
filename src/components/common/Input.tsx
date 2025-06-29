@@ -36,7 +36,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       <div className='relative w-full'>
         <input
           ref={inputRef}
-          className='ring-outline-gray shadow-light placeholder:text-outline-gray focus:ring-main-pink shadow-dark-50 w-full rounded-lg border-0 px-4 py-4 ring-1 outline-none ring-inset focus:ring-2 focus:ring-inset'
+          className='ring-outline-gray placeholder:text-outline-gray focus:ring-main-pink shadow-light w-full rounded-lg border-0 px-4 py-4 ring-1 outline-none ring-inset focus:ring-2 focus:ring-inset'
           onChange={handleInputChange}
           {...props}
         />
