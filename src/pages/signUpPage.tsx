@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Container from '@/components/common/Container';
 import HorizonLine from '@/components/common/HorizonLine';
 import ToastMessage from '@/components/common/ToastMessage';
@@ -5,113 +6,252 @@ import AuthInput from '@/components/domain/auth/AuthInput';
 import SocialLoginButtons from '@/components/domain/login/SocialLoginButtons';
 import WelcomeCard from '@/components/domain/login/WelcomeCard';
 
-import { useForm } from "react-hook-form"
+import { useForm } from 'react-hook-form'; // FieldErrors 타입 임포트
+import { z } from 'zod'; // Zod 스키마 정의를 위해 임포트
+import { zodResolver } from '@hookform/resolvers/zod';
+import Button from '@/components/common/Button';
 
-  type SignUpFormInputs = {
-  email: string;
-  verificationCode: number; // 비밀번호 필드를 추가할 경우
-  name:string;
-  phoneNumber:string;
-  password:string;
-  confirmPassword:string;
-  // 다른 필드들...
-};
+// Zod 스키마 정의 (유효성 검사를 강화하고 SignUpFormInputs 타입을 정의합니다)
+const signUpSchema = z
+  .object({
+    email: z.string().email('유효한 이메일 주소를 입력해주세요.'),
+    // verificationCode는 input value가 string이므로 string으로 받고, optional 처리
+    verificationCode: z.string().optional(),
+    name: z
+      .string()
+      .min(2, '이름은 최소 2자 이상이어야 합니다.')
+      .max(50, '이름은 50자를 초과할 수 없습니다.'),
+    phoneNumber: z
+      .string()
+      .regex(
+        /^010-\d{4}-\d{4}$/,
+        '유효한 전화번호 형식(010-XXXX-XXXX)을 입력해주세요.'
+      )
+      .optional()
+      .or(z.literal('')), // 빈 문자열도 허용하도록 추가
+    password: z.string().min(6, '비밀번호는 최소 6자 이상이어야 합니다.'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: '비밀번호가 일치하지 않습니다.',
+    path: ['confirmPassword'], // 에러 메시지가 표시될 필드
+  });
+
+// Zod 스키마로부터 폼 데이터 타입 추론
+type SignUpFormInputs = z.infer<typeof signUpSchema>;
 
 const SignUpPage = () => {
+  // ToastMessage 상태 관리
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState<'success' | 'error' | 'info'>(
+    'info'
+  );
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid }, // errors 객체를 가져와 유효성 검사 메시지 표시
+    formState: { errors, isValid, isSubmitting }, // isSubmitting 상태도 가져와 제출 중 UI 처리
+    setValue, // react-hook-form의 setValue 함수 가져오기 (AuthInput의 onClear 연동)
+    // watch, // 비밀번호 확인 등 필요 시 watch 함수 사용 가능
+    // getValues, // 특정 필드 값 가져오기 (필요 시)
   } = useForm<SignUpFormInputs>({
-    mode: 'onBlur', // 또는 'onChange', 'onSubmit' 등 유효성 검사 트리거 설정
-  
+    resolver: zodResolver(signUpSchema), // Zod Resolver 연동
+    mode: 'onBlur', // 필드에서 포커스를 잃을 때 유효성 검사
+    defaultValues: {
+      // 폼 초기값 설정 (선택 사항)
+      email: '',
+      verificationCode: '',
+      name: '',
+      phoneNumber: '',
+      password: '',
+      confirmPassword: '',
+    },
   });
 
-const onSubmit = (data: SignUpFormInputs) => {
-    console.log('폼 데이터:', data);
-    alert(`회원가입 시도: ${data.email}`);
+  const onSubmit = async (data: SignUpFormInputs) => {
+    console.log('회원가입 폼 데이터:', data);
+    // alert(`회원가입 시도: ${data.email}`); // alert() 제거, ToastMessage로 대체
+
+    // 실제 회원가입 API 호출 로직 (비동기)
+    try {
+      // await yourSignUpApiCall(data); // 실제 API 호출 주석 처리
+      setToastMessage('회원가입에 성공했습니다! 로그인 페이지로 이동합니다.');
+      setToastType('success');
+      setShowToast(true);
+      // 성공 후 리디렉션 처리 (예: navigate('/login'))
+    } catch (error) {
+      setToastMessage('회원가입에 실패했습니다. 다시 시도해주세요.');
+      setToastType('error');
+      setShowToast(true);
+      console.error('회원가입 오류:', error);
+    }
   };
 
+  // AuthInput의 onClear prop에 연결할 함수
+  // AuthInput에서 (name, value)를 전달받아 react-hook-form의 setValue를 호출합니다.
+  const handleAuthInputClear = (
+    fieldName: keyof SignUpFormInputs,
+    value: string
+  ) => {
+    setValue(fieldName, value, {
+      shouldValidate: true, // 클리어 후 유효성 재검사 (선택 사항)
+      shouldDirty: true, // 필드가 dirty 상태로 표시되도록 (선택 사항)
+      shouldTouch: true, // 필드가 touched 상태로 표시되도록 (선택 사항)
+    });
+  };
 
   return (
     <Container>
-      <div className='m-auto max-w-[540px] flex-col items-center justify-center p-8'>
-      <WelcomeCard
-        mainText='Create an account.'
-        accountQuestionText={
-          <>
-            Enter your email below to create your account.
-            <br />
-            Or if you already have an account
-          </>
-        }
-        linkHref='login'
-        linkText='Log in'
-      />
-
-
-      {/* 회원가입 폼 */}
-    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className='m-auto flex max-w-[540px] flex-col items-center justify-center p-8'>
+        <WelcomeCard
+          mainText='Create an account.'
+          accountQuestionText={
+            <>
+              Enter your email below to create your account.
+              <br />
+              Or if you already have an account
+            </>
+          }
+          linkHref='login'
+          linkText='Log in'
+        />
+        {/* 회원가입 폼 */}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className='mt-8 flex w-full flex-col gap-4'
+        >
+          {/* Email 필드 */}
           <AuthInput
-            // register 함수를 스프레드 연산자로 AuthInput에 전달합니다.
-            {...register('email', {
-              required: '올바른 이메일 형식이 아닙니다.',
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                message: '올바른 이메일 형식이 아닙니다.',
-              },
-            })}
+            {...register('email')}
             type='email'
-            label='Email' // label prop 추가
+            label='Email'
             placeholder='k@example.com'
-            id='email' // id prop 추가 (label과 연결)
+            id='email'
+            onClear={(name, value) =>
+              handleAuthInputClear(name as keyof SignUpFormInputs, value)
+            } // onClear 연결
+            autoComplete='email' // 자동 완성 속성 추가
+            className='mb-2'
           />
           {errors.email && (
-            <p className='text-red-500 text-sm my-2'>{errors.email.message}</p>
+            <p className='pb-1 text-sm text-red-500'>{errors.email.message}</p>
           )}
 
           <AuthInput
-            {...register('password', {
-              required: '비밀번호는 필수 입력입니다.',
-              minLength: {
-                value: 6,
-                message: '비밀번호는 최소 6자 이상이어야 합니다.',
-              },
-            })}
+            {...register('verificationCode')}
+            type='number' // Zod는 string을 받지만, input type은 number로 설정 가능 (브라우저 유효성 도움)
+            label='인증 코드 (선택 사항)'
+            placeholder='인증 코드를 입력해주세요.'
+            id='verificationCode'
+            onClear={(name, value) =>
+              handleAuthInputClear(name as keyof SignUpFormInputs, value)
+            }
+            className='mb-2'
+          />
+          {errors.verificationCode && (
+            <p className='pb-1 text-sm text-red-500'>
+              {errors.verificationCode.message}
+            </p>
+          )}
+
+          {/* 이름 필드 */}
+          <AuthInput
+            {...register('name')}
+            type='text'
+            label='이름'
+            placeholder='이름을 입력해주세요.'
+            id='name'
+            onClear={(name, value) =>
+              handleAuthInputClear(name as keyof SignUpFormInputs, value)
+            }
+            className='mb-2'
+            autoComplete='name'
+          />
+          {errors.name && (
+            <p className='pb-1 text-sm text-red-500'>{errors.name.message}</p>
+          )}
+
+          {/* 전화번호 필드 (선택 사항) */}
+          <AuthInput
+            {...register('phoneNumber')}
+            type='text'
+            label='전화번호 (선택 사항)'
+            placeholder='010-XXXX-XXXX'
+            id='phoneNumber'
+            onClear={(name, value) =>
+              handleAuthInputClear(name as keyof SignUpFormInputs, value)
+            }
+            className='mb-2'
+            autoComplete='tel'
+          />
+          {errors.phoneNumber && (
+            <p className='pb-1 text-sm text-red-500'>
+              {errors.phoneNumber.message}
+            </p>
+          )}
+
+          {/* 비밀번호 필드 */}
+          <AuthInput
+            {...register('password')}
             type='password'
             label='비밀번호'
             placeholder='비밀번호를 입력해주세요.'
             id='password'
-            className='mt-4' // Tailwind CSS margin-top 추가 예시
+            onClear={(name, value) =>
+              handleAuthInputClear(name as keyof SignUpFormInputs, value)
+            }
+            className='mb-2'
+            autoComplete='new-password' // 새 비밀번호 자동 완성
           />
           {errors.password && (
-            <p className='text-red-500 text-sm mt-1'>
+            <p className='pb-1 text-sm text-red-500'>
               {errors.password.message}
             </p>
           )}
 
+          {/* 비밀번호 확인 필드 */}
+          <AuthInput
+            {...register('confirmPassword')}
+            type='password'
+            label='비밀번호 확인'
+            placeholder='비밀번호를 다시 입력해주세요.'
+            id='confirmPassword'
+            onClear={(name, value) =>
+              handleAuthInputClear(name as keyof SignUpFormInputs, value)
+            }
+            className='mb-2'
+            autoComplete='new-password' // 새 비밀번호 확인 자동 완성
+          />
+          {errors.confirmPassword && (
+            <p className='pb-1 text-sm text-red-500'>
+              {errors.confirmPassword.message}
+            </p>
+          )}
+
           {/* 폼 제출 버튼 */}
-          <button
+          <Button
             type='submit'
-            className='w-full bg-blue-500 text-white py-3 rounded-lg mt-6 hover:bg-blue-600 transition-colors duration-200'
-            disabled={!isValid} // 유효성 검사를 통과해야 버튼 활성화 (선택 사항)
+            variant='active'
+            className='mt-6 w-full py-3.5' // 높이를 AuthInput과 유사하게 조정
+            disabled={isSubmitting || !isValid} // 제출 중이거나 폼이 유효하지 않을 때 비활성화
           >
-            계정 생성
-          </button>
+            {isSubmitting ? '계정 생성 중...' : '계정 생성'}
+          </Button>
         </form>
-
-      {/* 회원가입 폼 끝 */}
-      <HorizonLine text='Or continue with  ' />
-      <SocialLoginButtons />
-
-      <ToastMessage
-        message='이미 있는 회원입니다.'
-        type='error'
-        duration={3000}
-        onClose={() => console.log('Toast closed')}
-      />
-    </div>
+        <HorizonLine text='Or continue with' className='my-8' />{' '}
+        {/* 마진 추가 */}
+        <SocialLoginButtons className={'w-full'} />
+        {/* ToastMessage 조건부 렌더링 */}
+        {showToast && (
+          <ToastMessage
+            message={toastMessage}
+            type={toastType}
+            duration={3000}
+            onClose={() => setShowToast(false)} // 토스트 닫힐 때 상태 초기화
+          />
+        )}
+      </div>
     </Container>
   );
 };
