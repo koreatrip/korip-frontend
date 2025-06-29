@@ -48,8 +48,8 @@ const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title='계정 탈퇴'
-      maxWidth='lg'
+      // title='계정 탈퇴'
+      // maxWidth='lg'
     >
       <div className='space-y-6'>
         {/* 안내 문구 */}
