@@ -1,21 +1,22 @@
 import HorizonLine from '@/components/common/HorizonLine';
-import LoginForm from '@/components/login/LoginForm';
+import LogInForm from '@/components/login/LogInForm';
 import WelcomeCard from '@/components/login/WelcomeCard';
 import SocialLoginButtons from '@/components/login/SocialLoginButtons';
 
-const LoginPage = () => {
+const LogInPage = () => {
   return (
-    <div className='w-full flex-col items-center justify-center p-8'>
+    <div className='m-auto max-w-[500px] flex-col items-center justify-center px-8'>
       <WelcomeCard
+        mainText='Welcome to Korip.'
         accountQuestionText="Don't have an account?"
         linkText='Sign Up'
         linkHref='/signup'
       />
-      <LoginForm />
+      <LogInForm />
       <HorizonLine text='Or continue with  ' />
       <SocialLoginButtons />
     </div>
   );
 };
 
-export default LoginPage;
+export default LogInPage;
