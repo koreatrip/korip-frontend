@@ -4,7 +4,7 @@ import Input from '@/components/common/Input';
 import SearchBar from '@/components/common/searchBar/SearchBar';
 import ToastMessage from '@/components/common/ToastMessage';
 import AuthInput from '@/components/domain/auth/AuthInput';
-import ProfileCard from '@/components/MyPage/ProfileCard';
+import ProfileCard from '@/components/domain/myPage/ProfileCard';
 import defaultLayout from '@/layouts/defaultLayout';
 
 import MyPage from '@/pages/myPage';
