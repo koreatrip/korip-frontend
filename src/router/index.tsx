@@ -8,7 +8,8 @@ import Header from '@/components/header/Header';
 import SearchHeader from '@/components/header/SearchHeader';
 import SearchBar from '@/components/searchBar/SearchBar';
 
-import LoginPage from '../pages/loginPage';
+import LogInPage from '@/pages/logInPage';
+import SignUpPage from '@/pages/signUpPage';
 
 // 컴포넌트 테스트용 페이지
 const TestPage = () => {
@@ -43,7 +44,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'login',
-        element: <LoginPage />,
+        element: <LogInPage />,
+      },
+      {
+        path: 'register',
+        element: <SignUpPage />,
       },
     ],
   },
