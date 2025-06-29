@@ -85,3 +85,6 @@ export const Footer = ({ children }: { children: React.ReactNode }) => {
 Modal.Header = Header;
 Modal.Body = Body;
 Modal.Footer = Footer;
+
+// 임시
+export default Modal;

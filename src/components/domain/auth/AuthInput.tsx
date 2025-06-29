@@ -4,8 +4,8 @@ import { XCircleIcon } from '@heroicons/react/24/outline';
 
 type TInputProps = Omit<React.ComponentPropsWithoutRef<'input'>, 'type'> & {
   type: 'text' | 'password' | 'email' | 'number' | 'date';
-  label?: string;
   children?: ReactNode;
+  label?: string;
   onClear?: () => void; // 클리어 버튼 클릭 시 호출될 함수
 };
 
@@ -90,7 +90,6 @@ const AuthInput = forwardRef<HTMLInputElement, TInputProps>(
               <XCircleIcon className='stroke-outline-gray h-6 w-6' />
             </button>
           )}
-
           {children}
         </div>
       </div>

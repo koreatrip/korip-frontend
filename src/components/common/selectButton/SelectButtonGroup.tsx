@@ -43,7 +43,7 @@ const SelectButtonGroup = ({
   return (
     <div
       className={twMerge(
-        'flex flex-row overflow-x-auto py-1 whitespace-nowrap mb-2',
+        'mb-2 flex flex-row overflow-x-auto py-1 whitespace-nowrap',
         className
       )}
     >
