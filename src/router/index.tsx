@@ -15,7 +15,7 @@ import MyPage from '@/pages/myPage';
 import FavoritePlacesPage from '@/pages/myPage/places';
 import TravelPlanPage from '@/pages/myPage/plan';
 import FavoriteRegionsPage from '@/pages/myPage/regions';
-import LoginPage from '../pages/loginPage';
+import LoginPage from '@/pages/loginPage';
 import ExamplePage from '@/pages/examplePage';
 import DistrictListPage from '@/pages/districtListPage';
 import PlannerPage from '@/pages/plannerPage';
@@ -57,7 +57,6 @@ export const router = createBrowserRouter([
         path: 'login',
         element: <LoginPage />,
       },
-
       {
         path: 'mypage',
         element: <MyPage />,

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 
-const LoginForm = () => {
+const LogInForm = () => {
   const handleSubmitLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
@@ -55,4 +55,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default LogInForm;
