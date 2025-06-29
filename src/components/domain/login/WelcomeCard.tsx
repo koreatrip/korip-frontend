@@ -6,7 +6,6 @@ type WelcomeCardProps = {
   linkText?: string;
   linkHref?: string;
 };
-
 const WelcomeCard = ({
   mainText,
   accountQuestionText,
@@ -22,14 +21,16 @@ const WelcomeCard = ({
         height='30'
         className='mb-8'
       />
-      <h1 className='text-3xl font-bold text-gray-800'>{mainText}</h1>
-      <p className='text-md text-gray-600'>
+      <h1 className='text-main-text-navy p-2 text-2xl font-bold md:text-3xl'>
+        {mainText}
+      </h1>
+      <p className='md:text-md text-sub-text-gray text-sm'>
         {' '}
         {accountQuestionText}{' '}
         {linkText && linkHref && (
           <a
             href={linkHref}
-            className='text-gray-800 underline hover:text-gray-900'
+            className='text-sub-text-gray hover:text-main-text-navy underline'
           >
             {linkText}
           </a>
