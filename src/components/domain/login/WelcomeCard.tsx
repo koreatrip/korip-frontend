@@ -1,12 +1,14 @@
 import Logo from '@/assets/header/logo_sm.svg';
 
 type WelcomeCardProps = {
-  accountQuestionText: string;
+  mainText: string;
+  accountQuestionText: string | React.ReactNode;
   linkText: string;
   linkHref: string;
 };
 
 const WelcomeCard = ({
+  mainText,
   accountQuestionText,
   linkText,
   linkHref,
@@ -20,8 +22,10 @@ const WelcomeCard = ({
         height='30'
         className='mb-8'
       />
-      <h1 className='text-3xl font-bold text-gray-800'>Welcome to Korip.</h1>
-      <p className='text-md text-gray-600'>
+      <h1 className='p-2 text-2xl font-bold text-gray-800 md:text-3xl'>
+        {mainText}
+      </h1>
+      <p className='md:text-md text-sm text-gray-600'>
         {' '}
         {accountQuestionText}{' '}
         <a

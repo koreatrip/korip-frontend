@@ -4,11 +4,12 @@ import WelcomeCard from '@/components/domain/login/WelcomeCard';
 import SocialLoginButtons from '@/components/domain/login/SocialLoginButtons';
 import Container from '@/components/common/Container';
 
-const LoginPage = () => {
+const LogInPage = () => {
   return (
     <div className='w-full flex-col items-center justify-center p-8'>
       <Container>
         <WelcomeCard
+          mainText='Welcome to Korip'
           accountQuestionText="Don't have an account?"
           linkText='Sign Up'
           linkHref='/signup'
@@ -21,4 +22,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LogInPage;
