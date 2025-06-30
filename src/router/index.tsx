@@ -9,7 +9,7 @@ import defaultLayout from '@/layouts/defaultLayout';
 
 import MyPage from '@/pages/myPage';
 import FavoritePlacesPage from '@/pages/myPage/places';
-import TravelPlanPage from '@/pages/myPage/plan';
+
 import FavoriteRegionsPage from '@/pages/myPage/regions';
 
 import DistrictListPage from '@/pages/districtListPage';
@@ -97,7 +97,7 @@ export const router = createBrowserRouter([
               />
             ),
           },
-          { path: 'plan', element: <TravelPlanPage /> },
+          // { path: 'plan', element: <TravelPlanPage /> },
           { path: 'places', element: <FavoritePlacesPage /> },
           { path: 'regions', element: <FavoriteRegionsPage /> },
         ],

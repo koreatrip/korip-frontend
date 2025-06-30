@@ -1,9 +1,9 @@
 import Button from '@/components/common/Button';
 
-interface SecuritySectionProps {
+type SecuritySectionProps = {
   onPasswordChange: () => void;
   onAccountDelete: () => void;
-}
+};
 
 const SecuritySection: React.FC<SecuritySectionProps> = ({
   onPasswordChange,

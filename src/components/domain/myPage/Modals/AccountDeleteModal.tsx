@@ -3,11 +3,11 @@ import { Modal } from '@/components/common/Modal';
 import AuthInput from '@/components/domain/auth/AuthInput';
 import React, { useState } from 'react';
 
-interface AccountDeleteModalProps {
+type AccountDeleteModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (selectedReasons: string[], customReason?: string) => void;
-}
+};
 
 const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
   isOpen,

@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 
 const MyPageMenu = () => {
   return (
-    <nav className='h-64 w-full rounded-lg bg-white p-6 shadow-md'>
+    <nav className='hidden h-[291px] w-full rounded-xl bg-white p-8 shadow-md md:block'>
       {/* 사용자 이름 */}
       <div className='mb-6 text-4xl font-normal text-slate-800'>김태율</div>
 

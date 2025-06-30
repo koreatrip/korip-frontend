@@ -3,7 +3,7 @@ import Input from '@/components/common/Input';
 import { Modal } from '@/components/common/Modal';
 import React, { useState } from 'react';
 
-interface PasswordChangeModalProps {
+type PasswordChangeModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onSave: (passwords: {
@@ -11,7 +11,7 @@ interface PasswordChangeModalProps {
     new: string;
     confirm: string;
   }) => void;
-}
+};
 
 const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
   isOpen,

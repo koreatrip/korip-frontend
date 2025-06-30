@@ -4,7 +4,7 @@ import React from 'react';
 import EditableField from '../Fields/EditableField';
 import InterestsField from '../Fields/InterestsField';
 
-interface BasicInfoSectionProps {
+type BasicInfoSectionProps = {
   formData: UserProfile;
   tempFormData: UserProfile;
   isEditing: boolean;
@@ -14,7 +14,7 @@ interface BasicInfoSectionProps {
   onInterestRemove: (interest: string) => void;
   onSave: () => void;
   onCancel: () => void;
-}
+};
 
 const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
   formData,
