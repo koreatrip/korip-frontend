@@ -5,7 +5,7 @@ import AccountStatsSection from './Sections/AccountStatsSection';
 import BasicInfoSection from './Sections/BasicInfoSection';
 import SecuritySection from './Sections/SecuritySection';
 
-interface UserProfile {
+type UserProfile = {
   name: string;
   email: string;
   phone: string;
@@ -17,13 +17,13 @@ interface UserProfile {
     favorites: number;
     visitedPlaces: number;
   };
-}
+};
 
-interface ProfileCardProps {
+type ProfileCardProps = {
   initialData?: UserProfile;
   onSave: (data: UserProfile) => void;
   onCancel: () => void;
-}
+};
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
   initialData,
