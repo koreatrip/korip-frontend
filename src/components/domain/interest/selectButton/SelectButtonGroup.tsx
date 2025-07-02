@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import SelectButton from '@/components/common/selectButton/SelectButton';
+import SelectButton from '@/components/domain/interest/selectButton/SelectButton';
 
 type SelectOption = {
   id: string;
