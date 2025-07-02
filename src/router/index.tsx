@@ -21,6 +21,7 @@ import DistrictListPage from '@/pages/districtListPage';
 import PlannerPage from '@/pages/plannerPage';
 import TravelTipsPage from '@/pages/travelTipsPage';
 import InterestPage from '@/pages/interestPage';
+import { InterestProvider } from '@/context/InterestContext';
 import SignUpPage from '@/pages/signUpPage';
 
 // 컴포넌트 테스트용 페이지
@@ -88,7 +89,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'interest',
-        element: <InterestPage />,
+        element: (
+          <InterestProvider>
+            <InterestPage />
+          </InterestProvider>
+        ),
       },
     ],
   },

@@ -1,17 +1,16 @@
 import Button from '@/components/common/Button';
 import Container from '@/components/common/Container';
 import Input from '@/components/common/Input';
-import SelectButtonGroup from '@/components/common/selectButton/SelectButtonGroup';
+import SelectButtonGroup from '@/components/domain/interest/selectButton/SelectButtonGroup';
 import WelcomeCard from '@/components/domain/login/WelcomeCard';
+import { useInterestContext } from '@/context/InterestContext';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
+import SelectedInterests from '@/components/domain/interest/SelectedInterests';
 
 const InterestPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
+  const { selectedInterests, setSelectedInterests } = useInterestContext();
 
   const interests = [
     { id: 'travel', label: '여행' },
@@ -25,7 +24,10 @@ const InterestPage = () => {
     { id: 'fashion', label: '패션' },
     { id: 'game', label: '게임' },
   ];
-  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
 
   const handleInterestsSelectionChange = (newSelectedIds: string[]) => {
     setSelectedInterests(newSelectedIds);
@@ -70,9 +72,8 @@ const InterestPage = () => {
           singleSelect={false}
           className='py-2'
         />
-        {/* 디테일 카드 */}
         {/* 선택한 관심사 */}
-
+        <SelectedInterests interests={interests} />
         <Button>완료</Button>
       </div>
     </Container>
