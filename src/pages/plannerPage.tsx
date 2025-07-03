@@ -2,7 +2,7 @@ import Button from '@/components/common/Button';
 import Container from '@/components/common/Container';
 import PlannerMap from '@/components/domain/planner/PlannerMap';
 import SchedulePlanner from '@/components/domain/planner/SchedulePlanner';
-import type { Place, TimeSlotData } from '@/types/plannerType';
+import type { PlannerPlace, TimeSlotData } from '@/types/plannerType';
 import { useCallback, useEffect, useReducer } from 'react';
 import PlannerSidebar from '@/components/domain/planner/PlannerSidebar';
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
@@ -13,7 +13,11 @@ type PlannerState = {
 type PlannerAction =
   | {
       type: 'MOVE_PLACE';
-      payload: { sourceTime: string | null; targetTime: string; place: Place };
+      payload: {
+        sourceTime: string | null;
+        targetTime: string;
+        place: PlannerPlace;
+      };
     }
   | { type: 'REMOVE_PLACE'; payload: { placeId: string } };
 
@@ -76,7 +80,7 @@ const PlannerPage = () => {
     ],
   });
 
-  const availablePlaces: Place[] = [
+  const availablePlaces: PlannerPlace[] = [
     { id: '1', title: '가로수길', category: '맛집/카페' },
     { id: '2', title: '경복궁', category: '역사/문화' },
   ];
@@ -97,7 +101,7 @@ const PlannerPage = () => {
         const sourceData = source.data;
         const targetData = target.data;
 
-        const draggedPlace = sourceData.place as Place;
+        const draggedPlace = sourceData.place as PlannerPlace;
         const sourceTime = (sourceData.originTime as string) || null;
         const targetTime = targetData.time as string;
 

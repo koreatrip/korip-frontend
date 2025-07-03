@@ -1,4 +1,4 @@
-export type Place = {
+export type PlannerPlace = {
   id: string;
   title: string;
   category: string;
@@ -6,5 +6,5 @@ export type Place = {
 
 export type TimeSlotData = {
   time: string;
-  place: Place | null;
+  place: PlannerPlace | null;
 };
