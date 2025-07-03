@@ -89,3 +89,4 @@ Modal.Footer = Footer;
 
 // 임시
 export default Modal;
+// export default Modal;
