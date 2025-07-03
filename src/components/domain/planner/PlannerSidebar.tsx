@@ -1,4 +1,4 @@
-import type { Place } from '@/types/plannerType';
+import type { PlannerPlace } from '@/types/plannerType';
 import SelectedPlacesList from './SelectedPlacesList';
 import TripSummary from './TripSummary';
 /**
@@ -7,7 +7,7 @@ import TripSummary from './TripSummary';
  */
 
 type PlannerSidebarProps = {
-  places: Place[];
+  places: PlannerPlace[];
   scheduledPlaceIds: string[];
 };
 
