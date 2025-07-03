@@ -3,11 +3,18 @@ import DailyTimeline from './DailyTimeline';
 import DailyScheduleTabs from './DailyScheduleTabs';
 import type { TabItem } from '@/types/tabType';
 import DateRangePicker from '@/components/common/DateRangePicker';
+import type { TimeSlotData } from '@/types/plannerType';
+
+type SchedulePlannerProps = {
+  schedule: TimeSlotData[];
+  onRemovePlace: (timeSlotId: string) => void; // ✅ FIX: 삭제 함수를 받을 prop 타입 추가
+};
+
 /**
  * 날짜 선택, 일차별 탭, 타임라인 등 가운데 계획 영역 전체를 책임지는 핵심 컴포넌트
  * @returns
  */
-const SchedulePlanner = () => {
+const SchedulePlanner = ({ schedule, onRemovePlace }: SchedulePlannerProps) => {
   const [activeTab, setActiveTab] = useState(1);
   const tabs: TabItem[] = [
     { id: 1, label: '1일차 (7/1)' },
@@ -33,7 +40,9 @@ const SchedulePlanner = () => {
 
         {/* 타임라인 */}
         {/* 선택된 탭에 따라 다른 타임라인을 보여주는 로직이 여기에 들어갑니다. */}
-        {activeTab === 1 && <DailyTimeline />}
+        {activeTab === 1 && (
+          <DailyTimeline schedule={schedule} onRemovePlace={onRemovePlace} />
+        )}
         {activeTab === 2 && <div>2일차 내용</div>}
         {activeTab === 3 && <div>3일차 내용</div>}
       </div>
