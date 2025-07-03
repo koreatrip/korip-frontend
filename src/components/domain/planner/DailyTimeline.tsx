@@ -3,26 +3,46 @@ import TimeSlot from './TimeSlot';
 
 type DailyTimelineProps = {
   schedule: TimeSlotData[];
-  onRemovePlace: (timeSlotId: string) => void; // ✅ FIX: 삭제 함수를 받을 prop 타입 추가
+  activeTab: number;
+  onRemovePlace: (timeSlotId: string) => void;
 };
+
+// ✅ 1. 타임라인에 항상 표시될 시간대 '틀'을 미리 정의합니다.
+const ALL_TIME_SLOTS = [
+  '09:00',
+  '11:00',
+  '13:00',
+  '15:00',
+  '17:00',
+  '19:00',
+  '21:00',
+  '23:00',
+];
 
 /**
  * 선택된 날짜의 시간대별 타임라인을 보여줍니다.
  */
-const DailyTimeline = ({ schedule, onRemovePlace }: DailyTimelineProps) => {
-  // 실제로는 API를 통해 해당 날짜의 일정 데이터를 받아옵니다.
-
+const DailyTimeline = ({
+  schedule,
+  activeTab,
+  onRemovePlace,
+}: DailyTimelineProps) => {
   return (
     <div className='space-y-5 pt-4'>
-      {schedule.map((slot) => (
-        <TimeSlot
-          key={slot.time}
-          time={slot.time}
-          place={slot.place}
-          // ✅ FIX: 'onRemove' prop 대신 TimeSlot이 필요로 하는 'onRemovePlace' prop으로 전달합니다.
-          onRemovePlace={onRemovePlace}
-        />
-      ))}
+      {ALL_TIME_SLOTS.map((time) => {
+        const slotData = schedule.find((item) => item.time === time);
+
+        return (
+          <TimeSlot
+            key={time}
+            day={activeTab} // ✅ TimeSlot에 activeTab 값을 day 프롭으로 전달
+            time={time}
+            place={slotData?.place ?? null}
+            timeSlotId={slotData?.timeSlotId ?? ''}
+            onRemovePlace={onRemovePlace}
+          />
+        );
+      })}
     </div>
   );
 };

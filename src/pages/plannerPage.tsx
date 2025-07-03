@@ -1,11 +1,16 @@
+// src/pages/PlannerPage.tsx
+
 import Button from '@/components/common/Button';
 import Container from '@/components/common/Container';
 import PlannerMap from '@/components/domain/planner/PlannerMap';
 import SchedulePlanner from '@/components/domain/planner/SchedulePlanner';
+import PlannerSidebar from '@/components/domain/planner/PlannerSidebar';
 import type { PlannerPlace, TimeSlotData } from '@/types/plannerType';
 import { useCallback, useEffect, useReducer } from 'react';
-import PlannerSidebar from '@/components/domain/planner/PlannerSidebar';
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+
+// --- 상태 및 액션 타입 정의 ---
+
 type PlannerState = {
   schedule: TimeSlotData[];
 };
@@ -15,53 +20,62 @@ type PlannerAction =
       type: 'MOVE_PLACE';
       payload: {
         sourceTime: string | null;
+        sourceDay: number | null;
         targetTime: string;
+        targetDay: number;
         place: PlannerPlace;
       };
     }
-  | { type: 'REMOVE_PLACE'; payload: { placeId: string } };
+  | { type: 'REMOVE_PLACE'; payload: { timeSlotId: string } };
+
+// --- Reducer 함수 ---
 
 const reducer = (state: PlannerState, action: PlannerAction): PlannerState => {
   switch (action.type) {
     case 'MOVE_PLACE': {
-      const { sourceTime, targetTime, place } = action.payload;
+      const { sourceTime, sourceDay, targetTime, targetDay, place } =
+        action.payload;
 
-      // 1. 복사를 원천 방지하기 위해, 현재 일정에서 드래그된 장소(place)를 모두 제거한
-      //    깨끗한 버전의 스케줄을 만듭니다. 이것이 가장 중요한 단계입니다.
+      // 1. 원본 스케줄에서 드래그된 장소를 먼저 제거 (중복 방지)
       let cleanedSchedule = state.schedule.map((slot) =>
         slot.place?.id === place.id ? { ...slot, place: null } : slot
       );
 
-      // 2. 타겟 위치의 인덱스를 찾습니다.
-      const targetIdx = cleanedSchedule.findIndex((s) => s.time === targetTime);
-      if (targetIdx === -1) return state; // 타겟이 없으면 아무것도 하지 않음
+      // 2. 타겟 위치의 인덱스 찾기 (day와 time 모두 일치)
+      const targetIdx = cleanedSchedule.findIndex(
+        (s) => s.day === targetDay && s.time === targetTime
+      );
+      if (targetIdx === -1) return state;
 
-      // 3. (스왑을 위해) 타겟 위치에 원래 어떤 아이템이 있었는지 기억해 둡니다.
+      // 3. (스왑 대비) 타겟 위치에 원래 있던 아이템 기억
       const itemOriginallyAtTarget = cleanedSchedule[targetIdx].place;
 
-      // 4. 드래그된 아이템을 타겟 위치에 확실하게 놓습니다.
-      cleanedSchedule[targetIdx].place = place;
+      // 4. 타겟 위치에 드래그된 아이템 놓기
+      cleanedSchedule[targetIdx] = {
+        ...cleanedSchedule[targetIdx],
+        place,
+      };
 
-      // 5. 만약 드래그가 타임라인 내부에서 시작되었고(sourceTime 존재),
-      //    원래 타겟 위치에 다른 아이템이 있었다면(스왑 상황),
-      //    그 다른 아이템을 원래 드래그가 시작된 위치(source)로 보냅니다.
-      if (sourceTime && itemOriginallyAtTarget) {
+      // 5. 스왑 로직: 타임라인 내부 이동이었고, 타겟에 다른 아이템이 있었다면
+      if (sourceTime && sourceDay && itemOriginallyAtTarget) {
         const sourceIdx = cleanedSchedule.findIndex(
-          (s) => s.time === sourceTime
+          (s) => s.day === sourceDay && s.time === sourceTime
         );
         if (sourceIdx !== -1) {
-          cleanedSchedule[sourceIdx].place = itemOriginallyAtTarget;
+          cleanedSchedule[sourceIdx] = {
+            ...cleanedSchedule[sourceIdx],
+            place: itemOriginallyAtTarget,
+          };
         }
       }
 
-      // 6. 최종적으로 정리된 새로운 schedule로 상태를 업데이트합니다.
       return { ...state, schedule: cleanedSchedule };
     }
 
     case 'REMOVE_PLACE': {
-      const { placeId } = action.payload;
+      const { timeSlotId } = action.payload;
       const newSchedule = state.schedule.map((s) =>
-        s.place?.id === placeId ? { ...s, place: null } : s
+        s.timeSlotId === timeSlotId ? { ...s, place: null } : s
       );
       return { ...state, schedule: newSchedule };
     }
@@ -71,72 +85,96 @@ const reducer = (state: PlannerState, action: PlannerAction): PlannerState => {
   }
 };
 
+// --- 초기 데이터 생성 함수 ---
+
+const generateInitialSchedule = (days: number): TimeSlotData[] => {
+  const times = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
+  let schedule: TimeSlotData[] = [];
+  for (let day = 1; day <= days; day++) {
+    for (const time of times) {
+      schedule.push({
+        day,
+        time,
+        place: null,
+        timeSlotId: `day${day}-time${time}`, // 고유 ID 부여
+      });
+    }
+  }
+  return schedule;
+};
+
+// --- 페이지 컴포넌트 ---
+
 const PlannerPage = () => {
   const [state, dispatch] = useReducer(reducer, {
-    schedule: [
-      { time: '09:00', place: null },
-      { time: '11:00', place: null },
-      { time: '13:00', place: null },
-    ],
+    schedule: generateInitialSchedule(7), // 7일치 데이터 생성
   });
 
+  // 사이드바에 표시될 장소 목록 (실제로는 API로 받아옴)
   const availablePlaces: PlannerPlace[] = [
     { id: '1', title: '가로수길', category: '맛집/카페' },
     { id: '2', title: '경복궁', category: '역사/문화' },
+    { id: '3', title: 'SM타운', category: '엔터테인먼트' },
+    { id: '4', title: '하이브', category: '엔터테인먼트' },
+    { id: '5', title: 'JYP', category: '엔터테인먼트' },
+    { id: '6', title: 'YG', category: '엔터테인먼트' },
   ];
 
-  // ✅ PDD의 이벤트 모니터를 설정하는 useEffect
+  // Drag & Drop 모니터 설정
   useEffect(() => {
-    // monitorForElements는 드래그 앤 드롭 이벤트를 감지하는 리스너를 반환합니다.
     const cleanup = monitorForElements({
       onDrop(args) {
         const { location, source } = args;
-
-        // 드롭 영역 밖이나, 드롭할 수 없는 곳에 놓았으면 무시
-        if (!location.current.dropTargets.length) {
-          return;
-        }
+        if (!location.current.dropTargets.length) return;
 
         const target = location.current.dropTargets[0];
         const sourceData = source.data;
         const targetData = target.data;
 
+        // 드래그 & 드롭 관련 데이터 추출
         const draggedPlace = sourceData.place as PlannerPlace;
         const sourceTime = (sourceData.originTime as string) || null;
+        const sourceDay = (sourceData.originDay as number) || null; // DraggablePlaceCard에서 제공해야 함
         const targetTime = targetData.time as string;
+        const targetDay = targetData.day as number; // TimeSlot에서 제공
 
-        // 자기 자신 위에 드롭하는 경우 무시 (타임라인 내 이동 시)
-        if (sourceTime === targetTime) {
-          return;
-        }
+        // 같은 위치에 드롭하는 것 방지
+        if (sourceDay === targetDay && sourceTime === targetTime) return;
 
-        console.log('[PDD onDrop] draggedPlace:', draggedPlace);
-        console.log('[PDD onDrop] sourceTime:', sourceTime);
-        console.log('[PDD onDrop] targetTime:', targetTime);
-
-        // 기존의 reducer 로직을 그대로 재사용
+        // 상태 업데이트 액션 디스패치
         dispatch({
           type: 'MOVE_PLACE',
-          payload: { sourceTime, targetTime, place: draggedPlace },
+          payload: {
+            sourceTime,
+            sourceDay,
+            targetTime,
+            targetDay,
+            place: draggedPlace,
+          },
         });
       },
     });
 
-    // 컴포넌트가 언마운트될 때 리스너를 정리합니다.
     return cleanup;
-  }, []); // 빈 배열로 컴포넌트 마운트 시 한 번만 실행되도록 설정
+  }, []); // 컴포넌트 마운트 시 한 번만 실행
 
-  const handleRemovePlace = useCallback((placeId: string) => {
-    dispatch({ type: 'REMOVE_PLACE', payload: { placeId } });
+  // 장소 제거 핸들러
+  const handleRemovePlace = useCallback((timeSlotId: string) => {
+    dispatch({ type: 'REMOVE_PLACE', payload: { timeSlotId } });
   }, []);
 
   return (
     <div className='bg-bg-section'>
       <Container className='mt-16'>
-        {/* ... (제목, 설명 부분은 동일) */}
+        <div className='mb-4 text-center'>
+          <h1 className='text-3xl font-bold'>플래너</h1>
+          <p className='text-sub-text-gray mt-2'>
+            드래그 앤 드롭으로 일정을 관리해보세요.
+          </p>
+        </div>
 
-        {/* 🛑 DndContext는 제거합니다. */}
         <div className='flex h-screen w-full gap-4'>
+          {/* 왼쪽 사이드바 */}
           <div className='w-80 flex-shrink-0'>
             <PlannerSidebar
               places={availablePlaces}
@@ -148,6 +186,7 @@ const PlannerPage = () => {
             />
           </div>
 
+          {/* 중앙 플래너 */}
           <div className='flex-1'>
             <SchedulePlanner
               schedule={state.schedule}
@@ -155,10 +194,11 @@ const PlannerPage = () => {
             />
           </div>
 
+          {/* 오른쪽 맵 */}
           <div className='flex w-96 flex-shrink-0 flex-col'>
             <PlannerMap />
             <div className='mt-4'>
-              <Button variant='active'>일정 저장하기 </Button>
+              <Button variant='active'>일정 저장하기</Button>
             </div>
           </div>
         </div>
