@@ -1,54 +1,68 @@
+// src/components/common/DateRangePicker.tsx
+
 import {
   CalendarIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import type { FC } from 'react';
 
-const DateRangePicker = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date(2025, 6, 1)); // 2025년 7월 1일
+type DateRangePickerProps = {
+  selectedDate: Date;
+  onDateChange: (date: Date) => void;
+};
+
+const DateRangePicker: FC<DateRangePickerProps> = ({
+  selectedDate,
+  onDateChange,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(new Date(2025, 6, 1));
+  // The initial month shown in the calendar can be based on the selected date
+  const [currentMonth, setCurrentMonth] = useState(
+    selectedDate || new Date(2025, 6, 1)
+  );
 
-  const formatDate = (date) => {
+  // ✅ FIX: Add a check to prevent crash if date is undefined
+  const formatDate = (date: Date) => {
+    // If the date is not valid, return a placeholder text instead of crashing.
+    if (!date || !(date instanceof Date)) {
+      return '날짜 선택...';
+    }
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}. ${month}. ${day}`;
   };
 
-  const getMonthName = (date) => {
+  // ... (the rest of the component remains the same)
+
+  const getMonthName = (date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     return `${year}년 ${month}월`;
   };
 
-  const getDaysInMonth = (date) => {
+  const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const startDate = firstDay.getDay();
     const daysInMonth = lastDay.getDate();
-
-    const days = [];
-
-    // 빈 칸들
+    const days: (Date | null)[] = [];
     for (let i = 0; i < startDate; i++) {
       days.push(null);
     }
-
-    // 실제 날짜들
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, month, day));
     }
-
     return days;
   };
 
-  const handleDateClick = (date) => {
+  const handleDateClick = (date: Date | null) => {
     if (date) {
-      setSelectedDate(date);
+      onDateChange(date);
       setIsOpen(false);
     }
   };
@@ -65,7 +79,7 @@ const DateRangePicker = () => {
     );
   };
 
-  const isSameDate = (date1, date2) => {
+  const isSameDate = (date1: Date | null, date2: Date | null) => {
     if (!date1 || !date2) return false;
     return (
       date1.getFullYear() === date2.getFullYear() &&
@@ -74,7 +88,7 @@ const DateRangePicker = () => {
     );
   };
 
-  const isToday = (date) => {
+  const isToday = (date: Date) => {
     return isSameDate(date, new Date());
   };
 
@@ -84,7 +98,6 @@ const DateRangePicker = () => {
   return (
     <div className='mx-auto w-full'>
       <div className='relative'>
-        {/* 데이트 피커 버튼 */}
         <div
           onClick={() => setIsOpen(!isOpen)}
           className='border-outline-gray shadow-light hover:shadow-medium bg-bg-white cursor-pointer rounded-lg border p-4 transition-shadow'
@@ -94,11 +107,8 @@ const DateRangePicker = () => {
             <CalendarIcon className='text-main-text-navy h-5 w-5' />
           </div>
         </div>
-
-        {/* 캘린더 팝업 */}
         {isOpen && (
           <div className='border-outline-gray bg-bg-white shadow-large absolute top-full right-0 left-0 z-50 mt-2 rounded-2xl border p-4'>
-            {/* 캘린더 헤더 */}
             <div className='mb-4 flex items-center justify-between'>
               <button
                 onClick={handlePrevMonth}
@@ -116,8 +126,6 @@ const DateRangePicker = () => {
                 <ChevronRightIcon className='text-sub-text-gray h-5 w-5' />
               </button>
             </div>
-
-            {/* 요일 헤더 */}
             <div className='mb-2 grid grid-cols-7 gap-1'>
               {weekDays.map((day) => (
                 <div
@@ -128,8 +136,6 @@ const DateRangePicker = () => {
                 </div>
               ))}
             </div>
-
-            {/* 캘린더 날짜 */}
             <div className='grid grid-cols-7 gap-1'>
               {days.map((date, index) => (
                 <div
@@ -143,8 +149,6 @@ const DateRangePicker = () => {
             </div>
           </div>
         )}
-
-        {/* 배경 클릭 시 닫기 */}
         {isOpen && (
           <div
             className='fixed inset-0 z-40'

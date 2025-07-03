@@ -11,7 +11,7 @@ const DailyScheduleTabs = ({
   onTabClick: (tabId: number) => void;
 }) => {
   return (
-    <div className='border-outline-gray mb-6 flex max-w-full flex-nowrap overflow-x-auto border-b'>
+    <div className='border-outline-gray mb-6 flex max-w-[624px] flex-nowrap overflow-x-auto border-b'>
       <div className='flex flex-nowrap gap-x-1'>
         {tabs.map((tab) => (
           <Tab
