@@ -1,4 +1,4 @@
-import type { Place } from '@/types/plannerType';
+import type { PlannerPlace } from '@/types/plannerType';
 import DraggablePlaceCard from './DraggablePlaceCard';
 
 /**
@@ -7,7 +7,7 @@ import DraggablePlaceCard from './DraggablePlaceCard';
  */
 
 type SelectedPlacesListProps = {
-  places: Place[];
+  places: PlannerPlace[];
   scheduledPlaceIds: string[];
 };
 const SelectedPlacesList = ({

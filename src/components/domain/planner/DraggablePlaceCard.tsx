@@ -1,12 +1,12 @@
 // src/components/domain/planner/DraggablePlaceCard.tsx
 
-import type { Place } from '@/types/plannerType';
+import type { PlannerPlace } from '@/types/plannerType';
 import { XCircleIcon } from '@heroicons/react/24/outline';
 import { useEffect, useRef, useState } from 'react'; // useEffect, useRef, useState 추가
 import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 
 type DraggablePlaceCardProps = {
-  place: Place;
+  place: PlannerPlace;
   isOccupied: boolean;
   originTime?: string;
   onRemove?: () => void;
@@ -35,7 +35,7 @@ const DraggablePlaceCard = ({
         originTime: originTime || null,
       }),
       // 드래그가 비활성화되었는지 여부
-      disabled: isOccupied,
+      // disabled: isOccupied,
       onDragStart: () => setIsDragging(true),
       onDrop: () => setIsDragging(false),
     });
