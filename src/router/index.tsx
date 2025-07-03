@@ -1,29 +1,28 @@
-import ProfileCard from '@/components/MyPage/ProfileCard';
-import { createBrowserRouter } from 'react-router-dom';
-import AuthInput from '@/components/domain/auth/AuthInput';
 import Button from '@/components/common/Button';
-import Input from '@/components/common/Input';
-import ToastMessage from '@/components/common/ToastMessage';
-
 import Header from '@/components/common/Header';
+import Input from '@/components/common/Input';
 import SearchBar from '@/components/common/searchBar/SearchBar';
-
-import RegionsPage from '@/pages/regionsPage';
-
+import ToastMessage from '@/components/common/ToastMessage';
+import AuthInput from '@/components/domain/auth/AuthInput';
+import ProfileCard from '@/components/domain/myPage/ProfileCard';
 import defaultLayout from '@/layouts/defaultLayout';
+
 import MyPage from '@/pages/myPage';
 import FavoritePlacesPage from '@/pages/myPage/places';
-import TravelPlanPage from '@/pages/myPage/plan';
 import FavoriteRegionsPage from '@/pages/myPage/regions';
-import LoginPage from '@/pages/loginPage';
-import ExamplePage from '@/pages/examplePage';
-import DistrictListPage from '@/pages/districtListPage';
-import PlannerPage from '@/pages/plannerPage';
-import TravelTipsPage from '@/pages/travelTipsPage';
-import InterestPage from '@/pages/interestPage';
-import { InterestProvider } from '@/context/InterestContext';
-import SignUpPage from '@/pages/signUpPage';
 
+import DistrictListPage from '@/pages/districtListPage';
+import ExamplePage from '@/pages/examplePage';
+import InterestPage from '@/pages/interestPage';
+import PlannerPage from '@/pages/plannerPage';
+import RegionsPage from '@/pages/regionsPage';
+import { InterestProvider } from '@/context/InterestContext';
+
+import SignUpPage from '@/pages/signUpPage';
+import TravelTipsPage from '@/pages/travelTipsPage';
+import LoginPage from '@/pages/loginPage';
+
+import { createBrowserRouter } from 'react-router-dom';
 // 컴포넌트 테스트용 페이지
 const TestPage = () => {
   return (
@@ -65,6 +64,22 @@ export const router = createBrowserRouter([
         element: <SignUpPage />,
       },
       {
+        path: 'explore/regions',
+        element: <RegionsPage />,
+      },
+      {
+        path: 'explore/districts',
+        element: <DistrictListPage />,
+      },
+      {
+        path: 'planner',
+        element: <PlannerPage />,
+      },
+      {
+        path: 'tips',
+        element: <TravelTipsPage />,
+      },
+      {
         path: 'mypage',
         element: <MyPage />,
         children: [
@@ -82,7 +97,7 @@ export const router = createBrowserRouter([
               />
             ),
           },
-          { path: 'plan', element: <TravelPlanPage /> },
+          // { path: 'plan', element: <TravelPlanPage /> },
           { path: 'places', element: <FavoritePlacesPage /> },
           { path: 'regions', element: <FavoriteRegionsPage /> },
         ],
@@ -96,22 +111,5 @@ export const router = createBrowserRouter([
         ),
       },
     ],
-  },
-
-  {
-    path: 'explore/regions',
-    element: <RegionsPage />,
-  },
-  {
-    path: 'explore/districts',
-    element: <DistrictListPage />,
-  },
-  {
-    path: 'planner',
-    element: <PlannerPage />,
-  },
-  {
-    path: 'tips',
-    element: <TravelTipsPage />,
   },
 ]);

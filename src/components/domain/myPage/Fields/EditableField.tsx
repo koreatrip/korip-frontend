@@ -1,13 +1,13 @@
 import React from 'react';
 
-interface EditableFieldProps {
+type EditableFieldProps = {
   label: string;
   value: string;
   isEditing: boolean;
   type?: 'text' | 'email' | 'tel';
   placeholder?: string;
   onChange: (value: string) => void;
-}
+};
 
 const EditableField: React.FC<EditableFieldProps> = ({
   label,

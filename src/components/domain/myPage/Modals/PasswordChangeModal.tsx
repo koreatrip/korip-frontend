@@ -1,9 +1,9 @@
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
-import Modal from '@/components/common/Modal';
+import { Modal } from '@/components/common/Modal';
 import React, { useState } from 'react';
 
-interface PasswordChangeModalProps {
+type PasswordChangeModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onSave: (passwords: {
@@ -11,7 +11,7 @@ interface PasswordChangeModalProps {
     new: string;
     confirm: string;
   }) => void;
-}
+};
 
 const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
   isOpen,
@@ -94,12 +94,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleClose}
-      title='비밀번호 변경'
-      maxWidth='sm'
-    >
+    <Modal isOpen={isOpen} onClose={handleClose}>
       <div className='space-y-6'>
         {/* 현재 비밀번호 */}
         <div>
