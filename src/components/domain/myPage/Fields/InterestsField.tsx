@@ -1,9 +1,9 @@
-interface InterestsFieldProps {
+type InterestsFieldProps = {
   interests: string[];
   isEditing: boolean;
   onAdd: (interest: string) => void;
   onRemove: (interest: string) => void;
-}
+};
 
 const InterestsField: React.FC<InterestsFieldProps> = ({
   interests,

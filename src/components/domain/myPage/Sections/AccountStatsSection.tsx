@@ -1,11 +1,11 @@
-interface AccountStatsSectionProps {
+type AccountStatsSectionProps = {
   joinDate: string;
   stats: {
     travelPlans: number;
     favorites: number;
     visitedPlaces: number;
   };
-}
+};
 
 const AccountStatsSection: React.FC<AccountStatsSectionProps> = ({
   joinDate,

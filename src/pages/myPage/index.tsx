@@ -1,7 +1,8 @@
-import MyPageLayout from '@/components/MyPage/MyPageLayout';
+import MyPageLayout from '@/components/domain/myPage/MyPageLayout';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
 
-const MyPage = () => {
+const MyPage: React.FC = () => {
   return (
     <MyPageLayout>
       <Outlet />
