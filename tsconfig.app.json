@@ -31,7 +31,8 @@
       "@styles/*": ["src/styles/*"],
       "@utils/*": ["src/utils/*"],
       "@stores/*": ["src/stores/*"],
-      "@api/*": ["src/api/*"]
+      "@api/*": ["src/api/*"],
+      "@store/*": ["src/stores/*"]
     }
   },
   "include": ["src"],
