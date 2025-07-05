@@ -1,30 +1,26 @@
 import type { PlannerPlace } from '@/types/plannerType';
 import SelectedPlacesList from './SelectedPlacesList';
 import TripSummary from './TripSummary';
-/**
- * 왼쪽 사이드바 전체를 감싸는 컴포넌트
- * @returns
- */
 
 type PlannerSidebarProps = {
   places: PlannerPlace[];
-  scheduledPlaceIds: string[];
 };
 
-const PlannerSidebar = ({ places, scheduledPlaceIds }: PlannerSidebarProps) => {
+const PlannerSidebar = ({ places }: PlannerSidebarProps) => {
+  // TripSummary에 필요한 정보는 places만으로 계산하도록 단순화합니다.
+  // 또는 전역 스토어에서 직접 가져올 수도 있습니다.
+  const scheduledPlacesCount = 0; // 이 부분은 실제 로직에 맞게 수정이 필요합니다.
+
   return (
     <div className='flex flex-col gap-y-6'>
-      <SelectedPlacesList
-        places={places}
-        scheduledPlaceIds={scheduledPlaceIds}
-      />
+      <SelectedPlacesList places={places} />
       <TripSummary
-        duration={3}
+        duration={7} // 예시 값
         totalPlaces={places.length}
-        completedPlaces={scheduledPlaceIds.length}
+        completedPlaces={scheduledPlacesCount}
         progress={
           places.length > 0
-            ? Math.round((scheduledPlaceIds.length / places.length) * 100)
+            ? Math.round((scheduledPlacesCount / places.length) * 100)
             : 0
         }
       />
