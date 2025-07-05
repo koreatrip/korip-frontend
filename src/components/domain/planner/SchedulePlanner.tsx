@@ -15,8 +15,8 @@ type SchedulePlannerProps = {
  */
 const SchedulePlanner = ({ schedule, onRemovePlace }: SchedulePlannerProps) => {
   // 1. 시작일과 종료일 상태 관리
-  const [startDate, setStartDate] = useState(new Date('2025-07-01'));
-  const [endDate, setEndDate] = useState(new Date('2025-07-07'));
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [tabs, setTabs] = useState<TabItem[]>([]);
   const [activeTab, setActiveTab] = useState(1);
   const dailySchedule = schedule.filter((item) => item.day === activeTab);
@@ -31,46 +31,42 @@ const SchedulePlanner = ({ schedule, onRemovePlace }: SchedulePlannerProps) => {
     const generateTabs = () => {
       if (!startDate || !endDate || endDate < startDate) {
         setTabs([]);
-        setDailySchedules({}); // 탭이 없으면 스케줄도 초기화
         return;
       }
 
+      // ✅ 원본 날짜 상태를 직접 수정하지 않도록 복사본을 만듭니다.
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      // ✅ 시간 부분을 모두 0으로 만들어 날짜만 순수하게 비교하도록 합니다.
+      start.setHours(0, 0, 0, 0);
+      end.setHours(0, 0, 0, 0);
+
       const newTabs: TabItem[] = [];
-      const newDailySchedules: Record<number, TimeSlotData[]> = {};
-      let currentDate = new Date(startDate);
+      let currentDate = start;
       let dayCount = 1;
 
-      while (currentDate <= endDate) {
+      // ✅ 이 반복문이 이제 마지막 날짜까지 정확하게 포함합니다.
+      while (currentDate <= end) {
         newTabs.push({
           id: dayCount,
           label: `${dayCount}일차 (${currentDate.getMonth() + 1}/${currentDate.getDate()})`,
         });
 
-        // 🔥 각 일차마다 빈 스케줄로 초기화
-        newDailySchedules[dayCount] = [];
-
+        // 다음 날짜로 넘어갑니다.
         currentDate.setDate(currentDate.getDate() + 1);
         dayCount++;
       }
 
       setTabs(newTabs);
-      setDailySchedules(newDailySchedules);
 
-      if (activeTab > newTabs.length) {
+      if (activeTab > newTabs.length && newTabs.length > 0) {
         setActiveTab(1);
       }
     };
 
     generateTabs();
-  }, [startDate, endDate, activeTab]);
-
-  // 🔥 각 일차별 스케줄 업데이트 함수
-  const updateDailySchedule = (day: number, newSchedule: TimeSlotData[]) => {
-    setDailySchedules((prev) => ({
-      ...prev,
-      [day]: newSchedule,
-    }));
-  };
+  }, [startDate, endDate]);
 
   return (
     <div className='flex w-full items-center justify-center'>
