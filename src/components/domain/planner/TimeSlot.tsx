@@ -10,7 +10,6 @@ type TimeSlotProps = TimeSlotData & {
   onRemovePlace: (timeSlotId: string) => void;
 };
 
-// ✅ 1. props에서 timeSlotId를 구조 분해 할당으로 받아옵니다.
 const TimeSlot = ({
   time,
   place,
@@ -27,7 +26,6 @@ const TimeSlot = ({
 
     const cleanup = dropTargetForElements({
       element: el,
-      // ✅ getData에서 time과 함께 day 정보도 제공합니다.
       getData: () => ({ time, day }),
       onDragEnter: () => setIsBeingDraggedOver(true),
       onDragLeave: () => setIsBeingDraggedOver(false),
@@ -35,14 +33,13 @@ const TimeSlot = ({
     });
 
     return cleanup;
-  }, [time, day]); // 의존성 배열에 day 추가
+  }, [time, day]);
 
   return (
     <div className='flex items-center gap-x-6'>
       <div className='text-main-text-navy w-12 text-right text-sm font-medium'>
         {time}
       </div>
-
       <div
         ref={ref}
         className={`flex h-16 flex-1 items-center rounded-lg border-2 border-dashed transition-all duration-200 ${
@@ -57,7 +54,7 @@ const TimeSlot = ({
               place={place}
               isOccupied={false}
               originTime={time}
-              // ✅ 2. onRemovePlace에 place.id 대신 timeSlotId를 전달합니다.
+              originDay={day} // ✅ DraggablePlaceCard에 day 정보를 originDay로 전달
               onRemove={() => onRemovePlace(timeSlotId)}
             />
           </div>
