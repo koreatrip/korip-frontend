@@ -4,25 +4,26 @@ import Input from '@/components/common/Input';
 import SearchBar from '@/components/common/searchBar/SearchBar';
 import ToastMessage from '@/components/common/ToastMessage';
 import AuthInput from '@/components/domain/auth/AuthInput';
+
 import ProfileCard from '@/components/domain/myPage/ProfileCard';
+
 import defaultLayout from '@/layouts/defaultLayout';
 
 import MyPage from '@/pages/myPage';
 import FavoritePlacesPage from '@/pages/myPage/places';
 import FavoriteRegionsPage from '@/pages/myPage/regions';
 
+import { InterestProvider } from '@/context/InterestContext';
 import DistrictListPage from '@/pages/districtListPage';
 import ExamplePage from '@/pages/examplePage';
 import InterestPage from '@/pages/interestPage';
 import PlannerPage from '@/pages/plannerPage';
 import RegionsPage from '@/pages/regionsPage';
-import { InterestProvider } from '@/context/InterestContext';
-
 import SignUpPage from '@/pages/signUpPage';
 import TravelTipsPage from '@/pages/travelTipsPage';
-import LoginPage from '@/pages/loginPage';
-
 import { createBrowserRouter } from 'react-router-dom';
+import LoginPage from '../pages/loginPage';
+
 // 컴포넌트 테스트용 페이지
 const TestPage = () => {
   return (
