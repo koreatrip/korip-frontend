@@ -11,6 +11,7 @@ import defaultLayout from '@/layouts/defaultLayout';
 
 import MyPage from '@/pages/myPage';
 import FavoritePlacesPage from '@/pages/myPage/places';
+
 import FavoriteRegionsPage from '@/pages/myPage/regions';
 
 import { InterestProvider } from '@/context/InterestContext';
