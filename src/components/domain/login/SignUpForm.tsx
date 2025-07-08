@@ -1,10 +1,9 @@
+import Button from '@/components/common/Button';
+import AuthInput from '@/components/domain/auth/AuthInput';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form'; // FieldErrors 타입 임포트
 import { z } from 'zod'; // Zod 스키마 정의를 위해 임포트
-import { zodResolver } from '@hookform/resolvers/zod';
-import Button from '@/components/common/Button';
-import ToastMessage from '@/components/common/ToastMessage';
-import AuthInput from '@/components/domain/auth/AuthInput';
-import { useState } from 'react';
 
 const signUpSchema = z
   .object({
