@@ -8,7 +8,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import SelectedInterests from '@/components/domain/interest/SelectedInterests';
 
-import Modal, { Body, Footer, Header } from '@/components/common/Modal';
+import IdolRequestModal from '@/components/domain/interest/IdolRequestModal';
 
 const InterestPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -87,20 +87,12 @@ const InterestPage = () => {
         {/* 선택한 관심사 */}
         <SelectedInterests interests={interests} />
         <Button>완료</Button>
-      </div>
+      </div>                        
 
-      <Modal
-        isOpen={modal}
-        onClose={() => {
-          setModal(false);
-        }}
-      >
-        <Header>hd</Header>
-        <Body>dd</Body>
-        <Footer>dd</Footer>
-      </Modal>
+      <IdolRequestModal isOpen={modal} onClose={() => setModal(false)} />
     </Container>
   );
 };
+
 
 export default InterestPage;
