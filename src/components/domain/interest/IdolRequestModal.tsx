@@ -10,7 +10,7 @@ type FormValues = {
   append?: string;
 };
 
-type IdolRequestModalProps {
+type IdolRequestModalProps = {
   isOpen: boolean;
   onClose: () => void;
 }
