@@ -24,6 +24,7 @@ import SignUpPage from '@/pages/signUpPage';
 import TravelTipsPage from '@/pages/travelTipsPage';
 import { createBrowserRouter } from 'react-router-dom';
 import LoginPage from '../pages/loginPage';
+import FirstSearchingPage from '@/pages/firstSearchingPage';
 
 // 컴포넌트 테스트용 페이지
 const TestPage = () => {
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
       {
         path: 'tips',
         element: <TravelTipsPage />,
+      },
+      {
+        path: 'first_region_search',
+        element: <FirstSearchingPage />,
       },
       {
         path: 'mypage',
