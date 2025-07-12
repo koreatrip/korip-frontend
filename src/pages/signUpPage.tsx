@@ -31,7 +31,7 @@ const SignUpPage = () => {
           linkHref='login'
           linkText='Log in'
         />
-<SignUpForm />
+        <SignUpForm />
         <HorizonLine text='Or continue with' className='my-8' />{' '}
         {/* 마진 추가 */}
         <SocialLoginButtons className={'w-full'} />
