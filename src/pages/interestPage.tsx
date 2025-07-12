@@ -8,9 +8,13 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import SelectedInterests from '@/components/domain/interest/SelectedInterests';
 
+import Modal, { Body, Footer, Header } from '@/components/common/Modal';
+
 const InterestPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { selectedInterests, setSelectedInterests } = useInterestContext();
+
+  const [modal, setModal] = useState(false);
 
   const interests = [
     { id: 'travel', label: '여행' },
@@ -72,10 +76,29 @@ const InterestPage = () => {
           singleSelect={false}
           className='py-2'
         />
+
+        <Button
+          onClick={() => {
+            setModal(true);
+          }}
+        >
+          아이돌 신청하기
+        </Button>
         {/* 선택한 관심사 */}
         <SelectedInterests interests={interests} />
         <Button>완료</Button>
       </div>
+
+      <Modal
+        isOpen={modal}
+        onClose={() => {
+          setModal(false);
+        }}
+      >
+        <Header>hd</Header>
+        <Body>dd</Body>
+        <Footer>dd</Footer>
+      </Modal>
     </Container>
   );
 };
