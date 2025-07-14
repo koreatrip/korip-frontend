@@ -5,7 +5,7 @@ import App from './App.tsx';
 const queryClient = new QueryClient();
 
 async function enableMocking() {
-  if (import.meta.env.NODE_ENV !== 'development') {
+  if (process.env.NODE_ENV !== 'development') {
     return;
   }
 

@@ -54,7 +54,7 @@ const InfoCard = ({
         {/* 즐겨찾기(별) 버튼 */}
         <button
           onClick={onFavorite}
-          className='absolute top-3 right-3 z-30 cursor-pointer'
+          className='absolute top-3 right-3 z-10 cursor-pointer'
         >
           <img src={star} alt='star' />
         </button>
@@ -79,7 +79,7 @@ const InfoCard = ({
         <div className='bg-main-text-navy/50 absolute inset-0 flex items-center justify-center space-x-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
           <button
             onClick={onAddSchedule}
-            className='bg-main-text-navy hover:bg-main-text-navy/70 tfont-medium cursor-pointer rounded-full px-5 py-2 text-white'
+            className='bg-main-text-navy hover:bg-main-text-navy/70 cursor-pointer rounded-full px-5 py-2 font-medium text-white'
           >
             일정 추가
           </button>

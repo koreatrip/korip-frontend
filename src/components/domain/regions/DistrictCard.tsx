@@ -10,7 +10,7 @@ const DistrictCard = () => {
     <div className='bg-bg-white border-outline-gray shadow-light relative rounded-2xl border p-4'>
       <h3 className='text-lg font-medium'>강남구</h3>
       <div className='text-sub-text-gray flex items-center gap-x-1'>
-        <button className='absolute top-3 right-3 z-30 cursor-pointer'>
+        <button className='absolute top-3 right-3 z-10 cursor-pointer'>
           <img src={star_sm} alt='star' />
         </button>
         <MapPinIcon className='h-4 w-4' />
