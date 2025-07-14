@@ -1,4 +1,5 @@
 import Header from '@/components/common/Header';
+import { ToastProvider } from '@/context/ToastContextProvider';
 import { Outlet, useLocation } from 'react-router';
 
 const defaultLayout = () => {
@@ -10,12 +11,14 @@ const defaultLayout = () => {
     headerVariant = 'search';
   }
   return (
-    <div className='bg-bg-white text-main-text-navy font-pretendard flex min-h-screen flex-col'>
-      <Header variant={headerVariant} />
-      <main className='flex flex-grow flex-col'>
-        <Outlet />
-      </main>
-    </div>
+    <ToastProvider>
+      <div className='bg-bg-white text-main-text-navy font-pretendard flex min-h-screen flex-col'>
+        <Header variant={headerVariant} />
+        <main className='flex flex-grow flex-col'>
+          <Outlet />
+        </main>
+      </div>
+    </ToastProvider>
   );
 };
 
