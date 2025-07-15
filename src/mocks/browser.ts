@@ -1,4 +1,4 @@
 import { setupWorker } from 'msw/browser';
-import { handlers } from './handlers';
+import { mockWeatherLocationHandlers } from './mockWeatherLocationHandlers';
 
-export const worker = setupWorker(...handlers);
+export const worker = setupWorker(...mockWeatherLocationHandlers);
