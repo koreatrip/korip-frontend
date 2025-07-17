@@ -28,7 +28,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <ToastContext.Provider value={{ showToast }}>
+    <ToastContext value={{ showToast }}>
       {children}
       {toasts.map((toast) => (
         <ToastMessage
@@ -38,6 +38,6 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
           onClose={() => removeToast(toast.id)}
         />
       ))}
-    </ToastContext.Provider>
+    </ToastContext>
   );
 };

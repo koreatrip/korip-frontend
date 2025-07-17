@@ -75,6 +75,10 @@ export const router = createBrowserRouter([
         element: <DistrictListPage />,
       },
       {
+        path: 'explore/attractions/:district',
+        element: <DistrictListPage />,
+      },
+      {
         path: 'planner',
         element: <PlannerPage />,
       },
