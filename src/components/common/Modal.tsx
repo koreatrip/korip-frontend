@@ -25,7 +25,7 @@ export const Modal = ({ isOpen, onClose, children }: TModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <ModalContext.Provider value={{ onClose }}>
+    <ModalContext value={{ onClose }}>
       {/* Modal Backdrop (배경) */}
       <div
         className='bg-main-text-navy/40 fixed inset-0 z-50 flex items-center justify-center'
@@ -39,7 +39,7 @@ export const Modal = ({ isOpen, onClose, children }: TModalProps) => {
           {children}
         </div>
       </div>
-    </ModalContext.Provider>
+    </ModalContext>
   );
 };
 

@@ -125,10 +125,10 @@ const RegionsPage = () => {
             </li>
             <li>
               <InfoCard
-                variant='interactive'
-                title='경복궁'
-                description='조선시대 왕궁 한복입고 방문시 어쩌고'
-                details='오전9시 ~ 6시 3호선 경복궁 역 '
+                variant='selectable'
+                title='종로구'
+                // description='조선시대 왕궁 한복입고 방문시 어쩌고'
+                // details='오전9시 ~ 6시 3호선 경복궁 역 '
               />
             </li>
             <li>

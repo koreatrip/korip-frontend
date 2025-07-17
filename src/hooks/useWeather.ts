@@ -6,7 +6,8 @@ import {
   getWindDirection,
   getSunriseTime,
 } from '../utils/weatherUtils';
-import type { Location } from '../stores/useLocationStore';
+// import type { Location } from '../stores/useLocationStore';
+import type { Location } from '@/api/locations/locationType';
 
 const API_KEY = decodeURIComponent(import.meta.env.VITE_API_KEY || '');
 
@@ -107,13 +108,7 @@ const useWeather = (location: Location | null) => {
         const { baseDate, baseTime, yesterdayDate, currentHour } =
           getBaseDateTime();
         const ultraSrtBaseTime = getUltraSrtBaseTime();
-        const {
-          '격자 X': nx,
-          '격자 Y': ny,
-          stnId,
-          stationName,
-          areaNo,
-        } = location;
+        const { '격자 X': nx, '격자 Y': ny, stationName, areaNo } = location;
 
         const tomorrowDate = new Date(
           new Date().setDate(new Date().getDate() + 1)
@@ -128,7 +123,6 @@ const useWeather = (location: Location | null) => {
           ultraSrtBaseTime,
           nx,
           ny,
-          stnId,
           stationName,
           areaNo,
         });
@@ -404,7 +398,6 @@ const useWeather = (location: Location | null) => {
           baseDate,
           yesterdayDate,
           currentHour,
-          stnId,
           stationName,
           currentTemp,
         });
