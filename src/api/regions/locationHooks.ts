@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { regionQueries } from './locationQueries';
+import { regionQueries } from '../locations/locationQueries';
 
 /** 전체 지역 목록 조회 */
 export const useGetRegionsQuery = (options?: any) => {
