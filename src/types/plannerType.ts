@@ -34,8 +34,3 @@ export type PlaceData = {
   isFavorite: boolean;
   createdAt: string; // ISO date string
 };
-
-type TSearchBarProps = {
-  placeholder?: string;
-  onSearch: (value: string) => void;
-};
