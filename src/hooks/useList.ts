@@ -1,17 +1,22 @@
 import { useTranslation } from 'react-i18next';
 
-export const useList = (namespace = 'tips') => {
+const isStringArray = (value: unknown): value is string[] => {
+  return (
+    Array.isArray(value) && value.every((item) => typeof item === 'string')
+  );
+};
+
+export const useList = (namespace: string = 'tips') => {
   const { t } = useTranslation();
 
-  const getList = (key) => {
-    // namespace가 이미 포함되어 있으면 그대로, 없으면 추가
+  const getList = (key: string): string[] => {
     const fullKey =
       key.includes('.') && key.startsWith(namespace)
         ? key
         : `${namespace}.${key}`;
 
     const list = t(fullKey, { returnObjects: true });
-    return Array.isArray(list) ? list : [];
+    return isStringArray(list) ? list : [];
   };
 
   return getList;
