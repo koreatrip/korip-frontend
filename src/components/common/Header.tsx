@@ -11,6 +11,7 @@ import SearchBar from './searchBar/SearchBar';
 import type { TDropdownItem } from './dropdown/Dropdown';
 import Dropdown from './dropdown/Dropdown';
 import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 // --- Props 타입 정의 ---
 type THeaderProps = {
@@ -19,35 +20,67 @@ type THeaderProps = {
 
 // --- 단일 Header 컴포넌트 ---
 const Header = ({ variant = 'default' }: THeaderProps) => {
-  // 1. 모든 상태와 데이터는 한 곳에서 관리합니다.
+  const { t, i18n } = useTranslation();
   const { stack, actions } = useHeaderStore();
 
+  // 언어 변경 핸들러
+  const handleLanguageChange = (languageCode: string) => {
+    i18n.changeLanguage(languageCode);
+    actions.closeLangDropdown(); // 드롭다운 닫기
+  };
+
   const mainMenuItems = [
-    { label: '지역별 둘러보기', href: '/regions/explore' },
-    { label: '여행', href: '/travel' },
-    { label: '한국 여행 팁', href: '/tips' },
+    { label: t('places.explore_regions'), href: '/explore/regions' },
+    { label: t('common.travel'), href: '/travel' },
+    { label: t('places.travel_tips'), href: '/tips' },
   ];
 
   const authMenuItems = [
-    { label: '로그인', href: '/login' },
-    { label: '회원가입', href: '/register' },
+    { label: t('auth.login'), href: '/login' },
+    { label: t('auth.signup'), href: '/register' },
   ];
 
   const languages: TDropdownItem[] = [
-    { label: '한국어', value: 'ko' },
-    { label: '영어', value: 'en' },
-    { label: '일본어', value: 'ja' },
-    { label: '중국어', value: 'zh' },
+    {
+      label: t('languages.korean'),
+      value: 'ko',
+      onClick: () => handleLanguageChange('ko'),
+    },
+    {
+      label: t('languages.english'),
+      value: 'en',
+      onClick: () => handleLanguageChange('en'),
+    },
+    {
+      label: t('languages.japanese'),
+      value: 'ja',
+      onClick: () => handleLanguageChange('ja'),
+    },
+    {
+      label: t('languages.chinese'),
+      value: 'zh',
+      onClick: () => handleLanguageChange('zh'),
+    },
   ];
 
   const travelItems: TDropdownItem[] = [
-    { label: '내 여행 일정', value: 'my-itinerary', href: '/my-itinerary' },
     {
-      label: '새로운 일정 만들기',
+      label: t('travel.my_travel_plans'),
+      value: 'my-itinerary',
+      href: '/my-itinerary',
+    },
+    {
+      label: t('travel.create_new_plan'),
       value: 'new-itinerary',
       href: '/create-itinerary',
     },
   ];
+
+  // 현재 언어에 맞는 표시명 가져오기
+  const getCurrentLanguageLabel = () => {
+    const currentLang = languages.find((lang) => lang.value === i18n.language);
+    return currentLang?.label || t('languages.korean');
+  };
 
   // 가독성을 위해 데스크톱 메뉴를 작은 컴포넌트로 분리
   const MainMenu = () => (
@@ -57,7 +90,7 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
           key={item.label}
           className='hover:bg-hover-gray relative cursor-pointer rounded-lg px-5 py-[10px]'
         >
-          {item.label === '여행' ? (
+          {item.label === t('common.travel') ? (
             <>
               <button
                 onClick={actions.toggleTravelDropdown}
@@ -116,7 +149,7 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
                   className='hover:bg-hover-gray flex cursor-pointer items-center gap-x-1 rounded-lg px-3 py-1.5'
                 >
                   <GlobeAltIcon className='h-5 w-5 stroke-2' />
-                  <p>언어별</p>
+                  <p>{getCurrentLanguageLabel()}</p>
                 </button>
                 <Dropdown
                   isOpen={stack.isLangDropdownOpen}
@@ -144,7 +177,7 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
                   className='hover:bg-hover-gray flex cursor-pointer items-center gap-x-1 rounded-lg px-3 py-1.5'
                 >
                   <GlobeAltIcon className='h-5 w-5 stroke-2' />
-                  <p>언어별</p>
+                  <p>{getCurrentLanguageLabel()}</p>
                 </button>
                 <Dropdown
                   isOpen={stack.isLangDropdownOpen}
@@ -168,7 +201,7 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
             href='/login'
             className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-semibold'
           >
-            <p>로그인</p>
+            <p>{t('auth.login')}</p>
           </a>
           <button
             onClick={actions.toggleMenu}
