@@ -1,0 +1,326 @@
+{
+  "common": {
+    "search": "検索",
+    "confirm_selection": "選択確認",
+    "complete": "完了",
+    "cancel": "キャンセル",
+    "submit": "送信する",
+    "edit": "編集",
+    "delete": "削除",
+    "save": "保存",
+    "view_details": "詳細を見る",
+    "sort": "並べ替え",
+    "explore": "探検する",
+    "view_all": "全て見る",
+    "all": "全体",
+    "good": "良い",
+    "normal": "普通",
+    "bad": "悪い",
+    "current": "現在",
+    "tomorrow": "明日",
+    "min": "最低",
+    "max": "最高",
+    "address": "住所",
+    "description": "説明",
+    "features": "特長",
+    "others": "その他",
+    "date_ascending": "日付が古い順",
+    "date_descending": "日付が新しい順",
+    "name_ascending": "名前昇順",
+    "name_descending": "名前降順",
+    "travel": "旅行",
+    "menu": "メニュー"
+  },
+
+  "auth": {
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "signup": "会員登録",
+    "email": "メール",
+    "password": "パスワード",
+    "confirm_password": "パスワード確認",
+    "username": "ユーザー名",
+    "phone_number": "電話番号",
+    "please_enter_name": "名前を入力してください",
+    "email_password_mismatch": "メールまたはパスワードが一致しません。",
+    "member_already_exists": "既に登録されています",
+    "invalid_phone_format": "電話番号の形式が正しくありません",
+    "password_mismatch": "パスワードが一致しません",
+    "invalid_email_format": "メール形式が正しくありません",
+    "verification_code_sent": "認証コードを送信しました。受信箱をご確認ください",
+    "enter_verification_code": "認証コードを入力してください",
+    "verification_code_mismatch": "認証コードが一致しません",
+    "min_8_characters": "8文字以上",
+    "letter_number_special_combo": "英字、数字、特殊文字の組み合わせ"
+  },
+
+  "user": {
+    "edit_profile": "プロフィール編集",
+    "basic_info": "基本情報",
+    "interests": "興味",
+    "account_status": "アカウント状況",
+    "security_settings": "セキュリティ設定",
+    "change_password": "パスワード変更",
+    "delete_account": "アカウント削除",
+    "current_password": "現在のパスワード",
+    "new_password": "新しいパスワード",
+    "confirm_new_password": "新しいパスワード確認",
+    "welcome_user": "ようこそ、{{name}}さん",
+    "account_deletion_warning": "注意：アカウントを削除すると、すべての旅行プラン、お気に入り、個人情報が永久に削除されます。",
+    "select_deletion_reason": "退会理由を選択してください",
+    "not_using_service": "サービスを使用していない",
+    "dissatisfied_with_service": "サービスへの不満",
+    "privacy_concerns": "プライバシー保護の懸念",
+    "select_interests": "興味を選択してください",
+    "korip_recommended_interests": "Koripがおすすめする興味",
+    "selected_interests": "選択した興味"
+  },
+
+  "travel": {
+    "my_travel_plans": "マイプラン",
+    "create_new_plan": "新しい旅行プランを作成",
+    "add_to_plan": "プランに追加",
+    "travel_schedule": "旅行プラン",
+    "create_travel_schedule": "旅行プランを作成",
+    "travel_name": "旅行名",
+    "travel_period": "旅行期間",
+    "destination": "旅行先",
+    "total_places": "総場所",
+    "placement_complete": "配置完了",
+    "progress": "進行度",
+    "schedule_complete": "旅程完成",
+    "schedule_summary": "旅程概要",
+    "selected_places": "選択した場所",
+    "plan_your_trip": "自分だけの旅行を計画しよう！",
+    "edit_your_schedule": "旅程を編集する",
+    "google_calendar_sync": "Google カレンダー連携",
+    "save_as_pdf": "PDFで保存",
+    "drag_attractions_to_schedule": "選んだ観光地をドラッグして旅程に追加してみましょう",
+    "drag_instructions": "使い方：左の名所をドラッグして中央の時間帯に置いてください。日付と時間は自由に調整できます。"
+  },
+
+  "places": {
+    "favorite_places": "お気に入りの場所",
+    "favorite_regions": "お気に入りの地域",
+    "main_attractions": "主要観光地",
+    "visited_places": "訪問済み場所",
+    "favorites": "お気に入り",
+    "search_region_placeholder": "地域名で検索してみましょう（例：ソウル、チェジュ島）",
+    "recommended_searches": "おすすめ検索ワード",
+    "which_region_travel": "どの地域へ旅行しますか？",
+    "select_beautiful_regions": "韓国の美しい地域を選んでください",
+    "explore_regions": "地域を巡る",
+    "travel_tips": "旅行のヒント",
+    "popular_area_info": "人気エリア情報",
+    "explore_all_districts": "全ての区を巡る",
+    "recommended_spots_for_user": "{{name}}さんへのおすすめスポット",
+    "selected_based_on_interests": "{{interest}}にご興味があるお客様のために、厳選した内容をご紹介します",
+    "recommended_accommodations": "旅行者におすすめの宿泊施設",
+    "explore_all_areas": "{{regions}} 全ての区を巡る",
+    "total_districts": "全{{count}}区",
+    "45_attractions": "{{attractions_count}}か所の観光スポット",
+    "website_url": "サイトURL",
+    "visit_website": "サイトにアクセス",
+    "available_hours": "利用可能時間"
+  },
+
+  "themes": {
+    "theme_travel": "テーマ別旅行",
+    "kpop_hallyu": "K‑POP／ハルリュ",
+    "city_travel": "都市旅行",
+    "nature_healing": "自然／癒し",
+    "history_culture": "歴史／文化",
+    "activities": "アクティビティ",
+    "gourmet_travel": "グルメ旅行",
+    "palace_history": "宮殿／歴史",
+    "shopping": "ショッピング",
+    "cafe_restaurant": "カフェ／レストラン",
+    "nature_parks": "自然／公園",
+    "culture_performance": "文化／公演",
+    "night_view": "夜景／眺望",
+    "k_drama": "K‑ドラマ",
+    "relaxation": "休憩",
+    "kpop_hobbies": "K‑POP／趣味"
+  },
+
+  "weather": {
+    "feels_like": "体感",
+    "humidity": "湿度",
+    "uv_index": "紫外線",
+    "south_wind": "南風",
+    "sunrise": "日の出",
+    "sunset": "日の入り",
+    "fine_dust": "微細粉塵",
+    "hourly_forecast": "時間別予報",
+    "air_quality_info": "大気質情報",
+    "ultrafine_dust": "超微細粉塵"
+  },
+
+  "kpop": {
+    "select_favorite_kpop_idol": "好きなK-POPアイドル／グループを選択してください",
+    "search_idol_placeholder": "アイドルグループを検索（例：BTS、aespa）",
+    "idol_not_in_list": "欲しいアイドル／グループがリストにありませんか？",
+    "request_idol": "アイドルをリクエスト",
+    "idol_group_name": "アイドル／グループ名",
+    "agency_optional": "所属事務所（任意）",
+    "related_info_optional": "関連情報（任意）",
+    "remarks_optional": "備考／コメント（任意）",
+    "idol_request_will_be_reviewed": "ご申請いただいたアイドル／グループは、審査後に更新されます。",
+    "please_be_patient": "時間がかかる場合がありますのでご了承ください。"
+  },
+
+  "languages": {
+    "korean": "韓国語",
+    "japanese": "日本語",
+    "chinese": "中国語",
+    "english": "英語",
+    "choose_starting_language": "開始言語を選択してください",
+    "language_can_be_changed_anytime": "言語はいつでも変更できます。"
+  },
+
+  "schedule": {
+    "monday_am_pm": "月曜日（午前・午後）",
+    "tuesday": "火曜日",
+    "wednesday": "水曜日",
+    "thursday": "木曜日",
+    "friday": "金曜日",
+    "saturday": "土曜日",
+    "sunday": "日曜日"
+  },
+
+  "messages": {
+    "welcome_to_korip": "Koripへようこそ",
+    "looking_for_amazing_spots": "韓国の素晴らしい旅行スポットを探しています",
+    "discovering_hidden_gems": "隠れスポットを見つけています",
+    "maybe_later": "また今度にします",
+    "lost_in_korea": "韓国で道に迷いましたか？"
+  },
+  "travelTips": {
+    "title": "韓国旅行のヒント",
+    "subtitle": "何について知りたいですか？",
+    "accordion": {
+      "payment_guide": "支払い案内",
+      "emergency_calls": "112/119 緊急通報の使い方",
+      "transport_card": "交通カードの使い方（eZL、T-moneyなど）",
+      "embassy_info": "大使館の連絡先（国別）",
+      "hospital_pharmacy": "病院・薬局の探し方 + 位置情報の提供"
+    },
+    "misc": {
+      "additional_tip": "追加のヒント",
+      "recommendation": "おすすめ",
+      "note": "参考"
+    }
+  },
+  "tips": {
+    "title": "韓国旅行のヒント",
+    "subtitle": "何を知りたいですか？",
+    "payment": {
+      "title": "支払い案内",
+      "list": [
+        "ほとんどの店舗、レストラン、コンビニでは海外発行カード（VISA、Mastercard、JCB、UnionPayなど）が使用可能です。",
+        "市場や小さな飲食店、地方ではカード不可の場合もあるため、現金を少し持っておくことをお勧めします。"
+      ]
+    },
+    "emergency": {
+      "title": "112/119 緊急通報の使い方",
+      "police": {
+        "title": "112",
+        "description": "警察（24時間通訳サービス）",
+        "list": [
+          "犯罪通報、交通事故、遺失物の通報",
+          "緊急時は24時間いつでも連絡可能"
+        ]
+      },
+      "fire": {
+        "title": "119",
+        "description": "消防・救急医療（17言語対応）",
+        "list": [
+          "火災、救急医療、救助要請に使用",
+          "緊急時は24時間いつでも連絡可能",
+          "通話時、自動的に位置が追跡されます"
+        ]
+      },
+      "additionalTipTitle": "追加のヒント",
+      "additionalTipContent": "1330は韓国観光公社が運営する24時間対応の多言語観光案内・通訳サービスで、緊急時には112や119との三者通話で通訳を支援します。"
+    },
+    "transportCard": {
+      "title": "交通カードの使い方 (eZL, T‑moneyなど)",
+      "rechargeableCardTitle": "チャージ式交通カード（eZL/T‑money）",
+      "rechargeableCardList": [
+        "韓国で最も広く使われている交通カードです。一度購入すれば何度でもチャージして使えます。",
+        "購入場所：コンビニ（GS25、CU、セブンイレブン、Emart24など）",
+        "地下鉄、バス、空港鉄道、一部タクシーでも使用可能",
+        "ソウル、釜山、済州など多くの地域で互換あり",
+        "カード価格に保証金は含まれません",
+        "現金のみでチャージ可能",
+        "一部コンビニでは残高を手数料を差し引いて返金可能",
+        "一部コンビニでも使用可能",
+        "バスと地下鉄間での乗り継ぎ割引あり"
+      ],
+      "recommendationTitle": "おすすめ",
+      "rechargeableCardRecommendation": "公共交通を何度も利用する予定なら、このカードが最も便利です。",
+      "ezl": {
+        "title": "eZL",
+        "list": [
+          "ICタイプ：支払いチップ付きで日常利用可能",
+          "RFタイプ：チップなし、公共交通および一部コンビニ支払い専用",
+          "eZLサイトに登録すれば紛失時に残高返金可能"
+        ]
+      },
+      "tmoney": {
+        "title": "T‑money",
+        "list": [
+          "RFタイプ：チップなし、公共交通および一部コンビニ支払い専用",
+          "T-moneyサイトに登録すれば紛失時に残高返金可能"
+        ]
+      },
+      "singleUseTicketTitle": "一回限り地下鉄チケット",
+      "singleUseTicketList": [
+        "ソウル地下鉄専用の一回きり使用カードです。",
+        "駅の券売機で購入可能",
+        "デポジット500ウォンが含まれています<br/>(例：地下鉄料金1,250ウォン + 500 デポジット = 1,750ウォン支払い)",
+        "到着駅の返金機で500ウォンが返金されます",
+        "チャージ不可、再使用不可"
+      ],
+      "singleUseTicketRecommendation": "地下鉄を1～2回だけ利用する場合に便利です！"
+    },
+    "embassy": {
+      "title": "大使館連絡先（国別）",
+      "description": "韓国にある主要国の大使館の連絡先と住所です。紛失や事故、緊急時にサポートを求めることができます。",
+      "us": {
+        "name": "米国大使館",
+        "info": "ソウル特別市鍾路区世宗路 <br /> 02-397-4114"
+      },
+      "japan": {
+        "name": "日本大使館",
+        "info": "ソウル特別市鍾路区水淞洞 <br /> 02-2170-5200"
+      },
+      "china": {
+        "name": "中国大使館",
+        "info": "ソウル特別市西大門区延禧洞 <br /> 02-738-1038"
+      },
+      "noteTitle": "参考",
+      "noteContent": "大使館は平日のみ営業しており、緊急時は緊急連絡番号にて対応可能です。"
+    },
+    "hospital": {
+      "title": "病院・薬局の探し方＋位置情報",
+      "pharmacyTitle": "薬局利用案内",
+      "pharmacyList": [
+        "薬局では一般用医薬品（風邪薬など）の購入が可能ですが、抗生物質は病院の処方箋が必要です。",
+        "ほとんどの薬局で基本的な英語対応が可能です。",
+        "コンビニでも一部医薬品を販売しています。"
+      ],
+      "foreignerFriendlyTitle": "外国人対応医療機関",
+      "foreignerFriendlyList": [
+        "ソウル大学病院：英語、中国語、日本語対応",
+        "延世医療院：国際診療センターを運営",
+        "サムスンソウル病院：外国人専用デスクあり",
+        "アサン病院：通訳サービス提供"
+      ],
+      "mainHospitalsTitle": "主要病院情報",
+      "mainHospitalsList": [
+        "外国人向け診療可能な病院情報は現在更新中です。緊急時には119に連絡し、最寄りの救急室へ搬送されます。"
+      ]
+    }
+  }
+}
