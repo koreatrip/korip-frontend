@@ -1,0 +1,323 @@
+{
+  "common": {
+    "search": "搜索",
+    "confirm_selection": "选择确认",
+    "complete": "完成",
+    "cancel": "取消",
+    "submit": "提交",
+    "edit": "修改",
+    "delete": "删除",
+    "save": "保存",
+    "view_details": "查看详情",
+    "sort": "排序",
+    "explore": "浏览",
+    "view_all": "查看全部",
+    "all": "全部",
+    "good": "好",
+    "normal": "普通",
+    "bad": "差",
+    "current": "现在",
+    "tomorrow": "明天",
+    "min": "最低",
+    "max": "最高",
+    "address": "地址",
+    "description": "介绍",
+    "features": "特点",
+    "others": "其他",
+    "date_ascending": "日期升序",
+    "date_descending": "日期降序",
+    "name_ascending": "名称升序",
+    "name_descending": "名称降序",
+    "travel": "旅行",
+    "menu": "菜单"
+  },
+
+  "auth": {
+    "login": "登录",
+    "logout": "登出",
+    "signup": "注册",
+    "email": "邮箱",
+    "password": "密码",
+    "confirm_password": "确认密码",
+    "username": "用户名",
+    "phone_number": "联系方式",
+    "please_enter_name": "请输入姓名",
+    "email_password_mismatch": "邮箱或密码不匹配。",
+    "member_already_exists": "已是会员",
+    "invalid_phone_format": "电话号码格式不正确",
+    "password_mismatch": "密码不一致",
+    "invalid_email_format": "邮箱格式不正确",
+    "verification_code_sent": "已发送验证码。请查看邮箱",
+    "enter_verification_code": "请输入验证码",
+    "verification_code_mismatch": "验证码不一致",
+    "min_8_characters": "8位以上",
+    "letter_number_special_combo": "英文、数字、特殊字符组合"
+  },
+
+  "user": {
+    "edit_profile": "修改个人信息",
+    "basic_info": "基本信息",
+    "interests": "兴趣",
+    "account_status": "账户状态",
+    "security_settings": "安全设置",
+    "change_password": "修改密码",
+    "delete_account": "注销账户",
+    "current_password": "当前密码",
+    "new_password": "新密码",
+    "confirm_new_password": "确认新密码",
+    "welcome_user": "欢迎您， {{name}}",
+    "account_deletion_warning": "注意: 注销账户将永久删除所有旅行计划、收藏和个人信息。",
+    "select_deletion_reason": "请选择注销原因",
+    "not_using_service": "不使用服务",
+    "dissatisfied_with_service": "对服务不满意",
+    "privacy_concerns": "担忧个人信息保护",
+    "select_interests": "请选择兴趣",
+    "korip_recommended_interests": "推荐兴趣 - Korip",
+    "selected_interests": "已选兴趣"
+  },
+
+  "travel": {
+    "my_travel_plans": "我的旅行日程",
+    "create_new_plan": "创建新日程",
+    "add_to_plan": "添加日程",
+    "travel_schedule": "旅行日程",
+    "create_travel_schedule": "创建旅行日程",
+    "travel_name": "旅行名称",
+    "travel_period": "旅行期间",
+    "destination": "旅行地",
+    "total_places": "总场所",
+    "placement_complete": "已完成安排",
+    "progress": "进度",
+    "schedule_complete": "日程完成",
+    "schedule_summary": "日程摘要",
+    "selected_places": "选定场所",
+    "plan_your_trip": "计划您的专属旅行!",
+    "edit_your_schedule": "修改日程",
+    "google_calendar_sync": "谷歌日历同步",
+    "save_as_pdf": "保存为PDF",
+    "drag_attractions_to_schedule": "拖动选中的景点添加到日程中",
+    "drag_instructions": "使用方法: 将左侧景点拖动到中间时间段。日期和时间可以自由调整。"
+  },
+
+  "places": {
+    "favorite_places": "收藏地点",
+    "favorite_regions": "收藏地区",
+    "main_attractions": "主要景点",
+    "visited_places": "访问地点",
+    "favorites": "收藏",
+    "search_region_placeholder": "搜索地区 (例: 首尔, 济州岛)",
+    "recommended_searches": "推荐搜索词",
+    "which_region_travel": "您要去哪个地区旅行?",
+    "select_beautiful_regions": "请选择韩国的美丽地区",
+    "explore_regions": "浏览地区",
+    "travel_tips": "旅行提示",
+    "popular_area_info": "热门区域信息",
+    "explore_all_districts": "浏览所有区域",
+    "recommended_spots_for_user": "为{{name}}推荐的景点",
+    "selected_based_on_interests": "根据您的兴趣 {{interest}} 精选内容",
+    "recommended_accommodations": "为旅行者推荐的住宿",
+    "explore_all_areas": "{{regions}}浏览所有区域",
+    "total_districts": "总{{count}}个区域",
+    "45_attractions": "{{attractions_count}}个景点",
+    "website_url": "网址",
+    "visit_website": "网站快捷方式",
+    "available_hours": "可用时间"
+  },
+
+  "themes": {
+    "theme_travel": "主题旅行",
+    "kpop_hallyu": "K-POP/韩流",
+    "city_travel": "城市旅行",
+    "nature_healing": "自然/疗愈",
+    "history_culture": "历史/文化",
+    "activities": "活动",
+    "gourmet_travel": "美食旅行",
+    "palace_history": "宫殿/历史",
+    "shopping": "购物",
+    "cafe_restaurant": "咖啡厅/美食",
+    "nature_parks": "自然/公园",
+    "culture_performance": "文化/演出",
+    "night_view": "夜景/展望",
+    "k_drama": "韩剧",
+    "relaxation": "休息",
+    "kpop_hobbies": "K-POP/兴趣"
+  },
+
+  "weather": {
+    "feels_like": "体感",
+    "humidity": "湿度",
+    "uv_index": "紫外线",
+    "south_wind": "南风",
+    "sunrise": "日出",
+    "sunset": "日落",
+    "fine_dust": "PM2.5",
+    "hourly_forecast": "小时预报",
+    "air_quality_info": "空气质量信息",
+    "ultrafine_dust": "PM2.5"
+  },
+
+  "kpop": {
+    "select_favorite_kpop_idol": "请选择感兴趣的K-POP爱豆/组合",
+    "search_idol_placeholder": "搜索爱豆组合 (例: 防弹少年团, aespa)",
+    "idol_not_in_list": "想要的爱豆/组合不在列表中吗?",
+    "request_idol": "申请爱豆",
+    "idol_group_name": "爱豆/组合名称",
+    "agency_optional": "所属公司 (可选)",
+    "related_info_optional": "相关信息 (可选)",
+    "remarks_optional": "备注/想说的话 (可选)",
+    "idol_request_will_be_reviewed": "您申请的爱豆/组合将在审核后更新。",
+    "please_be_patient": "可能需要一定时间，敬请谅解。"
+  },
+
+  "languages": {
+    "korean": "韩语",
+    "japanese": "日语",
+    "chinese": "中文",
+    "english": "英语",
+    "choose_starting_language": "选择起始语言",
+    "language_can_be_changed_anytime": "语言可以随时更改。"
+  },
+
+  "schedule": {
+    "monday_am_pm": "星期一上午下午",
+    "tuesday": "星期二",
+    "wednesday": "星期三",
+    "thursday": "星期四",
+    "friday": "星期五",
+    "saturday": "星期六",
+    "sunday": "星期日"
+  },
+
+  "messages": {
+    "welcome_to_korip": "欢迎来到Korip",
+    "looking_for_amazing_spots": "正在寻找韩国的精彩旅行地",
+    "discovering_hidden_gems": "正在发现隐藏景点",
+    "maybe_later": "稍后进行。",
+    "lost_in_korea": "Lost in Korea? 迷路了吗?"
+  },
+  "travelTips": {
+    "title": "韩国旅行小贴士",
+    "subtitle": "您想了解什么？",
+    "accordion": {
+      "payment_guide": "支付指南",
+      "emergency_calls": "如何使用紧急电话 112/119",
+      "transport_card": "交通卡使用方法（eZL、T-money等）",
+      "embassy_info": "各国大使馆联系方式",
+      "hospital_pharmacy": "查找医院/药房的方法 + 位置信息"
+    },
+    "misc": {
+      "additional_tip": "额外提示",
+      "recommendation": "推荐",
+      "note": "参考"
+    }
+  },
+  "tips": {
+    "title": "韩国旅行小贴士",
+    "subtitle": "您想了解什么？",
+    "payment": {
+      "title": "支付指南",
+      "list": [
+        "大多数商店、餐馆和便利店都接受国际卡（VISA、Mastercard、JCB、UnionPay等）。",
+        "市场、小餐馆和乡村地区可能不支持刷卡，建议准备一些现金。"
+      ]
+    },
+    "emergency": {
+      "title": "112/119 紧急电话使用方法",
+      "police": {
+        "title": "112",
+        "description": "警察（24小时翻译服务）",
+        "list": ["报案、交通事故、遗失物报失", "紧急情况下24小时都可联系"]
+      },
+      "fire": {
+        "title": "119",
+        "description": "消防、急救（支持17种语言）",
+        "list": [
+          "用于火灾、急救、救援请求",
+          "紧急情况下24小时都可联系",
+          "拨打时会自动追踪位置"
+        ]
+      },
+      "additionalTipTitle": "补充提示",
+      "additionalTipContent": "1330是由韩国观光公社运营的24小时多语言旅游服务台。在紧急情况下，可以通过三方通话与112或119进行口译支持。"
+    },
+    "transportCard": {
+      "title": "交通卡使用方法（eZL，T‑money等）",
+      "rechargeableCardTitle": "可充值交通卡（eZL/T‑money）",
+      "rechargeableCardList": [
+        "在韩国最广泛使用的交通卡。一次购买，多次充值使用。",
+        "购买地点：便利店（GS25、CU、7‑Eleven、Emart24等）",
+        "适用于地铁、公交、机场铁路和部分出租车",
+        "在首尔、釜山、济州等大多数地区通用",
+        "卡价不含押金",
+        "只支持现金充值",
+        "部分便利店可在扣除手续费后退还余额",
+        "部分便利店可使用",
+        "公交和地铁之间享有换乘折扣"
+      ],
+      "recommendationTitle": "推荐",
+      "rechargeableCardRecommendation": "如果计划多次使用公共交通，这是最方便的选择。",
+      "ezl": {
+        "title": "eZL",
+        "list": [
+          "IC类型：含支付芯片，可用于日常消费",
+          "RF类型：无芯片，仅限公共交通和部分便利店支付",
+          "注册到eZL网站后，卡片丢失时可退款余额"
+        ]
+      },
+      "tmoney": {
+        "title": "T‑money",
+        "list": [
+          "RF类型：无芯片，仅限公共交通和部分便利店支付",
+          "注册到T‑money网站后，卡片丢失时可退款余额"
+        ]
+      },
+      "singleUseTicketTitle": "一次性地铁票",
+      "singleUseTicketList": [
+        "仅适用于首尔地铁的一次性使用卡。",
+        "可在地铁站售票机购买",
+        "含500韩元押金<br/>(例如：地铁票价1250韩元 + 500押金 = 支付1750韩元)",
+        "可在目的地站的退押金机退还500韩元",
+        "不可充值，不可重复使用"
+      ],
+      "singleUseTicketRecommendation": "如果仅使用地铁一两次，非常实用！"
+    },
+    "embassy": {
+      "title": "大使馆联系方式（按国家）",
+      "description": "韩国主要国家驻韩大使馆的联系方式和地址。在遗失、事故或紧急情况下，可以寻求帮助。",
+      "us": {
+        "name": "美国大使馆",
+        "info": "首尔钟路区世宗路 <br /> 02-397-4114"
+      },
+      "japan": {
+        "name": "日本大使馆",
+        "info": "首尔钟路区水淞洞 <br /> 02-2170-5200"
+      },
+      "china": {
+        "name": "中国大使馆",
+        "info": "首尔西大门区延禧洞 <br /> 02-738-1038"
+      },
+      "noteTitle": "备注",
+      "noteContent": "大使馆仅在工作日办公，紧急情况下可通过紧急联系方式联系。"
+    },
+    "hospital": {
+      "title": "医院/药房查询 + 位置信息",
+      "pharmacyTitle": "药房使用指南",
+      "pharmacyList": [
+        "药房可以购买非处方药（如感冒药），但抗生素需要医生处方。",
+        "大多数药房提供基础英语交流。",
+        "便利店也销售部分药品。"
+      ],
+      "foreignerFriendlyTitle": "外籍人士友好医疗机构",
+      "foreignerFriendlyList": [
+        "首尔大学医院：提供英语、中文、日语服务",
+        "延世医疗院：设有国际诊疗中心",
+        "三星首尔医院：设有外籍病人接待处",
+        "Asan医院：提供翻译服务"
+      ],
+      "mainHospitalsTitle": "主要医院信息",
+      "mainHospitalsList": [
+        "外籍就医信息正在更新中。紧急时，请拨打119前往最近的急诊室。"
+      ]
+    }
+  }
+}

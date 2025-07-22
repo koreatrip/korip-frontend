@@ -1,0 +1,327 @@
+{
+  "common": {
+    "search": "Search",
+    "confirm_selection": "Confirm",
+    "complete": "Complete",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "view_details": "Details",
+    "sort": "Sort",
+    "explore": "Explore",
+    "view_all": "View All",
+    "all": "All",
+    "good": "Good",
+    "normal": "Normal",
+    "bad": "Bad",
+    "current": "Current",
+    "tomorrow": "Tomorrow",
+    "min": "Low",
+    "max": "High",
+    "address": "Address",
+    "description": "Description",
+    "features": "Highlights",
+    "others": "Other",
+    "date_ascending": "Date Ascending",
+    "date_descending": "Date Descending",
+    "name_ascending": "Name Ascending",
+    "name_descending": "Name Descending",
+    "travel": "Travel",
+    "menu": "Menu"
+  },
+
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "username": "Username",
+    "phone_number": "Phone Number",
+    "please_enter_name": "Please enter your name",
+    "email_password_mismatch": "Incorrect email or password.",
+    "member_already_exists": "Member already exists",
+    "invalid_phone_format": "Invalid phone number format",
+    "password_mismatch": "Passwords do not match",
+    "invalid_email_format": "Invalid email format",
+    "verification_code_sent": "Verification code sent. Please check your inbox",
+    "enter_verification_code": "Enter the verification code",
+    "verification_code_mismatch": "Verification code does not match",
+    "min_8_characters": "At least 8 characters",
+    "letter_number_special_combo": "Combination of letters, numbers, and special characters"
+  },
+
+  "user": {
+    "edit_profile": "Edit Profile",
+    "basic_info": "Basic Info",
+    "interests": "Interests",
+    "account_status": "Account Status",
+    "security_settings": "Security Settings",
+    "change_password": "Change Password",
+    "delete_account": "Delete Account",
+    "current_password": "Current Password",
+    "new_password": "New Password",
+    "confirm_new_password": "Confirm New Password",
+    "welcome_user": "Welcome, {{name}}",
+    "account_deletion_warning": "Warning: Deleting your account will permanently erase all plans, favorites, and personal data.",
+    "select_deletion_reason": "Reason for Deletion",
+    "not_using_service": "Not using the service",
+    "dissatisfied_with_service": "Dissatisfied with the service",
+    "privacy_concerns": "Privacy concerns",
+    "select_interests": "Select your interests",
+    "korip_recommended_interests": "Recommended interests from Korip",
+    "selected_interests": "Selected Interests"
+  },
+
+  "travel": {
+    "my_travel_plans": "My Travel Plans",
+    "create_new_plan": "Create New Plan",
+    "add_to_plan": "Add to Plan",
+    "travel_schedule": "Travel Plans",
+    "create_travel_schedule": "Create Travel Plan",
+    "travel_name": "Travel Name",
+    "travel_period": "Travel Period",
+    "destination": "Destination",
+    "total_places": "Total Places",
+    "placement_complete": "Placement Complete",
+    "progress": "Progress",
+    "schedule_complete": "Itinerary Complete",
+    "schedule_summary": "Itinerary Summary",
+    "selected_places": "Selected Places",
+    "plan_your_trip": "Plan your own trip!",
+    "edit_your_schedule": "Edit Your Itinerary",
+    "google_calendar_sync": "Sync with Google Calendar",
+    "save_as_pdf": "Save as PDF",
+    "drag_attractions_to_schedule": "Drag selected attractions to add to your itinerary",
+    "drag_instructions": "How to use: Drag an attraction from the left and drop it into the schedule in the center. You can freely adjust dates and times."
+  },
+
+  "places": {
+    "favorite_places": "Favorite Places",
+    "favorite_regions": "Favorite Regions",
+    "main_attractions": "Main Attractions",
+    "visited_places": "Visited Places",
+    "favorites": "Favorites",
+    "search_region_placeholder": "Search for a region (e.g., Seoul, Jeju Island)",
+    "recommended_searches": "Recommended Searches",
+    "which_region_travel": "Which region are you traveling to?",
+    "select_beautiful_regions": "Select beautiful regions of Korea",
+    "explore_regions": "Explore Regions",
+    "travel_tips": "Travel Tips",
+    "popular_area_info": "Popular Area Info",
+    "explore_all_districts": "Explore All Districts",
+    "recommended_spots_for_user": "Recommended Spots for {{name}}",
+    "selected_based_on_interests": "Curated based on your interest in {{interest}}",
+    "recommended_accommodations": "Recommended Accommodations for Travelers",
+    "explore_all_areas": "Explore All Districts",
+    "total_districts": "Total {{count}} Districts",
+    "45_attractions": "{{attractions_count}} Attractions",
+    "website_url": "Website URL",
+    "visit_website": "Visit Website",
+    "available_hours": "Available Hours"
+  },
+
+  "themes": {
+    "theme_travel": "Thematic Travel",
+    "kpop_hallyu": "K-POP/Hallyu",
+    "city_travel": "City Travel",
+    "nature_healing": "Nature/Healing",
+    "history_culture": "History/Culture",
+    "activities": "Activities",
+    "gourmet_travel": "Gourmet Travel",
+    "palace_history": "Palaces/History",
+    "shopping": "Shopping",
+    "cafe_restaurant": "Cafes/Restaurants",
+    "nature_parks": "Nature/Parks",
+    "culture_performance": "Culture/Performances",
+    "night_view": "Night View/Scenery",
+    "k_drama": "K-Dramas",
+    "relaxation": "Relaxation",
+    "kpop_hobbies": "K-POP/Hobbies"
+  },
+
+  "weather": {
+    "feels_like": "Feels Like",
+    "humidity": "Humidity",
+    "uv_index": "UV Index",
+    "south_wind": "South Wind",
+    "sunrise": "Sunrise",
+    "sunset": "Sunset",
+    "fine_dust": "Fine Dust",
+    "hourly_forecast": "Hourly Forecast",
+    "air_quality_info": "Air Quality Info",
+    "ultrafine_dust": "Ultrafine Dust"
+  },
+
+  "kpop": {
+    "select_favorite_kpop_idol": "Select your favorite K-POP idol/group",
+    "search_idol_placeholder": "Search idol group (e.g., BTS, aespa)",
+    "idol_not_in_list": "Can't find your idol/group?",
+    "request_idol": "Request an Idol",
+    "idol_group_name": "Idol/Group Name",
+    "agency_optional": "Agency (optional)",
+    "related_info_optional": "Related Information (optional)",
+    "remarks_optional": "Remarks / Comments (optional)",
+    "idol_request_will_be_reviewed": "Your request will be reviewed and updated later.",
+    "please_be_patient": "Thank you for your patience."
+  },
+
+  "languages": {
+    "korean": "Korean",
+    "japanese": "Japanese",
+    "chinese": "Chinese",
+    "english": "English",
+    "choose_starting_language": "Choose your starting language",
+    "language_can_be_changed_anytime": "You can change the language anytime."
+  },
+
+  "schedule": {
+    "monday_am_pm": "Monday (AM/PM)",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+
+  "messages": {
+    "welcome_to_korip": "Welcome to Korip",
+    "looking_for_amazing_spots": "Looking for amazing travel spots in Korea",
+    "discovering_hidden_gems": "Discovering hidden gems",
+    "maybe_later": "Maybe Later",
+    "lost_in_korea": "Lost in Korea?"
+  },
+  "travelTips": {
+    "title": "Travel Tips for Korea",
+    "subtitle": "What are you curious about?",
+    "accordion": {
+      "payment_guide": "Payment Guide",
+      "emergency_calls": "How to Use Emergency Numbers (112/119)",
+      "transport_card": "How to Use Transportation Cards (eZL, T-money)",
+      "embassy_info": "Embassy Contact Information (By Country)",
+      "hospital_pharmacy": "How to Find Hospitals/Pharmacies + Location Info"
+    },
+    "misc": {
+      "additional_tip": "Additional Tip",
+      "recommendation": "Recommendation",
+      "note": "Note"
+    }
+  },
+
+  "tips": {
+    "title": "Travel Tips in Korea",
+    "subtitle": "What would you like to know?",
+    "payment": {
+      "title": "Payment Guide",
+      "list": [
+        "Most shops, restaurants, and convenience stores accept international cards (VISA, Mastercard, JCB, UnionPay, etc.).",
+        "Markets, small restaurants, and rural areas may not accept cards, so it's recommended to carry some cash."
+      ]
+    },
+    "emergency": {
+      "title": "How to Use Emergency Numbers 112/119",
+      "police": {
+        "title": "112",
+        "description": "Police (24/7 interpretation service)",
+        "list": [
+          "Report crimes, traffic accidents, lost items",
+          "Available 24/7 in emergencies"
+        ]
+      },
+      "fire": {
+        "title": "119",
+        "description": "Fire and Emergency Medical (Supports 17 languages)",
+        "list": [
+          "Use for fire, emergency medical, rescue situations",
+          "Available 24/7 in emergencies",
+          "Automatic location tracking when you call"
+        ]
+      },
+      "additionalTipTitle": "Additional Tip",
+      "additionalTipContent": "1330 is a 24/7 multilingual tourist helpline operated by the Korea Tourism Organization. In emergencies, it can provide interpretation support through a three-way call with 112 or 119."
+    },
+    "transportCard": {
+      "title": "How to Use Transportation Cards (eZL, T-money)",
+      "rechargeableCardTitle": "Rechargeable Transportation Cards (eZL/T-money)",
+      "rechargeableCardList": [
+        "Most widely used transportation cards in Korea. Buy once and recharge multiple times.",
+        "Where to buy: convenience stores (GS25, CU, 7-Eleven, Emart24, etc.)",
+        "Usable on subways, buses, airport trains, and some taxis",
+        "Compatible in most areas including Seoul, Busan, Jeju",
+        "No deposit required",
+        "Can be recharged with cash only",
+        "Remaining balance can be refunded at some convenience stores minus a fee",
+        "Can be used at some convenience stores",
+        "Transfer discounts available between bus and subway"
+      ],
+      "recommendationTitle": "Recommendation",
+      "rechargeableCardRecommendation": "Best option if you plan to use public transport multiple times.",
+      "ezl": {
+        "title": "eZL",
+        "list": [
+          "IC type: includes payment chip, usable for general purchases",
+          "RF type: no chip, usable only for public transport and some convenience stores",
+          "If registered on eZL site, balance can be refunded when reported lost"
+        ]
+      },
+      "tmoney": {
+        "title": "T-money",
+        "list": [
+          "RF type: no chip, usable only for public transport and some convenience stores",
+          "If registered on T-money site, balance can be refunded when reported lost"
+        ]
+      },
+      "singleUseTicketTitle": "Single-Use Subway Ticket",
+      "singleUseTicketList": [
+        "One-time-use card for Seoul subway only",
+        "Can be purchased from ticket machines inside subway stations",
+        "Includes a 500 KRW deposit (e.g., 1,250 fare + 500 deposit = 1,750 total)",
+        "Refundable 500 KRW at deposit return machines at your destination station",
+        "Cannot be recharged or reused"
+      ],
+      "singleUseTicketRecommendation": "Useful if you're using the subway just once or twice!"
+    },
+    "embassy": {
+      "title": "Embassy Contacts (by Country)",
+      "description": "Contact info and addresses of major embassies in Korea. You can seek help in case of loss, accidents, or emergencies.",
+      "us": {
+        "name": "U.S. Embassy",
+        "info": "Sejong-ro, Jongno-gu, Seoul <br /> 02-397-4114"
+      },
+      "japan": {
+        "name": "Japanese Embassy",
+        "info": "Susong-dong, Jongno-gu, Seoul <br /> 02-2170-5200"
+      },
+      "china": {
+        "name": "Chinese Embassy",
+        "info": "Yeonhui-dong, Seodaemun-gu, Seoul <br /> 02-738-1038"
+      },
+      "noteTitle": "Note",
+      "noteContent": "Embassies operate on weekdays only. In case of emergency, you can reach them via emergency contact numbers."
+    },
+    "hospital": {
+      "title": "Finding Hospitals & Pharmacies + Location Info",
+      "pharmacyTitle": "Pharmacy Information",
+      "pharmacyList": [
+        "You can buy basic medicine (like cold medicine) at pharmacies, but antibiotics require a doctor’s prescription.",
+        "Most pharmacies offer basic English communication.",
+        "Some convenience stores also sell basic medication."
+      ],
+      "foreignerFriendlyTitle": "Foreigner-Friendly Medical Institutions",
+      "foreignerFriendlyList": [
+        "Seoul National University Hospital: English, Chinese, Japanese support",
+        "Yonsei Medical Center: Operates an international clinic",
+        "Samsung Medical Center: Foreigners-only reception desk",
+        "Asan Medical Center: Provides interpretation service"
+      ],
+      "mainHospitalsTitle": "Major Hospital Info",
+      "mainHospitalsList": [
+        "Information on hospitals with foreigner services is currently being updated. In emergencies, call 119 for transport to the nearest ER."
+      ]
+    }
+  }
+}
