@@ -165,7 +165,10 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
         {variant === 'search' && (
           <>
             <div className='flex-grow px-10'>
-              <SearchBar height='h-12' />
+              <SearchBar
+                height='h-12'
+                placeholder={t('places.search_region_placeholder')}
+              />
             </div>
             <div className='hidden items-center sm:flex'>
               <MainMenu />
