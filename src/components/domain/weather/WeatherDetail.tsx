@@ -1,8 +1,8 @@
 // src/components/domain/weather/WeatherDetail.tsx
-interface WeatherDetailProps {
+type WeatherDetailProps = {
   label: string;
   value: string;
-}
+};
 const WeatherDetail = ({ label, value }: WeatherDetailProps) => {
   return (
     <div className='bg-bg-section border-outline-gray flex w-full flex-col items-center justify-center rounded-2xl border px-8 py-4'>
