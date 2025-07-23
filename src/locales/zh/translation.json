@@ -1,6 +1,7 @@
 {
   "common": {
     "search": "搜索",
+    "search_result": "搜索结果",
     "confirm_selection": "选择确认",
     "complete": "完成",
     "cancel": "取消",
@@ -29,7 +30,11 @@
     "name_ascending": "名称升序",
     "name_descending": "名称降序",
     "travel": "旅行",
-    "menu": "菜单"
+    "menu": "菜单",
+    "am": "上午",
+    "pm": "下午",
+    "format": "格式",
+    "enter_without_hyphens": "请输入不带连字符"
   },
 
   "auth": {
@@ -38,7 +43,9 @@
     "signup": "注册",
     "email": "邮箱",
     "password": "密码",
+    "enter_password": "请输入密码",
     "confirm_password": "确认密码",
+    "enter_confirm_password": "请再次输入密码。",
     "username": "用户名",
     "phone_number": "联系方式",
     "please_enter_name": "请输入姓名",
@@ -51,7 +58,29 @@
     "enter_verification_code": "请输入验证码",
     "verification_code_mismatch": "验证码不一致",
     "min_8_characters": "8位以上",
-    "letter_number_special_combo": "英文、数字、特殊字符组合"
+    "letter_number_special_combo": "英文、数字、特殊字符组合",
+    "welcome_message_title": "欢迎来到Korip。",
+    "welcome_message_content": "还没有账户?",
+    "create_account": "创建账户。",
+    "enter_email_to_create_account": "请在下方输入您的电子邮件以创建账户。",
+    "already_have_account": "或者，已有账号？",
+    "forgot_password": "忘记密码了吗？",
+    "or_continue_with": "或使用其他方式继续",
+    "email_required": "邮箱是必填项。",
+    "password_required": "密码是必填项。",
+    "password_length_requirement": "密码长度必须在8到20个字符之间。",
+    "password_min_length": "密码至少需要6个字符。",
+    "password_max_length": "密码最多不能超过20个字符。",
+    "verification_code": "验证码",
+    "name": "姓名",
+    "name_min_length": "姓名长度必须至少为2个字符。",
+    "name_max_length": "姓名不能超过50个字符。",
+    "password_min_8_characters": "密码必须至少为8个字符。",
+    "creating_account": "正在创建账户...",
+    "signup_success": "注册成功！正在跳转到登录页面。",
+    "signup_failed": "注册失败。请再试一次。",
+    "phone_number_placeholder": "请输入您的电话号码",
+    "password_length_8_20": "8到20个字符"
   },
 
   "user": {
@@ -105,7 +134,7 @@
     "main_attractions": "主要景点",
     "visited_places": "访问地点",
     "favorites": "收藏",
-    "search_region_placeholder": "搜索地区 (例: 首尔, 济州岛)",
+    "search_region_placeholder": "请搜索地区名称（例如：首尔，江南区，大田 西区）",
     "recommended_searches": "推荐搜索词",
     "which_region_travel": "您要去哪个地区旅行?",
     "select_beautiful_regions": "请选择韩国的美丽地区",
@@ -114,14 +143,15 @@
     "popular_area_info": "热门区域信息",
     "explore_all_districts": "浏览所有区域",
     "recommended_spots_for_user": "为{{name}}推荐的景点",
-    "selected_based_on_interests": "根据您的兴趣 {{interest}} 精选内容",
+    "selected_based_on_interests": "根据您的兴趣 <InterestSpan>{{interest}}</InterestSpan> 精选内容",
     "recommended_accommodations": "为旅行者推荐的住宿",
     "explore_all_areas": "{{regions}}浏览所有区域",
     "total_districts": "总{{count}}个区域",
     "45_attractions": "{{attractions_count}}个景点",
     "website_url": "网址",
     "visit_website": "网站快捷方式",
-    "available_hours": "可用时间"
+    "available_hours": "可用时间",
+    "currently_viewing": "目前仅显示{{location}}"
   },
 
   "themes": {
@@ -195,22 +225,7 @@
     "maybe_later": "稍后进行。",
     "lost_in_korea": "Lost in Korea? 迷路了吗?"
   },
-  "travelTips": {
-    "title": "韩国旅行小贴士",
-    "subtitle": "您想了解什么？",
-    "accordion": {
-      "payment_guide": "支付指南",
-      "emergency_calls": "如何使用紧急电话 112/119",
-      "transport_card": "交通卡使用方法（eZL、T-money等）",
-      "embassy_info": "各国大使馆联系方式",
-      "hospital_pharmacy": "查找医院/药房的方法 + 位置信息"
-    },
-    "misc": {
-      "additional_tip": "额外提示",
-      "recommendation": "推荐",
-      "note": "参考"
-    }
-  },
+
   "tips": {
     "title": "韩国旅行小贴士",
     "subtitle": "您想了解什么？",
