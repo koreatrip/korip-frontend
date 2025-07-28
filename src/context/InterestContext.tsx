@@ -1,8 +1,8 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 interface InterestContextType {
-  selectedInterests: string[];
-  setSelectedInterests: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedDetailInterests: string[];
+  setSelectedDetailInterests: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const InterestContext = createContext<InterestContextType | undefined>(
@@ -10,11 +10,11 @@ const InterestContext = createContext<InterestContextType | undefined>(
 );
 
 export const InterestProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [selectedDetailInterests, setSelectedDetailInterests] = useState<string[]>([]);
 
   return (
     <InterestContext.Provider
-      value={{ selectedInterests, setSelectedInterests }}
+      value={{ selectedDetailInterests, setSelectedDetailInterests }}
     >
       {children}
     </InterestContext.Provider>

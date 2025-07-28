@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import SelectButton from '@/components/domain/interest/selectButton/SelectButton';
 
@@ -54,7 +54,7 @@ const SelectButtonGroup = ({
           onClick={() => handleButtonClick(option.id)}
           className='mr-2 last:mr-0'
         >
-          {option.label}
+          # {option.label}
         </SelectButton>
       ))}
     </div>
