@@ -2,10 +2,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.tsx';
+import { StrictMode } from 'react';
 const queryClient = new QueryClient();
 
 async function enableMocking() {
-  if (import.meta.env.NODE_ENV !== 'development') {
+  if (process.env.NODE_ENV !== 'development') {
     return;
   }
 
@@ -18,11 +19,11 @@ async function enableMocking() {
 
 enableMocking().then(() => {
   createRoot(document.getElementById('root')!).render(
-    // <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-    </QueryClientProvider>
-    // </StrictMode>
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <App />
+        {/* <ReactQueryDevtools initialIsOpen={true} /> */}
+      </QueryClientProvider>
+    </StrictMode>
   );
 });

@@ -1,5 +1,6 @@
 import Container from '@/components/common/Container';
 import DistrictCard from '@/components/domain/regions/DistrictCard';
+import Tag from '@/components/domain/regions/Tag';
 
 const DistrictListPage = () => {
   return (
@@ -10,6 +11,7 @@ const DistrictListPage = () => {
           <h1 className='mb-4 text-4xl font-semibold'>
             서울 모든 구역 둘러보기
           </h1>
+          <Tag />
           <div className='text-main-text-navy mt-4'>총 25개 구역</div>
         </Container>
       </section>
