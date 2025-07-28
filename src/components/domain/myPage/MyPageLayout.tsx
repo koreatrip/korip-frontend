@@ -18,7 +18,7 @@ const MyPageLayout = ({ children }: { children: React.ReactNode }) => {
         </aside>
 
         {/* 오른쪽 콘텐츠 */}
-        <section className='relative flex w-full flex-wrap gap-3 overflow-visible'>
+        <section className='relative flex flex-1 flex-col gap-3 overflow-visible'>
           {children}
         </section>
       </div>

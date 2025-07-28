@@ -116,6 +116,7 @@ const Places: React.FC = () => {
       <div className='mb-6 flex gap-4'>
         <div className='flex-1'>
           <SearchBar
+            className='!max-w-[876px]'
             placeholder='지역명을 검색해보세요 (예: 서울, 제주도)'
             onSearch={handleSearch}
           />

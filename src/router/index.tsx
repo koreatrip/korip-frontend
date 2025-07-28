@@ -11,7 +11,7 @@ import defaultLayout from '@/layouts/defaultLayout';
 
 import MyPage from '@/pages/myPage';
 import FavoritePlacesPage from '@/pages/myPage/places';
-
+import MyPlannerPage from '@/pages/myPage/myPlannerPage';
 import FavoriteRegionsPage from '@/pages/myPage/regions';
 
 import { InterestProvider } from '@/context/InterestContext';
@@ -108,7 +108,7 @@ export const router = createBrowserRouter([
               />
             ),
           },
-          // { path: 'plan', element: <TravelPlanPage /> },
+          { path: 'plan', element: <MyPlannerPage /> },
           { path: 'places', element: <FavoritePlacesPage /> },
           { path: 'regions', element: <FavoriteRegionsPage /> },
         ],
