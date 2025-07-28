@@ -10,6 +10,7 @@ import SideMenu from './sideMenu/SideMenu';
 import SearchBar from './searchBar/SearchBar';
 import type { TDropdownItem } from './dropdown/Dropdown';
 import Dropdown from './dropdown/Dropdown';
+import { Link } from 'react-router';
 
 // --- Props 타입 정의 ---
 type THeaderProps = {
@@ -86,9 +87,9 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
     <div className='bg-bg-white border-b-outline-gray flex h-20 w-full items-center justify-center border-b'>
       <div className='flex w-full max-w-[1440px] items-center justify-between px-4'>
         {/* 로고 (공통) */}
-        <div>
+        <Link to='/'>
           <img src={logo_sm} alt='Koriplogo' />
-        </div>
+        </Link>
 
         {/* variant에 따라 데스크톱의 가운데와 오른쪽 메뉴를 다르게 렌더링 --- */}
 
