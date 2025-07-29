@@ -9,6 +9,7 @@ interface PlannerCardProps {
   isNew?: boolean;
   onEdit: () => void;
   onDelete: () => void;
+  onClick?: () => void;
 }
 
 const PlannerCard: React.FC<PlannerCardProps> = ({
@@ -19,9 +20,13 @@ const PlannerCard: React.FC<PlannerCardProps> = ({
   isNew = false,
   onEdit,
   onDelete,
+  onClick,
 }) => {
   return (
-    <div className='h-[372px] w-[348px] overflow-hidden rounded-2xl bg-white shadow-md'>
+    <div 
+      className='h-[372px] w-[348px] overflow-hidden rounded-2xl bg-white shadow-md cursor-pointer hover:shadow-lg transition-shadow'
+      onClick={onClick}
+    >
       {/* 이미지 영역 */}
       <div className='relative h-[200px] bg-gray-100'>
         {imageUrl ? (
@@ -61,14 +66,20 @@ const PlannerCard: React.FC<PlannerCardProps> = ({
           {/* 편집/삭제 버튼 */}
           <div className='flex items-center gap-2'>
             <button
-              onClick={onEdit}
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit();
+              }}
               className='flex h-[20px] w-[16px] items-center justify-center rounded-full text-[#8B9DC3] transition-colors hover:text-gray-600'
               aria-label='편집'
             >
               <PencilIcon className='h-4 w-4' />
             </button>
             <button
-              onClick={onDelete}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete();
+              }}
               className='flex h-[20px] w-[16px] items-center justify-center rounded-full text-[#8B9DC3] transition-colors hover:text-gray-600'
               aria-label='삭제'
             >

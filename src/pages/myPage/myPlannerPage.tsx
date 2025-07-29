@@ -5,6 +5,7 @@ import PlannerAddButtonMini from '@/components/domain/planner/PlannerAddButtonMi
 import PlannerCard from '@/components/domain/planner/PlannerCard';
 import { SortOption, type DropdownItem } from '@/types/dropdown';
 import React, { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // 플래너 데이터 타입
 interface PlannerData {
@@ -17,6 +18,7 @@ interface PlannerData {
 }
 
 const MyPlannerPage: React.FC = () => {
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>(
     SortOption.DATE_DESC
@@ -59,6 +61,30 @@ const MyPlannerPage: React.FC = () => {
       description: '차박과 함께하는 자유로운 여행',
       dateRange: '25.01.03 ~ 25.01.07',
       createdAt: '2025-01-01',
+    },
+    {
+      id: 6,
+      title: '길동이와 동에번쩍 서에번쩍',
+      isNew: true,
+      description: '친구들과 떠나는 국내여행',
+      dateRange: '25.05.13 ~ 25.06.01',
+      createdAt: '2025-05-10',
+    },
+    {
+      id: 7,
+      title: '길동이와 동에번쩍 서에번쩍',
+      isNew: true,
+      description: '친구들과 떠나는 국내여행',
+      dateRange: '25.05.13 ~ 25.06.01',
+      createdAt: '2025-05-10',
+    },
+    {
+      id: 8,
+      title: '길동이와 동에번쩍 서에번쩍',
+      isNew: true,
+      description: '친구들과 떠나는 국내여행',
+      dateRange: '25.05.13 ~ 25.06.01',
+      createdAt: '2025-05-10',
     },
   ]);
 
@@ -132,10 +158,14 @@ const MyPlannerPage: React.FC = () => {
     console.log(`${title} 삭제`);
   };
 
+  const handleCardClick = (id: number) => {
+    navigate(`/trip/${id}`);
+  };
+
   return (
     <div className='flex min-h-screen bg-white'>
       {/* 메인 컨텐츠 */}
-      <div className='flex-1 px-2 py-6'>
+      <div className='flex-1 py-6'>
         {/* 헤더 */}
         <div className='mb-6'>
           <h1 className='mb-4 text-2xl font-bold text-gray-900'>
@@ -164,10 +194,16 @@ const MyPlannerPage: React.FC = () => {
           )}
         </div>
 
-        {/* 플래너 카드 그리드 */}
-        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+        {/* 플래너 카드 그리드 - 23px gap */}
+        <div 
+          className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+          style={{
+            gap: '0',
+            marginRight: '-30px'
+          }}
+        >
           {filteredAndSortedPlanners.map((planner) => (
-            <div key={planner.id} className='h-[372px] w-[348px]'>
+            <div key={planner.id} className='h-[372px]' style={{ marginRight: '30px', marginBottom: '30px' }}>
               <PlannerCard
                 title={planner.title}
                 description={planner.description}
@@ -175,12 +211,13 @@ const MyPlannerPage: React.FC = () => {
                 isNew={planner.isNew ?? false}
                 onEdit={() => handleEdit(planner.title)}
                 onDelete={() => handleDelete(planner.title)}
+                onClick={() => handleCardClick(planner.id)}
               />
             </div>
           ))}
 
           {/* 플래너 추가 버튼 */}
-          <div className='h-[372px] w-[348px]'>
+          <div className='h-[372px]' style={{ marginRight: '30px', marginBottom: '30px' }}>
             <PlannerAddButton />
           </div>
         </div>
