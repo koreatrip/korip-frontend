@@ -116,7 +116,7 @@ const Places: React.FC = () => {
       <div className='mb-6 flex gap-4'>
         <div className='flex-1'>
           <SearchBar
-            className='!max-w-[876px]'
+            className='!max-w-[932px]'
             placeholder='지역명을 검색해보세요 (예: 서울, 제주도)'
             onSearch={handleSearch}
           />
@@ -134,17 +134,17 @@ const Places: React.FC = () => {
         {filteredAndSortedData.map((item) => (
           <InfoCard
             key={item.id}
-              variant='interactive'
-              title={item.title}
-              description={item.description}
-              details={item.details}
-              imageUrl={item.imageUrl}
-              isSelected={selectedPlaceId === item.id}
-              onClick={() => handleCardClick(item.id)}
-              onAddSchedule={() => handleAddSchedule(item.id)}
-              onViewDetails={() => handleViewDetails(item.id)}
-              onFavorite={() => handleFavorite(item.id)}
-            />
+            variant='interactive'
+            title={item.title}
+            description={item.description}
+            details={item.details}
+            imageUrl={item.imageUrl}
+            isSelected={selectedPlaceId === item.id}
+            onClick={() => handleCardClick(item.id)}
+            onAddSchedule={() => handleAddSchedule(item.id)}
+            onViewDetails={() => handleViewDetails(item.id)}
+            onFavorite={() => handleFavorite(item.id)}
+          />
         ))}
       </div>
 

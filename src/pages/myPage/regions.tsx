@@ -118,7 +118,7 @@ const Regions: React.FC = () => {
       <div className='mb-6 flex flex-col gap-4 md:flex-row md:items-center'>
         <div className='flex-1'>
           <SearchBar
-            className='max-w-none'
+            className='!max-w-[932px]'
             placeholder='지역명을 검색해보세요 (예: 서울, 제주도)'
             onSearch={setSearchValue}
           />
