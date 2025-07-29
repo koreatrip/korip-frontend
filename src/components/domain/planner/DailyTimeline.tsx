@@ -6,7 +6,8 @@ import TimeSlot from './TimeSlot';
 type DailyTimelineProps = {
   schedule: TimeSlotData[];
   activeTab: number;
-  onRemovePlace: (timeSlotId: string) => void;
+  onRemovePlace?: (timeSlotId: string) => void;
+  readOnly?: boolean;
 };
 
 const ALL_TIME_SLOTS = [
@@ -24,6 +25,7 @@ const DailyTimeline = ({
   schedule,
   activeTab,
   onRemovePlace,
+  readOnly = false,
 }: DailyTimelineProps) => {
   return (
     <div className='space-y-5 pt-4'>
@@ -36,7 +38,8 @@ const DailyTimeline = ({
             time={time}
             place={slotData?.place ?? null}
             timeSlotId={slotData?.timeSlotId ?? ''}
-            onRemovePlace={onRemovePlace}
+            onRemovePlace={readOnly ? undefined : onRemovePlace}
+            readOnly={readOnly}
           />
         );
       })}

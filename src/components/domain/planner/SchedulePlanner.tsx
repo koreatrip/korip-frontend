@@ -7,13 +7,14 @@ import type { TimeSlotData } from '@/types/plannerType';
 
 type SchedulePlannerProps = {
   schedule: TimeSlotData[];
-  onRemovePlace: (timeSlotId: string) => void;
+  onRemovePlace?: (timeSlotId: string) => void;
+  readOnly?: boolean;
 };
 
 /**
  * 날짜 선택, 일차별 탭, 타임라인 등 가운데 계획 영역 전체를 책임지는 핵심 컴포넌트
  */
-const SchedulePlanner = ({ schedule, onRemovePlace }: SchedulePlannerProps) => {
+const SchedulePlanner = ({ schedule, onRemovePlace, readOnly = false }: SchedulePlannerProps) => {
   // 1. 시작일과 종료일 상태 관리
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -72,13 +73,15 @@ const SchedulePlanner = ({ schedule, onRemovePlace }: SchedulePlannerProps) => {
     <div className='flex w-full items-center justify-center'>
       <div className='shadow-light bg-bg-white w-full rounded-2xl p-6'>
         {/* 상단 날짜 선택 */}
-        <div className='mb-4 flex gap-x-2'>
-          <DateRangePicker
-            selectedDate={startDate}
-            onDateChange={setStartDate}
-          />
-          <DateRangePicker selectedDate={endDate} onDateChange={setEndDate} />
-        </div>
+        {!readOnly && (
+          <div className='mb-4 flex gap-x-2'>
+            <DateRangePicker
+              selectedDate={startDate}
+              onDateChange={setStartDate}
+            />
+            <DateRangePicker selectedDate={endDate} onDateChange={setEndDate} />
+          </div>
+        )}
 
         {/* 동적으로 생성된 탭 컴포넌트 사용 */}
         <DailyScheduleTabs
@@ -92,7 +95,8 @@ const SchedulePlanner = ({ schedule, onRemovePlace }: SchedulePlannerProps) => {
           <DailyTimeline
             schedule={dailySchedule}
             activeTab={activeTab} // ✅ DailyTimeline에 activeTab 프롭 전달
-            onRemovePlace={onRemovePlace}
+            onRemovePlace={readOnly ? undefined : onRemovePlace}
+            readOnly={readOnly}
           />
         )}
       </div>

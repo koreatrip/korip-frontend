@@ -11,6 +11,7 @@ type DraggablePlaceCardProps = {
   originTime?: string;
   originDay?: number; // ✅ '몇 일차'에서 왔는지 받을 프롭 추가
   onRemove?: () => void;
+  readOnly?: boolean;
 };
 
 const DraggablePlaceCard = ({
@@ -19,13 +20,14 @@ const DraggablePlaceCard = ({
   originTime,
   originDay, // ✅ 프롭으로 받기
   onRemove,
+  readOnly = false,
 }: DraggablePlaceCardProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || readOnly) return;
 
     const cleanup = draggable({
       element: el,
@@ -39,17 +41,19 @@ const DraggablePlaceCard = ({
     });
 
     return cleanup;
-  }, [place, originTime, originDay, isOccupied]); // ✅ 의존성 배열에 originDay 추가
+  }, [place, originTime, originDay, isOccupied, readOnly]); // ✅ 의존성 배열에 originDay, readOnly 추가
 
   return (
     <div
       ref={ref}
       className={`bg-bg-section shadow-light relative w-full rounded-lg p-4 transition-all duration-200 ${
-        isOccupied
+        readOnly
+          ? 'cursor-default'
+          : isOccupied
           ? 'cursor-not-allowed opacity-50'
           : isDragging
-            ? 'scale-105 opacity-80 shadow-lg'
-            : 'hover:shadow-medium cursor-grab active:cursor-grabbing'
+          ? 'scale-105 opacity-80 shadow-lg'
+          : 'hover:shadow-medium cursor-grab active:cursor-grabbing'
       }`}
     >
       <div className='bg-sub-green absolute top-0 left-0 h-full w-1.5 rounded-l-lg'></div>
@@ -57,7 +61,7 @@ const DraggablePlaceCard = ({
         <p className='text-main-text-navy font-semibold'>{place.title}</p>
         <p className='text-sub-text-gray mt-1 text-sm'>{place.category}</p>
       </div>
-      {onRemove && (
+      {onRemove && !readOnly && (
         <button
           onClick={(e) => {
             e.preventDefault();

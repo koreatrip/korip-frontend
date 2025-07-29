@@ -5,6 +5,7 @@ import PlannerAddButtonMini from '@/components/domain/planner/PlannerAddButtonMi
 import PlannerCard from '@/components/domain/planner/PlannerCard';
 import { SortOption, type DropdownItem } from '@/types/dropdown';
 import React, { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // 플래너 데이터 타입
 interface PlannerData {
@@ -17,6 +18,7 @@ interface PlannerData {
 }
 
 const MyPlannerPage: React.FC = () => {
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>(
     SortOption.DATE_DESC
@@ -160,6 +162,10 @@ const MyPlannerPage: React.FC = () => {
     setPlanners(prev => [newPlanner, ...prev]);
   };
 
+  const handlePlannerClick = (plannerId: number) => {
+    navigate(`/trip/${plannerId}`);
+  };
+
   return (
     <div className='flex min-h-screen bg-white'>
       {/* 메인 컨텐츠 */}
@@ -208,6 +214,7 @@ const MyPlannerPage: React.FC = () => {
                 isNew={planner.isNew ?? false}
                 onEdit={() => handleEdit(planner.title)}
                 onDelete={() => handleDelete(planner.title)}
+                onClick={() => handlePlannerClick(planner.id)}
               />
             </div>
           ))}
