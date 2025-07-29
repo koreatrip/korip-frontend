@@ -110,7 +110,7 @@ const Places: React.FC = () => {
   };
 
   return (
-    <div className='mx-auto max-w-screen-2xl px-4 py-8'>
+    <div className='max-w-screen-2xl py-8'>
       <h1 className='mb-6 text-2xl font-semibold'>즐겨찾는 장소</h1>
 
       <div className='mb-6 flex gap-4'>
@@ -134,23 +134,24 @@ const Places: React.FC = () => {
         {filteredAndSortedData.map((item) => (
           <InfoCard
             key={item.id}
-            variant='interactive'
-            title={item.title}
-            description={item.description}
-            details={item.details}
-            imageUrl={item.imageUrl}
-            isSelected={selectedPlaceId === item.id}
-            onClick={() => handleCardClick(item.id)}
-            onAddSchedule={() => handleAddSchedule(item.id)}
-            onViewDetails={() => handleViewDetails(item.id)}
-            onFavorite={() => handleFavorite(item.id)}
-          />
+              variant='interactive'
+              title={item.title}
+              description={item.description}
+              details={item.details}
+              imageUrl={item.imageUrl}
+              isSelected={selectedPlaceId === item.id}
+              onClick={() => handleCardClick(item.id)}
+              onAddSchedule={() => handleAddSchedule(item.id)}
+              onViewDetails={() => handleViewDetails(item.id)}
+              onFavorite={() => handleFavorite(item.id)}
+            />
         ))}
       </div>
 
       {filteredAndSortedData.length === 0 && (
         <div className='py-16 text-center'>
           <div className='mb-4 text-gray-300'>
+            ㅌ
             <svg
               className='mx-auto h-16 w-16'
               fill='none'

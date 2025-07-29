@@ -22,6 +22,8 @@ import PlannerPage from '@/pages/plannerPage';
 import RegionsPage from '@/pages/regionsPage';
 import SignUpPage from '@/pages/signUpPage';
 import TravelTipsPage from '@/pages/travelTipsPage';
+import TripDetailPage from '@/pages/tripDetailPage';
+import TripEditPage from '@/pages/tripEditPage';
 import { createBrowserRouter } from 'react-router-dom';
 import LoginPage from '../pages/loginPage';
 import LanguagePage from '@/pages/languagePage';
@@ -120,6 +122,14 @@ export const router = createBrowserRouter([
             <InterestPage />
           </InterestProvider>
         ),
+      },
+      {
+        path: 'trip/:id',
+        element: <TripDetailPage />,
+      },
+      {
+        path: 'trip/:id/edit',
+        element: <TripEditPage />,
       },
     ],
   },

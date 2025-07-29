@@ -112,7 +112,7 @@ const Regions: React.FC = () => {
   };
 
   return (
-    <div className='w-full px-2 py-8'>
+    <div className='w-full py-8'>
       <h1 className='mb-6 text-2xl font-semibold'>즐겨찾는 지역</h1>
 
       <div className='mb-6 flex flex-col gap-4 md:flex-row md:items-center'>
@@ -186,6 +186,10 @@ const Regions: React.FC = () => {
           )}
         </div>
       )}
+
+      <div className='mt-12 text-right text-sm text-gray-400'>
+        총 {filteredAndSortedData.length}개의 즐겨찾기 지역
+      </div>
     </div>
   );
 };
