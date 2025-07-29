@@ -1,14 +1,9 @@
+import { type DropdownItem, SortOption } from '@/types/dropdown';
 import React, { useEffect, useRef, useState } from 'react';
-
-type DropdownItem = {
-  value: string;
-  label: string;
-  onClick: () => void;
-};
 
 type SortDropdownProps = {
   options: DropdownItem[];
-  current: string;
+  current: SortOption;
 };
 
 const SortDropdown: React.FC<SortDropdownProps> = ({ options, current }) => {

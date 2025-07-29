@@ -105,8 +105,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 
   return (
     <>
-      <section className='mb-6 w-full rounded-lg bg-white p-6 shadow-md'>
-        <h2 className='text-main-text-navy mb-6 text-2xl font-semibold'>
+      <section className='mb-6 ml-[10px] h-[1364px] max-w-[1090px] rounded-lg bg-white p-6 shadow-md'>
+        <h2 className='text-main-text-navy mb-6 text-4xl font-semibold'>
           반갑습니다 {formData.name}님
         </h2>
 

@@ -39,13 +39,14 @@ const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
     <Modal isOpen={isOpen} onClose={handleClose}>
       <Modal.Header>계정 탈퇴</Modal.Header>
       <Modal.Body>
-        {/* Body 안에는 이렇게 복잡한 폼이나 다른 컴포넌트가 자유롭게 들어갈 수 있습니다. */}
         <div className='space-y-4'>
-          <div className='border-point-gold text-main-text-navy rounded-lg border bg-[#F7F0E8] p-3 text-sm'>
+          <div className='text-main-text-navy rounded-lg border border-none bg-[#F7F0E8] p-3 text-sm'>
             <p>
-              <strong>⚠️ 주의:</strong> 계정을 탈퇴하면 모든 여행 계획,
-              즐겨찾기, 개인정보가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수
-              없습니다.
+              <strong>
+                <span style={{ filter: 'grayscale(100%)' }}>⚠️</span> 주의:
+              </strong>{' '}
+              계정을 탈퇴하면 모든 여행 계획, 즐겨찾기, 개인정보가 영구적으로
+              삭제됩니다. 이 작업은 되돌릴 수 없습니다.
             </p>
           </div>
           <fieldset>
@@ -53,18 +54,25 @@ const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
               탈퇴 사유를 선택해주세요
             </legend>
             <div className='mt-2 space-y-2'>
-              {/* 라디오 버튼 등 자유롭게 구성 */}
-              <label className='flex items-center'>
-                <input type='radio' name='reason' className='mr-2' /> 서비스
-                미사용
-              </label>
-              <label className='flex items-center'>
-                <input type='radio' name='reason' className='mr-2' /> 개인정보
-                보호 우려
-              </label>
+              {deleteReasons.map((reason, idx) => (
+                <label key={idx} className='flex cursor-pointer items-center'>
+                  <input
+                    type='radio'
+                    name='reason'
+                    value={reason}
+                    className='peer hidden'
+                  />
+                  <span className='relative mr-2 h-4 w-4 rounded-full border border-[#FF6B7A] transition peer-checked:border-[#FF6B7A] peer-checked:before:absolute peer-checked:before:top-1/2 peer-checked:before:left-1/2 peer-checked:before:h-2 peer-checked:before:w-2 peer-checked:before:-translate-x-1/2 peer-checked:before:-translate-y-1/2 peer-checked:before:rounded-full peer-checked:before:bg-[#FF6B7A] peer-checked:before:content-[""]'></span>
+                  {reason}
+                </label>
+              ))}
             </div>
           </fieldset>
-          <AuthInput type='password' label='비밀번호 확인' />
+          <AuthInput
+            type='password'
+            label='비밀번호 확인'
+            placeholder='현재 비밀번호를 입력하세요'
+          />
         </div>
       </Modal.Body>
       <Modal.Footer>
@@ -72,7 +80,9 @@ const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
           <Button variant='cancel' onClick={handleClose}>
             취소
           </Button>
-          <Button variant='active'>탈퇴</Button>
+          <Button variant='active' onClick={handleConfirm}>
+            탈퇴
+          </Button>
         </div>
       </Modal.Footer>
     </Modal>

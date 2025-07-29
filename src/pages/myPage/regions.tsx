@@ -112,12 +112,13 @@ const Regions: React.FC = () => {
   };
 
   return (
-    <div className='mx-auto max-w-screen-2xl px-4 py-8'>
+    <div className='w-full py-8'>
       <h1 className='mb-6 text-2xl font-semibold'>즐겨찾는 지역</h1>
 
       <div className='mb-6 flex flex-col gap-4 md:flex-row md:items-center'>
         <div className='flex-1'>
           <SearchBar
+            className='max-w-none'
             placeholder='지역명을 검색해보세요 (예: 서울, 제주도)'
             onSearch={setSearchValue}
           />
@@ -133,7 +134,7 @@ const Regions: React.FC = () => {
         </div>
       )}
 
-      <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+      <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
         {filteredAndSortedData.map((item) => (
           <InfoCard
             key={item.id}
