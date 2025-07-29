@@ -5,7 +5,6 @@ import PlannerAddButtonMini from '@/components/domain/planner/PlannerAddButtonMi
 import PlannerCard from '@/components/domain/planner/PlannerCard';
 import { SortOption, type DropdownItem } from '@/types/dropdown';
 import React, { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 // 플래너 데이터 타입
 interface PlannerData {
@@ -18,7 +17,6 @@ interface PlannerData {
 }
 
 const MyPlannerPage: React.FC = () => {
-  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>(
     SortOption.DATE_DESC
@@ -158,14 +156,14 @@ const MyPlannerPage: React.FC = () => {
     console.log(`${title} 삭제`);
   };
 
-  const handleCardClick = (id: number) => {
-    navigate(`/trip/${id}`);
+  const handleAddPlanner = (newPlanner: PlannerData) => {
+    setPlanners(prev => [newPlanner, ...prev]);
   };
 
   return (
     <div className='flex min-h-screen bg-white'>
       {/* 메인 컨텐츠 */}
-      <div className='flex-1 py-6'>
+      <div className='flex-1 px-2 py-6'>
         {/* 헤더 */}
         <div className='mb-6'>
           <h1 className='mb-4 text-2xl font-bold text-gray-900'>
@@ -173,16 +171,18 @@ const MyPlannerPage: React.FC = () => {
           </h1>
 
           {/* 검색바와 정렬 드롭다운 */}
-          <div className='mb-6 flex gap-4'>
+          <div className='mb-6 flex flex-col gap-4 md:flex-row'>
             <div className='flex-1'>
               <SearchBar
-                className='!max-w-[876px]'
+                className='w-full max-w-none md:!max-w-[876px]'
                 placeholder='플래너 제목이나 설명을 검색해보세요'
                 onSearch={handleSearch}
               />
             </div>
-            <SortDropdown options={sortOptions} current={sortOption} />
-            <PlannerAddButtonMini />
+            <div className='flex gap-2'>
+              <SortDropdown options={sortOptions} current={sortOption} />
+              <PlannerAddButtonMini onAddPlanner={handleAddPlanner} />
+            </div>
           </div>
 
           {/* 검색 결과 표시 */}
@@ -195,15 +195,12 @@ const MyPlannerPage: React.FC = () => {
         </div>
 
         {/* 플래너 카드 그리드 - 23px gap */}
-        <div 
-          className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-          style={{
-            gap: '0',
-            marginRight: '-30px'
-          }}
-        >
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {filteredAndSortedPlanners.map((planner) => (
-            <div key={planner.id} className='h-[372px]' style={{ marginRight: '30px', marginBottom: '30px' }}>
+            <div
+              key={planner.id}
+              className='h-[372px] w-[348px] justify-self-start'
+            >
               <PlannerCard
                 title={planner.title}
                 description={planner.description}
@@ -211,14 +208,13 @@ const MyPlannerPage: React.FC = () => {
                 isNew={planner.isNew ?? false}
                 onEdit={() => handleEdit(planner.title)}
                 onDelete={() => handleDelete(planner.title)}
-                onClick={() => handleCardClick(planner.id)}
               />
             </div>
           ))}
 
           {/* 플래너 추가 버튼 */}
-          <div className='h-[372px]' style={{ marginRight: '30px', marginBottom: '30px' }}>
-            <PlannerAddButton />
+          <div className='h-[372px] w-[348px] justify-self-start'>
+            <PlannerAddButton onAddPlanner={handleAddPlanner} />
           </div>
         </div>
 

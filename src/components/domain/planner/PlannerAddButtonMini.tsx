@@ -1,20 +1,90 @@
-const PlannerAddButtonMini = () => {
+import React, { useState } from 'react';
+import CreateTripModal from '../../modals/CreateTripModal';
+
+interface PlannerAddButtonMiniProps {
+  onClick?: () => void;
+  onAddPlanner?: (planner: PlannerData) => void;
+}
+
+interface TripData {
+  tripName: string;
+  tripDescription: string;
+  location: string;
+  selectedRegion: string;
+}
+
+interface PlannerData {
+  id: number;
+  title: string;
+  description: string;
+  dateRange: string;
+  isNew?: boolean;
+  createdAt: string;
+}
+
+const PlannerAddButtonMini: React.FC<PlannerAddButtonMiniProps> = ({
+  onClick,
+  onAddPlanner,
+}) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleButtonClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleModalSubmit = (tripData: TripData) => {
+    // 새 일정 데이터 생성
+    const newPlanner: PlannerData = {
+      id: Date.now(), // 임시 ID
+      title: tripData.tripName,
+      description: tripData.tripDescription || `${tripData.location} 여행`,
+      dateRange: `${new Date().toLocaleDateString('ko-KR', {
+        year: '2-digit',
+        month: '2-digit',
+        day: '2-digit'
+      }).replace(/\./g, '.').replace(/ /g, '')} ~ 미정`,
+      isNew: true,
+      createdAt: new Date().toISOString().split('T')[0]
+    };
+    
+    if (onAddPlanner) {
+      onAddPlanner(newPlanner);
+    }
+    
+    console.log('새 여행 일정 생성:', newPlanner);
+  };
+
   return (
-    <button className='flex h-14 w-14 items-center justify-center rounded-full bg-[#FF6B7A] text-white transition-all duration-200 hover:bg-[#ff5a6b]'>
-      <svg
-        className='h-5 w-5'
-        fill='none'
-        stroke='currentColor'
-        strokeWidth={2.5}
-        viewBox='0 0 24 24'
+    <>
+      <button
+        onClick={handleButtonClick}
+        className='flex h-14 w-14 items-center justify-center rounded-full bg-[#FF6B7A] text-white transition-all duration-200 hover:bg-[#ff5a6b]'
       >
-        <path
-          strokeLinecap='round'
-          strokeLinejoin='round'
-          d='M12 4.5v15m7.5-7.5h-15'
-        />
-      </svg>
-    </button>
+        <svg
+          className='h-5 w-5'
+          fill='none'
+          stroke='currentColor'
+          strokeWidth={2.5}
+          viewBox='0 0 24 24'
+        >
+          <path
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            d='M12 4.5v15m7.5-7.5h-15'
+          />
+        </svg>
+      </button>
+      
+      <CreateTripModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleModalSubmit}
+      />
+    </>
   );
 };
 

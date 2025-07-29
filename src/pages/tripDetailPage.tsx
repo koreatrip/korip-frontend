@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MyPageLayout from '@/components/domain/myPage/MyPageLayout';
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface TimeSlot {
   time: string;
@@ -15,6 +16,8 @@ interface TripDay {
 }
 
 const TripDetailPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
   const [selectedDay, setSelectedDay] = useState(1);
   
   // 더미 데이터
@@ -138,7 +141,11 @@ const TripDetailPage: React.FC = () => {
               <button className="flex items-center justify-center bg-white text-[#FF6B7A] rounded-lg hover:bg-gray-50 transition-colors" style={{width: '52px', height: '56px'}}>
                 <TrashIcon className="h-4 w-4" />
               </button>
-              <button className="bg-[#FF6B7A] text-white rounded-lg hover:bg-[#e55a6e] transition-colors" style={{width: '228px', height: '56px'}}>
+              <button 
+                onClick={() => navigate(`/trip/${id}/edit`)}
+                className="bg-[#FF6B7A] text-white rounded-lg hover:bg-[#e55a6e] transition-colors" 
+                style={{width: '228px', height: '56px'}}
+              >
                 수정
               </button>
             </div>
