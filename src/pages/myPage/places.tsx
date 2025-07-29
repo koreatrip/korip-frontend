@@ -1,26 +1,15 @@
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
 import SearchBar from '@/components/common/searchBar/SearchBar';
 import InfoCard from '@/components/domain/regions/InfoCard';
-import type { DropdownItem } from '@/types/dropdown';
+import { SortOption, type DropdownItem } from '@/types/dropdown';
+import type { PlaceData } from '@/types/plannerType';
 import React, { useMemo, useState } from 'react';
-
-type PlaceData = {
-  id: number;
-  type: string;
-  title: string;
-  description: string;
-  details: string | null;
-  location: string;
-  imageUrl: string | null;
-  isFavorite: boolean;
-  createdAt: string;
-};
-
-type SortOption = 'dateDesc' | 'dateAsc' | 'nameAsc' | 'nameDesc';
 
 const Places: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [sortOption, setSortOption] = useState<SortOption>('dateDesc');
+  const [sortOption, setSortOption] = useState<SortOption>(
+    SortOption.DATE_DESC
+  );
   const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
 
   const [places, setPlaces] = useState<PlaceData[]>([
@@ -50,28 +39,28 @@ const Places: React.FC = () => {
 
   const sortOptions: DropdownItem[] = [
     {
-      value: 'dateDesc',
+      value: SortOption.DATE_DESC,
       label: '날짜 내림차순',
-      onClick: () => setSortOption('dateDesc'),
+      onClick: () => setSortOption(SortOption.DATE_DESC),
     },
     {
-      value: 'dateAsc',
+      value: SortOption.DATE_ASC,
       label: '날짜 오름차순',
-      onClick: () => setSortOption('dateAsc'),
+      onClick: () => setSortOption(SortOption.DATE_ASC),
     },
     {
-      value: 'nameAsc',
+      value: SortOption.NAME_ASC,
       label: '이름 오름차순',
-      onClick: () => setSortOption('nameAsc'),
+      onClick: () => setSortOption(SortOption.NAME_ASC),
     },
     {
-      value: 'nameDesc',
+      value: SortOption.NAME_DESC,
       label: '이름 내림차순',
-      onClick: () => setSortOption('nameDesc'),
+      onClick: () => setSortOption(SortOption.NAME_DESC),
     },
   ];
 
-  const filteredAndSortedData = useMemo(() => {
+  const filteredAndSortedData: PlaceData[] = useMemo(() => {
     let filtered = places.filter((place) => place.isFavorite);
 
     if (searchValue.trim()) {
@@ -83,57 +72,51 @@ const Places: React.FC = () => {
       );
     }
 
-    filtered.sort((a, b) => {
+    return filtered.sort((a, b) => {
       switch (sortOption) {
-        case 'dateDesc':
+        case SortOption.DATE_DESC:
           return (
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
-        case 'dateAsc':
+        case SortOption.DATE_ASC:
           return (
             new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
           );
-        case 'nameAsc':
+        case SortOption.NAME_ASC:
           return a.title.localeCompare(b.title);
-        case 'nameDesc':
+        case SortOption.NAME_DESC:
           return b.title.localeCompare(a.title);
         default:
           return 0;
       }
     });
-
-    return filtered;
   }, [places, searchValue, sortOption]);
 
-  const handleSearch = (value: string) => setSearchValue(value);
-
-  const handleCardClick = (id: number) => {
+  const handleSearch = (value: string): void => setSearchValue(value);
+  const handleCardClick = (id: number): void =>
     setSelectedPlaceId((prev) => (prev === id ? null : id));
-  };
-
-  const handleAddSchedule = (id: number) => {
+  const handleAddSchedule = (id: number): void => {
     const place = places.find((p) => p.id === id);
     alert(`"${place?.title}"이(가) 일정에 추가되었습니다.`);
   };
-
-  const handleViewDetails = (id: number) => {
+  const handleViewDetails = (id: number): void => {
     const place = places.find((p) => p.id === id);
     alert(`"${place?.title}" 상세 정보를 확인합니다.`);
   };
-
-  const handleFavorite = (id: number) => {
+  const handleFavorite = (id: number): void => {
     setPlaces((prev) =>
       prev.map((p) => (p.id === id ? { ...p, isFavorite: !p.isFavorite } : p))
     );
   };
 
   return (
-    <div className='mx-auto max-w-screen-2xl px-4 py-8'>
+    <div className='max-w-screen-2xl py-8'>
       <h1 className='mb-6 text-2xl font-semibold'>즐겨찾는 장소</h1>
 
       <div className='mb-6 flex gap-4'>
         <div className='flex-1'>
           <SearchBar
+            className='!max-w-[876px]'
             placeholder='지역명을 검색해보세요 (예: 서울, 제주도)'
             onSearch={handleSearch}
           />
@@ -151,23 +134,24 @@ const Places: React.FC = () => {
         {filteredAndSortedData.map((item) => (
           <InfoCard
             key={item.id}
-            variant='interactive'
-            title={item.title}
-            description={item.description}
-            details={item.details}
-            imageUrl={item.imageUrl}
-            isSelected={selectedPlaceId === item.id}
-            onClick={() => handleCardClick(item.id)}
-            onAddSchedule={() => handleAddSchedule(item.id)}
-            onViewDetails={() => handleViewDetails(item.id)}
-            onFavorite={() => handleFavorite(item.id)}
-          />
+              variant='interactive'
+              title={item.title}
+              description={item.description}
+              details={item.details}
+              imageUrl={item.imageUrl}
+              isSelected={selectedPlaceId === item.id}
+              onClick={() => handleCardClick(item.id)}
+              onAddSchedule={() => handleAddSchedule(item.id)}
+              onViewDetails={() => handleViewDetails(item.id)}
+              onFavorite={() => handleFavorite(item.id)}
+            />
         ))}
       </div>
 
       {filteredAndSortedData.length === 0 && (
         <div className='py-16 text-center'>
           <div className='mb-4 text-gray-300'>
+            ㅌ
             <svg
               className='mx-auto h-16 w-16'
               fill='none'

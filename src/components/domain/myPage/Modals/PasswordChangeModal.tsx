@@ -95,77 +95,153 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose}>
-      <div className='space-y-6'>
-        {/* 현재 비밀번호 */}
-        <div>
-          <label className='mb-2 block text-sm font-medium text-gray-700'>
-            현재 비밀번호
-          </label>
-          <Input
-            type='password'
-            value={passwords.current}
-            onChange={(e) => handleInputChange('current', e.target.value)}
-            placeholder='현재 비밀번호를 입력하세요'
-            className='focus:!border-main-pink focus:!ring-main-pink !border !border-gray-300 !py-3 focus:!ring-2'
-            onClear={() => handleInputChange('current', '')}
-          />
-          {errors.current && (
-            <p className='mt-1 text-xs text-red-500'>{errors.current}</p>
-          )}
-        </div>
+      <div className='flex h-[631px] w-[512px] flex-col'>
+        <Modal.Header>
+          <h2 className='text-2xl font-semibold text-[#2C3E50]'>
+            비밀번호 변경
+          </h2>
+        </Modal.Header>
 
-        {/* 새로운 비밀번호 */}
-        <div>
-          <label className='mb-2 block text-sm font-medium text-gray-700'>
-            새로운 비밀번호
-          </label>
-          <Input
-            type='password'
-            value={passwords.new}
-            onChange={(e) => handleInputChange('new', e.target.value)}
-            placeholder='새로운 비밀번호를 입력하세요'
-            className='focus:!border-main-pink focus:!ring-main-pink !border !border-gray-300 !py-3 focus:!ring-2'
-            onClear={() => handleInputChange('new', '')}
-          />
-          <div className='mt-2 space-y-1'>
-            <p className='text-xs text-gray-500'>• 8자 이상</p>
-            <p className='text-xs text-gray-500'>• 영문, 숫자, 특수문자 포함</p>
+        {/* 바디 */}
+        <div className='space-y-6 px-10 pb-6'>
+          {/* 현재 비밀번호 */}
+          <div>
+            <label className='text-md mb-3 block font-medium text-[#2C3E50]'>
+              현재 비밀번호
+            </label>
+            <div className='relative'>
+              <Input
+                type='password'
+                value={passwords.current}
+                onChange={(e) => handleInputChange('current', e.target.value)}
+                placeholder='현재 비밀번호를 입력하세요'
+                autoComplete='off'
+                className='w-full !rounded-lg !border !border-gray-200 !bg-white !px-4 !py-3 !pr-12 text-base transition-all duration-200 placeholder:text-gray-300 focus:!border-[#FF6B7A] focus:!ring-1 focus:!ring-[#FF6B7A] focus:!outline-none'
+              />
+              <button
+                type='button'
+                onClick={() => handleInputChange('current', '')}
+                className='absolute top-1/2 right-3 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full border border-[#E2E8F0] text-gray-300 transition-colors'
+              >
+                <svg
+                  className='h-5 w-5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M6 18L18 6M6 6l12 12'
+                  />
+                </svg>
+              </button>
+            </div>
+            {errors.current && (
+              <p className='mt-1 text-xs text-red-500'>{errors.current}</p>
+            )}
           </div>
-          {errors.new && (
-            <p className='mt-1 text-xs text-red-500'>{errors.new}</p>
-          )}
-        </div>
 
-        {/* 새로운 비밀번호 확인 */}
-        <div>
-          <label className='mb-2 block text-sm font-medium text-gray-700'>
-            새로운 비밀번호 확인
-          </label>
-          <Input
-            type='password'
-            value={passwords.confirm}
-            onChange={(e) => handleInputChange('confirm', e.target.value)}
-            placeholder='새로운 비밀번호를 다시 입력하세요'
-            className='focus:!border-main-pink focus:!ring-main-pink !border !border-gray-300 !py-3 focus:!ring-2'
-            onClear={() => handleInputChange('confirm', '')}
-          />
-          {errors.confirm && (
-            <p className='mt-1 text-xs text-red-500'>{errors.confirm}</p>
-          )}
-        </div>
+          {/* 새로운 비밀번호 */}
+          <div>
+            <label className='text-md mb-3 block font-medium text-[#2C3E50]'>
+              새로운 비밀번호
+            </label>
+            <div className='relative'>
+              <Input
+                type='password'
+                value={passwords.new}
+                onChange={(e) => handleInputChange('new', e.target.value)}
+                placeholder='새로운 비밀번호를 입력하세요'
+                autoComplete='new-password'
+                className='w-full !rounded-lg !border !border-gray-200 !bg-white !px-4 !py-3 !pr-12 text-base transition-all duration-200 placeholder:text-gray-300 focus:!border-[#FF6B7A] focus:!ring-1 focus:!ring-[#FF6B7A] focus:!outline-none'
+              />
+              <button
+                type='button'
+                onClick={() => handleInputChange('current', '')}
+                className='absolute top-1/2 right-3 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full border border-[#E2E8F0] text-gray-300 transition-colors'
+              >
+                <svg
+                  className='h-5 w-5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M6 18L18 6M6 6l12 12'
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className='mt-2 space-y-1'>
+              <p className='text-xs text-gray-400'>• 8자 이상</p>
+              <p className='text-xs text-gray-400'>
+                • 영문, 숫자, 특수문자 포함
+              </p>
+            </div>
+            {errors.new && (
+              <p className='mt-1 text-xs text-red-500'>{errors.new}</p>
+            )}
+          </div>
 
-        {/* 버튼들 */}
-        <div className='flex gap-3 pt-6'>
-          <Button
-            variant='cancel'
-            onClick={handleClose}
-            className='h-12 flex-1'
-          >
-            취소
-          </Button>
-          <Button variant='active' onClick={handleSave} className='h-12 flex-1'>
-            변경
-          </Button>
+          {/* 새로운 비밀번호 확인 */}
+          <div>
+            <label className='text-md mb-3 block font-medium text-[#2C3E50]'>
+              새로운 비밀번호 확인
+            </label>
+            <div className='relative'>
+              <Input
+                type='password'
+                value={passwords.confirm}
+                onChange={(e) => handleInputChange('confirm', e.target.value)}
+                placeholder='새로운 비밀번호를 다시 입력하세요'
+                autoComplete='new-password'
+                className='w-full !rounded-lg !border !border-gray-200 !bg-white !px-4 !py-3 !pr-12 text-base transition-all duration-200 placeholder:text-gray-300 focus:!border-[#FF6B7A] focus:!ring-1 focus:!ring-[#FF6B7A] focus:!outline-none'
+              />
+              <button
+                type='button'
+                onClick={() => handleInputChange('current', '')}
+                className='absolute top-1/2 right-3 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full border border-[#E2E8F0] text-gray-300 transition-colors'
+              >
+                <svg
+                  className='h-5 w-5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M6 18L18 6M6 6l12 12'
+                  />
+                </svg>
+              </button>
+            </div>
+            {errors.confirm && (
+              <p className='mt-1 text-xs text-red-500'>{errors.confirm}</p>
+            )}
+          </div>
+
+          {/* 버튼들 */}
+          <div className='space-y-3 pt-4'>
+            <Button
+              onClick={handleClose}
+              className='h-12 w-full rounded-lg border border-gray-200 bg-white font-medium text-gray-600 transition-colors hover:bg-gray-50'
+            >
+              취소
+            </Button>
+            <Button
+              onClick={handleSave}
+              className='h-12 w-full rounded-lg bg-[#FF6B7A] font-medium text-white transition-colors hover:bg-[#ff5a6b]'
+            >
+              확인
+            </Button>
+          </div>
         </div>
       </div>
     </Modal>
