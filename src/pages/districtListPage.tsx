@@ -1,18 +1,22 @@
 import Container from '@/components/common/Container';
 import DistrictCard from '@/components/domain/regions/DistrictCard';
 import Tag from '@/components/domain/regions/Tag';
+import { useTranslation } from 'react-i18next';
 
 const DistrictListPage = () => {
+  const { t } = useTranslation();
   return (
     <div className='flex flex-grow flex-col'>
       {/* 상단 흰색 섹션 */}
       <section>
         <Container className='py-8'>
           <h1 className='mb-4 text-4xl font-semibold'>
-            서울 모든 구역 둘러보기
+            {t('places.explore_all_areas')}
           </h1>
           <Tag />
-          <div className='text-main-text-navy mt-4'>총 25개 구역</div>
+          <div className='text-main-text-navy mt-4'>
+            {t('places.total_districts')}
+          </div>
         </Container>
       </section>
       <section className='bg-bg-section w-full flex-grow pt-8 pb-16'>

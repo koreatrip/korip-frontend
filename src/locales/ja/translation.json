@@ -80,7 +80,9 @@
     "signup_success": "会員登録が完了しました！ログインページに移動します。",
     "signup_failed": "会員登録に失敗しました。もう一度お試しください。",
     "phone_number_placeholder": "電話番号を入力してください",
-    "password_length_8_20": "8〜20文字"
+    "password_length_8_20": "8〜20文字",
+    "signup_date": "加入日",
+    "email_verification": "メール認証"
   },
 
   "user": {
@@ -125,7 +127,10 @@
     "google_calendar_sync": "Google カレンダー連携",
     "save_as_pdf": "PDFで保存",
     "drag_attractions_to_schedule": "選んだ観光地をドラッグして旅程に追加してみてください。",
-    "drag_instructions": "使い方：左の名所をドラッグして中央の時間帯に置いてください。日付と時間は自由に調整できます。"
+    "drag_instructions": "<IconText>💡使い方：</IconText>左の名所をドラッグして中央の時間帯に置いてください。日付と時間は自由に調整できます。",
+    "drop_here": "ここにドロップしてください",
+    "drag_place": "場所をドラッグしてください",
+    "day_label": "{{dayCount}}日目 ({{date}})"
   },
 
   "places": {

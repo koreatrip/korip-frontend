@@ -4,6 +4,7 @@ import type { TimeSlotData } from '@/types/plannerType';
 import DraggablePlaceCard from './DraggablePlaceCard';
 import { useEffect, useRef, useState } from 'react';
 import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import { useTranslation } from 'react-i18next';
 
 type TimeSlotProps = TimeSlotData & {
   day: number;
@@ -19,6 +20,8 @@ const TimeSlot = ({
 }: TimeSlotProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isBeingDraggedOver, setIsBeingDraggedOver] = useState(false);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     const el = ref.current;
@@ -61,7 +64,9 @@ const TimeSlot = ({
         ) : (
           <div className='flex h-full w-full items-center justify-center'>
             <p className='text-sub-text-gray text-sm'>
-              {isBeingDraggedOver ? '여기에 놓으세요' : '장소를 드래그하세요'}
+              {isBeingDraggedOver
+                ? t('travel.drop_here')
+                : t('travel.drag_place')}
             </p>
           </div>
         )}

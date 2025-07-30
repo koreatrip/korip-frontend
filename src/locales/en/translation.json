@@ -79,7 +79,9 @@
     "signup_success": "Sign up successful! Redirecting to login page.",
     "signup_failed": "Sign up failed. Please try again.",
     "phone_number_placeholder": "Enter your phone number",
-    "password_length_8_20": "8 to 20 characters"
+    "password_length_8_20": "8 to 20 characters",
+    "signup_date": "Sign-up Date",
+    "email_verification": "Email Verification"
   },
 
   "user": {
@@ -124,7 +126,10 @@
     "google_calendar_sync": "Sync with Google Calendar",
     "save_as_pdf": "Save as PDF",
     "drag_attractions_to_schedule": "Drag selected attractions to add to your itinerary",
-    "drag_instructions": "How to use: Drag an attraction from the left and drop it into the schedule in the center. You can freely adjust dates and times."
+    "drag_instructions": "<IconText>💡How to use:</IconText> Drag an attraction from the left and drop it into the schedule in the center. You can freely adjust dates and times.",
+    "drop_here": "Drop here",
+    "drag_place": "Drag the place",
+    "day_label": "Day {{dayCount}} ({{date}})"
   },
 
   "places": {
