@@ -1,8 +1,11 @@
 import Container from '@/components/common/Container';
 import bg from '@assets/lagnage_bg.png';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const LanguagePage = () => {
+  const { t } = useTranslation();
+
   const [selectedLanguage, setSelectedLanguage] = useState('한국어');
   const languages = ['한국어', 'English', '日本語', '中文'];
 
@@ -19,13 +22,13 @@ const LanguagePage = () => {
       >
         <div className='absolute top-0 left-0 h-full w-full bg-black opacity-30'></div>
         <p className='text-bg-white relative z-10 text-5xl'>
-          Korip에 오신 것을 환영합니다
+          {t('auth.welcome_message_title')}
         </p>
       </div>
       <Container>
         <div className='m-auto mt-[56px] flex max-w-[550px] flex-col gap-6'>
           <p className='text-center text-[32px] font-semibold'>
-            시작 언어를 선택하세요
+            {t('languages.choose_starting_language')}
           </p>
           <div className='my-5 flex justify-between gap-3'>
             {languages.map((language) => (
@@ -43,10 +46,10 @@ const LanguagePage = () => {
             ))}
           </div>
           <p className='font-sm text-ph-gray text-center'>
-            언제든지 프로필 기본설정에서 언어를 변경할 수 있습니다.{' '}
+            {t('languages.language_can_be_changed_anytime')}
           </p>
           <button className='bg-sub-green hover:text-sub-green hover:border-sub-green m-auto mt-8 w-fit cursor-pointer rounded-full border-2 border-white px-7 py-3 text-white transition-all duration-100 hover:border-2 hover:bg-white'>
-            선택확인
+            {t('common.confirm_selection')}
           </button>
         </div>
       </Container>

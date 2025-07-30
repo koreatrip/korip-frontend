@@ -80,7 +80,9 @@
     "signup_success": "회원가입에 성공했습니다! 로그인 페이지로 이동합니다.",
     "signup_failed": "회원가입에 실패했습니다. 다시 시도해주세요.",
     "phone_number_placeholder": "전화번호를 입력하세요",
-    "password_length_8_20": "8자 이상 20자 이하"
+    "password_length_8_20": "8자 이상 20자 이하",
+    "signup_date": "가입일",
+    "email_verification": "이메일 인증"
   },
 
   "user": {
@@ -125,7 +127,10 @@
     "google_calendar_sync": "구글 캘린더 연동",
     "save_as_pdf": "PDF 저장하기",
     "drag_attractions_to_schedule": "선택한 명소들을 드래그해 일정에 추가해보세요",
-    "drag_instructions": "사용법: 왼쪽 명소를 드래그해서 가운데 시간대에 놓으세요. 날짜와 시간을 자유롭게 조정할 수 있습니다."
+    "drag_instructions": "<IconText>💡사용법:</IconText> 왼쪽 명소를 드래그해서 가운데 시간대에 놓으세요. 날짜와 시간을 자유롭게 조정할 수 있습니다.",
+    "drop_here": "여기에 놓으세요",
+    "drag_place": "장소를 드래그하세요",
+    "day_label": "{{dayCount}}일차 ({{date}})"
   },
 
   "places": {

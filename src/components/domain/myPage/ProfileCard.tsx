@@ -4,6 +4,7 @@ import PasswordChangeModal from './Modals/PasswordChangeModal';
 import AccountStatsSection from './Sections/AccountStatsSection';
 import BasicInfoSection from './Sections/BasicInfoSection';
 import SecuritySection from './Sections/SecuritySection';
+import { useTranslation } from 'react-i18next';
 
 type UserProfile = {
   name: string;
@@ -33,7 +34,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
   const [formData, setFormData] = useState<UserProfile>(
     initialData || {
       name: 'Taeyul',
@@ -44,8 +44,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       stats: { travelPlans: 3, favorites: 12, visitedPlaces: 28 },
     }
   );
-
   const [tempFormData, setTempFormData] = useState<UserProfile>(formData);
+
+  const { t } = useTranslation();
 
   // 핸들러 함수들
   const handleInputChange = (field: keyof UserProfile, value: string) => {
@@ -105,9 +106,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 
   return (
     <>
-      <section className='mb-6 ml-[10px] h-[1364px] max-w-[1090px] rounded-lg bg-white p-6 shadow-md'>
-        <h2 className='text-main-text-navy mb-6 text-4xl font-semibold'>
-          반갑습니다 {formData.name}님
+      <section className='mb-6 w-full rounded-lg bg-white p-6 shadow-md'>
+        <h2 className='text-main-text-navy mb-6 text-2xl font-semibold'>
+          {t('user.welcome_user', { name: formData.name })}
         </h2>
 
         <BasicInfoSection

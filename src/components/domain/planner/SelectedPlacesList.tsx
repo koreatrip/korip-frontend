@@ -1,14 +1,16 @@
 import type { PlannerPlace } from '@/types/plannerType';
 import DraggablePlaceCard from './DraggablePlaceCard';
+import { useTranslation } from 'react-i18next';
 
 type SelectedPlacesListProps = {
   places: PlannerPlace[];
 };
 const SelectedPlacesList = ({ places }: SelectedPlacesListProps) => {
+  const { t } = useTranslation();
   return (
     <div className='bg-bg-white shadow-light flex max-h-[458px] flex-col gap-y-4 rounded-2xl p-6'>
       <h3 className='text-main-text-navy text-2xl font-semibold'>
-        선택한 장소들
+        {t('travel.selected_places')}
       </h3>
       <div className='overflow-y-auto'>
         {places.map((place) => {
