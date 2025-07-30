@@ -4,6 +4,7 @@
     "search_result": "搜索结果",
     "confirm_selection": "选择确认",
     "complete": "完成",
+    "confirm": "确认",
     "cancel": "取消",
     "submit": "提交",
     "edit": "修改",
@@ -34,7 +35,29 @@
     "am": "上午",
     "pm": "下午",
     "format": "格式",
-    "enter_without_hyphens": "请输入不带连字符"
+    "enter_without_hyphens": "没有收藏夹可以找到 。",
+    "no_search_favorites": "未找到搜索的收藏。",
+    "try_other_keywords": "请尝试使用其他关键词搜索。",
+    "no_favorites_yet": "您还没有收藏的地点。",
+    "explore_and_add_favorites": "探索旅游目的地，并添加到收藏夹中。",
+    "search_planner_title_or_description": "请搜索计划的标题或描述",
+    "login_and_start": "登录并开始",
+    "maybe_later": "稍后再说",
+    "inquiry_and_info": "咨询及指南",
+    "closed_days": "休息日",
+    "empty_schedule": "空行程",
+    "example": "例如：IVE、Stray Kids",
+    "required_field": "此为必填项",
+    "my_planner": "我的计划",
+    "create_new_planner": "+ 创建新计划",
+    "cannot_load_categories": "无法加载类别。",
+    "no_planner_found": "未找到计划。",
+    "no_planner_created": "尚未创建任何计划。",
+    "create_new_travel_plan": "制定新的旅行计划吧。",
+    "total_planners": "共 {{count}} 个计划",
+    "added_to_schedule": "{{place?.title}} 已添加到行程中。",
+    "view_details": "查看 {{place?.title}} 的详细信息。",
+    "select_region": "请选择一个地区。"
   },
 
   "auth": {
@@ -96,8 +119,10 @@
     "current_password": "当前密码",
     "new_password": "新密码",
     "confirm_new_password": "确认新密码",
+    "enter_current_password": "请输入您当前的密码",
+    "enter_new_password": "请输入您的新密码",
     "welcome_user": "欢迎您， {{name}}",
-    "account_deletion_warning": "注意: 注销账户将永久删除所有旅行计划、收藏和个人信息。",
+    "account_deletion_warning": "<Strong><WarningIcon>⚠️</WarningIcon> 注意:</Strong> 注销账户将永久删除所有旅行计划、收藏和个人信息。",
     "select_deletion_reason": "请选择注销原因",
     "not_using_service": "不使用服务",
     "dissatisfied_with_service": "对服务不满意",
@@ -130,7 +155,8 @@
     "drag_instructions": "<IconText>💡使用方法:</IconText> 将左侧景点拖动到中间时间段。日期和时间可以自由调整。",
     "drop_here": "请放在这里",
     "drag_place": "请拖动地点",
-    "day_label": "第{{dayCount}}天 ({{date}})"
+    "day_label": "第{{dayCount}}天 ({{date}})",
+    "login_required_for_custom_travel": "创建和保存您自己的旅行行程需要登录。"
   },
 
   "places": {
@@ -156,7 +182,10 @@
     "website_url": "网址",
     "visit_website": "网站快捷方式",
     "available_hours": "可用时间",
-    "currently_viewing": "目前仅显示{{location}}"
+    "currently_viewing": "目前仅显示{{location}}",
+    "search_results": "“{{searchValue}}”的搜索结果: {{count}}个",
+    "total_favorites": "共{{count}}个收藏地点",
+    "total_favorite_regions": "共 {{count}} 个收藏地区"
   },
 
   "themes": {

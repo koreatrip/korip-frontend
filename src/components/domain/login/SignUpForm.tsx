@@ -169,7 +169,7 @@ const SignUpForm = () => {
         <div className=''>
           <AuthInput
             {...register('verificationCode')}
-            type='number' // Zod는 string을 받지만, input type은 number로 설정 가능 (브라우저 유효성 도움)
+            type='text' // Zod는 string을 받지만, input type은 number로 설정 가능 (브라우저 유효성 도움)
             label={t('auth.verification_code')}
             placeholder={t('auth.enter_verification_code')}
             id='verificationCode'

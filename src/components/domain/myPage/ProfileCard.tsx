@@ -5,6 +5,7 @@ import AccountStatsSection from './Sections/AccountStatsSection';
 import BasicInfoSection from './Sections/BasicInfoSection';
 import SecuritySection from './Sections/SecuritySection';
 import { useTranslation } from 'react-i18next';
+import { useToast } from '@/hooks/useToast';
 
 type UserProfile = {
   name: string;
@@ -47,6 +48,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   const [tempFormData, setTempFormData] = useState<UserProfile>(formData);
 
   const { t } = useTranslation();
+  const { showToast } = useToast();
 
   // 핸들러 함수들
   const handleInputChange = (field: keyof UserProfile, value: string) => {
@@ -93,7 +95,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     confirm: string;
   }) => {
     console.log('비밀번호 변경:', passwords);
-    alert('비밀번호가 변경되었습니다.');
+    showToast('비밀번호가 변경되었습니다.', 'success');
   };
 
   const handleAccountDelete = (
@@ -101,7 +103,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     customReason?: string
   ) => {
     console.log('계정 탈퇴:', { selectedReasons, customReason });
-    alert('계정이 탈퇴되었습니다.');
+    showToast('계정이 탈퇴 되었습니다.', 'success');
   };
 
   return (

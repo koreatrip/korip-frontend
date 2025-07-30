@@ -5,6 +5,7 @@
     "confirm_selection": "Confirm",
     "complete": "Complete",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "submit": "Submit",
     "edit": "Edit",
     "delete": "Delete",
@@ -34,7 +35,29 @@
     "am": "AM",
     "pm": "PM",
     "format": "Format",
-    "enter_without_hyphens": "Enter without hyphens"
+    "enter_without_hyphens": "Enter without hyphens",
+    "no_search_favorites": "No favorites found for your search.",
+    "try_other_keywords": "Try searching with different keywords.",
+    "no_favorites_yet": "You don't have any favorite places yet.",
+    "explore_and_add_favorites": "Explore destinations and add them to your favorites.",
+    "search_planner_title_or_description": "Search by planner title or description",
+    "login_and_start": "Log in and start",
+    "maybe_later": "I'll do it later",
+    "inquiry_and_info": "Inquiries & Information",
+    "closed_days": "Closed Days",
+    "empty_schedule": "Empty Schedule",
+    "example": "e.g., IVE, Stray Kids",
+    "required_field": "This field is required",
+    "my_planner": "My Planner",
+    "create_new_planner": "+ Create New Planner",
+    "cannot_load_categories": "Unable to load categories.",
+    "no_planner_found": "No planner found.",
+    "no_planner_created": "No planner has been created yet.",
+    "create_new_travel_plan": "Create a new travel plan.",
+    "total_planners": "Total {{count}} planners",
+    "added_to_schedule": "{{place?.title}} has been added to the schedule.",
+    "view_details": "Viewing details for {{place?.title}}.",
+    "select_region": "Please select a region."
   },
 
   "auth": {
@@ -95,8 +118,10 @@
     "current_password": "Current Password",
     "new_password": "New Password",
     "confirm_new_password": "Confirm New Password",
+    "enter_current_password": "Please enter your current password",
+    "enter_new_password": "Please enter your new password",
     "welcome_user": "Welcome, {{name}}",
-    "account_deletion_warning": "Warning: Deleting your account will permanently erase all plans, favorites, and personal data.",
+    "account_deletion_warning": "<Strong><WarningIcon>⚠️</WarningIcon> Warning:</Strong> Deleting your account will permanently erase all plans, favorites, and personal data.",
     "select_deletion_reason": "Reason for Deletion",
     "not_using_service": "Not using the service",
     "dissatisfied_with_service": "Dissatisfied with the service",
@@ -129,7 +154,8 @@
     "drag_instructions": "<IconText>💡How to use:</IconText> Drag an attraction from the left and drop it into the schedule in the center. You can freely adjust dates and times.",
     "drop_here": "Drop here",
     "drag_place": "Drag the place",
-    "day_label": "Day {{dayCount}} ({{date}})"
+    "day_label": "Day {{dayCount}} ({{date}})",
+    "login_required_for_custom_travel": "You need to log in to create and save your own travel itinerary."
   },
 
   "places": {
@@ -155,7 +181,10 @@
     "website_url": "Website URL",
     "visit_website": "Visit Website",
     "available_hours": "Available Hours",
-    "currently_viewing": "You're currently viewing {{location}} only"
+    "currently_viewing": "You're currently viewing {{location}} only",
+    "search_results": "Search results for \"{{searchValue}}\": {{count}} items",
+    "total_favorites": "Total {{count}} favorite places",
+    "total_favorite_regions": "Total {{count}} favorite regions"
   },
 
   "themes": {

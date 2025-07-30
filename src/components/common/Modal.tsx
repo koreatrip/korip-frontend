@@ -1,5 +1,6 @@
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import React, { createContext, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type TModalContextType = {
   onClose: () => void;
@@ -22,6 +23,8 @@ const ModalContext = createContext<TModalContextType | null>(null);
  * 메인 Modal 컴포넌트
  */
 export const Modal = ({ isOpen, onClose, children }: TModalProps) => {
+  const { t } = useTranslation();
+
   if (!isOpen) return null;
 
   return (
