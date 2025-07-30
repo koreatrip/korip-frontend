@@ -45,19 +45,7 @@
     "maybe_later": "稍后再说",
     "inquiry_and_info": "咨询及指南",
     "closed_days": "休息日",
-    "empty_schedule": "空行程",
-    "example": "例如：IVE、Stray Kids",
-    "required_field": "此为必填项",
-    "my_planner": "我的计划",
-    "create_new_planner": "+ 创建新计划",
-    "cannot_load_categories": "无法加载类别。",
-    "no_planner_found": "未找到计划。",
-    "no_planner_created": "尚未创建任何计划。",
-    "create_new_travel_plan": "制定新的旅行计划吧。",
-    "total_planners": "共 {{count}} 个计划",
-    "added_to_schedule": "{{place?.title}} 已添加到行程中。",
-    "view_details": "查看 {{place?.title}} 的详细信息。",
-    "select_region": "请选择一个地区。"
+    "empty_schedule": "空行程"
   },
 
   "auth": {
