@@ -46,13 +46,13 @@ const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
       </div>
 
       <div className='space-y-4'>
-        <EditableField
+        {/* <EditableField
           label={t('auth.username')}
           value={tempFormData.name}
           isEditing={isEditing}
           placeholder='아이디를 입력하세요'
           onChange={(value) => onInputChange('name', value)}
-        />
+        /> */}
 
         <EditableField
           label={t('auth.email')}

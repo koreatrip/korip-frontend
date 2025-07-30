@@ -5,6 +5,7 @@
     "confirm_selection": "선택확인",
     "complete": "완료",
     "cancel": "취소",
+    "confirm": "확인",
     "submit": "신청하기",
     "edit": "수정",
     "delete": "삭제",
@@ -34,7 +35,29 @@
     "am": "오전",
     "pm": "오후",
     "format": "형식",
-    "enter_without_hyphens": "하이픈 없이 입력하세요"
+    "enter_without_hyphens": "하이픈 없이 입력하세요",
+    "no_search_favorites": "검색한 즐겨찾기가 없습니다.",
+    "try_other_keywords": "다른 키워드로 검색해보세요.",
+    "no_favorites_yet": "아직 즐겨찾기한 장소가 없습니다.",
+    "explore_and_add_favorites": "여행지를 탐색하고 즐겨찾기에 추가해보세요.",
+    "search_planner_title_or_description": "플래너 제목이나 설명을 검색해보세요.",
+    "login_and_start": "로그인하고 시작하기",
+    "maybe_later": "나중에 할게요.",
+    "inquiry_and_info": "문의 및 안내",
+    "closed_days": "휴무일",
+    "empty_schedule": "비어있는 일정",
+    "example": "예: 아이브, 스트레이키즈",
+    "required_field": "필수입력 사항입니다",
+    "my_planner": "내 플래너",
+    "create_new_planner": "+ 새플래너 만들기",
+    "cannot_load_categories": "카테고리를 불러올 수 없습니다.",
+    "no_planner_found": "검색한 플래너가 없습니다.",
+    "no_planner_created": "아직 생성된 플래너가 없습니다.",
+    "create_new_travel_plan": "새로운 여행 계획을 세워보세요.",
+    "total_planners": "총 {{count}}개의 플래너",
+    "added_to_schedule": "{{place?.title}}이(가) 일정에 추가되었습니다.",
+    "view_details": "{{place?.title}} 상세정보를 확인합니다.",
+    "select_region": "지역을 선택해주세요."
   },
 
   "auth": {
@@ -96,8 +119,9 @@
     "current_password": "현재 비밀번호",
     "new_password": "새로운 비밀번호",
     "confirm_new_password": "새로운 비밀번호 확인",
-    "welcome_user": "반갑습니다 {{name}}님",
-    "account_deletion_warning": "주의: 계정을 탈퇴하면 모든 여행계획, 즐겨찾기, 개인정보가 영구적으로 삭제됩니다.",
+    "enter_current_password": "현재 비밀번호를 입력해주세요",
+    "enter_new_password": "새 비밀번호를 입력해주세요",
+    "account_deletion_warning": "<Strong><WarningIcon>⚠️</WarningIcon> 주의:</Strong> 계정을 탈퇴하면 모든 여행 계획, 즐겨찾기, 개인정보가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
     "select_deletion_reason": "탈퇴 사유를 선택해주세요",
     "not_using_service": "서비스를 사용하지 않음",
     "dissatisfied_with_service": "서비스에 불만족",
@@ -130,7 +154,8 @@
     "drag_instructions": "<IconText>💡사용법:</IconText> 왼쪽 명소를 드래그해서 가운데 시간대에 놓으세요. 날짜와 시간을 자유롭게 조정할 수 있습니다.",
     "drop_here": "여기에 놓으세요",
     "drag_place": "장소를 드래그하세요",
-    "day_label": "{{dayCount}}일차 ({{date}})"
+    "day_label": "{{dayCount}}일차 ({{date}})",
+    "login_required_for_custom_travel": "나만의 여행 일정을 만들고 저장하려면 로그인이 필요해요."
   },
 
   "places": {
@@ -155,8 +180,11 @@
     "45_attractions": "{{attractions_count}}개 명소",
     "website_url": "사이트 주소",
     "visit_website": "사이트 바로가기",
-    "available_hours": "이용가능시간",
-    "currently_viewing": "지금은 {{location}}만 보고있어요"
+    "available_hours": "이용 가능 시간",
+    "currently_viewing": "지금은 {{location}}만 보고있어요",
+    "search_results": "\"{{searchValue}}\"에 대한 검색 결과: {{count}}개",
+    "total_favorites": "총 {{count}}개의 즐겨찾기 장소",
+    "total_favorite_regions": "총 {{count}}개의 즐겨찾기 지역"
   },
 
   "themes": {

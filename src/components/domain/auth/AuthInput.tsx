@@ -108,7 +108,7 @@ const AuthInput = forwardRef<HTMLInputElement, TInputProps>(
       inputValue !== null &&
       inputValue !== undefined &&
       String(inputValue).length > 0 &&
-      (onClear || (onChange && rest.name));
+      onClear;
 
     const determinedAutoComplete =
       autoComplete ||
@@ -141,6 +141,7 @@ const AuthInput = forwardRef<HTMLInputElement, TInputProps>(
         >
           <input
             ref={setRefs} // 병합된 ref 사용
+            type={type}
             className={twMerge(
               'placeholder:text-ph-gray text-main-text-navy flex-1 border-0 bg-transparent outline-none'
             )}

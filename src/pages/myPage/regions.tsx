@@ -3,6 +3,8 @@ import SearchBar from '@/components/common/searchBar/SearchBar';
 import InfoCard from '@/components/domain/regions/InfoCard';
 import type { DropdownItem } from '@/types/dropdown';
 import React, { useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { HeartIcon } from '@heroicons/react/24/outline';
 
 type RegionsData = {
   id: number;
@@ -19,6 +21,7 @@ type RegionsData = {
 type SortOption = 'dateDesc' | 'dateAsc' | 'nameAsc' | 'nameDesc';
 
 const Regions: React.FC = () => {
+  const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>('dateDesc');
   const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
@@ -31,22 +34,22 @@ const Regions: React.FC = () => {
     () => [
       {
         value: 'dateDesc',
-        label: '날짜 내림차순',
+        label: t('common.date_descending'),
         onClick: () => setSortOption('dateDesc'),
       },
       {
         value: 'dateAsc',
-        label: '날짜 오름차순',
+        label: t('common.date_ascending'),
         onClick: () => setSortOption('dateAsc'),
       },
       {
         value: 'nameAsc',
-        label: '이름 오름차순',
+        label: t('common.name_ascending'),
         onClick: () => setSortOption('nameAsc'),
       },
       {
         value: 'nameDesc',
-        label: '이름 내림차순',
+        label: t('common.name_descending'),
         onClick: () => setSortOption('nameDesc'),
       },
     ],
@@ -113,13 +116,15 @@ const Regions: React.FC = () => {
 
   return (
     <div className='w-full py-8'>
-      <h1 className='mb-6 text-2xl font-semibold'>즐겨찾는 지역</h1>
+      <h1 className='mb-6 text-2xl font-semibold'>
+        {t('places.favorite_regions')}
+      </h1>
 
       <div className='mb-6 flex flex-col gap-4 md:flex-row md:items-center'>
         <div className='flex-1'>
           <SearchBar
             className='max-w-none'
-            placeholder='지역명을 검색해보세요 (예: 서울, 제주도)'
+            placeholder={t('places.search_region_placeholder')}
             onSearch={setSearchValue}
           />
         </div>
@@ -130,7 +135,10 @@ const Regions: React.FC = () => {
 
       {searchValue && (
         <div className='mb-4 text-sm text-gray-600'>
-          "{searchValue}"에 대한 검색 결과: {filteredAndSortedData.length}개
+          {t('places.search_results', {
+            searchValue,
+            count: filteredAndSortedData.length,
+          })}
         </div>
       )}
 
@@ -154,41 +162,33 @@ const Regions: React.FC = () => {
 
       {filteredAndSortedData.length === 0 && (
         <div className='py-16 text-center'>
-          <div className='mb-4 text-gray-300'>
-            <svg
-              className='mx-auto h-16 w-16'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'
-              />
-            </svg>
+          <div className='mb-4 flex w-full justify-center'>
+            <HeartIcon className='text-sub-text-gray h-8 w-8' />
           </div>
           {searchValue ? (
             <>
-              <p className='text-gray-500'>검색한 즐겨찾기가 없습니다.</p>
-              <p className='mt-2 text-sm text-gray-400'>
-                다른 키워드로 검색해보세요.
+              <p className='text-sub-text-gray'>
+                {t('common.no_search_favorites')}
+              </p>
+              <p className='text-sub-text-gray mt-2 text-sm'>
+                {t('common.try_other_keywords')}
               </p>
             </>
           ) : (
             <>
-              <p className='text-gray-500'>아직 즐겨찾기한 지역이 없습니다.</p>
+              <p className='text-gray-500'>{t('common.no_favorites_yet')}</p>
               <p className='mt-2 text-sm text-gray-400'>
-                여행지를 탐색하고 즐겨찾기에 추가해보세요.
+                {t('common.explore_and_add_favorites')}
               </p>
             </>
           )}
         </div>
       )}
 
-      <div className='mt-12 text-right text-sm text-gray-400'>
-        총 {filteredAndSortedData.length}개의 즐겨찾기 지역
+      <div className='text-sub-text-gray mt-12 text-right text-sm'>
+        {t('places.total_favorite_regions', {
+          count: filteredAndSortedData.length,
+        })}
       </div>
     </div>
   );

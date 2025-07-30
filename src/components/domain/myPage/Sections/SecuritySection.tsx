@@ -40,20 +40,22 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({
         </div>
         <hr className='border-outline-gray -mt-3 border-t' />
 
-        <div className='flex items-center justify-end gap-2 pt-4'>
+        <div className='flex justify-end gap-2 pt-4'>
           <Button
             variant='cancel'
-            className='h-10 w-32'
+            className='h-10 w-auto' // 2. flex-1 제거 -> 버튼이 내용만큼만 너비를 갖도록
             onClick={onPasswordChange}
           >
-            비밀번호 변경
+            {t('user.change_password')}
           </Button>
+
+          {/* 3. '계정 탈퇴'는 위험한 작업이므로 시각적으로 구분되는 variant 추천 */}
           <Button
-            variant='cancel'
-            className='h-10 w-32'
+            variant='cancel' // 예: 'destructive' variant (빨간색 텍스트 등)
+            className='h-10 w-auto' // flex-1 제거
             onClick={onAccountDelete}
           >
-            계정탈퇴
+            {t('user.delete_account')}
           </Button>
         </div>
       </div>
