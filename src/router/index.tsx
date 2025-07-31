@@ -23,7 +23,6 @@ import RegionsPage from '@/pages/regionsPage';
 import SignUpPage from '@/pages/signUpPage';
 import TravelTipsPage from '@/pages/travelTipsPage';
 import TripDetailPage from '@/pages/tripDetailPage';
-import PlannerPage from '@/pages/plannerPage';
 import { createBrowserRouter } from 'react-router-dom';
 import LoginPage from '../pages/loginPage';
 import FirstSearchingPage from '@/pages/firstSearchingPage';

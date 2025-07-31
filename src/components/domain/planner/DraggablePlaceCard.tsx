@@ -5,7 +5,7 @@ import { XCircleIcon } from '@heroicons/react/24/outline';
 import { useEffect, useRef, useState } from 'react';
 import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 
-type DraggablePlaceCardProps = {
+type TDraggablePlaceCardProps = {
   place: PlannerPlace;
   isOccupied: boolean;
   originTime?: string;
@@ -21,7 +21,7 @@ const DraggablePlaceCard = ({
   originDay, // ✅ 프롭으로 받기
   onRemove,
   readOnly = false,
-}: DraggablePlaceCardProps) => {
+}: TDraggablePlaceCardProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 

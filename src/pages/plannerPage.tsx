@@ -1,21 +1,22 @@
+import Button from '@/components/common/Button';
 import MyPageMenu from '@/components/domain/myPage/MyPageMenu';
 import React, { useState } from 'react';
 
-interface TimeSlot {
+type TTimeSlot = {
   id: string;
   time: string;
   title: string;
   description: string;
-}
+};
 
-interface PlaceItem {
+type TPlaceItem = {
   id: string;
   name: string;
   category: string;
   type: string;
-}
+};
 
-const PlannerPage: React.FC = () => {
+const PlannerPage = () => {
   const [selectedDate, setSelectedDate] = useState('2025-07-01');
   const [selectedDay, setSelectedDay] = useState(1);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -23,7 +24,7 @@ const PlannerPage: React.FC = () => {
   const [draggedItemId, setDraggedItemId] = useState<string | null>(null);
 
   // 일차별 스케줄 데이터 - 각 일차마다 별도 저장
-  const [daySchedules, setDaySchedules] = useState<Record<number, TimeSlot[]>>({
+  const [daySchedules, setDaySchedules] = useState<Record<number, TTimeSlot[]>>({
     1: [
       { id: '1', time: '09:00', title: '가족수첩', description: '강원/강릉' },
       { id: '2', time: '11:00', title: '가족수첩', description: '강원/강릉' },
@@ -90,12 +91,14 @@ const PlannerPage: React.FC = () => {
     }));
   };
 
-  const handleSave = () => {
+  // 저장 버튼 클릭 이벤트 핸들러
+  const handleSaveButtonClick = () => {
     console.log('일정 저장');
   };
 
   // 드롭 시 기존 고정 시간대에 내용만 대체
-  const handleDrop = (e: React.DragEvent, targetIndex?: number) => {
+  // 드롭 이벤트 핸들러
+  const handleItemDrop = (e: React.DragEvent, targetIndex?: number) => {
     e.preventDefault();
     setIsDragOver(false);
     setDraggedOverIndex(null);
@@ -159,12 +162,14 @@ const PlannerPage: React.FC = () => {
   };
 
   // 드래그 오버 효과
-  const handleDragOver = (e: React.DragEvent) => {
+  // 드래그 오버 이벤트 핸들러
+  const handleItemDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(true);
   };
 
-  const handleDragLeave = (e: React.DragEvent) => {
+  // 드래그 리브 이벤트 핸들러
+  const handleItemDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX;
@@ -177,7 +182,8 @@ const PlannerPage: React.FC = () => {
     }
   };
 
-  const handleDragEnd = () => {
+  // 드래그 엔드 이벤트 핸들러
+  const handleItemDragEnd = () => {
     setDraggedItemId(null);
     setIsDragOver(false);
     setDraggedOverIndex(null);
@@ -186,16 +192,16 @@ const PlannerPage: React.FC = () => {
   // 드래그 가능한 카드 컴포넌트
   const DraggableCard: React.FC<{ item: PlaceItem }> = ({ item }) => (
     <div
-      className='cursor-move rounded-lg border-l-4 border-l-[#4A9B8E] bg-gray-50 p-4 transition-shadow hover:shadow-md'
+      className='cursor-move rounded-lg border-l-4 border-l-sub-green bg-gray-50 p-4 transition-shadow hover:shadow-md'
       draggable
       onDragStart={(e) => {
         e.dataTransfer.setData('text/plain', JSON.stringify(item));
       }}
     >
       <div className='mb-1 flex items-center gap-2'>
-        <h3 className='text-sm font-medium text-gray-900'>{item.name}</h3>
+        <h3 className='text-base font-medium text-gray-900'>{item.name}</h3>
       </div>
-      <p className='text-xs text-gray-500'>{item.category}</p>
+      <p className='text-base text-gray-500'>{item.category}</p>
     </div>
   );
 
@@ -216,7 +222,7 @@ const PlannerPage: React.FC = () => {
               className='rounded-lg bg-white p-6 shadow-sm'
               style={{ width: '326px', height: '312px' }}
             >
-              <h3 className='mb-4 font-medium text-gray-900'>일정 요약</h3>
+              <h3 className='mb-4 text-lg font-medium text-gray-900'>일정 요약</h3>
               <div
                 className='space-y-3 overflow-y-auto'
                 style={{ maxHeight: '240px' }}
@@ -232,7 +238,7 @@ const PlannerPage: React.FC = () => {
               className='rounded-lg bg-white p-6 shadow-sm'
               style={{ width: '326px', height: '438px' }}
             >
-              <h3 className='mb-4 font-medium text-gray-900'>선택된 장소들</h3>
+              <h3 className='mb-4 text-lg font-medium text-gray-900'>선택된 장소들</h3>
               <div
                 className='space-y-3 overflow-y-auto'
                 style={{ maxHeight: '366px' }}
@@ -270,18 +276,18 @@ const PlannerPage: React.FC = () => {
         <div className='space-y-6' style={{ width: '1090px' }}>
           {/* 제목 */}
           <div>
-            <h1 className='mb-2 text-3xl font-bold text-gray-900'>
+            <h1 className='mb-2 text-4xl font-bold text-gray-900'>
               일정 수정하기
             </h1>
-            <p className='text-gray-600'>일정을 수정해보세요</p>
+            <p className='text-base text-gray-600'>일정을 수정해보세요</p>
           </div>
 
           {/* 사용법 박스 */}
           <div
-            className='flex items-center rounded-lg border border-[#D4A574] bg-[#F7F0E8] p-4'
+            className='flex items-center rounded-lg border border-amber-400 bg-amber-50 p-4'
             style={{ height: '67px' }}
           >
-            <p className='text-sm text-[#2C3E50]'>
+            <p className='text-sm text-main-text-navy'>
               💡사용법: 왼쪽 명소를 드래그 해서 가운데 시간대에 놓으세요. 날짜와
               시간을 자유롭게 조정할 수 있습니다.
             </p>
@@ -318,7 +324,7 @@ const PlannerPage: React.FC = () => {
                     type='date'
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    className='w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-transparent focus:ring-2 focus:ring-[#4A9B8E]'
+                    className='w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-transparent focus:ring-2 focus:ring-sub-green'
                   />
                 </div>
                 <span className='font-medium text-gray-500'>~</span>
@@ -327,7 +333,7 @@ const PlannerPage: React.FC = () => {
                     type='date'
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    className='w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-transparent focus:ring-2 focus:ring-[#4A9B8E]'
+                    className='w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-transparent focus:ring-2 focus:ring-sub-green'
                   />
                 </div>
               </div>
@@ -341,13 +347,13 @@ const PlannerPage: React.FC = () => {
                   onClick={() => setSelectedDay(day)}
                   className={`relative px-2 py-1 font-medium transition-colors ${
                     selectedDay === day
-                      ? 'text-[#4A9B8E]'
-                      : 'text-gray-700 hover:text-[#4A9B8E]'
+                      ? 'text-sub-green'
+                      : 'text-gray-700 hover:text-sub-green'
                   }`}
                 >
                   {day}일차 (7/{day})
                   {selectedDay === day && (
-                    <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-[#4A9B8E]'></div>
+                    <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-sub-green'></div>
                   )}
                 </button>
               ))}
@@ -358,12 +364,12 @@ const PlannerPage: React.FC = () => {
             <div
               className={`min-h-64 rounded-lg border-2 border-none p-4 transition-all duration-300 ease-in-out ${
                 isDragOver
-                  ? 'border-[#4A9B8E] bg-green-50 shadow-lg'
+                  ? 'border-sub-green bg-green-50 shadow-lg'
                   : 'border-gray-300'
               }`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
+              onDragOver={handleItemDragOver}
+              onDragLeave={handleItemDragLeave}
+              onDrop={handleItemDrop}
             >
               {currentTimeSlots.length === 0 ? (
                 <div className='py-8 text-center'>
@@ -398,7 +404,7 @@ const PlannerPage: React.FC = () => {
                             e.preventDefault();
                           }
                         }}
-                        onDragEnd={handleDragEnd}
+                        onDragEnd={handleItemDragEnd}
                         onDragOver={(e) => {
                           e.preventDefault();
                         }}
@@ -447,7 +453,7 @@ const PlannerPage: React.FC = () => {
                         </div>
 
                         {/* 내용 영역 - 초록색 테두리로 감싸기 */}
-                        <div className='flex flex-1 items-center gap-4 rounded-r-lg border-l-4 border-l-[#4A9B8E] pl-4'>
+                        <div className='flex flex-1 items-center gap-4 rounded-r-lg border-l-4 border-l-sub-green pl-4'>
                           {/* 제목과 설명 */}
                           <div className='min-w-0 flex-1'>
                             {slot.title ? (
@@ -519,13 +525,12 @@ const PlannerPage: React.FC = () => {
 
           {/* 저장 버튼 */}
           <div className='flex justify-end'>
-            <button
-              onClick={handleSave}
-              className='rounded-lg bg-[#FF6B7A] font-medium text-white transition-colors hover:bg-[#e55a6e]'
-              style={{ width: '280px', height: '56px' }}
+            <Button
+              onClick={handleSaveButtonClick}
+              className='w-[280px] h-[56px]'
             >
               일정 완성
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -537,12 +542,12 @@ const PlannerPage: React.FC = () => {
             <h1 className='mb-2 text-2xl font-bold text-gray-900'>
               일정 수정하기
             </h1>
-            <p className='text-gray-600'>일정을 수정해보세요</p>
+            <p className='text-base text-gray-600'>일정을 수정해보세요</p>
           </div>
 
           {/* 사용법 박스 */}
-          <div className='flex items-center rounded-lg border border-[#D4A574] bg-[#F7F0E8] p-4'>
-            <p className='text-sm text-[#2C3E50]'>
+          <div className='flex items-center rounded-lg border border-amber-400 bg-amber-50 p-4'>
+            <p className='text-sm text-main-text-navy'>
               💡사용법: 왼쪽 명소를 드래그 해서 가운데 시간대에 놓으세요. 날짜와
               시간을 자유롭게 조정할 수 있습니다.
             </p>
@@ -602,7 +607,7 @@ const PlannerPage: React.FC = () => {
                     type='date'
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    className='w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-transparent focus:ring-2 focus:ring-[#4A9B8E]'
+                    className='w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-transparent focus:ring-2 focus:ring-sub-green'
                   />
                 </div>
                 <span className='font-medium text-gray-500'>~</span>
@@ -611,7 +616,7 @@ const PlannerPage: React.FC = () => {
                     type='date'
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    className='w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-transparent focus:ring-2 focus:ring-[#4A9B8E]'
+                    className='w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-transparent focus:ring-2 focus:ring-sub-green'
                   />
                 </div>
               </div>
@@ -624,13 +629,13 @@ const PlannerPage: React.FC = () => {
                   onClick={() => setSelectedDay(day)}
                   className={`relative px-2 py-1 font-medium transition-colors ${
                     selectedDay === day
-                      ? 'text-[#4A9B8E]'
-                      : 'text-gray-700 hover:text-[#4A9B8E]'
+                      ? 'text-sub-green'
+                      : 'text-gray-700 hover:text-sub-green'
                   }`}
                 >
                   {day}일차 (7/{day})
                   {selectedDay === day && (
-                    <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-[#4A9B8E]'></div>
+                    <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-sub-green'></div>
                   )}
                 </button>
               ))}
@@ -639,12 +644,12 @@ const PlannerPage: React.FC = () => {
             <div
               className={`min-h-64 rounded-lg border-2 border-none p-4 transition-all duration-300 ease-in-out ${
                 isDragOver
-                  ? 'border-[#4A9B8E] bg-green-50 shadow-lg'
+                  ? 'border-sub-green bg-green-50 shadow-lg'
                   : 'border-gray-300'
               }`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
+              onDragOver={handleItemDragOver}
+              onDragLeave={handleItemDragLeave}
+              onDrop={handleItemDrop}
             >
               {currentTimeSlots.length === 0 ? (
                 <div className='py-8 text-center'>
@@ -679,7 +684,7 @@ const PlannerPage: React.FC = () => {
                             e.preventDefault();
                           }
                         }}
-                        onDragEnd={handleDragEnd}
+                        onDragEnd={handleItemDragEnd}
                         onDragOver={(e) => {
                           e.preventDefault();
                         }}
@@ -723,7 +728,7 @@ const PlannerPage: React.FC = () => {
                           </div>
                         </div>
 
-                        <div className='flex flex-1 items-center gap-4 rounded-r-lg border-l-4 border-l-[#4A9B8E] pl-3'>
+                        <div className='flex flex-1 items-center gap-4 rounded-r-lg border-l-4 border-l-sub-green pl-3'>
                           <div className='min-w-0 flex-1'>
                             {slot.title ? (
                               <>
@@ -793,8 +798,8 @@ const PlannerPage: React.FC = () => {
 
           <div className='flex justify-end'>
             <button
-              onClick={handleSave}
-              className='rounded-lg bg-[#FF6B7A] font-medium text-white transition-colors hover:bg-[#e55a6e]'
+              onClick={handleSaveButtonClick}
+              className='rounded-lg bg-main-pink font-medium text-white transition-colors hover:bg-main-hover-pink'
               style={{ width: '200px', height: '48px' }}
             >
               일정 완성
@@ -814,8 +819,8 @@ const PlannerPage: React.FC = () => {
           </div>
 
           {/* 사용법 박스 */}
-          <div className='rounded-lg border border-[#D4A574] bg-[#F7F0E8] p-3'>
-            <p className='text-xs text-[#2C3E50]'>
+          <div className='rounded-lg border border-amber-400 bg-amber-50 p-3'>
+            <p className='text-xs text-main-text-navy'>
               💡사용법: 드래그해서 시간대에 놓으세요.
             </p>
           </div>
@@ -829,7 +834,7 @@ const PlannerPage: React.FC = () => {
                     type='date'
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    className='w-full rounded-lg border border-gray-300 p-2 text-xs focus:border-transparent focus:ring-2 focus:ring-[#4A9B8E]'
+                    className='w-full rounded-lg border border-gray-300 p-2 text-xs focus:border-transparent focus:ring-2 focus:ring-sub-green'
                   />
                 </div>
                 <span className='text-sm font-medium text-gray-500'>~</span>
@@ -838,7 +843,7 @@ const PlannerPage: React.FC = () => {
                     type='date'
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    className='w-full rounded-lg border border-gray-300 p-2 text-xs focus:border-transparent focus:ring-2 focus:ring-[#4A9B8E]'
+                    className='w-full rounded-lg border border-gray-300 p-2 text-xs focus:border-transparent focus:ring-2 focus:ring-sub-green'
                   />
                 </div>
               </div>
@@ -851,13 +856,13 @@ const PlannerPage: React.FC = () => {
                   onClick={() => setSelectedDay(day)}
                   className={`relative px-2 py-1 text-sm font-medium transition-colors ${
                     selectedDay === day
-                      ? 'text-[#4A9B8E]'
-                      : 'text-gray-700 hover:text-[#4A9B8E]'
+                      ? 'text-sub-green'
+                      : 'text-gray-700 hover:text-sub-green'
                   }`}
                 >
                   {day}일차
                   {selectedDay === day && (
-                    <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-[#4A9B8E]'></div>
+                    <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-sub-green'></div>
                   )}
                 </button>
               ))}
@@ -877,7 +882,7 @@ const PlannerPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className='flex flex-1 items-center gap-2 border-l-4 border-l-[#4A9B8E] pl-2'>
+                  <div className='flex flex-1 items-center gap-2 border-l-4 border-l-sub-green pl-2'>
                     <div className='min-w-0 flex-1'>
                       {slot.title ? (
                         <>
@@ -922,7 +927,7 @@ const PlannerPage: React.FC = () => {
                 {scheduleSummary.map((item) => (
                   <div
                     key={item.id}
-                    className='rounded-lg border-l-4 border-l-[#4A9B8E] bg-gray-50 p-2'
+                    className='rounded-lg border-l-4 border-l-sub-green bg-gray-50 p-2'
                   >
                     <div className='text-xs font-medium text-gray-900'>
                       {item.name}
@@ -944,7 +949,7 @@ const PlannerPage: React.FC = () => {
                 {selectedPlaces.map((item) => (
                   <div
                     key={item.id}
-                    className='rounded-lg border-l-4 border-l-[#4A9B8E] bg-gray-50 p-2'
+                    className='rounded-lg border-l-4 border-l-sub-green bg-gray-50 p-2'
                   >
                     <div className='text-xs font-medium text-gray-900'>
                       {item.name}
@@ -966,7 +971,7 @@ const PlannerPage: React.FC = () => {
                 {favoritePlaces.map((item) => (
                   <div
                     key={item.id}
-                    className='rounded-lg border-l-4 border-l-[#4A9B8E] bg-gray-50 p-2'
+                    className='rounded-lg border-l-4 border-l-sub-green bg-gray-50 p-2'
                   >
                     <div className='text-xs font-medium text-gray-900'>
                       {item.name}
@@ -978,12 +983,11 @@ const PlannerPage: React.FC = () => {
             </div>
           </div>
 
-          <button
-            onClick={handleSave}
-            className='w-full rounded-lg bg-[#FF6B7A] py-3 font-medium text-white transition-colors hover:bg-[#e55a6e]'
+          <Button
+            onClick={handleSaveButtonClick}
           >
             일정 완성
-          </button>
+          </Button>
         </div>
       </div>
     </div>
