@@ -1,31 +1,31 @@
 import React, { useState } from 'react';
 import CreateTripModal from '../../modals/CreateTripModal';
 
-interface PlannerAddButtonMiniProps {
+type TPlannerAddButtonMiniProps = {
   onClick?: () => void;
-  onAddPlanner?: (planner: PlannerData) => void;
-}
+  onAddPlanner?: (planner: TPlannerData) => void;
+};
 
-interface TripData {
+type TTripData = {
   tripName: string;
   tripDescription: string;
   location: string;
   selectedRegion: string;
-}
+};
 
-interface PlannerData {
+type TPlannerData = {
   id: number;
   title: string;
   description: string;
   dateRange: string;
   isNew?: boolean;
   createdAt: string;
-}
+};
 
-const PlannerAddButtonMini: React.FC<PlannerAddButtonMiniProps> = ({
+const PlannerAddButtonMini = ({
   onClick,
   onAddPlanner,
-}) => {
+}: TPlannerAddButtonMiniProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleButtonClick = () => {
@@ -36,9 +36,9 @@ const PlannerAddButtonMini: React.FC<PlannerAddButtonMiniProps> = ({
     }
   };
 
-  const handleModalSubmit = (tripData: TripData) => {
+  const handleModalSubmit = (tripData: TTripData) => {
     // 새 일정 데이터 생성
-    const newPlanner: PlannerData = {
+    const newPlanner: TPlannerData = {
       id: Date.now(), // 임시 ID
       title: tripData.tripName,
       description: tripData.tripDescription || `${tripData.location} 여행`,
@@ -62,7 +62,7 @@ const PlannerAddButtonMini: React.FC<PlannerAddButtonMiniProps> = ({
     <>
       <button
         onClick={handleButtonClick}
-        className='flex h-14 w-14 items-center justify-center rounded-full bg-[#FF6B7A] text-white transition-all duration-200 hover:bg-[#ff5a6b]'
+        className='flex h-14 w-14 items-center justify-center rounded-full bg-main-pink text-white transition-all duration-200 hover:bg-main-hover-pink'
       >
         <svg
           className='h-5 w-5'

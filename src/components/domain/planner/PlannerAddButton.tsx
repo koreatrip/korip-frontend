@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
 import CreateTripModal from '../../modals/CreateTripModal';
 
-interface PlannerAddButtonProps {
+type TPlannerAddButtonProps = {
   onClick?: () => void;
-  onAddPlanner?: (planner: PlannerData) => void;
-}
+  onAddPlanner?: (planner: TPlannerData) => void;
+};
 
-interface TripData {
+type TTripData = {
   tripName: string;
   tripDescription: string;
   location: string;
   selectedRegion: string;
-}
+};
 
-interface PlannerData {
+type TPlannerData = {
   id: number;
   title: string;
   description: string;
   dateRange: string;
   isNew?: boolean;
   createdAt: string;
-}
+};
 
-const PlannerAddButton: React.FC<PlannerAddButtonProps> = ({ onClick, onAddPlanner }) => {
+const PlannerAddButton = ({ onClick, onAddPlanner }: TPlannerAddButtonProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleButtonClick = () => {
@@ -33,9 +33,9 @@ const PlannerAddButton: React.FC<PlannerAddButtonProps> = ({ onClick, onAddPlann
     }
   };
 
-  const handleModalSubmit = (tripData: TripData) => {
+  const handleModalSubmit = (tripData: TTripData) => {
     // 새 일정 데이터 생성
-    const newPlanner: PlannerData = {
+    const newPlanner: TPlannerData = {
       id: Date.now(), // 임시 ID
       title: tripData.tripName,
       description: tripData.tripDescription || `${tripData.location} 여행`,

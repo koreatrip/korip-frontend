@@ -1,11 +1,11 @@
 import type { PlannerPlace } from '@/types/plannerType';
 import DraggablePlaceCard from './DraggablePlaceCard';
 
-type SelectedPlacesListProps = {
+type TSelectedPlacesListProps = {
   places: PlannerPlace[];
   readOnly?: boolean;
 };
-const SelectedPlacesList = ({ places, readOnly = false }: SelectedPlacesListProps) => {
+const SelectedPlacesList = ({ places, readOnly = false }: TSelectedPlacesListProps) => {
   return (
     <div className='bg-bg-white shadow-light flex max-h-[458px] flex-col gap-y-4 rounded-2xl p-6'>
       <h3 className='text-main-text-navy text-2xl font-semibold'>

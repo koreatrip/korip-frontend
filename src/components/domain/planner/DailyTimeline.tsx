@@ -3,7 +3,7 @@
 import type { TimeSlotData } from '@/types/plannerType';
 import TimeSlot from './TimeSlot';
 
-type DailyTimelineProps = {
+type TDailyTimelineProps = {
   schedule: TimeSlotData[];
   activeTab: number;
   onRemovePlace?: (timeSlotId: string) => void;
@@ -26,7 +26,7 @@ const DailyTimeline = ({
   activeTab,
   onRemovePlace,
   readOnly = false,
-}: DailyTimelineProps) => {
+}: TDailyTimelineProps) => {
   return (
     <div className='space-y-5 pt-4'>
       {ALL_TIME_SLOTS.map((time) => {

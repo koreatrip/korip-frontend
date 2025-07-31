@@ -5,7 +5,7 @@ import DraggablePlaceCard from './DraggablePlaceCard';
 import { useEffect, useRef, useState } from 'react';
 import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 
-type TimeSlotProps = TimeSlotData & {
+type TTimeSlotProps = TimeSlotData & {
   day: number;
   onRemovePlace?: (timeSlotId: string) => void;
   readOnly?: boolean;
@@ -18,7 +18,7 @@ const TimeSlot = ({
   timeSlotId,
   onRemovePlace,
   readOnly = false,
-}: TimeSlotProps) => {
+}: TTimeSlotProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isBeingDraggedOver, setIsBeingDraggedOver] = useState(false);
 

@@ -8,16 +8,16 @@ import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // 플래너 데이터 타입
-interface PlannerData {
+type TPlannerData = {
   id: number;
   title: string;
   description: string;
   dateRange: string;
   isNew?: boolean;
   createdAt: string;
-}
+};
 
-const MyPlannerPage: React.FC = () => {
+const MyPlannerPage = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>(
@@ -25,7 +25,7 @@ const MyPlannerPage: React.FC = () => {
   );
 
   // 플래너 더미 데이터 (createdAt 추가)
-  const [planners, setPlanners] = useState<PlannerData[]>([
+  const [planners, setPlanners] = useState<TPlannerData[]>([
     {
       id: 1,
       title: '길동이와 동에번쩍 서에번쩍',
@@ -113,7 +113,7 @@ const MyPlannerPage: React.FC = () => {
   ];
 
   // 검색 및 정렬 로직 - Places 컴포넌트와 동일한 구조
-  const filteredAndSortedPlanners: PlannerData[] = useMemo(() => {
+  const filteredAndSortedPlanners: TPlannerData[] = useMemo(() => {
     let filtered = planners;
 
     // 검색 필터링
@@ -148,31 +148,36 @@ const MyPlannerPage: React.FC = () => {
   }, [planners, searchValue, sortOption]);
 
   // 이벤트 핸들러들
-  const handleSearch = (value: string): void => setSearchValue(value);
+  // 검색 이벤트 핸들러
+  const handleSearchSubmit = (value: string): void => setSearchValue(value);
 
-  const handleEdit = (title: string) => {
+  // 편집 버튼 클릭 이벤트 핸들러
+  const handleEditClick = (title: string) => {
     console.log(`${title} 수정`);
   };
 
-  const handleDelete = (title: string) => {
+  // 삭제 버튼 클릭 이벤트 핸들러
+  const handleDeleteClick = (title: string) => {
     console.log(`${title} 삭제`);
   };
 
-  const handleAddPlanner = (newPlanner: PlannerData) => {
+  // 플래너 추가 이벤트 핸들러
+  const handleAddPlannerSubmit = (newPlanner: TPlannerData) => {
     setPlanners(prev => [newPlanner, ...prev]);
   };
 
-  const handlePlannerClick = (plannerId: number) => {
+  // 플래너 카드 클릭 이벤트 핸들러
+  const handlePlannerCardClick = (plannerId: number) => {
     navigate(`/trip/${plannerId}`);
   };
 
   return (
-    <div className='flex min-h-screen bg-white'>
+    <div className='flex min-h-screen bg-gray-50'>
       {/* 메인 컨텐츠 */}
       <div className='flex-1 px-2 py-6'>
         {/* 헤더 */}
         <div className='mb-6'>
-          <h1 className='mb-4 text-2xl font-bold text-gray-900'>
+          <h1 className='mb-4 text-4xl font-bold text-gray-900'>
             내 여행 일정
           </h1>
 
@@ -182,12 +187,12 @@ const MyPlannerPage: React.FC = () => {
               <SearchBar
                 className='w-full max-w-none md:!max-w-[876px]'
                 placeholder='플래너 제목이나 설명을 검색해보세요'
-                onSearch={handleSearch}
+                onSearch={handleSearchSubmit}
               />
             </div>
             <div className='flex gap-2'>
               <SortDropdown options={sortOptions} current={sortOption} />
-              <PlannerAddButtonMini onAddPlanner={handleAddPlanner} />
+              <PlannerAddButtonMini onAddPlanner={handleAddPlannerSubmit} />
             </div>
           </div>
 
@@ -212,16 +217,16 @@ const MyPlannerPage: React.FC = () => {
                 description={planner.description}
                 dateRange={planner.dateRange}
                 isNew={planner.isNew ?? false}
-                onEdit={() => handleEdit(planner.title)}
-                onDelete={() => handleDelete(planner.title)}
-                onClick={() => handlePlannerClick(planner.id)}
+                onEdit={() => handleEditClick(planner.title)}
+                onDelete={() => handleDeleteClick(planner.title)}
+                onClick={() => handlePlannerCardClick(planner.id)}
               />
             </div>
           ))}
 
           {/* 플래너 추가 버튼 */}
           <div className='h-[372px] w-[348px] justify-self-start'>
-            <PlannerAddButton onAddPlanner={handleAddPlanner} />
+            <PlannerAddButton onAddPlanner={handleAddPlannerSubmit} />
           </div>
         </div>
 
