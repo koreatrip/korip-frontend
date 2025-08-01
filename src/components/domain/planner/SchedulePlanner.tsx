@@ -4,6 +4,7 @@ import DailyScheduleTabs from './DailyScheduleTabs';
 import type { TabItem } from '@/types/tabType';
 import DateRangePicker from '@/components/common/DateRangePicker';
 import type { TimeSlotData } from '@/types/plannerType';
+import { useTranslation } from 'react-i18next';
 
 type SchedulePlannerProps = {
   schedule: TimeSlotData[];
@@ -19,12 +20,10 @@ const SchedulePlanner = ({ schedule, onRemovePlace }: SchedulePlannerProps) => {
   const [endDate, setEndDate] = useState(new Date());
   const [tabs, setTabs] = useState<TabItem[]>([]);
   const [activeTab, setActiveTab] = useState(1);
-  const dailySchedule = schedule.filter((item) => item.day === activeTab);
 
-  // 🔥 핵심 수정: 각 일차별 스케줄 데이터를 별도로 관리
-  const [dailySchedules, setDailySchedules] = useState<
-    Record<number, TimeSlotData[]>
-  >({});
+  const { t } = useTranslation();
+
+  const dailySchedule = schedule.filter((item) => item.day === activeTab);
 
   // 2. 날짜가 변경될 때마다 탭을 다시 생성하는 useEffect
   useEffect(() => {
@@ -48,9 +47,13 @@ const SchedulePlanner = ({ schedule, onRemovePlace }: SchedulePlannerProps) => {
 
       // ✅ 이 반복문이 이제 마지막 날짜까지 정확하게 포함합니다.
       while (currentDate <= end) {
+        const dateStr = `${currentDate.getMonth() + 1}/${currentDate.getDate()}`;
         newTabs.push({
           id: dayCount,
-          label: `${dayCount}일차 (${currentDate.getMonth() + 1}/${currentDate.getDate()})`,
+          label: t('travel.day_label', {
+            dayCount,
+            date: dateStr,
+          }), // 번역 적용
         });
 
         // 다음 날짜로 넘어갑니다.
@@ -66,7 +69,7 @@ const SchedulePlanner = ({ schedule, onRemovePlace }: SchedulePlannerProps) => {
     };
 
     generateTabs();
-  }, [startDate, endDate]);
+  }, [startDate, endDate, t]);
 
   return (
     <div className='flex w-full items-center justify-center'>

@@ -1,19 +1,26 @@
 import { motion } from 'framer-motion';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router-dom';
 
-const menuItems = [
-  { to: '/mypage', label: '개인정보' },
-  { to: '/mypage/plan', label: '일정' },
-  { to: '/mypage/places', label: '장소' },
-  { to: '/mypage/regions', label: '지역' },
-];
-
 const MobileSlideMenu = () => {
+  const { t } = useTranslation();
+
+  const menuItems = useMemo(
+    () => [
+      { to: '/mypage', labelKey: 'user.edit_profile' },
+      { to: '/mypage/plan', labelKey: 'travel.my_travel_plans' },
+      { to: '/mypage/places', labelKey: 'places.favorite_places' },
+      { to: '/mypage/regions', labelKey: 'places.favorite_regions' },
+    ],
+    []
+  ); // 의존성 배열 비워둠 (정적 데이터이므로)
+
   const scrollRef = useRef<HTMLUListElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+
   useLayoutEffect(() => {
     const listEl = scrollRef.current;
     if (!listEl) return;
@@ -40,7 +47,7 @@ const MobileSlideMenu = () => {
         activeEl.offsetLeft - listEl.clientWidth / 2 + activeEl.clientWidth / 2;
       listEl.scrollTo({ left: scrollAmount, behavior: 'smooth' });
     }
-  }, [location.pathname]);
+  }, [location.pathname, t]);
   return (
     <nav className='block w-full bg-white md:hidden'>
       <div className='relative'>
@@ -62,7 +69,7 @@ const MobileSlideMenu = () => {
                 }
                 end={item.to === '/mypage'}
               >
-                {item.label}
+                {t(item.labelKey)}
               </NavLink>
             </li>
           ))}
