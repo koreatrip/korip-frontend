@@ -172,7 +172,7 @@ const SearchBar = ({
   const searchBarRef = useRef<HTMLDivElement>(null);
 
   // 실제 프로젝트에서는 이 부분을 주석 해제하고 사용
-  const { searchAndSetLocation, getSuggestions } = useLocationStore();
+  const { searchAndSetLocation } = useLocationStore();
   const { showToast } = useToast();
 
   useEffect(() => {

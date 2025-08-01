@@ -5,6 +5,7 @@ import PlannerAddButtonMini from '@/components/domain/planner/PlannerAddButtonMi
 import PlannerCard from '@/components/domain/planner/PlannerCard';
 import { SortOption, type DropdownItem } from '@/types/dropdown';
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 // 플래너 데이터 타입
@@ -18,6 +19,7 @@ interface PlannerData {
 }
 
 const MyPlannerPage: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>(
@@ -92,22 +94,22 @@ const MyPlannerPage: React.FC = () => {
   const sortOptions: DropdownItem[] = [
     {
       value: SortOption.DATE_DESC,
-      label: '날짜 내림차순',
+      label: t('common.date_descending'),
       onClick: () => setSortOption(SortOption.DATE_DESC),
     },
     {
       value: SortOption.DATE_ASC,
-      label: '날짜 오름차순',
+      label: t('common.date_ascending'),
       onClick: () => setSortOption(SortOption.DATE_ASC),
     },
     {
       value: SortOption.NAME_ASC,
-      label: '이름 오름차순',
+      label: t('common.name_ascending'),
       onClick: () => setSortOption(SortOption.NAME_ASC),
     },
     {
       value: SortOption.NAME_DESC,
-      label: '이름 내림차순',
+      label: t('common.name_descending'),
       onClick: () => setSortOption(SortOption.NAME_DESC),
     },
   ];
@@ -163,13 +165,13 @@ const MyPlannerPage: React.FC = () => {
   };
 
   return (
-    <div className='flex min-h-screen bg-white'>
+    <div className='flex min-h-screen'>
       {/* 메인 컨텐츠 */}
       <div className='flex-1 py-6'>
         {/* 헤더 */}
         <div className='mb-6'>
-          <h1 className='mb-4 text-2xl font-bold text-gray-900'>
-            내 여행 일정
+          <h1 className='text-main-text-navy mb-4 text-4xl font-semibold'>
+            {t('travel.travel_schedule')}
           </h1>
 
           {/* 검색바와 정렬 드롭다운 */}
@@ -177,7 +179,7 @@ const MyPlannerPage: React.FC = () => {
             <div className='flex-1'>
               <SearchBar
                 className='!max-w-[876px]'
-                placeholder='플래너 제목이나 설명을 검색해보세요'
+                placeholder={t('common.search_planner_title_or_description')}
                 onSearch={handleSearch}
               />
             </div>
@@ -195,15 +197,19 @@ const MyPlannerPage: React.FC = () => {
         </div>
 
         {/* 플래너 카드 그리드 - 23px gap */}
-        <div 
+        <div
           className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
           style={{
             gap: '0',
-            marginRight: '-30px'
+            marginRight: '-30px',
           }}
         >
           {filteredAndSortedPlanners.map((planner) => (
-            <div key={planner.id} className='h-[372px]' style={{ marginRight: '30px', marginBottom: '30px' }}>
+            <div
+              key={planner.id}
+              className='h-[372px]'
+              style={{ marginRight: '30px', marginBottom: '30px' }}
+            >
               <PlannerCard
                 title={planner.title}
                 description={planner.description}
@@ -217,7 +223,10 @@ const MyPlannerPage: React.FC = () => {
           ))}
 
           {/* 플래너 추가 버튼 */}
-          <div className='h-[372px]' style={{ marginRight: '30px', marginBottom: '30px' }}>
+          <div
+            className='h-[372px]'
+            style={{ marginRight: '30px', marginBottom: '30px' }}
+          >
             <PlannerAddButton />
           </div>
         </div>

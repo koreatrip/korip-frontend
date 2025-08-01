@@ -1,20 +1,21 @@
 import Button from '@/components/common/Button';
 import { Modal } from '@/components/common/Modal';
+import { useTranslation } from 'react-i18next';
 
 // --- 데이터 타입 정의 ---
-interface TPlaceData {
+type TPlaceData = {
   name: string;
   address: string;
   description: string;
   operatingTime: string;
   closingDays: string;
   phoneNumber: string;
-}
+};
 
-interface OperatingHour {
+type OperatingHour = {
   day: string;
   time: string;
-}
+};
 
 // --- 데이터 가공 로직 ---
 const processOperatingHours = (apiData: TPlaceData): OperatingHour[] => {
@@ -71,25 +72,29 @@ const PlaceDetailModal = ({ isOpen, onClose }: TPlaceDetailModalProps) => {
   ];
   const todayName = dayOfWeekMap[new Date().getDay()];
 
+  const { t } = useTranslation();
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <Modal.Header>경복궁</Modal.Header>
       <Modal.Body>
         <div className='h-[182px] w-full rounded-lg bg-gray-200'></div>
-        <div className='mt-7 flex flex-col space-y-5'>
+        <div className='mt-7 flex h-80 flex-col space-y-5 overflow-y-scroll'>
           <div className='flex flex-col'>
-            <p className='font-semibold'>주소</p>
+            <p className='font-semibold'>{t('common.address')}</p>
             <p className='text-main-text-navy/80'>{mockPlaceData.address}</p>
           </div>
           <div className='flex flex-col'>
-            <p className='font-semibold'>소개글</p>
+            <p className='font-semibold'>{t('common.description')}</p>
             <p className='text-main-text-navy/80 leading-relaxed'>
               {mockPlaceData.description}
             </p>
           </div>
 
           <div className='mb-3 flex items-center justify-between border-b border-gray-200 pb-3'>
-            <h4 className='font-semibold text-gray-600'>문의 및 안내</h4>
+            <h4 className='font-semibold text-gray-600'>
+              {t('common.inquiry_and_info')}
+            </h4>
             <a
               href={`tel:${mockPlaceData.phoneNumber}`}
               className='text-sub-green font-semibold hover:underline'
@@ -98,11 +103,13 @@ const PlaceDetailModal = ({ isOpen, onClose }: TPlaceDetailModalProps) => {
             </a>
           </div>
 
-          <h4 className='mb-3 font-semibold text-gray-600'>이용 가능 시간</h4>
+          <h4 className='mb-3 font-semibold text-gray-600'>
+            {t('places.available_hours')}
+          </h4>
           <div className='space-y-2'>
             {processedHours.map(({ day, time }) => {
               const isToday = day === todayName;
-              const isClosed = time === '휴무일';
+              const isClosed = time === t('common.closed_days');
               return (
                 <div
                   key={day}
@@ -133,7 +140,7 @@ const PlaceDetailModal = ({ isOpen, onClose }: TPlaceDetailModalProps) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button className='mt-4'>일정 추가하기</Button>
+        <Button className='mt-4'>{t('travel.add_to_plan')}</Button>
       </Modal.Footer>
     </Modal>
   );

@@ -1,5 +1,6 @@
 import { type DropdownItem, SortOption } from '@/types/dropdown';
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type SortDropdownProps = {
   options: DropdownItem[];
@@ -9,6 +10,8 @@ type SortDropdownProps = {
 const SortDropdown: React.FC<SortDropdownProps> = ({ options, current }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const { t } = useTranslation();
 
   const handleToggle = () => setIsOpen((prev) => !prev);
   const handleClose = () => setIsOpen(false);
@@ -38,7 +41,7 @@ const SortDropdown: React.FC<SortDropdownProps> = ({ options, current }) => {
           isOpen ? '' : 'hover:bg-[#ff5a6b]'
         }`}
       >
-        <span>정렬</span>
+        <span>{t('common.sort')}</span>
         <svg
           className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill='none'
@@ -55,7 +58,7 @@ const SortDropdown: React.FC<SortDropdownProps> = ({ options, current }) => {
       </button>
 
       {isOpen && (
-        <div className='absolute top-full right-0 z-50 mt-1 w-32 rounded-lg border border-gray-200 bg-white py-1 shadow-lg'>
+        <div className='border-outline-gray bg-bg-white absolute top-full right-0 z-50 mt-1 w-auto rounded-lg border py-1 shadow-lg'>
           {options.map((item) => (
             <button
               key={item.value}

@@ -4,15 +4,19 @@ import AuthInput from '../auth/AuthInput'; // AuthInput 컴포넌트 경로 확�
 import { useForm } from 'react-hook-form'; // useForm 임포트
 import { z } from 'zod';
 import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
 const loginSchema = z.object({
   email: z.string().email('올바른 이메일 형식이 아닙니다.'),
-  password: z.string().min(6, '비밀번호는 최소 6자 이상이어야 합니다.'),
+  password: z.string().min(1, '비밀번호를 입력해주세요.'),
 });
 
 type LogInFormInputs = z.infer<typeof loginSchema>; // Zod 스키마로부터 타입 추론
 
 const LogInForm = () => {
+  const { t } = useTranslation();
+  const [loginError, setLoginError] = useState<string>(''); // 나중에 api 연결했을때 이메일또는 비밀번호가 일치하지않다라는 메세지 받을때 사용하거나 아니면 다른걸로 대체해서 경고 텍스트 보여주세용
   const {
     register,
     handleSubmit,
@@ -32,6 +36,9 @@ const LogInForm = () => {
     //   // 로그인 성공 처리
     // } catch (error) {
     //   // 로그인 실패 처리
+    // if (error.status === 401) {
+    //   setLoginError(t('auth.login_failed')); // 이메일 또는 비밀번호 불일치
+    // }
     // }
   };
 
@@ -43,8 +50,25 @@ const LogInForm = () => {
       shouldDirty: true,
       shouldTouch: true,
     });
+
+    // 입력값이 변경되면 로그인 에러 초기화
+    if (loginError) {
+      setLoginError('');
+    }
   };
 
+  /**
+   * 요거는 변경원이 만들었슈. 번역이슈로 만들었음
+   * 에러 메세지 번역 매핑
+   */
+  const getErrorMessage = (error: string) => {
+    const errorMap: Record<string, string> = {
+      '올바른 이메일 형식이 아닙니다.': t('auth.invalid_email_format'),
+      '비밀번호를 입력하세요.': t('auth.password_required'),
+      '이메일을 입력하세요.': t('auth.email_required'),
+    };
+    return errorMap[error] || error;
+  };
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -52,23 +76,25 @@ const LogInForm = () => {
     >
       <div>
         <AuthInput
-          label='Email'
+          label={t('auth.email')}
           placeholder='k@example.com'
           id='email' // AuthInput에 id prop 전달
           // react-hook-form의 register를 스프레드합니다.
           // register가 value, onChange, onBlur, ref 등을 AuthInput에 전달합니다.
           {...register('email', {
-            required: '이메일은 필수 입력입니다.',
+            required: t('auth.email_required'),
             pattern: {
               value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-              message: '올바른 이메일 형식이 아닙니다.',
+              message: t('auth.invalid_email_format'),
             },
           })}
           type='email'
           onClear={handleAuthInputClear} // onClear prop을 연결
         />
         {errors.email && (
-          <p className='my-2 text-sm text-red-500'>{errors.email.message}</p>
+          <p className='text-error-red my-2 text-sm'>
+            {getErrorMessage(errors.email.message!)}
+          </p>
         )}
       </div>
 
@@ -76,15 +102,15 @@ const LogInForm = () => {
         <div className='relative'>
           {/* AuthInput이 label을 포함하므로, 이 label은 AuthInput 안으로 들어갑니다. */}
           <AuthInput
-            label='Password'
-            placeholder='비밀번호를 입력해주세요.'
+            label={t('auth.password')}
+            placeholder={t('auth.enter_password')}
             id='password' // AuthInput에 id prop 전달
             {...register('password', {
-              required: '비밀번호는 필수 입력입니다.',
-              minLength: {
-                value: 6,
-                message: '비밀번호는 최소 6자 이상이어야 합니다.',
-              },
+              required: t('auth.password_required'),
+              // minLength: {
+              //   value: 6,
+              //   message: '비밀번호는 최소 6자 이상이어야 합니다.',
+              // },
             })}
             type='password'
             onClear={handleAuthInputClear} // onClear prop을 연결
@@ -95,11 +121,16 @@ const LogInForm = () => {
             to='/forgot-password'
             className='text-main-pink absolute -top-1 -right-0.5 mt-2 ml-4 text-sm whitespace-nowrap hover:underline' // ml-4 마진 추가, 줄바꿈 방지
           >
-            Forgot Password?
+            {t('auth.forgot_password')}
           </Link>
         </div>
         {errors.password && (
-          <p className='mt-1 text-sm text-red-500'>{errors.password.message}</p>
+          <p className='text-error-red mt-1 text-sm'>
+            {errors.password.message}
+          </p>
+        )}
+        {loginError && (
+          <p className='text-error-red mt-1 text-sm'>{loginError}</p>
         )}
       </div>
 
@@ -109,7 +140,7 @@ const LogInForm = () => {
         className='mt-5'
         disabled={!isValid || isSubmitting} // 유효성 검사 통과 및 제출 중일 때 비활성화
       >
-        Login
+        {t('auth.login')}
       </Button>
     </form>
   );
