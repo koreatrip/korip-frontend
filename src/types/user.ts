@@ -1,4 +1,4 @@
-export interface UserProfile {
+export type TUserProfile = {
   name: string;
   email: string;
   phone: string;
@@ -10,4 +10,4 @@ export interface UserProfile {
     favorites: number;
     visitedPlaces: number;
   };
-}
+};

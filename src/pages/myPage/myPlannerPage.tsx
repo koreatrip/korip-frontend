@@ -9,16 +9,17 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 // 플래너 데이터 타입
-interface PlannerData {
+type TPlannerData = {
   id: number;
   title: string;
   description: string;
   dateRange: string;
   isNew?: boolean;
   createdAt: string;
-}
+};
 
-const MyPlannerPage: React.FC = () => {
+
+const MyPlannerPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
@@ -27,7 +28,7 @@ const MyPlannerPage: React.FC = () => {
   );
 
   // 플래너 더미 데이터 (createdAt 추가)
-  const [planners, setPlanners] = useState<PlannerData[]>([
+  const [planners, setPlanners] = useState<TPlannerData[]>([
     {
       id: 1,
       title: '길동이와 동에번쩍 서에번쩍',
@@ -115,7 +116,7 @@ const MyPlannerPage: React.FC = () => {
   ];
 
   // 검색 및 정렬 로직 - Places 컴포넌트와 동일한 구조
-  const filteredAndSortedPlanners: PlannerData[] = useMemo(() => {
+  const filteredAndSortedPlanners: TPlannerData[] = useMemo(() => {
     let filtered = planners;
 
     // 검색 필터링
@@ -150,24 +151,34 @@ const MyPlannerPage: React.FC = () => {
   }, [planners, searchValue, sortOption]);
 
   // 이벤트 핸들러들
-  const handleSearch = (value: string): void => setSearchValue(value);
+  // 검색 이벤트 핸들러
+  const handleSearchSubmit = (value: string): void => setSearchValue(value);
 
-  const handleEdit = (title: string) => {
+  // 편집 버튼 클릭 이벤트 핸들러
+  const handleEditClick = (title: string) => {
     console.log(`${title} 수정`);
   };
 
-  const handleDelete = (title: string) => {
+  // 삭제 버튼 클릭 이벤트 핸들러
+  const handleDeleteClick = (title: string) => {
     console.log(`${title} 삭제`);
   };
 
-  const handleCardClick = (id: number) => {
-    navigate(`/trip/${id}`);
+  // 플래너 추가 이벤트 핸들러
+  const handleAddPlannerSubmit = (newPlanner: TPlannerData) => {
+    setPlanners(prev => [newPlanner, ...prev]);
+  };
+
+  // 플래너 카드 클릭 이벤트 핸들러
+  const handlePlannerCardClick = (plannerId: number) => {
+    navigate(`/trip/${plannerId}`);
   };
 
   return (
+
     <div className='flex min-h-screen'>
       {/* 메인 컨텐츠 */}
-      <div className='flex-1 py-6'>
+      <div className='flex-1 px-2 py-6'>
         {/* 헤더 */}
         <div className='mb-6'>
           <h1 className='text-main-text-navy mb-4 text-4xl font-semibold'>
@@ -175,16 +186,18 @@ const MyPlannerPage: React.FC = () => {
           </h1>
 
           {/* 검색바와 정렬 드롭다운 */}
-          <div className='mb-6 flex gap-4'>
+          <div className='mb-6 flex flex-col gap-4 md:flex-row'>
             <div className='flex-1'>
               <SearchBar
-                className='!max-w-[876px]'
+                className='w-full max-w-none md:!max-w-[876px]'
                 placeholder={t('common.search_planner_title_or_description')}
-                onSearch={handleSearch}
+                onSearch={handleSearchSubmit}
               />
             </div>
-            <SortDropdown options={sortOptions} current={sortOption} />
-            <PlannerAddButtonMini />
+            <div className='flex gap-2'>
+              <SortDropdown options={sortOptions} current={sortOption} />
+              <PlannerAddButtonMini onAddPlanner={handleAddPlannerSubmit} />
+            </div>
           </div>
 
           {/* 검색 결과 표시 */}
@@ -197,37 +210,29 @@ const MyPlannerPage: React.FC = () => {
         </div>
 
         {/* 플래너 카드 그리드 - 23px gap */}
-        <div
-          className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-          style={{
-            gap: '0',
-            marginRight: '-30px',
-          }}
-        >
+
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {filteredAndSortedPlanners.map((planner) => (
             <div
               key={planner.id}
-              className='h-[372px]'
-              style={{ marginRight: '30px', marginBottom: '30px' }}
+              className='h-[372px] w-[348px] justify-self-start'
             >
               <PlannerCard
                 title={planner.title}
                 description={planner.description}
                 dateRange={planner.dateRange}
                 isNew={planner.isNew ?? false}
-                onEdit={() => handleEdit(planner.title)}
-                onDelete={() => handleDelete(planner.title)}
-                onClick={() => handleCardClick(planner.id)}
+                onEdit={() => handleEditClick(planner.title)}
+                onDelete={() => handleDeleteClick(planner.title)}
+                onClick={() => handlePlannerCardClick(planner.id)}
               />
             </div>
           ))}
 
           {/* 플래너 추가 버튼 */}
-          <div
-            className='h-[372px]'
-            style={{ marginRight: '30px', marginBottom: '30px' }}
-          >
-            <PlannerAddButton />
+
+          <div className='h-[372px] w-[348px] justify-self-start'>
+            <PlannerAddButton onAddPlanner={handleAddPlannerSubmit} />
           </div>
         </div>
 

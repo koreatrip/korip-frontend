@@ -121,7 +121,7 @@ const Places: React.FC = () => {
       <div className='mb-6 flex gap-4'>
         <div className='flex-1'>
           <SearchBar
-            className='!max-w-[876px]'
+            className='!max-w-[932px]'
             placeholder={t('places.search_region_placeholder')}
             onSearch={handleSearch}
           />

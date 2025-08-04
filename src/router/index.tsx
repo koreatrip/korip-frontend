@@ -23,7 +23,6 @@ import RegionsPage from '@/pages/regionsPage';
 import SignUpPage from '@/pages/signUpPage';
 import TravelTipsPage from '@/pages/travelTipsPage';
 import TripDetailPage from '@/pages/tripDetailPage';
-import TripEditPage from '@/pages/tripEditPage';
 import { createBrowserRouter } from 'react-router-dom';
 import LoginPage from '../pages/loginPage';
 import FirstSearchingPage from '@/pages/firstSearchingPage';
@@ -135,7 +134,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'trip/:id/edit',
-        element: <TripEditPage />,
+        element: <PlannerPage />,
       },
     ],
   },
