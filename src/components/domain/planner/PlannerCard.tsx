@@ -1,5 +1,6 @@
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 type TPlannerCardProps = {
   title: string;
@@ -22,9 +23,12 @@ const PlannerCard = ({
   onDelete,
   onClick,
 }: TPlannerCardProps) => {
+
+  const { t } = useTranslation();
+
   return (
-    <div 
-      className='h-[372px] w-[348px] overflow-hidden rounded-2xl bg-white shadow-md cursor-pointer hover:shadow-lg transition-shadow'
+    <div
+      className='h-[372px] w-[348px] cursor-pointer overflow-hidden rounded-2xl bg-white shadow-md transition-shadow hover:shadow-lg'
       onClick={onClick}
     >
       {/* 이미지 영역 */}
@@ -36,8 +40,10 @@ const PlannerCard = ({
             className='h-full w-full object-cover'
           />
         ) : (
-          <div className='flex h-full w-full items-center justify-center'>
-            <span className='text-base text-gray-900'>비어있는 일정</span>
+          <div className='flex h-full w-full items-center justify-center bg-[#F7FAFC]'>
+            <span className='text-md text-gray-900'>
+              {t('common.empty_schedule')}
+            </span>
           </div>
         )}
       </div>

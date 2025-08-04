@@ -5,6 +5,7 @@ import PlannerAddButtonMini from '@/components/domain/planner/PlannerAddButtonMi
 import PlannerCard from '@/components/domain/planner/PlannerCard';
 import { SortOption, type DropdownItem } from '@/types/dropdown';
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 // 플래너 데이터 타입
@@ -17,7 +18,9 @@ type TPlannerData = {
   createdAt: string;
 };
 
+
 const MyPlannerPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>(
@@ -92,22 +95,22 @@ const MyPlannerPage = () => {
   const sortOptions: DropdownItem[] = [
     {
       value: SortOption.DATE_DESC,
-      label: '날짜 내림차순',
+      label: t('common.date_descending'),
       onClick: () => setSortOption(SortOption.DATE_DESC),
     },
     {
       value: SortOption.DATE_ASC,
-      label: '날짜 오름차순',
+      label: t('common.date_ascending'),
       onClick: () => setSortOption(SortOption.DATE_ASC),
     },
     {
       value: SortOption.NAME_ASC,
-      label: '이름 오름차순',
+      label: t('common.name_ascending'),
       onClick: () => setSortOption(SortOption.NAME_ASC),
     },
     {
       value: SortOption.NAME_DESC,
-      label: '이름 내림차순',
+      label: t('common.name_descending'),
       onClick: () => setSortOption(SortOption.NAME_DESC),
     },
   ];
@@ -172,13 +175,14 @@ const MyPlannerPage = () => {
   };
 
   return (
-    <div className='flex min-h-screen bg-gray-50'>
+
+    <div className='flex min-h-screen'>
       {/* 메인 컨텐츠 */}
       <div className='flex-1 px-2 py-6'>
         {/* 헤더 */}
         <div className='mb-6'>
-          <h1 className='mb-4 text-4xl font-bold text-gray-900'>
-            내 여행 일정
+          <h1 className='text-main-text-navy mb-4 text-4xl font-semibold'>
+            {t('travel.travel_schedule')}
           </h1>
 
           {/* 검색바와 정렬 드롭다운 */}
@@ -186,7 +190,7 @@ const MyPlannerPage = () => {
             <div className='flex-1'>
               <SearchBar
                 className='w-full max-w-none md:!max-w-[876px]'
-                placeholder='플래너 제목이나 설명을 검색해보세요'
+                placeholder={t('common.search_planner_title_or_description')}
                 onSearch={handleSearchSubmit}
               />
             </div>
@@ -206,6 +210,7 @@ const MyPlannerPage = () => {
         </div>
 
         {/* 플래너 카드 그리드 - 23px gap */}
+
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {filteredAndSortedPlanners.map((planner) => (
             <div
@@ -225,6 +230,7 @@ const MyPlannerPage = () => {
           ))}
 
           {/* 플래너 추가 버튼 */}
+
           <div className='h-[372px] w-[348px] justify-self-start'>
             <PlannerAddButton onAddPlanner={handleAddPlannerSubmit} />
           </div>

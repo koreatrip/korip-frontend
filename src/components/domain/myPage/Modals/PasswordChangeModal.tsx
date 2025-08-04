@@ -2,6 +2,7 @@ import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
 import { Modal } from '@/components/common/Modal';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type PasswordChangeModalProps = {
   isOpen: boolean;
@@ -29,6 +30,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
     new: '',
     confirm: '',
   });
+  const { t } = useTranslation();
 
   const handleInputChange = (field: keyof typeof passwords, value: string) => {
     setPasswords((prev) => ({
@@ -95,10 +97,10 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose}>
-      <div className='flex h-[631px] w-[512px] flex-col'>
+      <div className='flex w-[512px] flex-col'>
         <Modal.Header>
           <h2 className='text-2xl font-semibold text-[#2C3E50]'>
-            비밀번호 변경
+            {t('user.change_password')}
           </h2>
         </Modal.Header>
 
@@ -107,14 +109,14 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
           {/* 현재 비밀번호 */}
           <div>
             <label className='text-md mb-3 block font-medium text-[#2C3E50]'>
-              현재 비밀번호
+              {t('user.current_password')}
             </label>
             <div className='relative'>
               <Input
                 type='password'
                 value={passwords.current}
                 onChange={(e) => handleInputChange('current', e.target.value)}
-                placeholder='현재 비밀번호를 입력하세요'
+                placeholder={t('user.enter_current_password')}
                 autoComplete='off'
                 className='w-full !rounded-lg !border !border-gray-200 !bg-white !px-4 !py-3 !pr-12 text-base transition-all duration-200 placeholder:text-gray-300 focus:!border-[#FF6B7A] focus:!ring-1 focus:!ring-[#FF6B7A] focus:!outline-none'
               />
@@ -146,14 +148,14 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
           {/* 새로운 비밀번호 */}
           <div>
             <label className='text-md mb-3 block font-medium text-[#2C3E50]'>
-              새로운 비밀번호
+              {t('user.new_password')}
             </label>
             <div className='relative'>
               <Input
                 type='password'
                 value={passwords.new}
                 onChange={(e) => handleInputChange('new', e.target.value)}
-                placeholder='새로운 비밀번호를 입력하세요'
+                placeholder={t('user.confirm_new_password')}
                 autoComplete='new-password'
                 className='w-full !rounded-lg !border !border-gray-200 !bg-white !px-4 !py-3 !pr-12 text-base transition-all duration-200 placeholder:text-gray-300 focus:!border-[#FF6B7A] focus:!ring-1 focus:!ring-[#FF6B7A] focus:!outline-none'
               />
@@ -178,27 +180,29 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
               </button>
             </div>
             <div className='mt-2 space-y-1'>
-              <p className='text-xs text-gray-400'>• 8자 이상</p>
               <p className='text-xs text-gray-400'>
-                • 영문, 숫자, 특수문자 포함
+                • {t('auth.password_length_8_20')}
+              </p>
+              <p className='text-xs text-gray-400'>
+                • {t('auth.letter_number_special_combo')}
               </p>
             </div>
             {errors.new && (
-              <p className='mt-1 text-xs text-red-500'>{errors.new}</p>
+              <p className='text-error-red mt-1 text-xs'>{errors.new}</p>
             )}
           </div>
 
           {/* 새로운 비밀번호 확인 */}
           <div>
             <label className='text-md mb-3 block font-medium text-[#2C3E50]'>
-              새로운 비밀번호 확인
+              {t('user.confirm_new_password')}
             </label>
             <div className='relative'>
               <Input
                 type='password'
                 value={passwords.confirm}
                 onChange={(e) => handleInputChange('confirm', e.target.value)}
-                placeholder='새로운 비밀번호를 다시 입력하세요'
+                placeholder={t('user.enter_new_password')}
                 autoComplete='new-password'
                 className='w-full !rounded-lg !border !border-gray-200 !bg-white !px-4 !py-3 !pr-12 text-base transition-all duration-200 placeholder:text-gray-300 focus:!border-[#FF6B7A] focus:!ring-1 focus:!ring-[#FF6B7A] focus:!outline-none'
               />
@@ -223,7 +227,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
               </button>
             </div>
             {errors.confirm && (
-              <p className='mt-1 text-xs text-red-500'>{errors.confirm}</p>
+              <p className='text-error-red mt-1 text-xs'>{errors.confirm}</p>
             )}
           </div>
 
@@ -231,15 +235,15 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
           <div className='space-y-3 pt-4'>
             <Button
               onClick={handleClose}
-              className='h-12 w-full rounded-lg border border-gray-200 bg-white font-medium text-gray-600 transition-colors hover:bg-gray-50'
+              className='border-outline-gray hover:bg-hover-gray h-12 w-full rounded-lg border bg-white font-medium text-gray-600 transition-colors'
             >
-              취소
+              {t('common.cancel')}
             </Button>
             <Button
               onClick={handleSave}
               className='h-12 w-full rounded-lg bg-[#FF6B7A] font-medium text-white transition-colors hover:bg-[#ff5a6b]'
             >
-              확인
+              {t('common.confirm')}
             </Button>
           </div>
         </div>
