@@ -8,6 +8,7 @@ interface TripSummaryProps {
   totalPlaces: number; // 총 장소 수
   completedPlaces: number; // 배치 완료된 장소 수
   progress: number; // 진행률 (%)
+  readOnly?: boolean;
 }
 
 /**
@@ -21,6 +22,7 @@ const TripSummary = ({
   totalPlaces,
   completedPlaces,
   progress,
+  readOnly = false,
 }: TripSummaryProps) => {
   // 각 항목을 렌더링하기 위한 작은 헬퍼 컴포넌트
   const SummaryItem = ({ label, value }: { label: string; value: string }) => (

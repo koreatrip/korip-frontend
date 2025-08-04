@@ -2,7 +2,7 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface PlannerCardProps {
+type TPlannerCardProps = {
   title: string;
   description: string;
   dateRange: string;
@@ -13,7 +13,7 @@ interface PlannerCardProps {
   onClick?: () => void;
 }
 
-const PlannerCard: React.FC<PlannerCardProps> = ({
+const PlannerCard = ({
   title,
   description,
   dateRange,
@@ -22,15 +22,17 @@ const PlannerCard: React.FC<PlannerCardProps> = ({
   onEdit,
   onDelete,
   onClick,
-}) => {
+}: TPlannerCardProps) => {
+
   const { t } = useTranslation();
+
   return (
     <div
       className='h-[372px] w-[348px] cursor-pointer overflow-hidden rounded-2xl bg-white shadow-md transition-shadow hover:shadow-lg'
       onClick={onClick}
     >
       {/* 이미지 영역 */}
-      <div className='relative h-[200px] bg-gray-100'>
+      <div className='relative h-[200px]' style={{backgroundColor: '#F8F9FA'}}>
         {imageUrl ? (
           <img
             src={imageUrl}
@@ -50,22 +52,22 @@ const PlannerCard: React.FC<PlannerCardProps> = ({
       <div className='flex h-[172px] flex-col justify-between p-4'>
         {/* 제목과 NEW 태그 */}
         <div className='mb-2'>
-          <div className='mb-1 flex items-center gap-2'>
-            <h3 className='flex-1 truncate text-lg font-semibold text-[#2C3E50]'>
+          <div className='mb-1 flex items-center gap-1'>
+            <h3 className='truncate text-lg font-semibold text-main-text-navy'>
               {title}
             </h3>
             {isNew && (
-              <span className='font-sm rounded text-sm text-[#FF6B7A]'>
+              <span className='ml-1 text-sm font-medium text-main-pink'>
                 NEW
               </span>
             )}
           </div>
-          <p className='line-clamp-2 text-sm text-[#8B9DC3]'>{description}</p>
+          <p className='line-clamp-2 text-base text-gray-500'>{description}</p>
         </div>
 
         {/* 하단 영역: 날짜와 버튼들 */}
         <div className='flex items-center justify-between'>
-          <span className='text-md text-[#8B9DC3]'>{dateRange}</span>
+          <span className='text-base text-gray-500'>{dateRange}</span>
 
           {/* 편집/삭제 버튼 */}
           <div className='flex items-center gap-2'>
@@ -74,20 +76,20 @@ const PlannerCard: React.FC<PlannerCardProps> = ({
                 e.stopPropagation();
                 onEdit();
               }}
-              className='flex h-[20px] w-[16px] items-center justify-center rounded-full text-[#8B9DC3] transition-colors hover:text-gray-600'
+              className='flex h-[24px] w-[24px] items-center justify-center rounded-full text-gray-500 transition-colors hover:text-gray-700'
               aria-label='편집'
             >
-              <PencilIcon className='h-4 w-4' />
+              <PencilIcon className='h-5 w-5 stroke-2' />
             </button>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onDelete();
               }}
-              className='flex h-[20px] w-[16px] items-center justify-center rounded-full text-[#8B9DC3] transition-colors hover:text-gray-600'
+              className='flex h-[24px] w-[24px] items-center justify-center rounded-full text-gray-500 transition-colors hover:text-gray-700'
               aria-label='삭제'
             >
-              <TrashIcon className='h-4 w-4' />
+              <TrashIcon className='h-5 w-5 stroke-2' />
             </button>
           </div>
         </div>
