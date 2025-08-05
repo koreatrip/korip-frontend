@@ -1,3 +1,4 @@
+import { locationData } from '@/data/locations';
 import { useToast } from '@/hooks/useToast';
 import { useLocationStore } from '@/stores/useLocationStore';
 import {
@@ -14,148 +15,6 @@ type TSearchBarProps = {
   height?: string;
   showLocationIcon?: boolean;
   onSearch: (value: string) => void;
-};
-
-// 지역 데이터 (실제로는 useLocationStore에서 가져와야 함)
-const locationData = {
-  서울: {
-    total: 58890,
-    districts: [
-      { name: '강남구', count: 18183 },
-      { name: '강동구', count: 1899 },
-      { name: '강북구', count: 643 },
-      { name: '강서구', count: 3639 },
-      { name: '관악구', count: 2060 },
-      { name: '광진구', count: 1553 },
-      { name: '구로구', count: 3443 },
-      { name: '금천구', count: 4330 },
-      { name: '노원구', count: 875 },
-      { name: '도봉구', count: 471 },
-      { name: '동대문구', count: 1168 },
-      { name: '동작구', count: 1303 },
-      { name: '마포구', count: 4330 },
-      { name: '서대문구', count: 1161 },
-    ],
-  },
-  경기: {
-    total: 50652,
-    districts: [
-      { name: '수원시', count: 5200 },
-      { name: '성남시', count: 4800 },
-      { name: '고양시', count: 4200 },
-      { name: '용인시', count: 3800 },
-      { name: '부천시', count: 3200 },
-      { name: '안산시', count: 2800 },
-      { name: '안양시', count: 2500 },
-      { name: '남양주시', count: 2200 },
-    ],
-  },
-  인천: {
-    total: 8700,
-    districts: [
-      { name: '남동구', count: 1800 },
-      { name: '부평구', count: 1600 },
-      { name: '서구', count: 1400 },
-      { name: '연수구', count: 1200 },
-      { name: '계양구', count: 1100 },
-      { name: '미추홀구', count: 900 },
-      { name: '동구', count: 600 },
-    ],
-  },
-  부산: {
-    total: 12837,
-    districts: [
-      { name: '해운대구', count: 2500 },
-      { name: '부산진구', count: 2200 },
-      { name: '동래구', count: 1800 },
-      { name: '남구', count: 1600 },
-      { name: '북구', count: 1400 },
-      { name: '사상구', count: 1200 },
-      { name: '금정구', count: 1000 },
-      { name: '연제구', count: 800 },
-    ],
-  },
-  대구: {
-    total: 7761,
-    districts: [
-      { name: '수성구', count: 1800 },
-      { name: '중구', count: 1500 },
-      { name: '동구', count: 1200 },
-      { name: '북구', count: 1100 },
-      { name: '서구', count: 1000 },
-      { name: '남구', count: 900 },
-      { name: '달서구', count: 261 },
-    ],
-  },
-  광주: {
-    total: 3431,
-    districts: [
-      { name: '서구', count: 800 },
-      { name: '남구', count: 700 },
-      { name: '북구', count: 600 },
-      { name: '동구', count: 500 },
-      { name: '광산구', count: 831 },
-    ],
-  },
-  대전: {
-    total: 4588,
-    districts: [
-      { name: '유성구', count: 1200 },
-      { name: '서구', count: 1000 },
-      { name: '중구', count: 800 },
-      { name: '동구', count: 700 },
-      { name: '대덕구', count: 888 },
-    ],
-  },
-  울산: {
-    total: 3281,
-    districts: [
-      { name: '남구', count: 900 },
-      { name: '동구', count: 800 },
-      { name: '북구', count: 700 },
-      { name: '중구', count: 500 },
-      { name: '울주군', count: 381 },
-    ],
-  },
-  세종: {
-    total: 1356,
-    districts: [{ name: '세종시', count: 1356 }],
-  },
-  강원: {
-    total: 1791,
-    districts: [
-      { name: '춘천시', count: 500 },
-      { name: '원주시', count: 400 },
-      { name: '강릉시', count: 300 },
-      { name: '동해시', count: 200 },
-      { name: '태백시', count: 150 },
-      { name: '속초시', count: 241 },
-    ],
-  },
-  충남: {
-    total: 11750,
-    districts: [
-      { name: '천안시', count: 3000 },
-      { name: '아산시', count: 2500 },
-      { name: '서산시', count: 2000 },
-      { name: '당진시', count: 1500 },
-      { name: '공주시', count: 1200 },
-      { name: '보령시', count: 1000 },
-      { name: '논산시', count: 550 },
-    ],
-  },
-  경북: {
-    total: 8086,
-    districts: [
-      { name: '포항시', count: 2000 },
-      { name: '경주시', count: 1500 },
-      { name: '구미시', count: 1200 },
-      { name: '안동시', count: 1000 },
-      { name: '김천시', count: 800 },
-      { name: '영주시', count: 700 },
-      { name: '상주시', count: 886 },
-    ],
-  },
 };
 
 const SearchBar = ({
@@ -297,7 +156,7 @@ const SearchBar = ({
 
       {/* Location Selection Dropdown */}
       {isDropdownOpen && (
-        <div className='border-outline-gray shadow-medium absolute top-full right-0 left-0 z-20 mt-2 overflow-hidden rounded-2xl border bg-white'>
+        <div className='border-outline-gray shadow-medium absolute top-full right-0 left-0 z-50 mt-2 overflow-hidden rounded-2xl border bg-white'>
           <div className='p-4'>
             {currentView === 'city' ? (
               <>
