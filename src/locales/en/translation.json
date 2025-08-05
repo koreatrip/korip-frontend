@@ -370,5 +370,76 @@
         "Information on hospitals with foreigner services is currently being updated. In emergencies, call 119 for transport to the nearest ER."
       ]
     }
+  },
+
+  "location": {
+    "서울": {
+      "title": "A City Where Tradition and Modernity Coexist",
+      "description": "As the capital of South Korea, Seoul is the center of culture, economy, and politics. It's a city where you can experience a diverse range of attractions all in one day, from ancient palaces and traditional Hanok villages to modern shopping malls and skyscrapers."
+    },
+    "경기": {
+      "title": "Diverse Charms Embracing the Capital Area",
+      "description": "Surrounding Seoul, Gyeonggi Province offers a wide variety of destinations, from the UNESCO World Heritage Suwon Hwaseong Fortress to modern cities and beautiful natural recreation forests. Enjoy both dynamic city tours and peaceful relaxation in nature."
+    },
+    "인천": {
+      "title": "Gateway City Where Sky Meets Sea",
+      "description": "Home to Incheon International Airport, the gateway to Korea. It offers unique experiences where past and future coexist, featuring beautiful islands of the West Sea, a historic Chinatown from the port's opening era, and the futuristic skyline of Songdo International City."
+    },
+    "강원": {
+      "title": "A Haven of Clean Nature Painted by Mountains and Sea",
+      "description": "Boasting a natural paradise where majestic mountain ranges like Seoraksan and Odaesan meet the blue East Sea. You can enjoy leisure sports all year round and experience perfect healing amidst clean air and a tranquil atmosphere."
+    },
+    "부산": {
+      "title": "City of Sea, Film, and Romance",
+      "description": "South Korea's second-largest city and largest port. From the vast Haeundae and Gwangalli beaches and Jagalchi Market full of fresh seafood to the Busan Cinema Center where international film festivals are held, the city's romance is endless."
+    },
+    "대구": {
+      "title": "A Fashionable City Full of Passion and Youth",
+      "description": "Once the center of the textile industry, Daegu has transformed into a city leading Korea's cultural trends. Feel the vibrant energy of Daegu on the lively streets of Dongseongno, the nostalgic Kim Kwang-seok Street, and within the beautiful nature of Palgongsan Mountain."
+    },
+    "광주": {
+      "title": "The Home of Arts, Democracy, and Flavor",
+      "description": "Known as the 'Home of Arts' and a sacred site for Korean democracy. Gain artistic inspiration from the world-renowned Gwangju Biennale and the Asia Culture Center, and complete your culinary journey with rich Namdo cuisine."
+    },
+    "대전": {
+      "title": "The Science City Opening Korea's Future",
+      "description": "The heart of South Korea's science and technology, home to the Daedeok Innopolis and KAIST. It's a city of intellectual charm where you can explore the mysteries of science at the National Science Museum and enjoy urban leisure at Hanbat Arboretum."
+    },
+    "울산": {
+      "title": "The Heart of Industry, Breathing with Nature",
+      "description": "A global hub for the automotive and shipbuilding industries that also boasts a beautiful ecological environment. Stroll through the bamboo forest at Taehwagang National Garden, meet whales at Jangsaengpo, and greet the earliest sunrise at Ganjeolgot Cape."
+    },
+    "세종": {
+      "title": "The Smart Administrative Capital, Center of a Relaxed Life",
+      "description": "As the new administrative heart of South Korea, Sejong is a young and well-planned smart city. Centered around Sejong Lake Park, the largest man-made lake in Asia, it offers abundant green spaces for a pleasant and leisurely city trip."
+    },
+    "충북": {
+      "title": "An Inland Jewel of Lakes and Mountains",
+      "description": "Though without a sea, its beautiful lakes like Chungjuho and Daecheongho captivate the heart. It's the perfect destination to admire the stunning scenery of Woraksan and Songnisan National Parks and to spend a peaceful time at the serene Beopjusa Temple."
+    },
+    "충남": {
+      "title": "Where the Spirit of Baekje and the Romance of the West Sea Reside",
+      "description": "As the center of the brilliant Baekje culture, numerous historical sites remain in Gongju and Buyeo. You can enjoy the world-famous Boryeong Mud Festival and savor the tranquil romance of the West Sea while driving along the beautiful coastline of Taean."
+    },
+    "전북": {
+      "title": "A Land of Plenty Where Korean Flavor and Style Come Alive",
+      "description": "From the classic beauty and rich cuisine of Jeonju Hanok Village to the breathtaking autumn foliage of Naejangsan Mountain. It is one of the best-preserved places of Korean tradition and natural beauty, promising a fulfilling journey that satisfies all five senses."
+    },
+    "전남": {
+      "title": "The Southern Land of Indigo Seas and Green Plains",
+      "description": "A place of impressive scenery, featuring the jewel-like islands of the Dadohae archipelago and the green waves of the Boseong Green Tea Fields. It is the ultimate healing destination where you can experience the aesthetics of slowness while savoring the best of Korean cuisine."
+    },
+    "경북": {
+      "title": "The Cradle of Silla History and Confucian Culture",
+      "description": "The root of Korean spiritual culture, embracing the ancient capital Gyeongju and Andong, where the spirit of the seonbi (scholar) lives on. Experience tradition at Hahoe Village and enjoy a romantic drive along the majestic coastline of the East Sea."
+    },
+    "경남": {
+      "title": "Where the Scenic Beauty of the South Sea Meets High-Tech Industry",
+      "description": "Filled with the picturesque scenery of Hallyeohaesang National Park and beautiful islands like Geoje, Tongyeong, and Namhae. It is a region of diverse charms, where you can feel the majesty of Jirisan Mountain and explore the planned urban beauty of Changwon."
+    },
+    "제주": {
+      "title": "The Mysterious Island Forged by a Volcano",
+      "description": "South Korea's largest island and a shining UNESCO World Natural Heritage site. It is the ultimate vacation destination, offering unforgettable impressions to all visitors with Hallasan Mountain, numerous volcanic cones (oreum), and emerald beaches."
+    }
   }
 }
