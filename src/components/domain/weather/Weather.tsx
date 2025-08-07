@@ -4,10 +4,12 @@ import WeatherDetail from './WeatherDetail';
 import HourlyForecast from './HourlyForecast';
 import AirQuality from './AirQuality';
 import WeatherSkeleton from './WeatherSkeleton';
+import { useTranslation } from 'react-i18next';
 
 const WeatherDisplay = ({ location }: { location: Location }) => {
   console.log('✅ 4. WeatherDisplay: 최종적으로 받은 location prop', location);
   const { weatherData, loading, error } = useWeather(location);
+  const { t } = useTranslation();
 
   if (loading) return <WeatherSkeleton />;
   if (error)
@@ -37,7 +39,9 @@ const WeatherDisplay = ({ location }: { location: Location }) => {
       <div className='bg-bg-section text-main-text-navy flex items-center justify-center rounded-2xl p-6'>
         <div className='flex w-full justify-center gap-x-[142px]'>
           <div className='flex flex-col items-center justify-center'>
-            <div className='mb-2'>현재 {today}</div>
+            <div className='mb-2'>
+              {t('common.current')} {today}
+            </div>
             <div className='mb-2 text-6xl font-semibold'>
               {weatherData.current.temp}°
             </div>
@@ -49,11 +53,11 @@ const WeatherDisplay = ({ location }: { location: Location }) => {
                 {/* {tempDiffText} */}
               </p>
               <p>
-                최저{' '}
+                {t('common.min')}{' '}
                 <span className='text-xl font-medium'>
                   {weatherData.current.minTemp}°
                 </span>{' '}
-                최고{' '}
+                {t('common.max')}{' '}
                 <span className='text-xl font-medium'>
                   {weatherData.current.maxTemp}°
                 </span>
@@ -62,19 +66,23 @@ const WeatherDisplay = ({ location }: { location: Location }) => {
           </div>
           <div className='bg-ph-gray w-[1px]'></div>
           <div className='flex flex-col items-center justify-center'>
-            <div className='mb-2'>내일 {tomorrow}</div>
-            <div className='mb-1'>최저 최고</div>
+            <div className='mb-2'>
+              {t('common.tomorrow')} {tomorrow}
+            </div>
+            <div className='mb-1'>
+              {t('common.min')} {t('common.max')}
+            </div>
             <div className='mb-2 text-5xl font-semibold'>
               {weatherData.tomorrow.minTemp}°<span className='text-3xl'>/</span>{' '}
               {weatherData.tomorrow.maxTemp}°
             </div>
             <div className='text-sm'>
               <div>
-                오전 {weatherData.tomorrow.am.sky}
+                {t('common.am')} {weatherData.tomorrow.am.sky}
                 {weatherData.tomorrow.am.pop}%
               </div>
               <div>
-                오후 {weatherData.tomorrow.pm.sky}
+                {t('common.pm')} {weatherData.tomorrow.pm.sky}
                 {weatherData.tomorrow.pm.pop}%
               </div>
             </div>

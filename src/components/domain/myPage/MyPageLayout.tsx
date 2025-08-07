@@ -10,15 +10,20 @@ const MyPageLayout = ({ children }: { children: React.ReactNode }) => {
         <MobileSlideMenu />
       </div>
 
-      {/* PC용 레이아웃 */}
-      <div className='hidden gap-8 py-6 md:flex'>
+      {/* PC용 레이아웃 - 40px gap */}
+      <div className='hidden py-6 md:flex'>
         {/* 왼쪽 메뉴 */}
-        <aside className='w-1/4'>
+        <aside style={{ width: '20%' }}>
           <MyPageMenu />
         </aside>
 
         {/* 오른쪽 콘텐츠 */}
-        <section className='w-3/4'>{children}</section>
+        <section
+          className='relative flex flex-col gap-3 overflow-visible'
+          style={{ width: '80%', marginLeft: '40px' }}
+        >
+          {children}
+        </section>
       </div>
 
       {/* 모바일 콘텐츠 */}

@@ -4,6 +4,8 @@ import PasswordChangeModal from './Modals/PasswordChangeModal';
 import AccountStatsSection from './Sections/AccountStatsSection';
 import BasicInfoSection from './Sections/BasicInfoSection';
 import SecuritySection from './Sections/SecuritySection';
+import { useTranslation } from 'react-i18next';
+import { useToast } from '@/hooks/useToast';
 
 type UserProfile = {
   name: string;
@@ -33,7 +35,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
   const [formData, setFormData] = useState<UserProfile>(
     initialData || {
       name: 'Taeyul',
@@ -44,8 +45,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       stats: { travelPlans: 3, favorites: 12, visitedPlaces: 28 },
     }
   );
-
   const [tempFormData, setTempFormData] = useState<UserProfile>(formData);
+
+  const { t } = useTranslation();
+  const { showToast } = useToast();
 
   // 핸들러 함수들
   const handleInputChange = (field: keyof UserProfile, value: string) => {
@@ -92,7 +95,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     confirm: string;
   }) => {
     console.log('비밀번호 변경:', passwords);
-    alert('비밀번호가 변경되었습니다.');
+    showToast('비밀번호가 변경되었습니다.', 'success');
   };
 
   const handleAccountDelete = (
@@ -100,14 +103,14 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     customReason?: string
   ) => {
     console.log('계정 탈퇴:', { selectedReasons, customReason });
-    alert('계정이 탈퇴되었습니다.');
+    showToast('계정이 탈퇴 되었습니다.', 'success');
   };
 
   return (
     <>
       <section className='mb-6 w-full rounded-lg bg-white p-6 shadow-md'>
         <h2 className='text-main-text-navy mb-6 text-2xl font-semibold'>
-          반갑습니다 {formData.name}님
+          {t('user.welcome_user', { name: formData.name })}
         </h2>
 
         <BasicInfoSection

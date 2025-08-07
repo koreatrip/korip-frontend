@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 // src/components/domain/weather/HourlyForecast.tsx
 interface HourlyData {
   time: string;
@@ -9,10 +11,11 @@ interface HourlyForecastProps {
   data: HourlyData[];
 }
 const HourlyForecast = ({ data }: HourlyForecastProps) => {
+  const { t } = useTranslation();
   return (
     <div className='bg-bg-section mb-6 rounded-2xl p-8'>
       <h3 className='text-main-text-navy mb-6 text-xl font-semibold'>
-        시간별 예보
+        {t('weather.hourly_forecast')}
       </h3>
       <div className='flex gap-6 overflow-x-auto pb-2'>
         {data.map((hour, index) => (

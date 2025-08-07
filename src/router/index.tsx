@@ -11,7 +11,7 @@ import defaultLayout from '@/layouts/defaultLayout';
 
 import MyPage from '@/pages/myPage';
 import FavoritePlacesPage from '@/pages/myPage/places';
-
+import MyPlannerPage from '@/pages/myPage/myPlannerPage';
 import FavoriteRegionsPage from '@/pages/myPage/regions';
 
 import { InterestProvider } from '@/context/InterestContext';
@@ -22,6 +22,7 @@ import PlannerPage from '@/pages/plannerPage';
 import RegionsPage from '@/pages/regionsPage';
 import SignUpPage from '@/pages/signUpPage';
 import TravelTipsPage from '@/pages/travelTipsPage';
+import TripDetailPage from '@/pages/tripDetailPage';
 import { createBrowserRouter } from 'react-router-dom';
 import LoginPage from '../pages/loginPage';
 import FirstSearchingPage from '@/pages/firstSearchingPage';
@@ -114,7 +115,7 @@ export const router = createBrowserRouter([
               />
             ),
           },
-          // { path: 'plan', element: <TravelPlanPage /> },
+          { path: 'plan', element: <MyPlannerPage /> },
           { path: 'places', element: <FavoritePlacesPage /> },
           { path: 'regions', element: <FavoriteRegionsPage /> },
         ],
@@ -126,6 +127,14 @@ export const router = createBrowserRouter([
             <InterestPage />
           </InterestProvider>
         ),
+      },
+      {
+        path: 'trip/:id',
+        element: <TripDetailPage />,
+      },
+      {
+        path: 'trip/:id/edit',
+        element: <PlannerPage />,
       },
     ],
   },

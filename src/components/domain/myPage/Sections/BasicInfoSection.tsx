@@ -3,6 +3,7 @@ import type { UserProfile } from '@/types/user';
 import React from 'react';
 import EditableField from '../Fields/EditableField';
 import InterestsField from '../Fields/InterestsField';
+import { useTranslation } from 'react-i18next';
 
 type BasicInfoSectionProps = {
   formData: UserProfile;
@@ -27,43 +28,47 @@ const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
   onSave,
   onCancel,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <section className='mb-6 rounded-md bg-gray-50 p-6 shadow-md'>
       <div className='mb-6 flex items-center justify-between'>
-        <h3 className='text-main-text-navy text-lg font-bold'>기본정보</h3>
+        <h3 className='text-main-text-navy text-lg font-bold'>
+          {t('user.basic_info')}
+        </h3>
         <Button
           variant='active'
-          className='h-2 w-14 text-sm'
+          className='w-auto px-3 py-1 text-sm'
           onClick={onToggleEdit}
         >
-          {isEditing ? '취소' : '수정'}
+          {isEditing ? t('common.cancel') : t('common.delete')}
         </Button>
       </div>
 
       <div className='space-y-4'>
-        <EditableField
-          label='아이디'
+        {/* <EditableField
+          label={t('auth.username')}
           value={tempFormData.name}
           isEditing={isEditing}
           placeholder='아이디를 입력하세요'
           onChange={(value) => onInputChange('name', value)}
-        />
+        /> */}
 
         <EditableField
-          label='이메일'
+          label={t('auth.email')}
           value={tempFormData.email}
           isEditing={isEditing}
           type='email'
-          placeholder='이메일을 입력하세요'
+          placeholder='k@example.com'
           onChange={(value) => onInputChange('email', value)}
         />
 
         <EditableField
-          label='연락처'
+          label={t('auth.phone_number')}
           value={tempFormData.phone}
           isEditing={isEditing}
           type='tel'
-          placeholder='연락처를 입력하세요'
+          placeholder={t('auth.phone_number_placeholder')}
           onChange={(value) => onInputChange('phone', value)}
         />
 
