@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.tsx';
 import { StrictMode } from 'react';
+import './i18n/i18n.ts';
 const queryClient = new QueryClient();
 
 async function enableMocking() {
@@ -14,7 +15,10 @@ async function enableMocking() {
 
   // `worker.start()` returns a Promise that resolves
   // once the Service Worker is up and ready to intercept requests.
-  return worker.start();
+  return worker.start({
+    onUnhandledRequest: 'bypass',
+    quiet: true
+  });
 }
 
 enableMocking().then(() => {

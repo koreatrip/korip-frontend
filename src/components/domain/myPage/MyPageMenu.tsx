@@ -1,8 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 const MyPageMenu = () => {
+  const { t } = useTranslation();
+
   return (
-    <nav className='hidden h-[291px] w-full rounded-xl bg-white p-8 shadow-md md:block'>
+    <nav className='hidden h-[291px] w-[326px] rounded-xl bg-white p-10 shadow-md md:ml-[-40px] md:block'>
       {/* 사용자 이름 */}
       <div className='mb-6 text-4xl font-normal text-slate-800'>김태율</div>
 
@@ -18,7 +21,7 @@ const MyPageMenu = () => {
                 : 'text-gray-700 hover:text-red-400'
             }
           >
-            개인정보 수정
+            {t('user.edit_profile')}
           </NavLink>
         </li>
         <li>
@@ -30,7 +33,7 @@ const MyPageMenu = () => {
                 : 'text-gray-700 hover:text-red-400'
             }
           >
-            내 여행일정
+            {t('travel.my_travel_plans')}
           </NavLink>
         </li>
         <li>
@@ -42,7 +45,7 @@ const MyPageMenu = () => {
                 : 'text-gray-700 hover:text-red-400'
             }
           >
-            즐겨찾는 장소
+            {t('places.favorite_places')}
           </NavLink>
         </li>
         <li>
@@ -54,7 +57,7 @@ const MyPageMenu = () => {
                 : 'text-gray-700 hover:text-red-400'
             }
           >
-            즐겨찾는 지역
+            {t('places.favorite_regions')}
           </NavLink>
         </li>
       </ul>

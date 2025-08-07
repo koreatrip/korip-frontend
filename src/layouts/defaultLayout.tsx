@@ -12,7 +12,7 @@ const defaultLayout = () => {
   }
   return (
     <ToastProvider>
-      <div className='bg-bg-white text-main-text-navy font-pretendard flex min-h-screen flex-col'>
+      <div className='bg-gray-50 text-main-text-navy font-pretendard flex min-h-screen flex-col'>
         <Header variant={headerVariant} />
         <main className='flex flex-grow flex-col'>
           <Outlet />

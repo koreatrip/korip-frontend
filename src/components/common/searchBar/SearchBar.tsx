@@ -1,18 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
-import {
-  MagnifyingGlassIcon,
-  ChevronRightIcon,
-} from '@heroicons/react/24/outline';
-import { MapPinIcon } from '@heroicons/react/24/solid';
-import { twMerge } from 'tailwind-merge';
 import { useToast } from '@/hooks/useToast';
 import { useLocationStore } from '@/stores/useLocationStore';
+import {
+  ChevronRightIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline';
+import { MapPinIcon } from '@heroicons/react/24/solid';
+import React, { useEffect, useRef, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 type TSearchBarProps = {
   placeholder?: string;
   className?: string;
   height?: string;
   showLocationIcon?: boolean;
+  onSearch: (value: string) => void;
 };
 
 // 지역 데이터 (실제로는 useLocationStore에서 가져와야 함)
@@ -171,7 +172,7 @@ const SearchBar = ({
   const searchBarRef = useRef<HTMLDivElement>(null);
 
   // 실제 프로젝트에서는 이 부분을 주석 해제하고 사용
-  const { searchAndSetLocation, getSuggestions } = useLocationStore();
+  const { searchAndSetLocation } = useLocationStore();
   const { showToast } = useToast();
 
   useEffect(() => {

@@ -4,27 +4,27 @@ import DailyScheduleTabs from './DailyScheduleTabs';
 import type { TabItem } from '@/types/tabType';
 import DateRangePicker from '@/components/common/DateRangePicker';
 import type { TimeSlotData } from '@/types/plannerType';
+import { useTranslation } from 'react-i18next';
 
-type SchedulePlannerProps = {
+type TSchedulePlannerProps = {
   schedule: TimeSlotData[];
-  onRemovePlace: (timeSlotId: string) => void;
+  onRemovePlace?: (timeSlotId: string) => void;
+  readOnly?: boolean;
 };
 
 /**
  * 날짜 선택, 일차별 탭, 타임라인 등 가운데 계획 영역 전체를 책임지는 핵심 컴포넌트
  */
-const SchedulePlanner = ({ schedule, onRemovePlace }: SchedulePlannerProps) => {
+const SchedulePlanner = ({ schedule, onRemovePlace, readOnly = false }: TSchedulePlannerProps) => {
   // 1. 시작일과 종료일 상태 관리
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [tabs, setTabs] = useState<TabItem[]>([]);
   const [activeTab, setActiveTab] = useState(1);
-  const dailySchedule = schedule.filter((item) => item.day === activeTab);
 
-  // 🔥 핵심 수정: 각 일차별 스케줄 데이터를 별도로 관리
-  const [dailySchedules, setDailySchedules] = useState<
-    Record<number, TimeSlotData[]>
-  >({});
+  const { t } = useTranslation();
+
+  const dailySchedule = schedule.filter((item) => item.day === activeTab);
 
   // 2. 날짜가 변경될 때마다 탭을 다시 생성하는 useEffect
   useEffect(() => {
@@ -48,9 +48,13 @@ const SchedulePlanner = ({ schedule, onRemovePlace }: SchedulePlannerProps) => {
 
       // ✅ 이 반복문이 이제 마지막 날짜까지 정확하게 포함합니다.
       while (currentDate <= end) {
+        const dateStr = `${currentDate.getMonth() + 1}/${currentDate.getDate()}`;
         newTabs.push({
           id: dayCount,
-          label: `${dayCount}일차 (${currentDate.getMonth() + 1}/${currentDate.getDate()})`,
+          label: t('travel.day_label', {
+            dayCount,
+            date: dateStr,
+          }), // 번역 적용
         });
 
         // 다음 날짜로 넘어갑니다.
@@ -66,19 +70,21 @@ const SchedulePlanner = ({ schedule, onRemovePlace }: SchedulePlannerProps) => {
     };
 
     generateTabs();
-  }, [startDate, endDate]);
+  }, [startDate, endDate, t]);
 
   return (
     <div className='flex w-full items-center justify-center'>
       <div className='shadow-light bg-bg-white w-full rounded-2xl p-6'>
         {/* 상단 날짜 선택 */}
-        <div className='mb-4 flex gap-x-2'>
-          <DateRangePicker
-            selectedDate={startDate}
-            onDateChange={setStartDate}
-          />
-          <DateRangePicker selectedDate={endDate} onDateChange={setEndDate} />
-        </div>
+        {!readOnly && (
+          <div className='mb-4 flex gap-x-2'>
+            <DateRangePicker
+              selectedDate={startDate}
+              onDateChange={setStartDate}
+            />
+            <DateRangePicker selectedDate={endDate} onDateChange={setEndDate} />
+          </div>
+        )}
 
         {/* 동적으로 생성된 탭 컴포넌트 사용 */}
         <DailyScheduleTabs
@@ -92,7 +98,8 @@ const SchedulePlanner = ({ schedule, onRemovePlace }: SchedulePlannerProps) => {
           <DailyTimeline
             schedule={dailySchedule}
             activeTab={activeTab} // ✅ DailyTimeline에 activeTab 프롭 전달
-            onRemovePlace={onRemovePlace}
+            onRemovePlace={readOnly ? undefined : onRemovePlace}
+            readOnly={readOnly}
           />
         )}
       </div>

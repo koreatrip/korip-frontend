@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 type InterestsFieldProps = {
   interests: string[];
   isEditing: boolean;
@@ -11,6 +13,8 @@ const InterestsField: React.FC<InterestsFieldProps> = ({
   onAdd,
   onRemove,
 }) => {
+  const { t } = useTranslation();
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -25,7 +29,7 @@ const InterestsField: React.FC<InterestsFieldProps> = ({
       <div className='focus-within:border-main-pink focus-within:ring-main-pink flex h-10 items-center rounded-lg border border-gray-300 bg-white px-4 focus-within:ring-2'>
         <div className='flex w-full items-center justify-between'>
           <span className='text-main-text-navy w-20 text-sm font-medium'>
-            관심사
+            {t('user.interests')}
           </span>
           <div className='ml-4 flex-1'>
             <div className='flex h-6 flex-wrap items-center justify-end gap-2'>
@@ -61,7 +65,7 @@ const InterestsField: React.FC<InterestsFieldProps> = ({
     <>
       <div className='flex min-h-10 items-start justify-between'>
         <span className='text-main-text-navy w-20 pt-2 text-sm font-medium'>
-          관심사
+          {t('user.interests')}
         </span>
         <div className='ml-4 flex-1'>
           <div className='flex flex-wrap justify-end gap-2'>
