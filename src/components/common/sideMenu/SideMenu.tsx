@@ -33,7 +33,7 @@ const SideMenu = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className='bg-opacity-50 bg-main-text-navy/40 fixed inset-0 z-40 sm:hidden'
+            className='bg-opacity-50 bg-main-text-navy/40 tablet-bp:hidden fixed inset-0 z-40'
             onClick={onClose}
           />
 
@@ -43,14 +43,14 @@ const SideMenu = ({
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
-            className='fixed top-0 right-0 z-50 h-full w-80 bg-white shadow-xl sm:hidden'
+            className='tablet-bp:hidden bg-bg-white fixed top-0 right-0 z-50 h-full w-80 shadow-xl'
           >
             {/* 메뉴 헤더 */}
-            <div className='flex items-center justify-between border-b border-gray-200 p-6'>
+            <div className='border-outline-gray flex items-center justify-between border-b p-6'>
               <h2 className='text-lg font-semibold'>{title}</h2>
               <button
                 onClick={onClose}
-                className='rounded-lg p-2 hover:bg-gray-100'
+                className='hover:bg-hover-gray rounded-lg p-2'
               >
                 <XMarkIcon className='h-6 w-6' />
               </button>
@@ -64,7 +64,7 @@ const SideMenu = ({
                   key={item.label}
                   href={item.href}
                   onClick={onClose}
-                  className='block border-b border-gray-100 px-6 py-4 text-gray-800 hover:bg-gray-50'
+                  className='border-outline-gray text-main-text-navy hover:bg-hover-gray block border-b px-6 py-4'
                 >
                   {item.label}
                 </a>
@@ -76,7 +76,7 @@ const SideMenu = ({
                   key={item.label}
                   href={item.href}
                   onClick={onClose}
-                  className='block border-b border-gray-100 px-6 py-4 text-gray-800 hover:bg-gray-50'
+                  className='border-outline-gray text-main-text-navy hover:bg-hover-gray block border-b px-6 py-4'
                 >
                   {item.label}
                 </a>
@@ -98,7 +98,7 @@ const SideMenu = ({
                         }
                         onClose();
                       }}
-                      className='block w-full rounded-lg px-4 py-2 text-left text-gray-600 hover:bg-gray-50'
+                      className='text-main-text-navy hover:bg-hover-gray block w-full rounded-lg px-4 py-2 text-left'
                     >
                       {lang.label}
                     </button>
