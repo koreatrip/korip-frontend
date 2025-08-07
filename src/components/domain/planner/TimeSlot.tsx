@@ -48,7 +48,7 @@ const TimeSlot = ({
       <div
         ref={ref}
         className={`flex h-16 flex-1 items-center rounded-lg transition-all duration-200 ${
-          readOnly 
+          readOnly
             ? 'border-2 border-solid border-gray-200 bg-gray-50'
             : `border-2 border-dashed ${
                 isBeingDraggedOver
@@ -64,18 +64,28 @@ const TimeSlot = ({
               isOccupied={false}
               originTime={time}
               originDay={day} // ✅ DraggablePlaceCard에 day 정보를 originDay로 전달
-              onRemove={readOnly || !onRemovePlace ? undefined : () => onRemovePlace(timeSlotId)}
+              onRemove={
+                readOnly || !onRemovePlace
+                  ? undefined
+                  : () => onRemovePlace(timeSlotId)
+              }
               readOnly={readOnly}
             />
           </div>
         ) : (
           <div className='flex h-full w-full items-center justify-center'>
             <p className='text-sub-text-gray text-sm'>
-              {readOnly 
+              {/* {readOnly 
                 ? '빈 시간대' 
                 ? t('travel.drop_here')
-                : t('travel.drag_place')}
-              }
+                : t('travel.drag_place')
+              } */}
+              \
+              <p className='text-sub-text-gray text-sm'>
+                {
+                  readOnly ? '빈 시간대' : t('travel.drop_here') // place가 없으니까 드롭 안내
+                }
+              </p>
             </p>
           </div>
         )}
