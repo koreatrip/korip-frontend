@@ -144,7 +144,11 @@
     "drop_here": "请放在这里",
     "drag_place": "请拖动地点",
     "day_label": "第{{dayCount}}天 ({{date}})",
-    "login_required_for_custom_travel": "创建和保存您自己的旅行行程需要登录。"
+    "login_required_for_custom_travel": "创建和保存您自己的旅行行程需要登录。",
+    "search_results": "搜索结果",
+    "travel_description": "旅行说明",
+    "enter_travel_description": "请输入对旅行的简要说明",
+    "search_destination": "搜索目的地"
   },
 
   "places": {

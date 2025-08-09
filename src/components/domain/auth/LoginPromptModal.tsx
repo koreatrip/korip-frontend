@@ -22,7 +22,7 @@ const LoginPromptModal = ({ isOpen, onClose }: TLoginPromptModalProps) => {
       <Modal.Body>
         <div className='flex flex-col items-center justify-center gap-2'>
           <p className='text-2xl font-medium'>{t('travel.plan_your_trip')}</p>
-          <p className='text-sub-text-gray'>
+          <p className='text-sub-text-gray text-center'>
             {t('travel.login_required_for_custom_travel')}
           </p>
         </div>

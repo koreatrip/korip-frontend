@@ -15,34 +15,40 @@ const AirQuality = ({ data }: AirQualityProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className='bg-bg-section rounded-2xl p-6'>
-      <h3 className='text-main-text-navy mb-4 text-lg font-semibold'>
+    <div className='bg-bg-section tablet-bp:p-6 rounded-2xl p-4'>
+      <h3 className='text-main-text-navy tablet-bp:mb-4 tablet-bp:text-lg mb-3 text-base font-semibold'>
         {t('weather.air_quality_info')}
       </h3>
-      <div className='flex gap-x-4'>
-        <div className={`flex-1 rounded-2xl p-[26px] ${pm25Info.color}`}>
+      <div className='tablet-bp:gap-x-4 flex gap-x-2'>
+        <div
+          className={`tablet-bp:p-[26px] flex-1 rounded-2xl p-4 ${pm25Info.color}`}
+        >
           <div className='flex flex-col gap-y-1'>
-            <span className='text-sub-text-gray text-sm'>
+            <span className='text-sub-text-gray tablet-bp:text-sm text-xs'>
               {t('weather.fine_dust')}
             </span>
-            <span className='text-sub-green text-lg font-semibold'>
+            <span className='text-sub-green tablet-bp:text-lg text-base font-semibold'>
               {pm25Info.text}
             </span>
           </div>
-          <div className='text-xs opacity-60'>
+          <div className='text-xs break-words opacity-60'>
             PM2.5: {data.pm25.value}µg/m³
           </div>
         </div>
-        <div className={`flex-1 rounded-2xl p-[26px] ${pm10Info.color}`}>
+        <div
+          className={`tablet-bp:p-[26px] flex-1 rounded-2xl p-4 ${pm10Info.color}`}
+        >
           <div className='flex flex-col gap-y-1'>
-            <span className='text-sub-text-gray text-sm'>
+            <span className='text-sub-text-gray tablet-bp:text-sm text-xs'>
               {t('weather.ultrafine_dust')}
             </span>
-            <span className='text-sub-green text-lg font-semibold'>
+            <span className='text-sub-green tablet-bp:text-lg text-base font-semibold'>
               {pm10Info.text}
             </span>
           </div>
-          <div className='text-xs opacity-60'>PM10: {data.pm10.value}µg/m³</div>
+          <div className='text-xs break-words opacity-60'>
+            PM10: {data.pm10.value}µg/m³
+          </div>
         </div>
       </div>
     </div>

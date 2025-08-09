@@ -6,23 +6,47 @@ import {
 } from '@heroicons/react/24/outline';
 import { useHeaderStore } from '@/stores/useHeaderStore';
 import { useState, useEffect } from 'react';
-// DropdownItem 타입도 여기서 가져온다고 가정
 import SideMenu from './sideMenu/SideMenu';
 import SearchBar from './searchBar/SearchBar';
 import type { TDropdownItem } from './dropdown/Dropdown';
 import Dropdown from './dropdown/Dropdown';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { useModalStore } from '@/stores/useModalStore';
+import CreateTripModal from '../modals/CreateTripModal';
 
 // --- Props 타입 정의 ---
 type THeaderProps = {
   variant?: 'default' | 'search';
 };
 
+type TTripData = {
+  tripName: string;
+  tripDescription: string;
+  location: string;
+  selectedRegion: string;
+};
+
+// SideMenu에서 사용할 메뉴 아이템 타입
+type TSideMenuItem = {
+  label: string;
+  href?: string;
+  onClick?: () => void;
+  hasSubmenu?: boolean;
+  submenu?: {
+    label: string;
+    href?: string;
+    onClick?: () => void;
+  }[];
+};
+
 // --- 단일 Header 컴포넌트 ---
 const Header = ({ variant = 'default' }: THeaderProps) => {
   const { t, i18n } = useTranslation();
+
   const { stack, actions } = useHeaderStore();
+  const { stack: modalStack, actions: modalActions } = useModalStore();
+
   const [isScrolled, setIsScrolled] = useState(false);
 
   // 스크롤 감지
@@ -39,17 +63,57 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
   // 언어 변경 핸들러
   const handleLanguageChange = (languageCode: string) => {
     i18n.changeLanguage(languageCode);
-    actions.closeLangDropdown(); // 드롭다운 닫기
+    actions.closeLangDropdown();
   };
 
+  // 여행 일정 생성 핸들러
+  const handleCreateTrip = (tripData: TTripData) => {
+    console.log('여행 일정 생성:', tripData);
+    // 여기에 API 호출 또는 다른 로직 추가
+  };
+
+  // 데스크톱 헤더용 메뉴 아이템들
   const mainMenuItems = [
     { label: t('places.explore_regions'), href: '/explore/regions' },
     { label: t('common.travel'), href: '/travel' },
     { label: t('places.travel_tips'), href: '/tips' },
   ];
 
+  // SideMenu용 메뉴 아이템들 (서브메뉴 포함)
+  const sideMenuItems: TSideMenuItem[] = [
+    {
+      label: t('places.explore_regions'),
+      href: '/explore/regions',
+    },
+    {
+      label: t('common.travel'),
+      hasSubmenu: true,
+      submenu: [
+        {
+          label: t('travel.my_travel_plans'),
+          href: '/mypage/plan',
+        },
+        {
+          label: t('travel.create_new_plan'),
+          onClick: () => {
+            modalActions.openCreateTrip();
+          },
+        },
+      ],
+    },
+    {
+      label: t('places.travel_tips'),
+      href: '/tips',
+    },
+  ];
+
   const authMenuItems = [
     { label: t('auth.login'), href: '/login' },
+    { label: t('auth.signup'), href: '/register' },
+  ];
+
+  // SideMenu용 인증 메뉴 (회원가입만)
+  const sideAuthMenuItems: TSideMenuItem[] = [
     { label: t('auth.signup'), href: '/register' },
   ];
 
@@ -80,12 +144,15 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
     {
       label: t('travel.my_travel_plans'),
       value: 'my-itinerary',
-      href: '/my-itinerary',
+      href: '/mypage/plan',
     },
     {
       label: t('travel.create_new_plan'),
       value: 'new-itinerary',
-      href: '/create-itinerary',
+      onClick: () => {
+        modalActions.openCreateTrip();
+        actions.closeTravelDropdown();
+      },
     },
   ];
 
@@ -95,9 +162,9 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
     return currentLang?.label || t('languages.korean');
   };
 
-  // 가독성을 위해 데스크톱 메뉴를 작은 컴포넌트로 분리
+  // 데스크톱에서만 보이는 메뉴
   const MainMenu = () => (
-    <ul className='tablet-bp:flex hidden items-center font-medium'>
+    <ul className='desktop-bp:flex hidden items-center font-medium'>
       {mainMenuItems.map((item) => (
         <li
           key={item.label}
@@ -149,13 +216,8 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
                 <MainMenu />
               </div>
 
-              {/* 태블릿: 검색바 */}
-              <div className='tablet-bp:flex desktop-bp:hidden hidden flex-grow justify-center px-10'>
-                <SearchBar
-                  height='h-12'
-                  placeholder={t('places.search_region_placeholder')}
-                />
-              </div>
+              {/* 태블릿: 빈 공간 (검색바 제거) */}
+              <div className='tablet-bp:flex desktop-bp:hidden hidden flex-grow'></div>
 
               {/* 데스크톱: 우측 메뉴 */}
               <ul className='desktop-bp:flex hidden items-center font-medium'>
@@ -185,28 +247,25 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
                 </li>
               </ul>
 
-              {/* 태블릿: 우측 메뉴 (로그인 + 언어) */}
-              <ul className='tablet-bp:flex desktop-bp:hidden hidden items-center font-medium'>
-                <li className='relative'>
-                  <button
-                    onClick={actions.toggleLangDropdown}
-                    className='hover:bg-hover-gray flex cursor-pointer items-center gap-x-1 rounded-lg px-3 py-1.5'
-                  >
-                    <GlobeAltIcon className='h-5 w-5 stroke-2' />
-                    <p>{getCurrentLanguageLabel()}</p>
-                  </button>
-                  <Dropdown
-                    isOpen={stack.isLangDropdownOpen}
-                    items={languages}
-                    onClose={actions.closeLangDropdown}
-                  />
-                </li>
-                <li className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'>
-                  <a href={authMenuItems[0].href}>
-                    <p>{authMenuItems[0].label}</p>
-                  </a>
-                </li>
-              </ul>
+              {/* 태블릿: 우측 메뉴 (로그인 + 햄버거만) */}
+              <div className='tablet-bp:flex desktop-bp:hidden hidden items-center gap-x-2'>
+                <a
+                  href={authMenuItems[0].href}
+                  className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-medium'
+                >
+                  <p>{authMenuItems[0].label}</p>
+                </a>
+                <button
+                  onClick={actions.toggleMenu}
+                  className='hover:bg-hover-gray rounded-lg p-2'
+                >
+                  {stack.isMenuOpen ? (
+                    <XMarkIcon className='h-6 w-6' />
+                  ) : (
+                    <Bars3Icon className='h-6 w-6' />
+                  )}
+                </button>
+              </div>
             </>
           )}
 
@@ -220,10 +279,22 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
                   placeholder={t('places.search_region_placeholder')}
                 />
               </div>
-              <div className='tablet-bp:flex hidden items-center'>
+              <div className='desktop-bp:flex hidden items-center'>
                 <MainMenu />
               </div>
-              <ul className='tablet-bp:flex hidden items-center font-medium'>
+
+              {/* 데스크톱: 우측 메뉴 (햄버거 없음) */}
+              <ul className='desktop-bp:flex hidden items-center font-medium'>
+                {authMenuItems.map((item) => (
+                  <li
+                    key={item.label}
+                    className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
+                  >
+                    <a href={item.href}>
+                      <p>{item.label}</p>
+                    </a>
+                  </li>
+                ))}
                 <li className='relative'>
                   <button
                     onClick={actions.toggleLangDropdown}
@@ -238,13 +309,27 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
                     onClose={actions.closeLangDropdown}
                   />
                 </li>
-                {/* '회원가입' 제외 */}
-                <li className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'>
-                  <a href={authMenuItems[0].href}>
-                    <p>{authMenuItems[0].label}</p>
-                  </a>
-                </li>
               </ul>
+
+              {/* 태블릿: 우측 메뉴 (로그인 + 햄버거만) */}
+              <div className='tablet-bp:flex desktop-bp:hidden hidden items-center gap-x-2'>
+                <a
+                  href={authMenuItems[0].href}
+                  className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-medium'
+                >
+                  <p>{authMenuItems[0].label}</p>
+                </a>
+                <button
+                  onClick={actions.toggleMenu}
+                  className='hover:bg-hover-gray rounded-lg p-2'
+                >
+                  {stack.isMenuOpen ? (
+                    <XMarkIcon className='h-6 w-6' />
+                  ) : (
+                    <Bars3Icon className='h-6 w-6' />
+                  )}
+                </button>
+              </div>
             </>
           )}
 
@@ -270,8 +355,8 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
         </div>
       </div>
 
-      {/* 모바일 스크롤 시 나타나는 검색바 */}
-      {(variant === 'default' || variant === 'search') && isScrolled && (
+      {/* 모바일 스크롤 시 나타나는 검색바 - search variant일 때만 */}
+      {variant === 'search' && isScrolled && (
         <div className='tablet-bp:hidden bg-bg-white border-t-outline-gray border-t px-4 py-2'>
           <SearchBar
             height='h-12'
@@ -284,9 +369,16 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
       <SideMenu
         isOpen={stack.isMenuOpen}
         onClose={actions.closeMenu}
-        mainMenuItems={mainMenuItems}
-        authMenuItems={authMenuItems.slice(1)}
+        mainMenuItems={sideMenuItems}
+        authMenuItems={sideAuthMenuItems}
         languages={languages}
+        title={t('common.menu')}
+      />
+
+      <CreateTripModal
+        isOpen={modalStack.isCreateTripOpen}
+        onClose={modalActions.closeCreateTrip}
+        onSubmit={handleCreateTrip}
       />
     </div>
   );

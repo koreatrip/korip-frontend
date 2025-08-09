@@ -46,14 +46,14 @@ const DraggablePlaceCard = ({
   return (
     <div
       ref={ref}
-      className={`bg-bg-section shadow-light relative w-full rounded-lg p-4 transition-all duration-200 ${
+      className={`bg-bg-section shadow-light relative mb-2.5 w-full rounded-lg p-4 transition-all duration-200 ${
         readOnly
           ? 'cursor-default'
           : isOccupied
-          ? 'cursor-not-allowed opacity-50'
-          : isDragging
-          ? 'scale-105 opacity-80 shadow-lg'
-          : 'hover:shadow-medium cursor-grab active:cursor-grabbing'
+            ? 'cursor-not-allowed opacity-50'
+            : isDragging
+              ? 'scale-105 opacity-80 shadow-lg'
+              : 'hover:shadow-medium cursor-grab active:cursor-grabbing'
       }`}
     >
       <div className='bg-sub-green absolute top-0 left-0 h-full w-1.5 rounded-l-lg'></div>
@@ -68,7 +68,7 @@ const DraggablePlaceCard = ({
             e.stopPropagation();
             onRemove();
           }}
-          className='pointer-events-auto absolute top-2 right-2 z-30 p-1 text-gray-400 transition-colors hover:text-red-500'
+          className='hover:text-error-red pointer-events-auto absolute top-2 right-2 z-30 p-1 text-gray-400 transition-colors'
           type='button'
         >
           <XCircleIcon className='h-5 w-5' />
