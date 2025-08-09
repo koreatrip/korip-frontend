@@ -1,10 +1,3 @@
-import Button from '@/components/common/Button';
-import Header from '@/components/common/Header';
-import Input from '@/components/common/Input';
-import SearchBar from '@/components/common/searchBar/SearchBar';
-import ToastMessage from '@/components/common/ToastMessage';
-import AuthInput from '@/components/domain/auth/AuthInput';
-
 import ProfileCard from '@/components/domain/myPage/ProfileCard';
 
 import defaultLayout from '@/layouts/defaultLayout';
@@ -16,7 +9,6 @@ import FavoriteRegionsPage from '@/pages/myPage/regions';
 
 import { InterestProvider } from '@/context/InterestContext';
 import DistrictListPage from '@/pages/districtListPage';
-import ExamplePage from '@/pages/examplePage';
 import InterestPage from '@/pages/interestPage';
 import PlannerPage from '@/pages/plannerPage';
 import RegionsPage from '@/pages/regionsPage';
@@ -28,30 +20,6 @@ import LoginPage from '../pages/loginPage';
 import FirstSearchingPage from '@/pages/firstSearchingPage';
 import LanguagePage from '@/pages/languagePage';
 
-
-// 컴포넌트 테스트용 페이지
-const TestPage = () => {
-  return (
-    <>
-      <AuthInput
-        type='text'
-        label='인증번호'
-        placeholder='인증번호를 입력하세요'
-      />
-      <Button variant='cancel'>취소</Button>
-      <Button>로그인</Button>
-      <Button className='bg-sub-green rounded-full'>선택완료</Button>
-      <Input />
-      <ToastMessage message='테스트' />
-      <Header />
-      <Header variant='search' />
-      <SearchBar placeholder='왈랄랄라' />
-      <SearchBar height='h-12' />
-      <ExamplePage />
-    </>
-  );
-};
-
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -59,7 +27,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <TestPage />,
+        element: <FirstSearchingPage />,
       },
       {
         path: 'login',
@@ -89,10 +57,10 @@ export const router = createBrowserRouter([
         path: 'tips',
         element: <TravelTipsPage />,
       },
-      {
-        path: 'first-region-search',
-        element: <FirstSearchingPage />,
-      },
+      // {
+      //   path: 'first-region-search',
+      //   element: <FirstSearchingPage />,
+      // },
       {
         path: 'language',
         element: <LanguagePage />,

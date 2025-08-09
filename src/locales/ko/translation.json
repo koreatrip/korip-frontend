@@ -137,8 +137,8 @@
     "create_new_plan": "새로운 일정 만들기",
     "add_to_plan": "일정 추가",
     "travel_schedule": "여행 일정",
-    "create_travel_schedule": "여행일정만들기",
-    "travel_name": "여행이름",
+    "create_travel_schedule": "여행 일정 만들기",
+    "travel_name": "여행 이름",
     "travel_period": "여행기간",
     "destination": "여행지",
     "total_places": "총 장소",
@@ -151,12 +151,16 @@
     "edit_your_schedule": "일정을 수정해보세요",
     "google_calendar_sync": "구글 캘린더 연동",
     "save_as_pdf": "PDF 저장하기",
-    "drag_attractions_to_schedule": "선택한 명소들을 드래그해 일정에 추가해비밀번호보세요",
+    "drag_attractions_to_schedule": "선택한 명소들을 드래그해 일정에 추가해보세요",
     "drag_instructions": "<IconText>💡사용법:</IconText> 왼쪽 명소를 드래그해서 가운데 시간대에 놓으세요. 날짜와 시간을 자유롭게 조정할 수 있습니다.",
     "drop_here": "여기에 놓으세요",
     "drag_place": "장소를 드래그하세요",
     "day_label": "{{dayCount}}일차 ({{date}})",
-    "login_required_for_custom_travel": "나만의 여행 일정을 만들고 저장하려면 로그인이 필요해요."
+    "login_required_for_custom_travel": "나만의 여행 일정을 만들고 저장하려면 로그인이 필요해요.",
+    "search_results": "검색결과",
+    "travel_description": "여행설명",
+    "enter_travel_description": "여행에 대한 간단한 설명을 입력하세요",
+    "search_destination": "여행지 검색"
   },
 
   "places": {

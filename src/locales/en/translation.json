@@ -155,7 +155,11 @@
     "drop_here": "Drop here",
     "drag_place": "Drag the place",
     "day_label": "Day {{dayCount}} ({{date}})",
-    "login_required_for_custom_travel": "You need to log in to create and save your own travel itinerary."
+    "login_required_for_custom_travel": "You need to log in to create and save your own travel itinerary.",
+    "search_results": "Search Results",
+    "travel_description": "Travel Description",
+    "enter_travel_description": "Enter a brief description of the trip",
+    "search_destination": "Search Destination"
   },
 
   "places": {
