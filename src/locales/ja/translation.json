@@ -156,7 +156,11 @@
     "drop_here": "ここにドロップしてください",
     "drag_place": "場所をドラッグしてください",
     "day_label": "{{dayCount}}日目 ({{date}})",
-    "login_required_for_custom_travel": "自分だけの旅行日程を作成して保存するにはログインが必要です。"
+    "login_required_for_custom_travel": "自分だけの旅行日程を作成して保存するにはログインが必要です。",
+    "search_results": "検索結果",
+    "travel_description": "旅行の説明",
+    "enter_travel_description": "旅行に関する簡単な説明を入力してください",
+    "search_destination": "旅行先を検索"
   },
 
   "places": {
