@@ -34,7 +34,7 @@ const Dropdown = ({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
-          className={`shadow-light border-outline-gray absolute top-full z-50 mt-2 rounded-2xl border bg-white py-3 ${width} ${positionClass} ${className}`}
+          className={`shadow-light border-outline-gray bg-bg-white absolute top-full z-50 mt-2 rounded-2xl border py-3 ${width} ${positionClass} ${className}`}
         >
           {items.map((item) => (
             <button

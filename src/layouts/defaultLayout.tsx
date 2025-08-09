@@ -10,11 +10,12 @@ const defaultLayout = () => {
   if (currentPath.includes('/explore') || currentPath.startsWith('/search')) {
     headerVariant = 'search';
   }
+
   return (
     <ToastProvider>
-      <div className='bg-gray-50 text-main-text-navy font-pretendard flex min-h-screen flex-col'>
+      <div className='bg-bg-white text-main-text-navy font-pretendard min-h-screen'>
         <Header variant={headerVariant} />
-        <main className='flex flex-grow flex-col'>
+        <main className='flex flex-col'>
           <Outlet />
         </main>
       </div>

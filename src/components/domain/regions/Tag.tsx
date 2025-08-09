@@ -41,7 +41,7 @@ const Tag = () => {
   return (
     <div className='flex w-full flex-col gap-y-2'>
       {/* 메인 카테고리 */}
-      <div className='flex w-full flex-wrap gap-x-2'>
+      <div className='flex w-full flex-wrap gap-2'>
         <button
           onClick={handleAllClick}
           className={`rounded-full border px-5 py-2 transition-colors ${

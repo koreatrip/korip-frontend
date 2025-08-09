@@ -74,19 +74,9 @@ const TimeSlot = ({
           </div>
         ) : (
           <div className='flex h-full w-full items-center justify-center'>
-            <p className='text-sub-text-gray text-sm'>
-              {/* {readOnly 
-                ? '빈 시간대' 
-                ? t('travel.drop_here')
-                : t('travel.drag_place')
-              } */}
-              \
-              <p className='text-sub-text-gray text-sm'>
-                {
-                  readOnly ? '빈 시간대' : t('travel.drop_here') // place가 없으니까 드롭 안내
-                }
-              </p>
-            </p>
+            <span className='text-sub-text-gray text-sm'>
+              {readOnly ? '빈 시간대' : t('travel.drop_here')}
+            </span>
           </div>
         )}
       </div>
