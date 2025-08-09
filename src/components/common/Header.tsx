@@ -162,9 +162,9 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
     return currentLang?.label || t('languages.korean');
   };
 
-  // 가독성을 위해 데스크톱 메뉴를 작은 컴포넌트로 분리
+  // 데스크톱에서만 보이는 메뉴
   const MainMenu = () => (
-    <ul className='tablet-bp:flex hidden items-center font-medium'>
+    <ul className='desktop-bp:flex hidden items-center font-medium'>
       {mainMenuItems.map((item) => (
         <li
           key={item.label}
@@ -247,22 +247,8 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
                 </li>
               </ul>
 
-              {/* 태블릿: 우측 메뉴 (로그인 + 언어 + 햄버거) */}
+              {/* 태블릿: 우측 메뉴 (로그인 + 햄버거만) */}
               <div className='tablet-bp:flex desktop-bp:hidden hidden items-center gap-x-2'>
-                <div className='relative'>
-                  <button
-                    onClick={actions.toggleLangDropdown}
-                    className='hover:bg-hover-gray flex cursor-pointer items-center gap-x-1 rounded-lg px-3 py-1.5 font-medium'
-                  >
-                    <GlobeAltIcon className='h-5 w-5 stroke-2' />
-                    <p>{getCurrentLanguageLabel()}</p>
-                  </button>
-                  <Dropdown
-                    isOpen={stack.isLangDropdownOpen}
-                    items={languages}
-                    onClose={actions.closeLangDropdown}
-                  />
-                </div>
                 <a
                   href={authMenuItems[0].href}
                   className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-medium'
@@ -293,10 +279,22 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
                   placeholder={t('places.search_region_placeholder')}
                 />
               </div>
-              <div className='tablet-bp:flex hidden items-center'>
+              <div className='desktop-bp:flex hidden items-center'>
                 <MainMenu />
               </div>
-              <ul className='tablet-bp:flex hidden items-center font-medium'>
+
+              {/* 데스크톱: 우측 메뉴 (햄버거 없음) */}
+              <ul className='desktop-bp:flex hidden items-center font-medium'>
+                {authMenuItems.map((item) => (
+                  <li
+                    key={item.label}
+                    className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
+                  >
+                    <a href={item.href}>
+                      <p>{item.label}</p>
+                    </a>
+                  </li>
+                ))}
                 <li className='relative'>
                   <button
                     onClick={actions.toggleLangDropdown}
@@ -311,25 +309,27 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
                     onClose={actions.closeLangDropdown}
                   />
                 </li>
-                {/* '회원가입' 제외 */}
-                <li className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'>
-                  <a href={authMenuItems[0].href}>
-                    <p>{authMenuItems[0].label}</p>
-                  </a>
-                </li>
-                <li>
-                  <button
-                    onClick={actions.toggleMenu}
-                    className='hover:bg-hover-gray rounded-lg p-2'
-                  >
-                    {stack.isMenuOpen ? (
-                      <XMarkIcon className='h-6 w-6' />
-                    ) : (
-                      <Bars3Icon className='h-6 w-6' />
-                    )}
-                  </button>
-                </li>
               </ul>
+
+              {/* 태블릿: 우측 메뉴 (로그인 + 햄버거만) */}
+              <div className='tablet-bp:flex desktop-bp:hidden hidden items-center gap-x-2'>
+                <a
+                  href={authMenuItems[0].href}
+                  className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-medium'
+                >
+                  <p>{authMenuItems[0].label}</p>
+                </a>
+                <button
+                  onClick={actions.toggleMenu}
+                  className='hover:bg-hover-gray rounded-lg p-2'
+                >
+                  {stack.isMenuOpen ? (
+                    <XMarkIcon className='h-6 w-6' />
+                  ) : (
+                    <Bars3Icon className='h-6 w-6' />
+                  )}
+                </button>
+              </div>
             </>
           )}
 
