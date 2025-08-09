@@ -11,6 +11,8 @@ import { useToast } from '@/hooks/useToast';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Trans } from 'react-i18next';
+import { useModalStore } from '@/stores/useModalStore';
+import LoginPromptModal from '@/components/domain/auth/LoginPromptModal';
 
 const RegionsPage = () => {
   // regions API 호출 주석 처리 (MSW에서 지원 안 함)
@@ -29,6 +31,8 @@ const RegionsPage = () => {
   const searchAndSetLocation = useLocationStore(
     (state) => state.searchAndSetLocation
   );
+  const { stack, data, actions } = useModalStore();
+
   const { showToast } = useToast();
   const { t } = useTranslation();
 
@@ -282,6 +286,10 @@ const RegionsPage = () => {
           </div>
         </div>
       </Container>
+      <LoginPromptModal
+        isOpen={stack.isLoginPromptOpen}
+        onClose={actions.closeLoginPrompt}
+      />
     </div>
   );
 };
