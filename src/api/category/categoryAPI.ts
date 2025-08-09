@@ -13,6 +13,7 @@ export const categoryAPI = {
       params: { lang },
       headers: { Accept: 'application/json' },
     });
+    console.log(response.data);
     return response.data;
   },
 
@@ -27,6 +28,7 @@ export const categoryAPI = {
         headers: { Accept: 'application/json' },
       }
     );
+    console.log(response.data);
     return response.data;
   },
 };

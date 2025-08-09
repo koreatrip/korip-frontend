@@ -1,60 +1,40 @@
-import  { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import SelectButton from '@/components/domain/interest/selectButton/SelectButton';
-
-type SelectOption = {
-  id: string;
-  label: string;
-};
+import type { Category } from '@/api/category/categoryType';
 
 type SelectButtonGroupProps = {
-  options: SelectOption[];
-  initialSelectedIds?: string[];
-  singleSelect?: boolean;
-  onSelectionChange?: (selectedIds: string[]) => void;
+  slectedId: number | undefined;
+  mainCateData: Category[];
+
+  handleClickSubCate: (id: number) => void;
   className?: string;
 };
 
 const SelectButtonGroup = ({
-  options,
-  initialSelectedIds = [],
-  singleSelect = false,
-  onSelectionChange,
+  slectedId,
+  mainCateData,
+  handleClickSubCate,
+
   className,
 }: SelectButtonGroupProps) => {
-  const [selectedIds, setSelectedIds] = useState<string[]>(initialSelectedIds);
-
-  const handleButtonClick = (id: string) => {
-    let newSelectedIds: string[];
-
-    if (singleSelect) {
-      newSelectedIds = selectedIds[0] === id ? [] : [id];
-    } else {
-      if (selectedIds.includes(id)) {
-        newSelectedIds = selectedIds.filter((selectedId) => selectedId !== id);
-      } else {
-        newSelectedIds = [...selectedIds, id];
-      }
-    }
-    setSelectedIds(newSelectedIds);
-    onSelectionChange?.(newSelectedIds);
+  const handleButtonClick = (id: number) => {
+    handleClickSubCate(id);
   };
 
   return (
     <div
       className={twMerge(
-        'mb-2 flex flex-row overflow-x-auto py-1 whitespace-nowrap',
+        'mb-2 flex flex-row justify-between text-sm',
         className
       )}
     >
-      {options.map((option) => (
+      {mainCateData.map((item) => (
         <SelectButton
-          key={option.id}
-          selected={selectedIds.includes(option.id)}
-          onClick={() => handleButtonClick(option.id)}
-          className='mr-2 last:mr-0'
+          key={item.id}
+          selected={item.id === slectedId}
+          onClick={() => handleButtonClick(item.id)}
         >
-          # {option.label}
+          # {item.name}
         </SelectButton>
       ))}
     </div>
