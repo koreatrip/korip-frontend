@@ -8,7 +8,6 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-// 플래너 데이터 타입
 type TPlannerData = {
   id: number;
   title: string;
@@ -21,76 +20,70 @@ type TPlannerData = {
 const MyPlannerPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>(
     SortOption.DATE_DESC
   );
 
-  // 플래너 더미 데이터 (createdAt 추가)
-  const [planners, setPlanners] = useState<TPlannerData[]>([
+  // --- 임시 목 데이터 (API 연동 전)
+  const mockTravelPlansData: TPlannerData[] = [
     {
       id: 1,
-      title: '길동이와 동에번쩍 서에번쩍',
+      title: '제주도 여행',
+      description: '가족과 함께하는 제주도 3박 4일 여행',
+      dateRange: '2024-03-15 ~ 2024-03-18',
       isNew: true,
-      description: '친구들과 떠나는 국내여행',
-      dateRange: '25.05.13 ~ 25.06.01',
-      createdAt: '2025-05-10',
+      createdAt: '2024-02-20',
     },
     {
       id: 2,
-      title: '가족과 함께한 제주도 여행',
-      description: '힐링 가득한 자연 속으로',
-      dateRange: '25.03.01 ~ 25.03.05',
-      createdAt: '2025-02-20',
+      title: '부산 여행',
+      description: '친구들과 함께하는 부산 2박 3일 여행',
+      dateRange: '2024-04-10 ~ 2024-04-12',
+      isNew: false,
+      createdAt: '2024-02-15',
     },
-    {
-      id: 3,
-      title: '서울 미식 투어',
-      description: '맛집만 골라가는 하루 코스',
-      dateRange: '25.04.10 ~ 25.04.11',
-      createdAt: '2025-04-05',
-    },
-    {
-      id: 4,
-      title: '부산에서의 낭만',
-      description: '해운대, 광안리, 감천문화마을',
-      dateRange: '25.02.18 ~ 25.02.22',
-      createdAt: '2025-02-15',
-    },
-    {
-      id: 5,
-      title: '동해 드라이브 여행',
-      description: '차박과 함께하는 자유로운 여행',
-      dateRange: '25.01.03 ~ 25.01.07',
-      createdAt: '2025-01-01',
-    },
-    {
-      id: 6,
-      title: '길동이와 동에번쩍 서에번쩍',
-      isNew: true,
-      description: '친구들과 떠나는 국내여행',
-      dateRange: '25.05.13 ~ 25.06.01',
-      createdAt: '2025-05-10',
-    },
-    {
-      id: 7,
-      title: '길동이와 동에번쩍 서에번쩍',
-      isNew: true,
-      description: '친구들과 떠나는 국내여행',
-      dateRange: '25.05.13 ~ 25.06.01',
-      createdAt: '2025-05-10',
-    },
-    {
-      id: 8,
-      title: '길동이와 동에번쩍 서에번쩍',
-      isNew: true,
-      description: '친구들과 떠나는 국내여행',
-      dateRange: '25.05.13 ~ 25.06.01',
-      createdAt: '2025-05-10',
-    },
-  ]);
+  ];
 
-  // 정렬 옵션들 - Places 컴포넌트와 동일
+  // planners 상태 (API 연동 시 서버 응답으로 대체)
+  const [planners, setPlanners] = useState<TPlannerData[]>(mockTravelPlansData);
+
+  // 검색 + 정렬
+  const filteredAndSortedPlanners: TPlannerData[] = useMemo(() => {
+    const lower = searchValue.trim().toLowerCase();
+
+    const filtered = lower
+      ? planners.filter((p) =>
+          [p.title, p.description, p.dateRange]
+            .filter(Boolean)
+            .some((f) => f!.toLowerCase().includes(lower))
+        )
+      : planners;
+
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortOption) {
+        case SortOption.DATE_DESC:
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        case SortOption.DATE_ASC:
+          return (
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
+        case SortOption.NAME_ASC:
+          return a.title.localeCompare(b.title);
+        case SortOption.NAME_DESC:
+          return b.title.localeCompare(a.title);
+        default:
+          return 0;
+      }
+    });
+
+    return sorted;
+  }, [planners, searchValue, sortOption]);
+
+  // 드롭다운 옵션
   const sortOptions: DropdownItem[] = [
     {
       value: SortOption.DATE_DESC,
@@ -114,76 +107,35 @@ const MyPlannerPage = () => {
     },
   ];
 
-  // 검색 및 정렬 로직 - Places 컴포넌트와 동일한 구조
-  const filteredAndSortedPlanners: TPlannerData[] = useMemo(() => {
-    let filtered = planners;
+  // 이벤트 핸들러
+  const handleSearchSubmit = (value: string) => setSearchValue(value);
 
-    // 검색 필터링
-    if (searchValue.trim()) {
-      const lower = searchValue.toLowerCase();
-      filtered = filtered.filter((planner) =>
-        [planner.title, planner.description, planner.dateRange]
-          .filter(Boolean)
-          .some((field) => field!.toLowerCase().includes(lower))
-      );
-    }
-
-    // 정렬
-    return filtered.sort((a, b) => {
-      switch (sortOption) {
-        case SortOption.DATE_DESC:
-          return (
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
-        case SortOption.DATE_ASC:
-          return (
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          );
-        case SortOption.NAME_ASC:
-          return a.title.localeCompare(b.title);
-        case SortOption.NAME_DESC:
-          return b.title.localeCompare(a.title);
-        default:
-          return 0;
-      }
-    });
-  }, [planners, searchValue, sortOption]);
-
-  // 이벤트 핸들러들
-  // 검색 이벤트 핸들러
-  const handleSearchSubmit = (value: string): void => setSearchValue(value);
-
-  // 편집 버튼 클릭 이벤트 핸들러
   const handleEditClick = (title: string) => {
-    console.log(`${title} 수정`);
+    console.log(`${title} ${t('common.edit')}`);
   };
 
-  // 삭제 버튼 클릭 이벤트 핸들러
   const handleDeleteClick = (title: string) => {
-    console.log(`${title} 삭제`);
+    console.log(`${title} ${t('common.delete')}`);
   };
 
-  // 플래너 추가 이벤트 핸들러
   const handleAddPlannerSubmit = (newPlanner: TPlannerData) => {
     setPlanners((prev) => [newPlanner, ...prev]);
   };
 
-  // 플래너 카드 클릭 이벤트 핸들러
   const handlePlannerCardClick = (plannerId: number) => {
     navigate(`/trip/${plannerId}`);
   };
 
   return (
-    <div className='flex min-h-screen'>
-      {/* 메인 컨텐츠 */}
-      <div className='flex-1 px-2 py-6'>
+    <div className='flex min-h-screen w-full'>
+      <div className='w-full flex-1 px-2 py-6'>
         {/* 헤더 */}
         <div className='mb-6'>
           <h1 className='text-main-text-navy mb-4 text-4xl font-semibold'>
             {t('travel.travel_schedule')}
           </h1>
 
-          {/* 검색바와 정렬 드롭다운 */}
+          {/* 검색/정렬/추가 */}
           <div className='mb-6 flex flex-col gap-4 md:flex-row'>
             <div className='flex-1'>
               <SearchBar
@@ -198,23 +150,20 @@ const MyPlannerPage = () => {
             </div>
           </div>
 
-          {/* 검색 결과 표시 */}
+          {/* 검색 결과 문구 */}
           {searchValue && (
             <div className='mb-4 text-sm text-gray-600'>
-              "{searchValue}"에 대한 검색 결과:{' '}
-              {filteredAndSortedPlanners.length}개
+              "{searchValue}" {t('common.search_results')}{' '}
+              {filteredAndSortedPlanners.length}
+              {t('common.count_suffix')}
             </div>
           )}
         </div>
 
-        {/* 플래너 카드 그리드 - 23px gap */}
-
+        {/* 그리드 (고정 w/h 제거 → 반응형) */}
         <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
           {filteredAndSortedPlanners.map((planner) => (
-            <div
-              key={planner.id}
-              className='h-[372px] w-[348px] justify-self-start'
-            >
+            <div key={planner.id} className='justify-self-start'>
               <PlannerCard
                 title={planner.title}
                 description={planner.description}
@@ -227,14 +176,13 @@ const MyPlannerPage = () => {
             </div>
           ))}
 
-          {/* 플래너 추가 버튼 */}
-
-          <div className='h-[372px] w-[348px] justify-self-start'>
+          {/* 플래너 추가 카드를 맨 뒤로 배치 */}
+          <div className='justify-self-center'>
             <PlannerAddButton onAddPlanner={handleAddPlannerSubmit} />
           </div>
         </div>
 
-        {/* 검색 결과가 없을 때 */}
+        {/* 빈 상태 */}
         {filteredAndSortedPlanners.length === 0 && (
           <div className='py-16 text-center'>
             <div className='mb-4 text-gray-300'>
@@ -254,25 +202,27 @@ const MyPlannerPage = () => {
             </div>
             {searchValue ? (
               <>
-                <p className='text-gray-500'>검색한 플래너가 없습니다.</p>
+                <p className='text-gray-500'>
+                  {t('planner.search_empty_title')}
+                </p>
                 <p className='mt-2 text-sm text-gray-400'>
-                  다른 키워드로 검색해보세요.
+                  {t('planner.search_empty_desc')}
                 </p>
               </>
             ) : (
               <>
-                <p className='text-gray-500'>아직 생성된 플래너가 없습니다.</p>
+                <p className='text-gray-500'>{t('planner.empty_title')}</p>
                 <p className='mt-2 text-sm text-gray-400'>
-                  새로운 여행 계획을 세워보세요.
+                  {t('planner.empty_desc')}
                 </p>
               </>
             )}
           </div>
         )}
 
-        {/* 총 개수 표시 */}
+        {/* 총 개수 */}
         <div className='mt-12 text-right text-sm text-gray-400'>
-          총 {filteredAndSortedPlanners.length}개의 플래너
+          {t('common.total_count', { count: filteredAndSortedPlanners.length })}
         </div>
       </div>
     </div>
