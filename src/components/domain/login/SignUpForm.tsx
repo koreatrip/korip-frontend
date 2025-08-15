@@ -3,7 +3,7 @@ import AuthInput from '@/components/domain/auth/AuthInput';
 import { useToast } from '@/hooks/useToast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useSSR, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import PhoneInput from '../auth/PhoneInput';
 import AgreementForm from '../auth/AgreementForm';
@@ -26,28 +26,58 @@ const signUpSchema = z
       .string()
       .min(2, '이름은 최소 2자 이상이어야 합니다.')
       .max(50, '이름은 50자를 초과할 수 없습니다.'),
-    phoneNumber: z.string().optional().or(z.literal('')), // 빈 문자열도 허용하도록 추가
+    phoneNumber: z.string().optional().or(z.literal('')),
     password: z
       .string()
       .min(PASSWORD_MIN_LENGTH, '비밀번호는 최소 8자 이상이어야 합니다.')
       .max(PASSWORD_MAX_LENGTH, '비밀번호는 최대 20자 이하여야 합니다.')
       .regex(PASSWORD_REGEX, '영문, 숫자, 특수문자를 포함해야 합니다.'),
     confirmPassword: z.string(),
+    agreements: z
+      .array(z.boolean())
+      .refine((data) => data.every((item) => item), {
+        message: '모든 필수 약관에 동의해야 합니다.',
+      }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: '비밀번호가 일치하지 않습니다.',
-    path: ['confirmPassword'], // 에러 메시지가 표시될 필드
+    path: ['confirmPassword'],
   });
 
 // Zod 스키마로부터 폼 데이터 타입 추론
 type SignUpFormInputs = z.infer<typeof signUpSchema>;
 
 const SignUpForm = () => {
+  const { t } = useTranslation();
+  const { showToast } = useToast();
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // useMutation 훅에서 mutate 함수를 sendMutate 별칭으로 받아옵니다.
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+    setValue,
+    watch,
+    getValues,
+    control,
+    trigger,
+  } = useForm<SignUpFormInputs>({
+    resolver: zodResolver(signUpSchema),
+    mode: 'onChange',
+    defaultValues: {
+      email: '',
+      verificationCode: '',
+      name: '',
+      phoneNumber: '',
+      password: '',
+      confirmPassword: '',
+      agreements: [false, false, false],
+    },
+  });
+
   const { mutate: sendMutate, isPending: isSendingEmail } =
     useEmailSendMutation({
       onSuccess: () => {
@@ -56,44 +86,44 @@ const SignUpForm = () => {
         setTimeLeft(60);
       },
       onError: (error) => {
-        // API 응답의 에러 메시지를 추출합니다.
         const errorMessage =
           error.response?.data?.error_message ||
           '인증 메일 발송에 실패했습니다.';
-        // 추출한 에러 메시지를 토스트로 보여줍니다.
         showToast(errorMessage, 'error');
       },
     });
 
-  // useMutation 훅에서 mutate 함수를 checkMutate 별칭으로 받아옵니다.
   const { mutate: checkMutate, isPending: isCheckingEmail } =
     useEmailCheckMutation({
       onSuccess: () => {
         showToast('인증 코드가 확인되었습니다.', 'success');
-        // 인증 성공 시 타이머 중지
         setIsVerifying(false);
+        setIsEmailVerified(true);
         if (timerRef.current) {
           clearInterval(timerRef.current);
         }
       },
-      onError: () => {
-        showToast('인증 코드 확인에 실패했습니다.', 'error');
+      onError: (error) => {
+        const errorMessage =
+          error.response?.data?.error_message ||
+          '인증 코드 확인에 실패했습니다.';
+        showToast(errorMessage, 'error');
       },
     });
+
   useEffect(() => {
     if (isVerifying) {
-      // 1초마다 남은 시간 업데이트
       timerRef.current = setInterval(() => {
         setTimeLeft((prevTime) => prevTime - 1);
       }, 1000);
     }
-    // 컴포넌트 언마운트 시 또는 isVerifying이 false가 될 때 타이머 정리
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
     };
   }, [isVerifying]);
+
   useEffect(() => {
     if (timeLeft === 0) {
       setIsVerifying(false);
@@ -103,34 +133,14 @@ const SignUpForm = () => {
       showToast('인증 유효 시간이 만료되었습니다.', 'error');
     }
   }, [timeLeft]);
-  const { showToast } = useToast();
-  const { t } = useTranslation();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid, isSubmitting },
-    setValue,
-    watch,
-    getValues,
-  } = useForm<SignUpFormInputs>({
-    resolver: zodResolver(signUpSchema),
-    mode: 'onBlur',
-    defaultValues: {
-      email: '',
-      verificationCode: '',
-      name: '',
-      phoneNumber: '',
-      password: '',
-      confirmPassword: '',
-    },
-  });
 
   const currentPassword = watch('password', '');
   const isValidLength =
     currentPassword.length >= PASSWORD_MIN_LENGTH &&
     currentPassword.length <= PASSWORD_MAX_LENGTH;
   const hasLetterNumberSpecial = PASSWORD_REGEX.test(currentPassword);
+  const agreements = watch('agreements');
+  const allAgreementsChecked = agreements?.every((item) => item) ?? false;
 
   const getErrorMessage = (error: string) => {
     const errorMap: Record<string, string> = {
@@ -150,6 +160,7 @@ const SignUpForm = () => {
         'auth.letter_number_special_combo'
       ),
       '비밀번호가 일치하지 않습니다.': t('auth.password_mismatch'),
+      '모든 필수 약관에 동의해야 합니다.': t('auth.agreement_required'),
     };
     return errorMap[error] || error;
   };
@@ -157,6 +168,7 @@ const SignUpForm = () => {
   const onSubmit = async (data: SignUpFormInputs) => {
     console.log('회원가입 폼 데이터:', data);
     try {
+      // API 호출 로직을 여기에 추가합니다.
       // await yourSignUpApiCall(data);
       showToast(
         '회원가입에 성공했습니다! 로그인 페이지로 이동합니다.',
@@ -176,25 +188,33 @@ const SignUpForm = () => {
     });
   };
 
-  const handleEmailSend = () => {
-    const email = getValues('email');
-    if (!email) {
-      showToast('이메일을 입력해주세요.', 'error');
+  const handleEmailSend = async () => {
+    // email 필드의 유효성 검사만 실행
+    const isValidEmail = await trigger('email');
+    if (!isValidEmail) {
       return;
     }
+
+    const email = getValues('email');
     if (isVerifying || isSendingEmail) return;
     sendMutate({ email });
   };
 
-  const handleEmailCheck = () => {
+  const handleEmailCheck = async () => {
     const email = getValues('email');
     const code = getValues('verificationCode');
-    if (!email || !code) {
-      showToast('이메일과 인증 코드를 입력해주세요.', 'error');
+
+    // 이메일과 인증 코드 필드 유효성 검사
+    const isValidEmailAndCode = await trigger(['email', 'verificationCode']);
+    if (!isValidEmailAndCode) {
       return;
     }
+
     checkMutate({ email, code });
   };
+
+  // 모든 필수 조건이 충족되었는지 확인하는 변수
+  const isFormValid = isValid && isEmailVerified && allAgreementsChecked;
 
   return (
     <div className='flex w-full flex-col gap-4'>
@@ -217,13 +237,13 @@ const SignUpForm = () => {
               type='button'
               className='mt-8 flex h-12 flex-2/5'
               onClick={handleEmailSend}
-              disabled={isSendingEmail || isVerifying}
+              disabled={isSendingEmail || isVerifying || isEmailVerified}
             >
               {isSendingEmail ? '전송 중...' : t('auth.email_send')}
             </Button>
           </div>
 
-          {isVerifying && (
+          {isVerifying && !isEmailVerified && (
             <p className='mt-2 text-sm'>
               남은 시간: <span className='font-bold'>{timeLeft}초</span>
             </p>
@@ -244,21 +264,22 @@ const SignUpForm = () => {
               placeholder={t('auth.enter_verification_code')}
               id='verificationCode'
               onClear={() => handleAuthInputClear('verificationCode')}
+              disabled={!isVerifying || isEmailVerified}
             />
             <Button
               type='button'
               className='mt-8 flex h-12 flex-2/5'
               onClick={handleEmailCheck}
-              disabled={isCheckingEmail}
+              disabled={isCheckingEmail || !isVerifying || isEmailVerified}
             >
               {isCheckingEmail ? '확인 중...' : t('auth.email_verification')}
             </Button>
-            {errors.verificationCode && (
-              <p className='text-error-red my-2 text-sm'>
-                {getErrorMessage(errors.verificationCode.message!)}
-              </p>
-            )}
           </div>
+          {errors.verificationCode && (
+            <p className='text-error-red my-2 text-sm'>
+              {getErrorMessage(errors.verificationCode.message!)}
+            </p>
+          )}
         </div>
 
         <div className=''>
@@ -315,13 +336,17 @@ const SignUpForm = () => {
 
           <div className='mt-2 space-y-1'>
             <div
-              className={`flex items-center text-sm transition-colors ${isValidLength ? 'text-sub-green' : 'text-sub-text-gray'}`}
+              className={`flex items-center text-sm transition-colors ${
+                isValidLength ? 'text-sub-green' : 'text-sub-text-gray'
+              }`}
             >
               <span className='mr-2'>•</span>
               {t('auth.password_length_8_20')}
             </div>
             <div
-              className={`flex items-center text-sm transition-colors ${hasLetterNumberSpecial ? 'text-sub-green' : 'text-sub-text-gray'}`}
+              className={`flex items-center text-sm transition-colors ${
+                hasLetterNumberSpecial ? 'text-sub-green' : 'text-sub-text-gray'
+              }`}
             >
               <span className='mr-2'>•</span>
               {t('auth.letter_number_special_combo')}
@@ -344,13 +369,13 @@ const SignUpForm = () => {
             </p>
           )}
         </div>
-        <AgreementForm />
+        <AgreementForm control={control} />
 
         <Button
           type='submit'
-          variant='active'
           className='mt-6 w-full py-3.5'
-          disabled={isSubmitting || !isValid}
+          disabled={isSubmitting || !isFormValid}
+          variant={!isFormValid ? 'cancel' : 'active'}
         >
           {t('auth.signup')}
         </Button>
