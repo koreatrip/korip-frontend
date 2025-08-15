@@ -4,7 +4,7 @@ import PlannerAddButton from '@/components/domain/planner/PlannerAddButton';
 import PlannerAddButtonMini from '@/components/domain/planner/PlannerAddButtonMini';
 import PlannerCard from '@/components/domain/planner/PlannerCard';
 import { SortOption, type DropdownItem } from '@/types/dropdown';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,7 +17,6 @@ type TPlannerData = {
   isNew?: boolean;
   createdAt: string;
 };
-
 
 const MyPlannerPage = () => {
   const { t } = useTranslation();
@@ -166,7 +165,7 @@ const MyPlannerPage = () => {
 
   // 플래너 추가 이벤트 핸들러
   const handleAddPlannerSubmit = (newPlanner: TPlannerData) => {
-    setPlanners(prev => [newPlanner, ...prev]);
+    setPlanners((prev) => [newPlanner, ...prev]);
   };
 
   // 플래너 카드 클릭 이벤트 핸들러
@@ -175,7 +174,6 @@ const MyPlannerPage = () => {
   };
 
   return (
-
     <div className='flex min-h-screen'>
       {/* 메인 컨텐츠 */}
       <div className='flex-1 px-2 py-6'>
@@ -211,7 +209,7 @@ const MyPlannerPage = () => {
 
         {/* 플래너 카드 그리드 - 23px gap */}
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
           {filteredAndSortedPlanners.map((planner) => (
             <div
               key={planner.id}

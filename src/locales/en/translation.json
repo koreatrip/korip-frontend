@@ -107,6 +107,153 @@
     "email_verification": "Email Verification"
   },
 
+  "agreement": {
+    "terms": "Agree to Terms of Service",
+    "privacy": "Agree to Privacy Policy",
+    "location": "Agree to Location-Based Service"
+  },
+
+  "modal": {
+    "terms": {
+      "title": "Terms of Service",
+      "confirm": "Confirm"
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "confirm": "Confirm"
+    },
+    "location": {
+      "title": "Location-Based Services Terms",
+      "confirm": "Confirm"
+    }
+  },
+
+  "terms_content": {
+    "intro": "These Terms of Service govern the rights, obligations, and responsibilities between the Company and users regarding the use of our travel recommendation services.",
+    "article1": {
+      "title": "Article 1 (Purpose)",
+      "content": "The purpose of these terms is to define the rights, obligations, and responsibilities between the Company and users in using travel recommendation and related services provided by the Company."
+    },
+    "article2": {
+      "title": "Article 2 (Definitions)",
+      "service": "\"Service\" means all travel-related services provided by the Company, including travel destination recommendations, travel information, reviews, and rating systems.",
+      "user": "\"User\" means members and non-members who receive services provided by the Company in accordance with these terms.",
+      "content": "\"Content\" refers to all information provided within the service, including travel destination information, photos, reviews, and ratings."
+    },
+    "article3": {
+      "title": "Article 3 (Provision of Services)",
+      "content": "The Company strives to provide accurate and useful travel information to users, but does not guarantee the accuracy of all information."
+    },
+    "article4": {
+      "title": "Article 4 (Information Accuracy and Limitation of Liability)",
+      "content": "Travel destination information, operating hours, prices, etc. may change, and users must verify such information directly before actual visits. The Company is not responsible for damages caused by information changes."
+    },
+    "article5": {
+      "title": "Article 5 (Reviews and Ratings)",
+      "content": "Reviews and ratings written by users are personal subjective opinions, and the Company is not responsible for them. False, defamatory, or promotional reviews may be deleted."
+    },
+    "article6": {
+      "title": "Article 6 (Copyright)",
+      "content": "Copyright of all content within the service belongs to the Company or original copyright holders, and users may use the service only for personal purposes."
+    }
+  },
+  "privacy_content": {
+    "intro": "The Company has the following processing policy to protect users' personal information and rights in accordance with applicable privacy laws.",
+    "article1": {
+      "title": "Article 1 Purpose of Processing Personal Information",
+      "content": "The Company processes personal information for the following purposes:",
+      "purposes": [
+        "Confirming membership registration intention and providing identity verification for membership services",
+        "Providing personalized travel destination recommendation services",
+        "Analyzing user travel preferences and improving services",
+        "Responding to customer inquiries and handling complaints",
+        "Analyzing service usage statistics",
+        "Marketing and advertising activities (with separate consent)"
+      ]
+    },
+    "article2": {
+      "title": "Article 2 Personal Information Items Collected",
+      "required": "Required items: Email, nickname, password",
+      "optional": "Optional items: Date of birth, gender, travel interests, travel style",
+      "auto": "Automatically collected: IP address, cookies, service usage records, access logs"
+    },
+    "article3": {
+      "title": "Article 3 Processing and Retention Period of Personal Information",
+      "member": "Until membership withdrawal (except when retention is required by relevant laws)",
+      "nonmember": "Non-members: Immediately deleted after service use completion",
+      "legal": "Legal retention period: Retention according to telecommunications secrecy protection law, e-commerce law, etc."
+    },
+    "article4": {
+      "title": "Article 4 Provision of Personal Information to Third Parties",
+      "content": "The Company does not provide personal information to third parties in principle, but makes exceptions in the following cases:",
+      "exceptions": [
+        "When users have given prior consent",
+        "When required by law or requested by investigative agencies according to procedures and methods established by law for investigative purposes"
+      ]
+    },
+    "article5": {
+      "title": "Article 5 Personal Information Processing Outsourcing",
+      "content": "The Company may outsource personal information processing as follows to improve services:",
+      "partners": [
+        "Cloud service providers (AWS, Google Cloud, etc.)",
+        "Data analytics service providers",
+        "Customer support service providers"
+      ]
+    },
+    "article6": {
+      "title": "Article 6 User Rights",
+      "content": "Users may request access, correction, deletion, or suspension of processing of personal information at any time, and the Company will take action without delay."
+    }
+  },
+  "location_content": {
+    "intro": "These Location-Based Services Terms define the rights, obligations, and responsibilities between the Company and users regarding location-based services provided by the Company.",
+    "article1": {
+      "title": "Article 1 Purpose of Collecting and Using Location Information",
+      "content": "The Company collects and uses users' location information for the following purposes:",
+      "purposes": [
+        "Recommending nearby travel destinations based on current location",
+        "Suggesting location-specific customized travel routes",
+        "Providing regional weather information",
+        "Providing information on nearby restaurants and accommodations",
+        "Transportation and route guidance",
+        "Providing location-based discount benefits and event information"
+      ]
+    },
+    "article2": {
+      "title": "Article 2 Location Information Collection Methods",
+      "content": "The Company collects location information through the following methods:",
+      "methods": [
+        "Current location collection through web browser Geolocation API",
+        "Location information directly entered by users",
+        "Approximate location information through IP address"
+      ]
+    },
+    "article3": {
+      "title": "Article 3 Retention and Use Period of Location Information",
+      "realtime": "Real-time location information: Deleted immediately upon service provision completion",
+      "saved": "Saved location information (favorites, etc.): Until membership withdrawal or deletion request",
+      "analytics": "Location information for statistical analysis: Used for service improvement purposes after processing to make individual identification impossible"
+    },
+    "article4": {
+      "title": "Article 4 Provision of Location Information to Third Parties",
+      "content": "The Company does not provide users' location information to third parties, except in the following cases:",
+      "exceptions": [
+        "When users have explicitly consented",
+        "When required by law",
+        "When processed in a form that cannot identify specific individuals for statistical compilation, academic research, etc."
+      ]
+    },
+    "article5": {
+      "title": "Article 5 User Rights",
+      "content": "Users may withdraw consent for location information collection, use, and provision at any time, and may request deletion of collected location information."
+    },
+    "article6": {
+      "title": "Article 6 Location Information Manager",
+      "content": "The Company designates a location information manager to properly manage location information and smoothly handle user complaints.",
+      "contact": "Location Information Manager: privacy@company.com"
+    }
+  },
+
   "user": {
     "edit_profile": "Edit Profile",
     "basic_info": "Basic Info",

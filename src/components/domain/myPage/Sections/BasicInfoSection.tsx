@@ -38,7 +38,7 @@ const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
         </h3>
         <Button
           variant='active'
-          className='w-auto px-3 py-1 text-sm'
+          className='w-auto px-3 py-1'
           onClick={onToggleEdit}
         >
           {isEditing ? t('common.cancel') : t('common.delete')}

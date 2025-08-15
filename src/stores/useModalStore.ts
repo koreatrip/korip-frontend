@@ -7,6 +7,10 @@ type ModalType = {
   isPasswordChangeOpen: boolean;
   isIdolApplicationOpen: boolean;
   isCreateTripOpen: boolean;
+  // 약관 관련 모달 추가
+  isTermsOfServiceOpen: boolean;
+  isPrivacyPolicyOpen: boolean;
+  isLocationServiceOpen: boolean;
   // 확장 가능한 구조
 };
 
@@ -20,6 +24,10 @@ type ModalData = {
     memberName?: string;
   } | null;
   createTrip: null;
+  // 약관 관련 데이터 추가
+  termsOfService: null;
+  privacyPolicy: null;
+  locationService: null;
   // 다른 모달 데이터들...
 };
 
@@ -51,9 +59,17 @@ type ModalActions = {
     }) => void;
     closeIdolApplication: () => void;
 
-    // 여행 일정 생성 모달 (추가)
+    // 여행 일정 생성 모달
     openCreateTrip: () => void;
     closeCreateTrip: () => void;
+
+    // 약관 관련 모달들 추가
+    openTermsOfService: () => void;
+    closeTermsOfService: () => void;
+    openPrivacyPolicy: () => void;
+    closePrivacyPolicy: () => void;
+    openLocationService: () => void;
+    closeLocationService: () => void;
 
     // 유틸리티 액션들
     closeAllModals: () => void;
@@ -69,6 +85,10 @@ export const useModalStore = create<ModalState>((set) => ({
     isPasswordChangeOpen: false,
     isIdolApplicationOpen: false,
     isCreateTripOpen: false,
+    // 약관 모달 초기 상태 추가
+    isTermsOfServiceOpen: false,
+    isPrivacyPolicyOpen: false,
+    isLocationServiceOpen: false, // 추가됨
   },
 
   // 모달 데이터 초기 상태
@@ -78,11 +98,15 @@ export const useModalStore = create<ModalState>((set) => ({
     passwordChange: null,
     idolApplication: null,
     createTrip: null,
+    // 약관 데이터 초기 상태 추가
+    termsOfService: null,
+    privacyPolicy: null,
+    locationService: null, // 추가됨
   },
 
   // 액션들
   actions: {
-    // 로그인 프롬프트 모달
+    // 기존 액션들...
     openLoginPrompt: () =>
       set((state) => ({
         stack: {
@@ -99,7 +123,6 @@ export const useModalStore = create<ModalState>((set) => ({
         },
       })),
 
-    // 계정 탈퇴 모달
     openAccountDelete: () =>
       set((state) => ({
         stack: {
@@ -116,7 +139,6 @@ export const useModalStore = create<ModalState>((set) => ({
         },
       })),
 
-    // 비밀번호 변경 모달
     openPasswordChange: () =>
       set((state) => ({
         stack: {
@@ -133,7 +155,6 @@ export const useModalStore = create<ModalState>((set) => ({
         },
       })),
 
-    // 아이돌 신청 모달 (데이터와 함께)
     openIdolApplication: (data) =>
       set((state) => ({
         stack: {
@@ -158,7 +179,6 @@ export const useModalStore = create<ModalState>((set) => ({
         },
       })),
 
-    // 여행 일정 생성 모달 (추가)
     openCreateTrip: () =>
       set((state) => ({
         stack: {
@@ -175,7 +195,57 @@ export const useModalStore = create<ModalState>((set) => ({
         },
       })),
 
-    // 모든 모달 닫기
+    // 약관 관련 액션들 추가
+    openTermsOfService: () =>
+      set((state) => ({
+        stack: {
+          ...state.stack,
+          isTermsOfServiceOpen: true,
+        },
+      })),
+
+    closeTermsOfService: () =>
+      set((state) => ({
+        stack: {
+          ...state.stack,
+          isTermsOfServiceOpen: false,
+        },
+      })),
+
+    openPrivacyPolicy: () =>
+      set((state) => ({
+        stack: {
+          ...state.stack,
+          isPrivacyPolicyOpen: true,
+        },
+      })),
+
+    closePrivacyPolicy: () =>
+      set((state) => ({
+        stack: {
+          ...state.stack,
+          isPrivacyPolicyOpen: false,
+        },
+      })),
+
+    // 위치 서비스 모달 액션들 추가
+    openLocationService: () =>
+      set((state) => ({
+        stack: {
+          ...state.stack,
+          isLocationServiceOpen: true,
+        },
+      })),
+
+    closeLocationService: () =>
+      set((state) => ({
+        stack: {
+          ...state.stack,
+          isLocationServiceOpen: false,
+        },
+      })),
+
+    // 모든 모달 닫기 (약관 모달 포함)
     closeAllModals: () =>
       set((state) => ({
         stack: {
@@ -185,6 +255,9 @@ export const useModalStore = create<ModalState>((set) => ({
           isPasswordChangeOpen: false,
           isIdolApplicationOpen: false,
           isCreateTripOpen: false,
+          isTermsOfServiceOpen: false,
+          isPrivacyPolicyOpen: false,
+          isLocationServiceOpen: false, // 추가됨
         },
         data: {
           loginPrompt: null,
@@ -192,10 +265,13 @@ export const useModalStore = create<ModalState>((set) => ({
           passwordChange: null,
           idolApplication: null,
           createTrip: null,
+          termsOfService: null,
+          privacyPolicy: null,
+          locationService: null, // 추가됨
         },
       })),
 
-    // 모달 상태 초기화
+    // 모달 상태 초기화 (약관 모달 포함)
     resetModals: () =>
       set(() => ({
         stack: {
@@ -204,6 +280,9 @@ export const useModalStore = create<ModalState>((set) => ({
           isPasswordChangeOpen: false,
           isIdolApplicationOpen: false,
           isCreateTripOpen: false,
+          isTermsOfServiceOpen: false,
+          isPrivacyPolicyOpen: false,
+          isLocationServiceOpen: false, // 추가됨
         },
         data: {
           loginPrompt: null,
@@ -211,6 +290,9 @@ export const useModalStore = create<ModalState>((set) => ({
           passwordChange: null,
           idolApplication: null,
           createTrip: null,
+          termsOfService: null,
+          privacyPolicy: null,
+          locationService: null, // 추가됨
         },
       })),
   },

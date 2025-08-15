@@ -18,7 +18,7 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({
         {t('user.security_settings')}
       </h3>
 
-      <div className='space-y-4 text-sm'>
+      <div className='space-y-4'>
         <div className='flex items-center justify-between'>
           <span className='text-main-text-navy font-medium'>
             {t('auth.password')}
@@ -32,7 +32,7 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({
             {t('auth.email_verification')}
           </span>
           <span
-            className='flex w-auto items-center justify-center rounded-lg px-3 py-1 text-sm font-light text-white'
+            className='flex w-auto items-center justify-center rounded-lg px-3 py-1 font-light text-white'
             style={{ backgroundColor: '#4A9B8E' }}
           >
             {t('common.complete')}
