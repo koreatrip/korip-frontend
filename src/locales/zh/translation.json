@@ -45,7 +45,12 @@
     "maybe_later": "稍后再说",
     "inquiry_and_info": "咨询及指南",
     "closed_days": "休息日",
-    "empty_schedule": "空行程"
+    "empty_schedule": "空行程",
+    "temp_password_issued": "已生成临时密码。",
+    "temp_password_sent": "我们已将临时密码发送至您填写的电子邮箱。",
+    "change_after_login": "请登录后将其更改为新密码。",
+    "email_not_received": "没有收到邮件？",
+    "check_spam_or_retry": "请检查垃圾邮件文件夹，或几分钟后再试一次。"
   },
 
   "auth": {
