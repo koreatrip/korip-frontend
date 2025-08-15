@@ -19,6 +19,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import LoginPage from '../pages/loginPage';
 import FirstSearchingPage from '@/pages/firstSearchingPage';
 import LanguagePage from '@/pages/languagePage';
+import ResetPasswordPage from '@/pages/resetPasswordPage';
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
       {
         path: 'register',
         element: <SignUpPage />,
+      },
+      {
+        path: 'auth/password-reset-success',
+        element: <ResetPasswordPage />,
       },
       {
         path: 'explore/regions',
