@@ -6,7 +6,8 @@ import { z } from 'zod';
 import { Link, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { useLoginMutation } from '@/api/auth/loginHooks';
+import { useLoginMutation } from '@/api/auth/login/loginHooks';
+import Cookies from 'js-cookie';
 
 const loginSchema = z.object({
   email: z.string().email('올바른 이메일 형식이 아닙니다.'),
@@ -21,6 +22,8 @@ const LogInForm = () => {
     onSuccess: (response) => {
       console.log('로그인 성공:', response);
       navigate('/first-region-search');
+      Cookies.set('access_token', response.access_token);
+      Cookies.set('refresh_token', response.refresh_token);
     },
     onError: (error) => {
       console.error('로그인 실패:', error);
