@@ -27,7 +27,7 @@ const AccountStatsSection: React.FC<AccountStatsSectionProps> = ({
         {t('user.account_status')}
       </h3>
 
-      <div className='mb-4 flex items-center justify-between text-sm'>
+      <div className='mb-4 flex items-center justify-between'>
         <span className='text-main-text-navy font-medium'>
           {t('auth.signup_date')}
         </span>
@@ -43,7 +43,7 @@ const AccountStatsSection: React.FC<AccountStatsSectionProps> = ({
             className='border-outline-gray bg-bg-white flex flex-col items-center justify-center rounded-md border p-4 text-center shadow-sm'
           >
             <p className='text-main-pink text-lg font-bold'>{count}</p>
-            <p className='text-main-text-gray text-xs'>{t(label)}</p>
+            <p className='text-main-text-gray'>{t(label)}</p>
           </div>
         ))}
       </div>
