@@ -1,37 +1,34 @@
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
-interface Tdata {
-  id: string;
-  label: string;
-}
+type SelectedInterestsProps = {
+  subSelected: any[];
+  handleClickName: (data: any) => void;
+};
 
-interface SelectedInterestsProps {
-  data: Tdata[];
-  onDelete: (id: string) => void;
-}
-
-const SelectedInterests = ({ data, onDelete }: SelectedInterestsProps) => {
+const SelectedInterests = ({
+  subSelected,
+  handleClickName,
+}: SelectedInterestsProps) => {
   return (
-    <div className='flex flex-wrap gap-2 py-4 min-h-[4.5rem]'>
-      {data.length > 0 ? (
-        data.map((interest) => (
+    <div className='flex min-h-[4.5rem] flex-wrap gap-2 py-4'>
+      {subSelected.length > 0 ? (
+        subSelected.map((data) => (
           <div
-            key={interest.id}
-            className='flex items-center gap-x-1.5 bg-main-pink rounded-full pl-3 pr-2 py-1 text-sm text-white animate-in fade-in-50'
+            key={data.id}
+            className='bg-main-pink animate-in fade-in-50 flex items-center gap-x-1.5 rounded-full py-1 pr-2 pl-3 text-sm text-white'
           >
-            <span># {interest.label}</span>
+            <span># {data.name}</span>
             <button
               type='button'
-              onClick={() => onDelete(interest.id)}
-              className='flex items-center justify-center w-4 h-4 rounded-full bg-white/20 hover:bg-white/40 transition-colors'
-              aria-label={`Delete ${interest.label}`}
+              onClick={() => handleClickName(data)}
+              className='flex h-4 w-4 items-center justify-center rounded-full bg-white/20 transition-colors hover:bg-white/40'
             >
-              <XMarkIcon className='w-3 h-3 text-white' />
+              <XMarkIcon className='h-3 w-3 text-white' />
             </button>
           </div>
         ))
       ) : (
-        <p className='text-gray-500 self-center'>선택된 관심사가 없습니다.</p>
+        <p className='self-center text-gray-500'>선택된 관심사가 없습니다.</p>
       )}
     </div>
   );

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/useToast';
 import Button from '@/components/common/Button';
 import Container from '@/components/common/Container';
 import Input from '@/components/common/Input';
@@ -7,24 +8,63 @@ import WelcomeCard from '@/components/domain/login/WelcomeCard';
 import SelectedInterests from '@/components/domain/interest/selectButton/SelectedInterests';
 import IdolRequestModal from '@/components/domain/interest/IdolRequestModal';
 import SelectDetailBox from '@/components/domain/interest/selectButton/SelectDetailBox';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useAllCategoriesQuery } from '@/api/category/categoryHooks';
 import type { Category, Subcategory } from '@/api/category/categoryType';
+import ToastMessage from '@/components/common/ToastMessage';
+import SelectButton from '@/components/domain/interest/selectButton/SelectButton';
 
 const InterestPage = () => {
   const { data, isLoading, isError, error } = useAllCategoriesQuery('ko');
-
+  const { showToast } = useToast();
   const [slectedId, setSletedId] = useState<number>();
   const [subCate, setSubCate] = useState<Subcategory[]>([]);
   const [isModalOpen, setModalOpen] = useState(false);
 
+  const [subSelected, setSubSelected] = useState<Subcategory[]>([]);
 
-  const [subSelectedId, setSubSelectedId] = useState<number[]>([]);
+  const [idolInput, setIdolInput] = useState<string>('');
 
   let mainCate: Category[] = [];
 
   const handleClickSubCate = (id: number) => {
     setSletedId(id);
+  };
+
+  const handleClickName = (data: Subcategory) => {
+    if (
+      subSelected.length >= 9 &&
+      !subSelected.some((item) => item.id === data.id)
+    ) {
+      alert('관심사는 최대 9개까지 선택할 수 있습니다.');
+      return;
+    }
+
+    setSubSelected((prevItems) => {
+      // prevItems 배열에 같은 id를 가진 객체가 있는지 확인합니다.
+      const isSelected = prevItems.some((item) => item.id === data.id);
+
+      if (isSelected) {
+        // 같은 id를 가진 객체를 배열에서  제거합니다.
+        return prevItems.filter((item) => item.id !== data.id);
+      } else {
+        // 새로운 data 객체를 배열에 추가합니다.
+        return [...prevItems, data];
+      }
+    });
+  };
+
+  const handleSerchIdol = (value: string) => {
+    setIdolInput(value);
+  };
+
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (subSelected.length === 0) {
+      showToast('관심사를 하나 이상 선택해주세요.', 'error');
+      return;
+    }
+    console.log('최종 선택된 관심사:', subSelected);
+    showToast('관심사 선택이 완료되었습니다!', 'success');
   };
 
   useEffect(() => {
@@ -56,52 +96,75 @@ const InterestPage = () => {
 
         {/* 대분류 해시태그 뿌림 */}
         {mainCate && mainCate.length > 0 && (
-          <div>
-            <SelectButtonGroup
+          <SelectButtonGroup
             slectedId={slectedId}
-              mainCateData={mainCate}
-              handleClickSubCate={handleClickSubCate}
-            />
-          </div>
+            mainCateData={mainCate}
+            handleClickSubCate={handleClickSubCate}
+          />
         )}
 
         {/* 소분류 해시태그 뿌림 */}
+        {slectedId && slectedId !== 6 && (
+          <SelectDetailBox
+            subCateData={subCate}
+            // ui 확인용 프롭스
+            subSelected={subSelected}
+            handleClickName={handleClickName}
+          />
+        )}
 
-        {slectedId && (
-          <div className='mt-4 flex flex-col gap-4'>
-            <SelectDetailBox
-              subCateData={subCate}
-              // ui 확인용
-              subSelectedId={subSelectedId}
-              setSubSelectedId={setSubSelectedId}
+        {/* K-POP 아이돌/그룹 선택 */}
+        {slectedId === 6 && (
+          <div className='border-main-pink bg-bg-section my-6 rounded-3xl border p-6'>
+            <p className='mb-4'>관심있는 K-POP 아이돌/그룹을 선택하세요</p>
+            <Input
+              type='text'
+              placeholder='아이돌 이름 검색'
+              value={idolInput}
+              onChange={(e) => handleSerchIdol(e.target.value)}
             />
-             {slectedId === 6 && (
-              <div className='border-main-pink bg-bg-section mt-2 rounded-3xl border p-4'>
-                <p>관심있는 K-POP 아이돌/그룹을 선택하세요</p>
-                <Input type='text' placeholder='아이돌 이름 검색' />
 
-                <p>원하는게 없쟈며</p>
-                <Button
-                  variant='active'
-                  onClick={() => setModalOpen(true)}
-                  className='m-auto mt-4 w-fit rounded-full px-5'
-                >
-                  아이돌 신청하기
-                </Button>
-              </div>
-            )}
+            <div className='border-outline-gray mt-4 flex flex-wrap gap-2 border-b pb-4'>
+              {mainCate[5].subcategories
+                .filter((item) => item.name.includes(idolInput)) // 필터링 로직 추가
+                .map((item) => {
+                  return (
+                    <SelectButton
+                      key={item.id}
+                      type='button'
+                      onClick={() => handleClickName(item)}
+                      className='text-sm'
+                      selected={subSelected.some(
+                        (selectedItem) => selectedItem.id === item.id
+                      )}
+                    >
+                      # {item.name}
+                    </SelectButton>
+                  );
+                })}
+            </div>
+            <p className='my-2 text-center'>원하는 아이돌이 없나요?</p>
+            <Button
+              variant='active'
+              onClick={() => setModalOpen(true)}
+              className='m-auto mt-4 w-fit rounded-full px-5'
+            >
+              아이돌 신청하기
+            </Button>
           </div>
         )}
 
         <h3 className='mt-6 mb-2 text-lg font-semibold'>최종 선택된 관심사</h3>
 
-        {/* <SelectedInterests
-          data={finalSelectedInterestsForDisplay}
-          onDelete={handleDeleteInterest}
-        /> */}
+        <SelectedInterests
+          subSelected={subSelected}
+          handleClickName={handleClickName}
+        />
 
         <div className='mt-8'>
-          <Button className='w-full'>완료</Button>
+          <Button className='w-full' onClick={handleSubmit}>
+            완료
+          </Button>
         </div>
       </div>
 
