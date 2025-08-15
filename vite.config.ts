@@ -3,9 +3,9 @@ import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), tsconfigPaths()],
+  base: 'https://korip.me/',
   server: {
     proxy: {
       '/api/weather': {
@@ -15,7 +15,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/weather/, ''),
       },
       '/api/uv': {
-        target: 'https://apis.data.go.kr/1360000/LivingWthrIdxServiceV4', // V4 추가
+        target: 'https://apis.data.go.kr/1360000/LivingWthrIdxServiceV4',
         changeOrigin: true,
         secure: true,
         rewrite: (path) => path.replace(/^\/api\/uv/, ''),
@@ -31,6 +31,12 @@ export default defineConfig({
         changeOrigin: true,
         secure: true,
         rewrite: (path) => path.replace(/^\/api\/air/, ''),
+      },
+      '/api': {
+        target: 'https://korip.me/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api'),
+        secure: true,
       },
     },
   },
