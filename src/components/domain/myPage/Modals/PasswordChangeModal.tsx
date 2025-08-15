@@ -111,11 +111,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
             <label className='text-md mb-3 block font-medium text-[#2C3E50]'>
               {t('user.current_password')}
             </label>
-<<<<<<< HEAD
-            <Input
-=======
             <AuthInput
->>>>>>> 91c5d360 (:lipstick:: style:코드수정2)
               type='password'
               value={passwords.current}
               onChange={(e) => handleInputChange('current', e.target.value)}
@@ -133,11 +129,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
             <label className='text-md mb-3 block font-medium text-[#2C3E50]'>
               {t('user.new_password')}
             </label>
-<<<<<<< HEAD
-            <Input
-=======
             <AuthInput
->>>>>>> 91c5d360 (:lipstick:: style:코드수정2)
               type='password'
               value={passwords.new}
               onChange={(e) => handleInputChange('new', e.target.value)}
@@ -163,11 +155,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
             <label className='text-md mb-3 block font-medium text-[#2C3E50]'>
               {t('user.confirm_new_password')}
             </label>
-<<<<<<< HEAD
-            <Input
-=======
             <AuthInput
->>>>>>> 91c5d360 (:lipstick:: style:코드수정2)
               type='password'
               value={passwords.confirm}
               onChange={(e) => handleInputChange('confirm', e.target.value)}

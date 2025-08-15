@@ -1,12 +1,12 @@
+import { useToggleFavoriteRegion } from '@/api/user/userHooks';
+import type { FavoriteRegion } from '@/api/user/userType';
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
 import SearchBar from '@/components/common/searchBar/SearchBar';
 import InfoCard from '@/components/domain/regions/InfoCard';
 import type { DropdownItem } from '@/types/dropdown';
+import { HeartIcon } from '@heroicons/react/24/outline';
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { HeartIcon } from '@heroicons/react/24/outline';
-import { useFavoriteRegions, useUserProfile, useToggleFavoriteRegion } from '@/api/user/userHooks';
-import type { FavoriteRegion } from '@/api/user/userType';
 
 type RegionsData = {
   id: number;
@@ -70,7 +70,7 @@ const Regions: React.FC = () => {
   // API 데이터를 로컬 형식으로 변환
   const favoriteData: RegionsData[] = useMemo(() => {
     if (!favoriteRegionsData?.data) return [];
-    
+
     return favoriteRegionsData.data.map((region: FavoriteRegion) => ({
       id: region.id,
       type: region.type,
@@ -153,7 +153,7 @@ const Regions: React.FC = () => {
   const handleFavorite = async (id: number) => {
     // 임시로 비활성화
     // if (!userId) return;
-    
+
     try {
       // await toggleFavoriteRegion.mutateAsync({ userId, regionId: id });
       console.log('즐겨찾기 토글:', id);
@@ -177,11 +177,11 @@ const Regions: React.FC = () => {
     return (
       <div className='w-full py-8'>
         <div className='animate-pulse space-y-4'>
-          <div className='h-8 bg-gray-200 rounded w-1/3'></div>
-          <div className='h-12 bg-gray-200 rounded'></div>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6'>
+          <div className='h-8 w-1/3 rounded bg-gray-200'></div>
+          <div className='h-12 rounded bg-gray-200'></div>
+          <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
             {[...Array(8)].map((_, i) => (
-              <div key={i} className='h-[200px] bg-gray-200 rounded'></div>
+              <div key={i} className='h-[200px] rounded bg-gray-200'></div>
             ))}
           </div>
         </div>
@@ -193,9 +193,13 @@ const Regions: React.FC = () => {
   if (error) {
     return (
       <div className='w-full py-8'>
-        <div className='text-center py-16'>
-          <p className='text-red-500'>즐겨찾기 지역을 불러오는데 실패했습니다.</p>
-          <p className='text-gray-400 text-sm mt-2'>잠시 후 다시 시도해주세요.</p>
+        <div className='py-16 text-center'>
+          <p className='text-red-500'>
+            즐겨찾기 지역을 불러오는데 실패했습니다.
+          </p>
+          <p className='mt-2 text-sm text-gray-400'>
+            잠시 후 다시 시도해주세요.
+          </p>
         </div>
       </div>
     );
@@ -229,7 +233,7 @@ const Regions: React.FC = () => {
         </div>
       )}
 
-      <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
+      <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
         {filteredAndSortedData.map((item) => (
           <InfoCard
             key={item.id}
