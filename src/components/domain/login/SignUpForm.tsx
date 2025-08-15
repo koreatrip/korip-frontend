@@ -3,7 +3,7 @@ import AuthInput from '@/components/domain/auth/AuthInput';
 import { useToast } from '@/hooks/useToast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { useSSR, useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import PhoneInput from '../auth/PhoneInput';
 import AgreementForm from '../auth/AgreementForm';
@@ -11,6 +11,7 @@ import {
   useEmailSendMutation,
   useEmailCheckMutation,
 } from '@/api/auth/signup/email/emailHooks';
+import { useEffect, useRef, useState } from 'react';
 
 // 상수로 조건 정의
 const PASSWORD_MIN_LENGTH = 8;
@@ -42,11 +43,17 @@ const signUpSchema = z
 type SignUpFormInputs = z.infer<typeof signUpSchema>;
 
 const SignUpForm = () => {
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
   // useMutation 훅에서 mutate 함수를 sendMutate 별칭으로 받아옵니다.
   const { mutate: sendMutate, isPending: isSendingEmail } =
     useEmailSendMutation({
       onSuccess: () => {
         showToast('인증 메일이 발송되었습니다.', 'success');
+        setIsVerifying(true);
+        setTimeLeft(60);
       },
       onError: (error) => {
         // API 응답의 에러 메시지를 추출합니다.
@@ -63,12 +70,39 @@ const SignUpForm = () => {
     useEmailCheckMutation({
       onSuccess: () => {
         showToast('인증 코드가 확인되었습니다.', 'success');
+        // 인증 성공 시 타이머 중지
+        setIsVerifying(false);
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+        }
       },
       onError: () => {
         showToast('인증 코드 확인에 실패했습니다.', 'error');
       },
     });
-
+  useEffect(() => {
+    if (isVerifying) {
+      // 1초마다 남은 시간 업데이트
+      timerRef.current = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+    }
+    // 컴포넌트 언마운트 시 또는 isVerifying이 false가 될 때 타이머 정리
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [isVerifying]);
+  useEffect(() => {
+    if (timeLeft === 0) {
+      setIsVerifying(false);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+      showToast('인증 유효 시간이 만료되었습니다.', 'error');
+    }
+  }, [timeLeft]);
   const { showToast } = useToast();
   const { t } = useTranslation();
 
@@ -148,6 +182,7 @@ const SignUpForm = () => {
       showToast('이메일을 입력해주세요.', 'error');
       return;
     }
+    if (isVerifying || isSendingEmail) return;
     sendMutate({ email });
   };
 
@@ -182,11 +217,17 @@ const SignUpForm = () => {
               type='button'
               className='mt-8 flex h-12 flex-2/5'
               onClick={handleEmailSend}
-              disabled={isSendingEmail}
+              disabled={isSendingEmail || isVerifying}
             >
               {isSendingEmail ? '전송 중...' : t('auth.email_send')}
             </Button>
           </div>
+
+          {isVerifying && (
+            <p className='mt-2 text-sm'>
+              남은 시간: <span className='font-bold'>{timeLeft}초</span>
+            </p>
+          )}
 
           {errors.email && (
             <p className='text-error-red my-2 text-sm'>
