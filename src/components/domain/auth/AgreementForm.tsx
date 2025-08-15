@@ -1,32 +1,22 @@
 import Modal from '@/components/common/Modal';
 import { useTranslation } from 'react-i18next';
-
+import { Controller, Control } from 'react-hook-form'; // Controller와 Control 타입을 임포트
 import TermsOfServiceContent from './TermsOfServiceContent';
 import PrivacyPolicyContent from './PrivacyPolicyContent';
-import LocationServiceContent from './LocationServiceContent'; // 추가
-import { useState } from 'react';
+import LocationServiceContent from './LocationServiceContent';
 import { useModalStore } from '@/stores/useModalStore';
 import AgreementCheckbox from './AgreementCheckbox';
+import { useState } from 'react';
+import { SignUpFormInputs } from '@/components/domain/auth/signup/SignUpForm'; // SignUpFormInputs 타입을 임포트
 
-const AgreementForm = () => {
+// AgreementFormProps에 control prop을 추가합니다.
+type AgreementFormProps = {
+  control: Control<SignUpFormInputs>;
+};
+
+const AgreementForm = ({ control }: AgreementFormProps) => {
   const { t } = useTranslation();
-
-  // 체크박스 상태는 로컬 상태로 관리
-  const [agreements, setAgreements] = useState({
-    terms: false,
-    privacy: false,
-    location: false, // 추가
-  });
-
-  // 모달 상태는 Zustand 스토어에서 가져오기
   const { stack, actions } = useModalStore();
-
-  const handleCheckboxChange = (key) => {
-    setAgreements((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
 
   return (
     <div>
@@ -37,22 +27,35 @@ const AgreementForm = () => {
             필수 동의
           </h3>
           <div className='space-y-1'>
-            <AgreementCheckbox
-              id='terms'
-              type='terms'
-              required={true}
-              checked={agreements.terms}
-              onChange={() => handleCheckboxChange('terms')}
-              onLinkClick={actions.openTermsOfService}
+            {/* Controller를 사용하여 폼 상태와 연결 */}
+            <Controller
+              control={control}
+              name='agreements.0' // 배열의 첫 번째 항목에 해당
+              render={({ field }) => (
+                <AgreementCheckbox
+                  id='terms'
+                  type='terms'
+                  required={true}
+                  checked={field.value}
+                  onChange={field.onChange}
+                  onLinkClick={actions.openTermsOfService}
+                />
+              )}
             />
 
-            <AgreementCheckbox
-              id='privacy'
-              type='privacy'
-              required={true}
-              checked={agreements.privacy}
-              onChange={() => handleCheckboxChange('privacy')}
-              onLinkClick={actions.openPrivacyPolicy}
+            <Controller
+              control={control}
+              name='agreements.1' // 배열의 두 번째 항목에 해당
+              render={({ field }) => (
+                <AgreementCheckbox
+                  id='privacy'
+                  type='privacy'
+                  required={true}
+                  checked={field.value}
+                  onChange={field.onChange}
+                  onLinkClick={actions.openPrivacyPolicy}
+                />
+              )}
             />
           </div>
         </div>
@@ -63,19 +66,25 @@ const AgreementForm = () => {
             선택 동의
           </h3>
           <div className='space-y-1'>
-            <AgreementCheckbox
-              id='location'
-              type='location'
-              required={false}
-              checked={agreements.location}
-              onChange={() => handleCheckboxChange('location')}
-              onLinkClick={actions.openLocationService}
+            <Controller
+              control={control}
+              name='agreements.2' // 배열의 세 번째 항목에 해당
+              render={({ field }) => (
+                <AgreementCheckbox
+                  id='location'
+                  type='location'
+                  required={false}
+                  checked={field.value}
+                  onChange={field.onChange}
+                  onLinkClick={actions.openLocationService}
+                />
+              )}
             />
           </div>
         </div>
       </div>
 
-      {/* 이용약관 모달 */}
+      {/* 모달 컴포넌트들 (변경 없음) */}
       <Modal
         isOpen={stack.isTermsOfServiceOpen}
         onClose={actions.closeTermsOfService}
@@ -89,7 +98,6 @@ const AgreementForm = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* 개인정보처리방침 모달 */}
       <Modal
         isOpen={stack.isPrivacyPolicyOpen}
         onClose={actions.closePrivacyPolicy}
@@ -103,7 +111,6 @@ const AgreementForm = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* 위치기반서비스 모달 */}
       <Modal
         isOpen={stack.isLocationServiceOpen}
         onClose={actions.closeLocationService}
