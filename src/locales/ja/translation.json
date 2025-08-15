@@ -62,7 +62,15 @@
     "temp_password_sent": "ご入力いただいたメールアドレスに仮パスワードを送信しました。",
     "change_after_login": "ログイン後、新しいパスワードに変更してください。",
     "email_not_received": "メールを受信できませんでしたか？",
-    "check_spam_or_retry": "迷惑メールフォルダを確認するか、数分後にもう一度お試しください。"
+    "check_spam_or_retry": "迷惑メールフォルダを確認するか、数分後にもう一度お試しください。",
+    "title": "ページが見つかりません",
+    "description": "ご指定のページが見つかりません。入力されたアドレスが正しいかご確認いただくか、ホームに戻って再度ご利用ください。",
+    "button": "ホームに戻る",
+    "finding_beautiful_places": "韓国の素晴らしい旅行先を探しています",
+    "discovering_hidden_gems": "隠れた名所を発見中",
+    "error_generic_title": "エラーが発生しました",
+    "error_generic_description": "リクエストの処理中にエラーが発生しました。しばらくしてから再度お試しください。",
+    "refresh_button": "更新"
   },
 
   "auth": {

@@ -62,7 +62,15 @@
     "temp_password_sent": "We have sent the temporary password to the email address you provided.",
     "change_after_login": "Please log in and change it to a new password.",
     "email_not_received": "Didn't receive the email?",
-    "check_spam_or_retry": "Check your spam folder or try again in a few minutes."
+    "check_spam_or_retry": "Check your spam folder or try again in a few minutes.",
+    "title": "Page Not Found",
+    "description": "The page you requested could not be found. Please verify that the address you entered is correct, or return to the home page to continue browsing.",
+    "button": "Return to Home",
+    "finding_beautiful_places": "Looking for beautiful travel destinations in Korea",
+    "discovering_hidden_gems": "Discovering hidden gems",
+    "error_generic_title": "An Error Has Occurred",
+    "error_generic_description": "An error occurred while processing your request. Please try again later.",
+    "refresh_button": "Refresh"
   },
 
   "auth": {
