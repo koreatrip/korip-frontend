@@ -57,7 +57,12 @@
     "total_planners": "총 {{count}}개의 플래너",
     "added_to_schedule": "{{place?.title}}이(가) 일정에 추가되었습니다.",
     "view_details": "{{place?.title}} 상세정보를 확인합니다.",
-    "select_region": "지역을 선택해주세요."
+    "select_region": "지역을 선택해주세요.",
+    "temp_password_issued": "임시 비밀번호가 발급되었습니다.",
+    "temp_password_sent": "입력하신 이메일로 임시 비밀번호를 발송했습니다.",
+    "change_after_login": "로그인 후 새로운 비밀번호로 변경해주세요.",
+    "email_not_received": "이메일을 받지 못하셨나요?",
+    "check_spam_or_retry": "스팸함을 확인하거나 몇 분 후 다시 시도해주세요."
   },
 
   "auth": {
