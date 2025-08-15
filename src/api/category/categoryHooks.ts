@@ -1,9 +1,10 @@
 // categoryHooks.ts
 import { useQuery } from '@tanstack/react-query';
 import { categoryQueries } from './categoryQueries';
+import type { CategoriesResponse } from './categoryType';
 
 export const useAllCategoriesQuery = (lang: string = 'ko', options?: any) => {
-  return useQuery({
+  return useQuery<CategoriesResponse>({
     ...categoryQueries.categories.all(lang),
     ...options,
   });

@@ -1,42 +1,90 @@
+import { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/useToast';
 import Button from '@/components/common/Button';
 import Container from '@/components/common/Container';
 import Input from '@/components/common/Input';
 import SelectButtonGroup from '@/components/domain/interest/selectButton/SelectButtonGroup';
 import WelcomeCard from '@/components/domain/login/WelcomeCard';
-import { useInterestContext } from '@/context/InterestContext';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import React, { useState } from 'react';
-import SelectedInterests from '@/components/domain/interest/SelectedInterests';
-
+import SelectedInterests from '@/components/domain/interest/selectButton/SelectedInterests';
 import IdolRequestModal from '@/components/domain/interest/IdolRequestModal';
+import SelectDetailBox from '@/components/domain/interest/selectButton/SelectDetailBox';
+import { useAllCategoriesQuery } from '@/api/category/categoryHooks';
+import type { Category, Subcategory } from '@/api/category/categoryType';
+import ToastMessage from '@/components/common/ToastMessage';
+import SelectButton from '@/components/domain/interest/selectButton/SelectButton';
 
 const InterestPage = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const { selectedInterests, setSelectedInterests } = useInterestContext();
+  const { data, isLoading, isError, error } = useAllCategoriesQuery('ko');
+  const { showToast } = useToast();
+  const [slectedId, setSletedId] = useState<number>();
+  const [subCate, setSubCate] = useState<Subcategory[]>([]);
+  const [isModalOpen, setModalOpen] = useState(false);
 
-  const [modal, setModal] = useState(false);
+  const [subSelected, setSubSelected] = useState<Subcategory[]>([]);
 
-  const interests = [
-    { id: 'travel', label: '여행' },
-    { id: 'food', label: '맛집' },
-    { id: 'sports', label: '운동' },
-    { id: 'music', label: '음악' },
-    { id: 'art', label: '미술' },
-    { id: 'tech', label: 'IT' },
-    { id: 'book', label: '도서' },
-    { id: 'movie', label: '영화' },
-    { id: 'fashion', label: '패션' },
-    { id: 'game', label: '게임' },
-  ];
+  const [idolInput, setIdolInput] = useState<string>('');
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
+  let mainCate: Category[] = [];
+
+  const handleClickSubCate = (id: number) => {
+    setSletedId(id);
   };
 
-  const handleInterestsSelectionChange = (newSelectedIds: string[]) => {
-    setSelectedInterests(newSelectedIds);
-    console.log('선택된 관심사 ID:', newSelectedIds);
+  const handleClickName = (data: Subcategory) => {
+    if (
+      subSelected.length >= 9 &&
+      !subSelected.some((item) => item.id === data.id)
+    ) {
+      alert('관심사는 최대 9개까지 선택할 수 있습니다.');
+      return;
+    }
+
+    setSubSelected((prevItems) => {
+      // prevItems 배열에 같은 id를 가진 객체가 있는지 확인합니다.
+      const isSelected = prevItems.some((item) => item.id === data.id);
+
+      if (isSelected) {
+        // 같은 id를 가진 객체를 배열에서  제거합니다.
+        return prevItems.filter((item) => item.id !== data.id);
+      } else {
+        // 새로운 data 객체를 배열에 추가합니다.
+        return [...prevItems, data];
+      }
+    });
   };
+
+  const handleSerchIdol = (value: string) => {
+    setIdolInput(value);
+  };
+
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (subSelected.length === 0) {
+      showToast('관심사를 하나 이상 선택해주세요.', 'error');
+      return;
+    }
+    console.log('최종 선택된 관심사:', subSelected);
+    showToast('관심사 선택이 완료되었습니다!', 'success');
+  };
+
+  useEffect(() => {
+    const tempCate = mainCate.find((item) => item.id === slectedId);
+    if (tempCate) {
+      setSubCate(tempCate.subcategories);
+    }
+  }, [slectedId]);
+
+  if (data) {
+    mainCate = data.data;
+  }
+
+  if (isLoading) {
+    return <div>메인 카테고리 로딩중</div>;
+  }
+
+  if (isError) {
+    return <div>메인 카테고리 로딩 에러: {error.message}</div>;
+  }
 
   return (
     <Container>
@@ -45,54 +93,87 @@ const InterestPage = () => {
           mainText='관심사를 선택하세요'
           accountQuestionText='Korip에서 추천하는 관심사예요.'
         />
-        {/* 서치바 */}
-        <div className='flex min-w-full gap-2 pb-3'>
-          {/* 인풋안에 서치아이콘 */}
-          <div className='relative w-full'>
+
+        {/* 대분류 해시태그 뿌림 */}
+        {mainCate && mainCate.length > 0 && (
+          <SelectButtonGroup
+            slectedId={slectedId}
+            mainCateData={mainCate}
+            handleClickSubCate={handleClickSubCate}
+          />
+        )}
+
+        {/* 소분류 해시태그 뿌림 */}
+        {slectedId && slectedId !== 6 && (
+          <SelectDetailBox
+            subCateData={subCate}
+            // ui 확인용 프롭스
+            subSelected={subSelected}
+            handleClickName={handleClickName}
+          />
+        )}
+
+        {/* K-POP 아이돌/그룹 선택 */}
+        {slectedId === 6 && (
+          <div className='border-main-pink bg-main-pink/2 my-6 rounded-3xl border p-6'>
+            <p className='mb-4'>관심있는 K-POP 아이돌/그룹을 선택하세요</p>
             <Input
               type='text'
-              placeholder='찾기'
-              value={searchTerm}
-              onChange={handleSearchChange}
+              placeholder='아이돌 그룹 검색 (예: BTS, BLACKPINK)'
+              value={idolInput}
+              onChange={(e) => handleSerchIdol(e.target.value)}
             />
-            <button
-              type='button'
-              className='absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 transition-colors duration-200 hover:text-gray-600'
+
+            <div className='border-outline-gray mt-4 flex flex-wrap gap-2 border-b pb-4'>
+              {mainCate[5].subcategories
+                .filter((item) => item.name.includes(idolInput)) // 필터링 로직 추가
+                .map((item) => {
+                  return (
+                    <SelectButton
+                      key={item.id}
+                      type='button'
+                      onClick={() => handleClickName(item)}
+                      className='text-sm'
+                      selected={subSelected.some(
+                        (selectedItem) => selectedItem.id === item.id
+                      )}
+                    >
+                      # {item.name}
+                    </SelectButton>
+                  );
+                })}
+            </div>
+            <p className='my-2 text-center'>원하는 아이돌이 없나요?</p>
+            <Button
+              variant='active'
+              onClick={() => setModalOpen(true)}
+              className='m-auto mt-4 w-fit rounded-full px-5'
             >
-              <MagnifyingGlassIcon className='h-6 w-6' />
-            </button>
+              아이돌 신청하기
+            </Button>
           </div>
+        )}
 
-          <Button variant='active' className='w-2/6'>
-            search
-          </Button>
-        </div>
+        <h3 className='mt-6 mb-2 text-lg font-semibold'>최종 선택된 관심사</h3>
 
-        {/* 해시태그 필터링 */}
-        <SelectButtonGroup
-          options={interests}
-          initialSelectedIds={selectedInterests}
-          onSelectionChange={handleInterestsSelectionChange}
-          singleSelect={false}
-          className='py-2'
+        <SelectedInterests
+          subSelected={subSelected}
+          handleClickName={handleClickName}
         />
 
-        <Button
-          onClick={() => {
-            setModal(true);
-          }}
-        >
-          아이돌 신청하기
-        </Button>
-        {/* 선택한 관심사 */}
-        <SelectedInterests interests={interests} />
-        <Button>완료</Button>
-      </div>                        
+        <div className='mt-8'>
+          <Button className='w-full' onClick={handleSubmit}>
+            완료
+          </Button>
+        </div>
+      </div>
 
-      <IdolRequestModal isOpen={modal} onClose={() => setModal(false)} />
+      <IdolRequestModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+      />
     </Container>
   );
 };
-
 
 export default InterestPage;
