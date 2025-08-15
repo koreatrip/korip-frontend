@@ -20,6 +20,8 @@ import LoginPage from '../pages/loginPage';
 import FirstSearchingPage from '@/pages/firstSearchingPage';
 import LanguagePage from '@/pages/languagePage';
 import ResetPasswordPage from '@/pages/resetPasswordPage';
+import NotFoundPage from '@/pages/statusPage/notFoundPage';
+import ErrorPage from '@/pages/statusPage/errorPage';
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +31,14 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <FirstSearchingPage />,
+      },
+      {
+        path: '404',
+        element: <NotFoundPage />,
+      },
+      {
+        path: 'error',
+        element: <ErrorPage />,
       },
       {
         path: 'login',
