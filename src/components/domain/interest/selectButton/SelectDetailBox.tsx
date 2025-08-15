@@ -11,6 +11,8 @@ const SelectDetailBox = ({
   subCateData,
   subSelected,
   handleClickName,
+  subSelectedId,
+  setSubSelectedId,
 }: SelectDetailBoxProps) => {
   if (!subCateData || subCateData.length === 0) {
     return null;
