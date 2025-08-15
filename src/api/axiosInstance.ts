@@ -1,14 +1,14 @@
 import axios, { type InternalAxiosRequestConfig, type AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 
-const { VITE_BASE_REQUEST_URL } = import.meta.env;
+const { VITE_BASE_URL } = import.meta.env;
 
 // 토큰을 저장하고 가져오는 함수
 const getAccessToken = (): string | undefined => Cookies.get('accessToken');
 const getRefreshToken = (): string | undefined => Cookies.get('refreshToken');
 
 // 액세스 토큰 설정
-const setAccessToken = (token: string) => {
+export const setAccessToken = (token: string) => {
   Cookies.set('accessToken', token, {
     secure: true,
     sameSite: 'strict',
@@ -17,7 +17,7 @@ const setAccessToken = (token: string) => {
 };
 
 // 리프레시 토큰 설정
-const setRefreshToken = (token: string) => {
+export const setRefreshToken = (token: string) => {
   Cookies.set('refreshToken', token, {
     secure: true,
     sameSite: 'strict',
@@ -26,13 +26,13 @@ const setRefreshToken = (token: string) => {
 };
 
 // 토큰을 제거하는 함수
-const clearTokens = () => {
+export const clearTokens = () => {
   Cookies.remove('accessToken', { path: '/' });
   Cookies.remove('refreshToken', { path: '/' });
 };
 
 const axiosInstance = axios.create({
-  baseURL: VITE_BASE_REQUEST_URL,
+  baseURL: VITE_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
