@@ -1,8 +1,8 @@
 import Button from '@/components/common/Button';
-import Input from '@/components/common/Input';
 import { Modal } from '@/components/common/Modal';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import AuthInput from '../../auth/AuthInput';
 
 type PasswordChangeModalProps = {
   isOpen: boolean;
@@ -111,35 +111,14 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
             <label className='text-md mb-3 block font-medium text-[#2C3E50]'>
               {t('user.current_password')}
             </label>
-            <div className='relative'>
-              <Input
-                type='password'
-                value={passwords.current}
-                onChange={(e) => handleInputChange('current', e.target.value)}
-                placeholder={t('user.enter_current_password')}
-                autoComplete='off'
-                className='w-full !rounded-lg !border !border-gray-200 !bg-white !px-4 !py-3 !pr-12 text-base transition-all duration-200 placeholder:text-gray-300 focus:!border-[#FF6B7A] focus:!ring-1 focus:!ring-[#FF6B7A] focus:!outline-none'
-              />
-              <button
-                type='button'
-                onClick={() => handleInputChange('current', '')}
-                className='absolute top-1/2 right-3 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full border border-[#E2E8F0] text-gray-300 transition-colors'
-              >
-                <svg
-                  className='h-5 w-5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M6 18L18 6M6 6l12 12'
-                  />
-                </svg>
-              </button>
-            </div>
+            <AuthInput
+              type='password'
+              value={passwords.current}
+              onChange={(e) => handleInputChange('current', e.target.value)}
+              placeholder={t('user.enter_current_password')}
+              autoComplete='off'
+              onClear={() => handleInputChange('current', '')}
+            />
             {errors.current && (
               <p className='mt-1 text-xs text-red-500'>{errors.current}</p>
             )}
@@ -150,35 +129,14 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
             <label className='text-md mb-3 block font-medium text-[#2C3E50]'>
               {t('user.new_password')}
             </label>
-            <div className='relative'>
-              <Input
-                type='password'
-                value={passwords.new}
-                onChange={(e) => handleInputChange('new', e.target.value)}
-                placeholder={t('user.confirm_new_password')}
-                autoComplete='new-password'
-                className='w-full !rounded-lg !border !border-gray-200 !bg-white !px-4 !py-3 !pr-12 text-base transition-all duration-200 placeholder:text-gray-300 focus:!border-[#FF6B7A] focus:!ring-1 focus:!ring-[#FF6B7A] focus:!outline-none'
-              />
-              <button
-                type='button'
-                onClick={() => handleInputChange('current', '')}
-                className='absolute top-1/2 right-3 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full border border-[#E2E8F0] text-gray-300 transition-colors'
-              >
-                <svg
-                  className='h-5 w-5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M6 18L18 6M6 6l12 12'
-                  />
-                </svg>
-              </button>
-            </div>
+            <AuthInput
+              type='password'
+              value={passwords.new}
+              onChange={(e) => handleInputChange('new', e.target.value)}
+              placeholder={t('user.enter_new_password')}
+              autoComplete='new-password'
+              onClear={() => handleInputChange('new', '')}
+            />
             <div className='mt-2 space-y-1'>
               <p className='text-xs text-gray-400'>
                 • {t('auth.password_length_8_20')}
@@ -197,35 +155,14 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
             <label className='text-md mb-3 block font-medium text-[#2C3E50]'>
               {t('user.confirm_new_password')}
             </label>
-            <div className='relative'>
-              <Input
-                type='password'
-                value={passwords.confirm}
-                onChange={(e) => handleInputChange('confirm', e.target.value)}
-                placeholder={t('user.enter_new_password')}
-                autoComplete='new-password'
-                className='w-full !rounded-lg !border !border-gray-200 !bg-white !px-4 !py-3 !pr-12 text-base transition-all duration-200 placeholder:text-gray-300 focus:!border-[#FF6B7A] focus:!ring-1 focus:!ring-[#FF6B7A] focus:!outline-none'
-              />
-              <button
-                type='button'
-                onClick={() => handleInputChange('current', '')}
-                className='absolute top-1/2 right-3 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full border border-[#E2E8F0] text-gray-300 transition-colors'
-              >
-                <svg
-                  className='h-5 w-5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M6 18L18 6M6 6l12 12'
-                  />
-                </svg>
-              </button>
-            </div>
+            <AuthInput
+              type='password'
+              value={passwords.confirm}
+              onChange={(e) => handleInputChange('confirm', e.target.value)}
+              placeholder={t('user.confirm_new_password')}
+              autoComplete='new-password'
+              onClear={() => handleInputChange('confirm', '')}
+            />
             {errors.confirm && (
               <p className='text-error-red mt-1 text-xs'>{errors.confirm}</p>
             )}

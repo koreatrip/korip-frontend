@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 type SecuritySectionProps = {
   onPasswordChange: () => void;
-  onAccountDelete: () => void;
+  onAccountDelete?: () => void;
 };
 
 const SecuritySection: React.FC<SecuritySectionProps> = ({
@@ -15,48 +15,50 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({
   return (
     <section className='mb-6 rounded-md bg-gray-50 p-6 shadow-md'>
       <h3 className='text-main-text-navy mb-4 text-lg font-bold'>
-        {t('user.security_settings')}
+        보안 설정
       </h3>
 
       <div className='space-y-4'>
         <div className='flex items-center justify-between'>
           <span className='text-main-text-navy font-medium'>
-            {t('auth.password')}
+            비밀번호
           </span>
           <span className='text-gray-400'>*********</span>
         </div>
         <hr className='border-outline-gray -mt-3 border-t' />
 
+        {/* 이메일 인증 */}
         <div className='flex items-center justify-between'>
           <span className='text-main-text-navy font-medium'>
-            {t('auth.email_verification')}
+            이메일 인증
           </span>
           <span
             className='flex w-auto items-center justify-center rounded-lg px-3 py-1 font-light text-white'
             style={{ backgroundColor: '#4A9B8E' }}
           >
-            {t('common.complete')}
+            완료
           </span>
         </div>
         <hr className='border-outline-gray -mt-3 border-t' />
 
+        {/* 버튼 영역 */}
         <div className='flex justify-end gap-2 pt-4'>
           <Button
             variant='cancel'
-            className='h-10 w-auto' // 2. flex-1 제거 -> 버튼이 내용만큼만 너비를 갖도록
+            className='h-[52px] w-[164px]'
             onClick={onPasswordChange}
           >
-            {t('user.change_password')}
+            비밀번호 변경
           </Button>
-
-          {/* 3. '계정 탈퇴'는 위험한 작업이므로 시각적으로 구분되는 variant 추천 */}
-          <Button
-            variant='cancel' // 예: 'destructive' variant (빨간색 텍스트 등)
-            className='h-10 w-auto' // flex-1 제거
-            onClick={onAccountDelete}
-          >
-            {t('user.delete_account')}
-          </Button>
+          {onAccountDelete && (
+            <Button
+              variant='cancel'
+              className='h-[52px] w-[164px]'
+              onClick={onAccountDelete}
+            >
+              계정탈퇴
+            </Button>
+          )}
         </div>
       </div>
     </section>
