@@ -1,31 +1,38 @@
-import axios, {
-  type InternalAxiosRequestConfig,
-  type AxiosError,
-} from 'axios';
+import axios, { type InternalAxiosRequestConfig, type AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 
-// 토큰을 저장하고 가져오는 함수 
+const { VITE_BASE_REQUEST_URL } = import.meta.env;
+
+// 토큰을 저장하고 가져오는 함수
 const getAccessToken = (): string | undefined => Cookies.get('accessToken');
 const getRefreshToken = (): string | undefined => Cookies.get('refreshToken');
 
-// 액세스 토큰 설정 
+// 액세스 토큰 설정
 const setAccessToken = (token: string) => {
-  Cookies.set('accessToken', token, { secure: true, sameSite: 'strict', path: '/' });
+  Cookies.set('accessToken', token, {
+    secure: true,
+    sameSite: 'strict',
+    path: '/',
+  });
 };
 
-// 리프레시 토큰 설정 
+// 리프레시 토큰 설정
 const setRefreshToken = (token: string) => {
-  Cookies.set('refreshToken', token, { secure: true, sameSite: 'strict', path: '/' });
+  Cookies.set('refreshToken', token, {
+    secure: true,
+    sameSite: 'strict',
+    path: '/',
+  });
 };
 
+// 토큰을 제거하는 함수
 const clearTokens = () => {
   Cookies.remove('accessToken', { path: '/' });
   Cookies.remove('refreshToken', { path: '/' });
 };
 
-
 const axiosInstance = axios.create({
-  baseURL: '/api', 
+  baseURL: VITE_BASE_REQUEST_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -44,12 +51,14 @@ axiosInstance.interceptors.request.use(
 );
 
 // 토큰 갱신 및 재시도 로직
-
 let isRefreshing = false;
-let failedQueue: Array<{ resolve: (value: any) => void; reject: (reason?: any) => void }> = [];
+let failedQueue: Array<{
+  resolve: (value: any) => void;
+  reject: (reason?: any) => void;
+}> = [];
 
 const processQueue = (error: Error | null, token: string | null = null) => {
-  failedQueue.forEach(prom => {
+  failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
     } else {
@@ -63,7 +72,9 @@ const processQueue = (error: Error | null, token: string | null = null) => {
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+    const originalRequest = error.config as InternalAxiosRequestConfig & {
+      _retry?: boolean;
+    };
 
     // 401 에러이고, 재시도한 요청이 아닐 때
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -72,13 +83,13 @@ axiosInstance.interceptors.response.use(
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
-          .then(token => {
+          .then((token) => {
             if (originalRequest.headers) {
               originalRequest.headers.Authorization = `Bearer ${token}`;
             }
             return axiosInstance(originalRequest); // 갱신된 토큰으로 원래 요청을 다시 보냅니다.
           })
-          .catch(err => Promise.reject(err));
+          .catch((err) => Promise.reject(err));
       }
 
       originalRequest._retry = true;
@@ -86,7 +97,7 @@ axiosInstance.interceptors.response.use(
 
       const refreshToken = getRefreshToken();
       if (!refreshToken) {
-        console.error("리프레시 토큰이 없습니다. 로그아웃 처리합니다.");
+        console.error('리프레시 토큰이 없습니다. 로그아웃 처리합니다.');
         clearTokens();
         window.location.href = '/login'; // 로그인 페이지로 리디렉션
         return Promise.reject(error);
@@ -94,7 +105,9 @@ axiosInstance.interceptors.response.use(
 
       try {
         // 토큰 갱신 API 호출 (이 API는 인증 인터셉터를 타지 않도록 기본 axios를 사용할 수 있습니다)
-        const { data } = await axios.post('/api/auth/refresh', { refreshToken });
+        const { data } = await axios.post('/api/auth/refresh', {
+          refreshToken,
+        });
         const newAccessToken = data.accessToken;
         setAccessToken(newAccessToken);
 
@@ -104,7 +117,7 @@ axiosInstance.interceptors.response.use(
         processQueue(null, newAccessToken);
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        console.error("토큰 갱신에 실패했습니다.", refreshError);
+        console.error('토큰 갱신에 실패했습니다.', refreshError);
         clearTokens();
         if (refreshError instanceof Error) {
           processQueue(refreshError, null);
@@ -123,4 +136,3 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance;
-
