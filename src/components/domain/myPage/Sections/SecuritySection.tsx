@@ -27,6 +27,7 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({
         </div>
         <hr className='border-outline-gray -mt-3 border-t' />
 
+        {/* 이메일 인증 */}
         <div className='flex items-center justify-between'>
           <span className='text-main-text-navy font-medium'>
             이메일 인증
@@ -40,6 +41,7 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({
         </div>
         <hr className='border-outline-gray -mt-3 border-t' />
 
+        {/* 버튼 영역 */}
         <div className='flex justify-end gap-2 pt-4'>
           <Button
             variant='cancel'
