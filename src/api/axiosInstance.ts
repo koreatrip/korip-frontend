@@ -1,4 +1,4 @@
-import axios, { type InternalAxiosRequestConfig, type AxiosError } from 'axios';
+import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
 
 const { VITE_BASE_URL } = import.meta.env;

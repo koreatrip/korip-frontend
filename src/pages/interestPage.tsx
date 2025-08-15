@@ -1,17 +1,16 @@
-import { useEffect, useState } from 'react';
-import { useToast } from '@/hooks/useToast';
+import { useAllCategoriesQuery } from '@/api/category/categoryHooks';
+import type { Category, Subcategory } from '@/api/category/categoryType';
 import Button from '@/components/common/Button';
 import Container from '@/components/common/Container';
 import Input from '@/components/common/Input';
-import SelectButtonGroup from '@/components/domain/interest/selectButton/SelectButtonGroup';
-import WelcomeCard from '@/components/domain/login/WelcomeCard';
-import SelectedInterests from '@/components/domain/interest/selectButton/SelectedInterests';
 import IdolRequestModal from '@/components/domain/interest/IdolRequestModal';
-import SelectDetailBox from '@/components/domain/interest/selectButton/SelectDetailBox';
-import { useAllCategoriesQuery } from '@/api/category/categoryHooks';
-import type { Category, Subcategory } from '@/api/category/categoryType';
-import ToastMessage from '@/components/common/ToastMessage';
 import SelectButton from '@/components/domain/interest/selectButton/SelectButton';
+import SelectButtonGroup from '@/components/domain/interest/selectButton/SelectButtonGroup';
+import SelectDetailBox from '@/components/domain/interest/selectButton/SelectDetailBox';
+import SelectedInterests from '@/components/domain/interest/selectButton/SelectedInterests';
+import WelcomeCard from '@/components/domain/login/WelcomeCard';
+import { useToast } from '@/hooks/useToast';
+import { useEffect, useState } from 'react';
 
 const InterestPage = () => {
   const { data, isLoading, isError, error } = useAllCategoriesQuery('ko');
