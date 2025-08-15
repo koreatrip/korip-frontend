@@ -109,6 +109,7 @@
     "phone_number_placeholder": "전화번호를 입력하세요",
     "password_length_8_20": "8자 이상 20자 이하",
     "signup_date": "가입일",
+    "email_send": "이메일 전송",
     "email_verification": "이메일 인증",
     "password_length_requirement": "길이는 8~20자 사이여야 합니다."
   },

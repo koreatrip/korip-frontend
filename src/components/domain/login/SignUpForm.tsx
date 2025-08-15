@@ -149,41 +149,52 @@ const SignUpForm = () => {
         className='mt-8 flex w-full flex-col gap-4'
       >
         <div className=''>
-          <AuthInput
-            {...register('email')}
-            type='email'
-            label={t('auth.email')}
-            placeholder='k@example.com'
-            id='email'
-            onClear={(name, value) =>
-              handleAuthInputClear(name as keyof SignUpFormInputs, value)
-            } // onClear 연결
-            autoComplete='email' // 자동 완성 속성 추가
-          />
+          <div className='flex items-center justify-between gap-2'>
+            <AuthInput
+              {...register('email')}
+              type='email'
+              label={t('auth.email')}
+              placeholder='k@example.com'
+              id='email'
+              onClear={(name, value) =>
+                handleAuthInputClear(name as keyof SignUpFormInputs, value)
+              }
+              autoComplete='email'
+            />
+            <Button type='button' className='mt-8 flex h-12 flex-2/5'>
+              {t('auth.email_verification')}
+            </Button>
+          </div>
+
           {errors.email && (
             <p className='text-error-red my-2 text-sm'>
               {getErrorMessage(errors.email.message!)}
             </p>
           )}
         </div>
-
         <div className=''>
-          <AuthInput
-            {...register('verificationCode')}
-            type='text' // Zod는 string을 받지만, input type은 number로 설정 가능 (브라우저 유효성 도움)
-            label={t('auth.verification_code')}
-            placeholder={t('auth.enter_verification_code')}
-            id='verificationCode'
-            onClear={(name, value) =>
-              handleAuthInputClear(name as keyof SignUpFormInputs, value)
-            }
-          />
-          {errors.verificationCode && (
-            <p className='text-error-red my-2 text-sm'>
-              {getErrorMessage(errors.verificationCode.message!)}
-            </p>
-          )}
+          <div className='flex items-center justify-between gap-2'>
+            <AuthInput
+              {...register('verificationCode')}
+              type='text' // Zod는 string을 받지만, input type은 number로 설정 가능 (브라우저 유효성 도움)
+              label={t('auth.verification_code')}
+              placeholder={t('auth.enter_verification_code')}
+              id='verificationCode'
+              onClear={(name, value) =>
+                handleAuthInputClear(name as keyof SignUpFormInputs, value)
+              }
+            />
+            <Button type='button' className='mt-8 flex h-12 flex-2/5'>
+              {t('auth.email_send')}
+            </Button>
+            {errors.verificationCode && (
+              <p className='text-error-red my-2 text-sm'>
+                {getErrorMessage(errors.verificationCode.message!)}
+              </p>
+            )}
+          </div>
         </div>
+
         <div className=''>
           {/* 이름 필드 */}
           <AuthInput
