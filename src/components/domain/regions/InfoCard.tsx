@@ -1,30 +1,57 @@
 import { star } from '@/assets/assets';
+import { useModalStore } from '@/stores/useModalStore';
 
 type TCard = {
-  variant: 'interactive' | 'selectable';
-  title: string;
-  description: string;
-  details: string | null;
-  imageUrl: string | null;
-  isSelected: boolean;
-  onClick: () => void;
-  onAddSchedule: () => void;
-  onViewDetails: () => void;
-  onFavorite: () => void;
+  variant?: 'interactive' | 'selectable';
+  title?: string;
+  description?: string;
+  details?: string | null;
+  imageUrl?: string | null;
+  isSelected?: boolean;
+  onClick?: () => void;
+  onAddSchedule?: () => void;
+  onViewDetails?: () => void;
+  onFavorite?: () => void;
 };
 
 const InfoCard = ({
-  variant = 'interactive', // 'interactive' | 'selectable'
-  title,
-  description,
-  details,
-  imageUrl,
-  isSelected,
-  onClick,
-  onAddSchedule = () => {},
+  variant = 'interactive',
+  title = '제목 없음',
+  description = '설명 없음',
+  details = null,
+  imageUrl = null,
+  isSelected = false,
+  onClick = () => {},
+  onAddSchedule,
   onViewDetails = () => {},
   onFavorite = () => {},
 }: TCard) => {
+  const { actions } = useModalStore();
+
+  // 일정 추가 버튼 클릭 핸들러
+  const handleAddSchedule = (e?: React.MouseEvent) => {
+    // 이벤트 버블링 방지 (selectable 카드의 onClick과 충돌 방지)
+    e?.stopPropagation();
+
+    if (onAddSchedule) {
+      onAddSchedule();
+    } else {
+      // 기본 동작: 로그인 프롬프트 모달 열기
+      console.log('Opening login prompt modal'); // 디버깅용
+      actions.openLoginPrompt();
+    }
+  };
+
+  const handleViewDetails = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    onViewDetails();
+  };
+
+  const handleFavorite = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    onFavorite();
+  };
+
   /**
    * 카드의 기본이 되는 스타일
    */
@@ -35,8 +62,8 @@ const InfoCard = ({
    * 카드 종류(variant)에 따라 달라지는 스타일
    */
   const variantClasses = {
-    interactive: 'hover:shadow-xl', // 호버 시 그림자 효과 강화
-    selectable: `cursor-pointer  ${isSelected ? 'border-sub-green border' : 'border-transparent'}`, // 선택 시 틸(teal) 색상 테두리
+    interactive: 'hover:shadow-xl',
+    selectable: `cursor-pointer ${isSelected ? 'border-sub-green border' : 'border-transparent'}`,
   };
 
   return (
@@ -53,7 +80,7 @@ const InfoCard = ({
       >
         {/* 즐겨찾기(별) 버튼 */}
         <button
-          onClick={onFavorite}
+          onClick={handleFavorite}
           className='absolute top-3 right-3 z-10 cursor-pointer'
         >
           <img src={star} alt='star' />
@@ -78,13 +105,13 @@ const InfoCard = ({
       {variant === 'interactive' && (
         <div className='bg-main-text-navy/50 absolute inset-0 flex items-center justify-center space-x-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
           <button
-            onClick={onAddSchedule}
+            onClick={handleAddSchedule}
             className='bg-main-text-navy hover:bg-main-text-navy/70 cursor-pointer rounded-full px-5 py-2 font-medium text-white'
           >
             일정 추가
           </button>
           <button
-            onClick={onViewDetails}
+            onClick={handleViewDetails}
             className='text-main-text-navy bg-bg-white cursor-pointer rounded-full px-5 py-2 font-medium hover:bg-gray-200'
           >
             상세보기

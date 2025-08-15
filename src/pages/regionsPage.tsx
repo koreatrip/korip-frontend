@@ -11,6 +11,8 @@ import { useToast } from '@/hooks/useToast';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Trans } from 'react-i18next';
+import { useModalStore } from '@/stores/useModalStore';
+import LoginPromptModal from '@/components/domain/auth/LoginPromptModal';
 
 const RegionsPage = () => {
   // regions API 호출 주석 처리 (MSW에서 지원 안 함)
@@ -29,6 +31,8 @@ const RegionsPage = () => {
   const searchAndSetLocation = useLocationStore(
     (state) => state.searchAndSetLocation
   );
+  const { stack, data, actions } = useModalStore();
+
   const { showToast } = useToast();
   const { t } = useTranslation();
 
@@ -89,15 +93,15 @@ const RegionsPage = () => {
       <Container>
         <Carousel />
         <div className='mt-[60px] flex flex-col'>
-          <h1 className='mb-4 text-4xl font-semibold'>
+          <h1 className='tablet-bp:text-4xl mb-4 text-2xl font-semibold'>
             {/* 임시로 하드코딩 */}
             서울
             {/* {regionDetail?.regions[0]?.name} */}
           </h1>
-          <h2 className='mb-3.5 text-[32px] font-semibold'>
+          <h2 className='tablet-bp:text-[32px] mb-3.5 text-xl font-semibold'>
             전통과 현대가 공존하는 도시
           </h2>
-          <p className='text-sub-text-gray'>
+          <p className='text-sub-text-gray tablet-bp:text-base text-sm'>
             서울은 대한민국의 수도이자, 문화·경제·정치의 중심지입니다.
             <br /> 고궁과 한옥마을, 현대적인 쇼핑몰과 마천루, 트렌디한 카페
             골목과 전통시장까지 다양한 매력을 하루 안에 모두 경험할 수 있는
@@ -105,7 +109,7 @@ const RegionsPage = () => {
           </p>
         </div>
         <div className='mt-[60px] flex flex-col'>
-          <h1 className='mb-4 text-[32px] font-semibold'>
+          <h1 className='tablet-bp:text-[32px] mb-4 text-xl font-semibold'>
             {getLocationDisplayName()}
           </h1>
           {/* 검색된 위치 정보 표시 */}
@@ -121,10 +125,10 @@ const RegionsPage = () => {
           </div>
         </div>
         <div className='mt-16'>
-          <h2 className='text-[32px] font-semibold'>
+          <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
             {t('places.popular_area_info')}
           </h2>
-          <ul className='mt-7 grid grid-cols-4 gap-4'>
+          <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-4 mt-7 grid grid-cols-1 gap-4'>
             <li>
               <InfoCard variant='interactive' />
             </li>
@@ -159,7 +163,7 @@ const RegionsPage = () => {
             </button>
           </div>
         </div>
-        <h1 className='mt-14 text-4xl font-semibold'>
+        <h1 className='tablet-bp:text-4xl mt-14 text-2xl font-semibold'>
           <p>
             {t('places.currently_viewing', {
               location: getCurrentRegionName(),
@@ -167,10 +171,10 @@ const RegionsPage = () => {
           </p>
         </h1>
         <div className='mt-16'>
-          <h2 className='text-[32px] font-semibold'>
+          <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
             {t('places.main_attractions')}
           </h2>
-          <ul className='mt-7 grid grid-cols-4 gap-4'>
+          <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-4 mt-7 grid grid-cols-1 gap-4'>
             <li>
               <InfoCard variant='interactive' />
             </li>
@@ -206,10 +210,10 @@ const RegionsPage = () => {
           </div>
         </div>
         <div className='mt-7'>
-          <h2 className='text-[32px] font-semibold'>
+          <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
             {t('places.recommended_spots_for_user')}
           </h2>
-          <p className='text-sub-text-gray'>
+          <p className='text-sub-text-gray tablet-bp:text-base text-sm'>
             <Trans
               i18nKey='places.selected_based_on_interests'
               values={{ interest: 'k-pop,맛집/카페' }}
@@ -218,7 +222,7 @@ const RegionsPage = () => {
               }}
             />
           </p>
-          <ul className='mt-7 grid grid-cols-3 gap-4'>
+          <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-3 mt-7 grid grid-cols-1 gap-4'>
             <li>
               <InfoCard variant='selectable' />
             </li>
@@ -241,11 +245,11 @@ const RegionsPage = () => {
           </ul>
         </div>
         <div className='my-16'>
-          <h2 className='text-[32px] font-semibold'>
+          <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
             {' '}
             {t('places.recommended_accommodations')}
           </h2>
-          <ul className='mt-7 grid grid-cols-4 gap-4'>
+          <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-4 mt-7 grid grid-cols-1 gap-4'>
             <li>
               <InfoCard variant='selectable' />
             </li>
@@ -282,6 +286,10 @@ const RegionsPage = () => {
           </div>
         </div>
       </Container>
+      <LoginPromptModal
+        isOpen={stack.isLoginPromptOpen}
+        onClose={actions.closeLoginPrompt}
+      />
     </div>
   );
 };
