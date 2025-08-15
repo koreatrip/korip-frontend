@@ -62,10 +62,10 @@ export const router = createBrowserRouter([
         path: 'tips',
         element: <TravelTipsPage />,
       },
-      // {
-      //   path: 'first-region-search',
-      //   element: <FirstSearchingPage />,
-      // },
+      {
+        path: 'first-region-search',
+        element: <FirstSearchingPage />,
+      },
       {
         path: 'language',
         element: <LanguagePage />,

@@ -3,9 +3,10 @@ import Button from '@/components/common/Button';
 import AuthInput from '../auth/AuthInput'; // AuthInput 컴포넌트 경로 확인
 import { useForm } from 'react-hook-form'; // useForm 임포트
 import { z } from 'zod';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { useLoginMutation } from '@/api/auth/loginHooks';
 
 const loginSchema = z.object({
   email: z.string().email('올바른 이메일 형식이 아닙니다.'),
@@ -15,6 +16,18 @@ const loginSchema = z.object({
 type LogInFormInputs = z.infer<typeof loginSchema>; // Zod 스키마로부터 타입 추론
 
 const LogInForm = () => {
+  const navigate = useNavigate(); // useNavigate 훅을 사용하여 페이지 이동
+  const { mutate, isPending } = useLoginMutation({
+    onSuccess: (response) => {
+      console.log('로그인 성공:', response);
+      navigate('/first-region-search');
+    },
+    onError: (error) => {
+      console.error('로그인 실패:', error);
+      // 로그인 실패 시 에러 메시지 설정
+    },
+  });
+
   const { t } = useTranslation();
   const [loginError, setLoginError] = useState<string>(''); // 나중에 api 연결했을때 이메일또는 비밀번호가 일치하지않다라는 메세지 받을때 사용하거나 아니면 다른걸로 대체해서 경고 텍스트 보여주세용
   const {
@@ -28,18 +41,10 @@ const LogInForm = () => {
     mode: 'onBlur',
   });
 
-  const onSubmit = async (data: LogInFormInputs) => {
+  const onSubmit = (data: LogInFormInputs) => {
     console.log('로그인 폼 데이터:', data);
-    // 실제 로그인 API 호출 로직
-    // try {
-    //   await loginApiCall(data);
-    //   // 로그인 성공 처리
-    // } catch (error) {
-    //   // 로그인 실패 처리
-    // if (error.status === 401) {
-    //   setLoginError(t('auth.login_failed')); // 이메일 또는 비밀번호 불일치
-    // }
-    // }
+    // useLoginMutation에서 반환된 mutate 함수를 호출하고, 폼 데이터를 인자로 전달합니다.
+    mutate(data);
   };
 
   // AuthInput의 onClear prop에 연결할 함수 (react-hook-form의 setValue를 사용)
@@ -71,7 +76,7 @@ const LogInForm = () => {
   };
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit)} // react-hook-form의 handleSubmit 사용
       className='flex w-full flex-col gap-4'
     >
       <div>
@@ -140,7 +145,7 @@ const LogInForm = () => {
         className='mt-5'
         disabled={!isValid || isSubmitting} // 유효성 검사 통과 및 제출 중일 때 비활성화
       >
-        {t('auth.login')}
+        {isPending ? '로그인 중...' : t('auth.login')}
       </Button>
     </form>
   );
