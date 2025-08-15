@@ -143,6 +143,7 @@ const PlannerPage = () => {
             </div>
             <div className='flex w-96 flex-shrink-0 flex-col'>
               <PlannerMap />
+              {/* <ItineraryMap/> */}
               <div className='mt-4'>
                 <Button variant='active'>{t('common.save')}</Button>
               </div>
