@@ -1,3 +1,4 @@
+import type { TravelPlan } from '@/api/user/userType';
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
 import SearchBar from '@/components/common/searchBar/SearchBar';
 import PlannerAddButton from '@/components/domain/planner/PlannerAddButton';
@@ -26,69 +27,56 @@ const MyPlannerPage = () => {
     SortOption.DATE_DESC
   );
 
-  // 플래너 더미 데이터 (createdAt 추가)
-  const [planners, setPlanners] = useState<TPlannerData[]>([
-    {
-      id: 1,
-      title: '길동이와 동에번쩍 서에번쩍',
-      isNew: true,
-      description: '친구들과 떠나는 국내여행',
-      dateRange: '25.05.13 ~ 25.06.01',
-      createdAt: '2025-05-10',
-    },
-    {
-      id: 2,
-      title: '가족과 함께한 제주도 여행',
-      description: '힐링 가득한 자연 속으로',
-      dateRange: '25.03.01 ~ 25.03.05',
-      createdAt: '2025-02-20',
-    },
-    {
-      id: 3,
-      title: '서울 미식 투어',
-      description: '맛집만 골라가는 하루 코스',
-      dateRange: '25.04.10 ~ 25.04.11',
-      createdAt: '2025-04-05',
-    },
-    {
-      id: 4,
-      title: '부산에서의 낭만',
-      description: '해운대, 광안리, 감천문화마을',
-      dateRange: '25.02.18 ~ 25.02.22',
-      createdAt: '2025-02-15',
-    },
-    {
-      id: 5,
-      title: '동해 드라이브 여행',
-      description: '차박과 함께하는 자유로운 여행',
-      dateRange: '25.01.03 ~ 25.01.07',
-      createdAt: '2025-01-01',
-    },
-    {
-      id: 6,
-      title: '길동이와 동에번쩍 서에번쩍',
-      isNew: true,
-      description: '친구들과 떠나는 국내여행',
-      dateRange: '25.05.13 ~ 25.06.01',
-      createdAt: '2025-05-10',
-    },
-    {
-      id: 7,
-      title: '길동이와 동에번쩍 서에번쩍',
-      isNew: true,
-      description: '친구들과 떠나는 국내여행',
-      dateRange: '25.05.13 ~ 25.06.01',
-      createdAt: '2025-05-10',
-    },
-    {
-      id: 8,
-      title: '길동이와 동에번쩍 서에번쩍',
-      isNew: true,
-      description: '친구들과 떠나는 국내여행',
-      dateRange: '25.05.13 ~ 25.06.01',
-      createdAt: '2025-05-10',
-    },
-  ]);
+  // API에서 사용자 정보와 여행 일정 조회 - 임시로 비활성화
+  // const { data: userProfileData } = useUserProfile();
+  // const userId = userProfileData?.data?.id;
+  // const { data: travelPlansData, isLoading, error } = useTravelPlans(userId || 0);
+
+  // 임시 목 데이터
+  const mockTravelPlansData = {
+    data: [
+      {
+        id: 1,
+        title: '제주도 여행',
+        description: '가족과 함께하는 제주도 3박 4일 여행',
+        dateRange: '2024-03-15 ~ 2024-03-18',
+        startDate: '2024-03-15',
+        endDate: '2024-03-18',
+        isNew: true,
+        createdAt: '2024-02-20',
+        updatedAt: '2024-02-20',
+      },
+      {
+        id: 2,
+        title: '부산 여행',
+        description: '친구들과 함께하는 부산 2박 3일 여행',
+        dateRange: '2024-04-10 ~ 2024-04-12',
+        startDate: '2024-04-10',
+        endDate: '2024-04-12',
+        isNew: false,
+        createdAt: '2024-02-15',
+        updatedAt: '2024-02-15',
+      },
+    ],
+  };
+
+  const travelPlansData = mockTravelPlansData;
+  const isLoading = false;
+  const error = null;
+
+  // API 데이터를 로컬 형식으로 변환
+  const planners: TPlannerData[] = useMemo(() => {
+    if (!travelPlansData?.data) return [];
+
+    return travelPlansData.data.map((plan: TravelPlan) => ({
+      id: plan.id,
+      title: plan.title,
+      description: plan.description,
+      dateRange: plan.dateRange,
+      isNew: plan.isNew,
+      createdAt: plan.createdAt,
+    }));
+  }, [travelPlansData]);
 
   // 정렬 옵션들 - Places 컴포넌트와 동일
   const sortOptions: DropdownItem[] = [
@@ -163,7 +151,7 @@ const MyPlannerPage = () => {
     console.log(`${title} 삭제`);
   };
 
-  // 플래너 추가 이벤트 핸들러
+  // 플래너 추가 이벤트 핸들러 (API 연동 필요)
   const handleAddPlannerSubmit = (newPlanner: TPlannerData) => {
     setPlanners((prev) => [newPlanner, ...prev]);
   };

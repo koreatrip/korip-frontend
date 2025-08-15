@@ -1,7 +1,7 @@
+import Container from '@/components/common/Container';
 import React from 'react';
 import MobileSlideMenu from './MobileSlideMenu';
 import MyPageMenu from './MyPageMenu';
-import Container from '@/components/common/Container';
 
 const MyPageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
