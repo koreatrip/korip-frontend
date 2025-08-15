@@ -50,7 +50,15 @@
     "temp_password_sent": "我们已将临时密码发送至您填写的电子邮箱。",
     "change_after_login": "请登录后将其更改为新密码。",
     "email_not_received": "没有收到邮件？",
-    "check_spam_or_retry": "请检查垃圾邮件文件夹，或几分钟后再试一次。"
+    "check_spam_or_retry": "请检查垃圾邮件文件夹，或几分钟后再试一次。",
+    "title": "无法找到页面",
+    "description": "无法找到您请求的页面。请检查您输入的地址是否正确，或返回首页继续浏览。",
+    "button": "返回首页",
+    "finding_beautiful_places": "正在寻找韩国的美丽旅行目的地",
+    "discovering_hidden_gems": "正在发现隐藏的景点",
+    "error_generic_title": "发生错误",
+    "error_generic_description": "处理您的请求时发生错误。请稍后再试。",
+    "refresh_button": "刷新"
   },
 
   "auth": {
