@@ -76,17 +76,7 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: (
-              <ProfileCard
-                onSave={(data) => {
-                  console.log('프로필 저장:', data);
-                  // 나중에 API 호출 로직 추가
-                }}
-                onCancel={() => {
-                  console.log('프로필 수정 취소');
-                }}
-              />
-            ),
+            element: <ProfileCard />,
           },
           { path: 'plan', element: <MyPlannerPage /> },
           { path: 'places', element: <FavoritePlacesPage /> },

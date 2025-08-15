@@ -1,13 +1,25 @@
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
+// import { useUserProfile } from '@/api/user/userHooks';
 
 const MyPageMenu = () => {
   const { t } = useTranslation();
+  // const { data: userProfileData, isLoading } = useUserProfile();
+  
+  // 임시 목 데이터
+  const userName = '김태율';
+  const isLoading = false;
 
   return (
     <nav className='hidden rounded-xl bg-white p-10 shadow-md md:ml-[-40px] md:block'>
       {/* 사용자 이름 */}
-      <div className='mb-6 text-4xl font-normal text-slate-800'>김태율</div>
+      <div className='mb-6 text-4xl font-normal text-slate-800'>
+        {isLoading ? (
+          <div className='h-10 w-20 animate-pulse rounded bg-gray-200'></div>
+        ) : (
+          userName
+        )}
+      </div>
 
       {/* 메뉴 목록 */}
       <ul className='m-4 flex flex-col gap-4'>

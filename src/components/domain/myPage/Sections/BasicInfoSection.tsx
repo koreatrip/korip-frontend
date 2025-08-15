@@ -1,5 +1,19 @@
 import Button from '@/components/common/Button';
-import type { UserProfile } from '@/types/user';
+// import type { UserProfile } from '@/types/user';
+
+type UserProfile = {
+  name: string;
+  email: string;
+  phone: string;
+  interests: string[];
+  profileImage?: string;
+  joinDate: string;
+  stats: {
+    travelPlans: number;
+    favorites: number;
+    visitedPlaces: number;
+  };
+};
 import React from 'react';
 import EditableField from '../Fields/EditableField';
 import InterestsField from '../Fields/InterestsField';
@@ -41,7 +55,7 @@ const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({
           className='w-auto px-3 py-1'
           onClick={onToggleEdit}
         >
-          {isEditing ? t('common.cancel') : t('common.delete')}
+          {isEditing ? t('common.cancel') : t('common.edit')}
         </Button>
       </div>
 
