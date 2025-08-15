@@ -21,9 +21,16 @@ const LogInForm = () => {
   const { mutate, isPending } = useLoginMutation({
     onSuccess: (response) => {
       console.log('로그인 성공:', response);
-      navigate('/first-region-search');
+
       Cookies.set('access_token', response.access_token);
       Cookies.set('refresh_token', response.refresh_token);
+
+      if (response.first_login) {
+        // 첫 로그인인 경우
+        navigate('/language');
+      } else {
+        navigate('/first-region-search');
+      }
     },
     onError: (error) => {
       console.error('로그인 실패:', error);
