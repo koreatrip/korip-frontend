@@ -115,11 +115,11 @@ const InterestPage = () => {
 
         {/* K-POP 아이돌/그룹 선택 */}
         {slectedId === 6 && (
-          <div className='border-main-pink bg-bg-section my-6 rounded-3xl border p-6'>
+          <div className='border-main-pink bg-main-pink/2 my-6 rounded-3xl border p-6'>
             <p className='mb-4'>관심있는 K-POP 아이돌/그룹을 선택하세요</p>
             <Input
               type='text'
-              placeholder='아이돌 이름 검색'
+              placeholder='아이돌 그룹 검색 (예: BTS, BLACKPINK)'
               value={idolInput}
               onChange={(e) => handleSerchIdol(e.target.value)}
             />
