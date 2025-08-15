@@ -52,7 +52,9 @@ export const Header = ({ children }: { children?: React.ReactNode }) => {
   return (
     <div className='flex items-center px-9 pt-8 pb-5'>
       <div className='border-outline-gray flex w-full items-center justify-between border-b pb-4'>
-        <h3 className='text-2xl font-semibold text-gray-800'>{children}</h3>
+        <h3 className='text-main-text-navy text-2xl font-semibold'>
+          {children}
+        </h3>
         <button onClick={onClose} className='cursor-pointer'>
           <XMarkIcon className='text-main-text-navy h-8 w-8 stroke-2' />
         </button>

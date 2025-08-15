@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'; // FieldErrors 타입 임포트
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod'; // Zod 스키마 정의를 위해 임포트
 import PhoneInput from '../auth/PhoneInput';
+import AgreementForm from '../auth/AgreementForm';
 
 // 상수로 조건 정의
 const PASSWORD_MIN_LENGTH = 8;
@@ -282,6 +283,7 @@ const SignUpForm = () => {
             </p>
           )}
         </div>
+        <AgreementForm />
 
         {/* 폼 제출 버튼 */}
         <Button
