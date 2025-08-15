@@ -2,12 +2,13 @@ import Button from '@/components/common/Button';
 import AuthInput from '@/components/domain/auth/AuthInput';
 import { useToast } from '@/hooks/useToast';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { useForm } from 'react-hook-form'; // FieldErrors 타입 임포트
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod'; // Zod 스키마 정의를 위해 임포트
 import PhoneInput from '../auth/PhoneInput';
 import AgreementForm from '../auth/AgreementForm';
+import { useEmailSendMutation } from '@/api/auth/signup/emailHooks';
 
 // 상수로 조건 정의
 const PASSWORD_MIN_LENGTH = 8;
@@ -40,6 +41,23 @@ const signUpSchema = z
 type SignUpFormInputs = z.infer<typeof signUpSchema>;
 
 const SignUpForm = () => {
+  const { sendMutate, isPending } = useEmailSendMutation({
+    onSuccess: (response) => {
+      console.log('메일 보내기 성공:', response);
+    },
+    onError: (error) => {
+      console.error('메일 보내기 실패:', error);
+    },
+  });
+  const { checkMutate, isPending } = useEmailCheckMutation({
+    onSuccess: (response) => {
+      console.log('메일 인증 성공:', response);
+    },
+    onError: (error) => {
+      console.error('메일 인증 실패:', error);
+    },
+  });
+
   // const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error' | 'info'>(
@@ -142,6 +160,49 @@ const SignUpForm = () => {
     });
   };
 
+  const handleEmailSend = async () => {
+    const email = watch('email');
+    if (!email) {
+      setToastMessage('이메일을 입력해주세요.');
+      setToastType('error');
+      showToast(toastMessage, toastType);
+      return;
+    }
+
+    try {
+      await sendMutate({ email });
+      setToastMessage('인증 메일이 발송되었습니다.');
+      setToastType('success');
+      showToast(toastMessage, toastType);
+    } catch (error) {
+      setToastMessage('인증 메일 발송에 실패했습니다.');
+      setToastType('error');
+      showToast(toastMessage, toastType);
+    }
+  };
+
+  const handleEmailCheck = async () => {
+    const email = watch('email');
+    const verificationCode = watch('verificationCode');
+    if (!email || !verificationCode) {
+      setToastMessage('이메일과 인증 코드를 입력해주세요.');
+      setToastType('error');
+      showToast(toastMessage, toastType);
+      return;
+    }
+
+    try {
+      await checkMutate({ email, verificationCode });
+      setToastMessage('인증 코드가 확인되었습니다.');
+      setToastType('success');
+      showToast(toastMessage, toastType);
+    } catch (error) {
+      setToastMessage('인증 코드 확인에 실패했습니다.');
+      setToastType('error');
+      showToast(toastMessage, toastType);
+    }
+  };
+
   return (
     <div className='flex w-full flex-col gap-4'>
       <form
@@ -161,7 +222,12 @@ const SignUpForm = () => {
               }
               autoComplete='email'
             />
-            <Button type='button' className='mt-8 flex h-12 flex-2/5'>
+            <Button
+              type='button'
+              className='mt-8 flex h-12 flex-2/5'
+              onClick={handleEmailSend}
+              disabled={isPending}
+            >
               {t('auth.email_verification')}
             </Button>
           </div>
@@ -184,7 +250,12 @@ const SignUpForm = () => {
                 handleAuthInputClear(name as keyof SignUpFormInputs, value)
               }
             />
-            <Button type='button' className='mt-8 flex h-12 flex-2/5'>
+            <Button
+              type='button'
+              className='mt-8 flex h-12 flex-2/5'
+              onClick={handleEmailCheck}
+              disabled={isPending}
+            >
               {t('auth.email_send')}
             </Button>
             {errors.verificationCode && (
