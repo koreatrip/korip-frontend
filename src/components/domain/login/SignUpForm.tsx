@@ -48,8 +48,13 @@ const SignUpForm = () => {
       onSuccess: () => {
         showToast('인증 메일이 발송되었습니다.', 'success');
       },
-      onError: () => {
-        showToast('인증 메일 발송에 실패했습니다.', 'error');
+      onError: (error) => {
+        // API 응답의 에러 메시지를 추출합니다.
+        const errorMessage =
+          error.response?.data?.error_message ||
+          '인증 메일 발송에 실패했습니다.';
+        // 추출한 에러 메시지를 토스트로 보여줍니다.
+        showToast(errorMessage, 'error');
       },
     });
 
@@ -179,7 +184,7 @@ const SignUpForm = () => {
               onClick={handleEmailSend}
               disabled={isSendingEmail}
             >
-              {isSendingEmail ? '전송 중...' : t('auth.email_verification')}
+              {isSendingEmail ? '전송 중...' : t('auth.email_send')}
             </Button>
           </div>
 
@@ -205,7 +210,7 @@ const SignUpForm = () => {
               onClick={handleEmailCheck}
               disabled={isCheckingEmail}
             >
-              {isCheckingEmail ? '확인 중...' : t('auth.email_send')}
+              {isCheckingEmail ? '확인 중...' : t('auth.email_verification')}
             </Button>
             {errors.verificationCode && (
               <p className='text-error-red my-2 text-sm'>
