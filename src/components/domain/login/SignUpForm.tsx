@@ -12,6 +12,8 @@ import {
   useEmailCheckMutation,
 } from '@/api/auth/signup/email/emailHooks';
 import { useEffect, useRef, useState } from 'react';
+import { useSignupMutation } from '@/api/auth/signup/signupHooks';
+import { useNavigate } from 'react-router';
 
 // 상수로 조건 정의
 const PASSWORD_MIN_LENGTH = 8;
@@ -54,6 +56,7 @@ const SignUpForm = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -75,6 +78,21 @@ const SignUpForm = () => {
       password: '',
       confirmPassword: '',
       agreements: [false, false, false],
+    },
+  });
+
+  const { mutate: signupMutate } = useSignupMutation({
+    onSuccess: () => {
+      showToast(
+        '회원가입에 성공했습니다! 로그인 페이지로 이동합니다.',
+        'success'
+      );
+      navigate('/login', { replace: true });
+    },
+    onError: (error) => {
+      const errorMessage =
+        error.response?.data?.error_message || '회원가입에 실패했습니다.';
+      showToast(errorMessage, 'error');
     },
   });
 
@@ -165,19 +183,13 @@ const SignUpForm = () => {
     return errorMap[error] || error;
   };
 
-  const onSubmit = async (data: SignUpFormInputs) => {
-    console.log('회원가입 폼 데이터:', data);
-    try {
-      // API 호출 로직을 여기에 추가합니다.
-      // await yourSignUpApiCall(data);
-      showToast(
-        '회원가입에 성공했습니다! 로그인 페이지로 이동합니다.',
-        'success'
-      );
-    } catch (error) {
-      showToast('회원가입에 실패했습니다. 다시 시도해주세요.', 'error');
-      console.error('회원가입 오류:', error);
-    }
+  const onSubmit = (data: SignUpFormInputs) => {
+    signupMutate({
+      email: data.email,
+      nickname: data.name,
+      phone_number: data.phoneNumber || '',
+      password: data.password,
+    });
   };
 
   const handleAuthInputClear = (fieldName: keyof SignUpFormInputs) => {

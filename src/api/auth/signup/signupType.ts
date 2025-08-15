@@ -1,9 +1,6 @@
-export type LoginRequest = {
+export type SignupRequest = {
   email: string;
+  nickname: string;
+  phone_number: string;
   password: string;
-};
-
-export type LoginResponse = {
-  access_token: string;
-  refresh_token: string;
 };

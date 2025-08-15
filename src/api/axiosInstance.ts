@@ -4,12 +4,12 @@ import Cookies from 'js-cookie';
 const { VITE_BASE_URL } = import.meta.env;
 
 // 토큰을 저장하고 가져오는 함수
-const getAccessToken = (): string | undefined => Cookies.get('accessToken');
-const getRefreshToken = (): string | undefined => Cookies.get('refreshToken');
+const getAccessToken = (): string | undefined => Cookies.get('access_token');
+const getRefreshToken = (): string | undefined => Cookies.get('refresh_token');
 
 // 액세스 토큰 설정
 export const setAccessToken = (token: string) => {
-  Cookies.set('accessToken', token, {
+  Cookies.set('access_token', token, {
     secure: true,
     sameSite: 'strict',
     path: '/',
@@ -18,7 +18,7 @@ export const setAccessToken = (token: string) => {
 
 // 리프레시 토큰 설정
 export const setRefreshToken = (token: string) => {
-  Cookies.set('refreshToken', token, {
+  Cookies.set('refresh_token', token, {
     secure: true,
     sameSite: 'strict',
     path: '/',
@@ -27,8 +27,8 @@ export const setRefreshToken = (token: string) => {
 
 // 토큰을 제거하는 함수
 export const clearTokens = () => {
-  Cookies.remove('accessToken', { path: '/' });
-  Cookies.remove('refreshToken', { path: '/' });
+  Cookies.remove('access_token', { path: '/' });
+  Cookies.remove('refresh_token', { path: '/' });
 };
 
 const axiosInstance = axios.create({
@@ -41,9 +41,9 @@ const axiosInstance = axios.create({
 // 요청 인터셉터
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const accessToken = getAccessToken();
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
+    const access_token = getAccessToken();
+    if (access_token) {
+      config.headers.Authorization = `Bearer ${access_token}`;
     }
     return config;
   },
@@ -95,8 +95,8 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      const refreshToken = getRefreshToken();
-      if (!refreshToken) {
+      const refresh_token = getRefreshToken();
+      if (!refresh_token) {
         console.error('리프레시 토큰이 없습니다. 로그아웃 처리합니다.');
         clearTokens();
         window.location.href = '/login'; // 로그인 페이지로 리디렉션
@@ -106,7 +106,7 @@ axiosInstance.interceptors.response.use(
       try {
         // 토큰 갱신 API 호출 (이 API는 인증 인터셉터를 타지 않도록 기본 axios를 사용할 수 있습니다)
         const { data } = await axios.post('/api/auth/refresh', {
-          refreshToken,
+          refresh_token,
         });
         const newAccessToken = data.accessToken;
         setAccessToken(newAccessToken);
