@@ -1,4 +1,4 @@
-import axiosInstance from '../axiosInstance';
+import axiosInstance from '../../axiosInstance';
 
 import { type LoginRequest, type LoginResponse } from './loginType';
 

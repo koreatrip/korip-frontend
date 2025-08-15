@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { Link, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { useLoginMutation } from '@/api/auth/loginHooks';
+import { useLoginMutation } from '@/api/auth/login/loginHooks';
 
 const loginSchema = z.object({
   email: z.string().email('올바른 이메일 형식이 아닙니다.'),
