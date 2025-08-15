@@ -21,11 +21,6 @@ const WeatherDisplay = ({ location }: { location: Location }) => {
       </div>
     );
 
-  // const tempDiffText =
-  //   weatherData.current.tempDiff !== null
-  //     ? `어제보다 ${weatherData.current.tempDiff > 0 ? `${weatherData.current.tempDiff.toFixed(1)}°↑` : `${Math.abs(weatherData.current.tempDiff).toFixed(1)}°↓`}`
-  //     : '';
-
   const today = new Date().toLocaleDateString('ko-KR', {
     month: '2-digit',
     day: '2-digit',
@@ -37,7 +32,8 @@ const WeatherDisplay = ({ location }: { location: Location }) => {
   return (
     <div className='flex w-full flex-col gap-y-4'>
       <div className='bg-bg-section text-main-text-navy flex items-center justify-center rounded-2xl p-6'>
-        <div className='flex w-full justify-center gap-x-[142px]'>
+        <div className='tablet-bp:flex-row tablet-bp:justify-center tablet-bp:gap-x-[142px] tablet-bp:gap-y-0 flex w-full flex-col gap-y-6'>
+          {/* 현재 날씨 */}
           <div className='flex flex-col items-center justify-center'>
             <div className='mb-2'>
               {t('common.current')} {today}
@@ -49,8 +45,7 @@ const WeatherDisplay = ({ location }: { location: Location }) => {
               <p>
                 <span className='text-xl font-medium'>
                   {weatherData.current.sky}
-                </span>{' '}
-                {/* {tempDiffText} */}
+                </span>
               </p>
               <p>
                 {t('common.min')}{' '}
@@ -64,7 +59,11 @@ const WeatherDisplay = ({ location }: { location: Location }) => {
               </p>
             </div>
           </div>
-          <div className='bg-ph-gray w-[1px]'></div>
+
+          {/* 구분선 - 태블릿 이상에서만 세로선, 모바일에서는 가로선 */}
+          <div className='bg-ph-gray tablet-bp:h-auto tablet-bp:w-[1px] h-[1px] w-full'></div>
+
+          {/* 내일 날씨 */}
           <div className='flex flex-col items-center justify-center'>
             <div className='mb-2'>
               {t('common.tomorrow')} {tomorrow}
@@ -78,28 +77,34 @@ const WeatherDisplay = ({ location }: { location: Location }) => {
             </div>
             <div className='text-sm'>
               <div>
-                {t('common.am')} {weatherData.tomorrow.am.sky}
+                {t('common.am')} {weatherData.tomorrow.am.sky}{' '}
                 {weatherData.tomorrow.am.pop}%
               </div>
               <div>
-                {t('common.pm')} {weatherData.tomorrow.pm.sky}
+                {t('common.pm')} {weatherData.tomorrow.pm.sky}{' '}
                 {weatherData.tomorrow.pm.pop}%
               </div>
             </div>
           </div>
         </div>
       </div>
-      <ul className='flex w-full gap-x-4'>
-        {weatherData.details.map((detail, index) => (
-          <li key={index} className='flex-1'>
-            <WeatherDetail label={detail.label} value={detail.value} />
-          </li>
-        ))}
-      </ul>
-      <HourlyForecast data={weatherData.hourly} />
-      <div className='grid grid-cols-2 gap-6'>
-        {weatherData.airQuality && <AirQuality data={weatherData.airQuality} />}
+
+      {/* 상세 정보 */}
+      <div className='w-full overflow-x-auto'>
+        <ul className='tablet-bp:gap-x-4 tablet-bp:min-w-0 flex min-w-max gap-x-3'>
+          {weatherData.details.map((detail, index) => (
+            <li key={index} className='tablet-bp:flex-1 flex-shrink-0'>
+              <WeatherDetail label={detail.label} value={detail.value} />
+            </li>
+          ))}
+        </ul>
       </div>
+
+      {/* 시간별 예보 */}
+      <HourlyForecast data={weatherData.hourly} />
+
+      {/* 대기질 */}
+      {weatherData.airQuality && <AirQuality data={weatherData.airQuality} />}
     </div>
   );
 };

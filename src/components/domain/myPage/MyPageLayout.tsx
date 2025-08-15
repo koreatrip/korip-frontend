@@ -4,7 +4,7 @@ import MyPageMenu from './MyPageMenu';
 
 const MyPageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className='mx-auto w-full max-w-[1440px] px-4 md:px-6'>
+    <div className='bg-bg-section mx-auto w-full max-w-[1440px] px-4 md:px-6'>
       {/* 모바일 슬라이드 메뉴 */}
       <div className='block overflow-x-visible md:hidden'>
         <MobileSlideMenu />

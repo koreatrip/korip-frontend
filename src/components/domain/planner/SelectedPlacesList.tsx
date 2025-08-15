@@ -15,11 +15,7 @@ const SelectedPlacesList = ({
   return (
     <div className='bg-bg-white shadow-light flex max-h-[458px] flex-col gap-y-4 rounded-2xl p-6'>
       <h3 className='text-main-text-navy text-2xl font-semibold'>
-        {t('travel.selected_places')}
-        {readOnly
-          ? t('travel.schedule_summary')
-          : t('travel.selected_places')}{' '}
-        // 일정 장소들 : 선택한 장소들인것같은데 일정장소들 번역이 없다
+        {readOnly ? t('travel.schedule_summary') : t('travel.selected_places')}
       </h3>
       <div className='overflow-y-auto'>
         {places.map((place) => {

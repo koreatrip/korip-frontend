@@ -1,9 +1,23 @@
 import type { DropdownItem } from '@/stores/useHeaderStore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { XMarkIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
+import {
+  XMarkIcon,
+  GlobeAltIcon,
+  ChevronDownIcon,
+} from '@heroicons/react/24/outline';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 type TMenuItem = {
   label: string;
-  href: string;
+  href?: string;
+  onClick?: () => void;
+  hasSubmenu?: boolean;
+  submenu?: {
+    label: string;
+    href?: string;
+    onClick?: () => void;
+  }[];
 };
 
 type TSideMenuProps = {
@@ -23,6 +37,34 @@ const SideMenu = ({
   languages,
   title = '메뉴',
 }: TSideMenuProps) => {
+  const { t } = useTranslation();
+  const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
+
+  const handleMenuClick = (item: TMenuItem) => {
+    if (item.hasSubmenu) {
+      // 서브메뉴가 있는 경우 토글
+      setExpandedMenu(expandedMenu === item.label ? null : item.label);
+    } else if (item.onClick) {
+      // onClick이 있는 경우 실행하고 메뉴 닫기
+      item.onClick();
+      onClose();
+    } else if (item.href) {
+      // href가 있는 경우 링크 이동
+      window.location.href = item.href;
+      onClose();
+    }
+  };
+
+  const handleSubmenuClick = (submenuItem: TMenuItem['submenu'][0]) => {
+    if (submenuItem.onClick) {
+      submenuItem.onClick();
+      onClose();
+    } else if (submenuItem.href) {
+      window.location.href = submenuItem.href;
+      onClose();
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -33,7 +75,7 @@ const SideMenu = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className='bg-opacity-50 bg-main-text-navy/40 tablet-bp:hidden fixed inset-0 z-40'
+            className='fixed inset-0 z-40'
             onClick={onClose}
           />
 
@@ -43,7 +85,7 @@ const SideMenu = ({
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
-            className='tablet-bp:hidden bg-bg-white fixed top-0 right-0 z-50 h-full w-80 shadow-xl'
+            className='bg-bg-white fixed top-0 right-0 z-50 h-full w-80 shadow-xl'
           >
             {/* 메뉴 헤더 */}
             <div className='border-outline-gray flex items-center justify-between border-b p-6'>
@@ -57,29 +99,52 @@ const SideMenu = ({
             </div>
 
             {/* 메뉴 아이템들 */}
-            <div className='py-4'>
+            <div className='overflow-y-auto py-4'>
               {/* 메인 메뉴 아이템들 */}
               {mainMenuItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={onClose}
-                  className='border-outline-gray text-main-text-navy hover:bg-hover-gray block border-b px-6 py-4'
-                >
-                  {item.label}
-                </a>
+                <div key={item.label}>
+                  <button
+                    onClick={() => handleMenuClick(item)}
+                    className='border-outline-gray text-main-text-navy hover:bg-hover-gray flex w-full items-center justify-between border-b px-6 py-4 text-left'
+                  >
+                    <span>{item.label}</span>
+                    {item.hasSubmenu && (
+                      <ChevronDownIcon
+                        className={`h-4 w-4 transform transition-transform ${
+                          expandedMenu === item.label ? 'rotate-180' : ''
+                        }`}
+                      />
+                    )}
+                  </button>
+
+                  {/* 서브메뉴 */}
+                  {item.hasSubmenu &&
+                    item.submenu &&
+                    expandedMenu === item.label && (
+                      <div className='bg-bg-section'>
+                        {item.submenu.map((submenuItem) => (
+                          <button
+                            key={submenuItem.label}
+                            onClick={() => handleSubmenuClick(submenuItem)}
+                            className='text-main-text-navy hover:bg-hover-gray border-outline-gray/50 w-full border-b px-8 py-3 text-left text-sm'
+                          >
+                            {submenuItem.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                </div>
               ))}
 
               {/* 인증 메뉴 아이템들 */}
               {authMenuItems.map((item) => (
-                <a
+                <button
                   key={item.label}
-                  href={item.href}
-                  onClick={onClose}
-                  className='border-outline-gray text-main-text-navy hover:bg-hover-gray block border-b px-6 py-4'
+                  onClick={() => handleMenuClick(item)}
+                  className='border-outline-gray text-main-text-navy hover:bg-hover-gray w-full border-b px-6 py-4 text-left'
                 >
                   {item.label}
-                </a>
+                </button>
               ))}
 
               {/* 언어 선택 */}
