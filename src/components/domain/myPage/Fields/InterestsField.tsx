@@ -28,7 +28,7 @@ const InterestsField: React.FC<InterestsFieldProps> = ({
     return (
       <div className='focus-within:border-main-pink focus-within:ring-main-pink flex h-10 items-center rounded-lg border border-gray-300 bg-white px-4 focus-within:ring-2'>
         <div className='flex w-full items-center justify-between'>
-          <span className='text-main-text-navy w-20 text-sm font-medium'>
+          <span className='text-main-text-navy w-20 font-medium'>
             {t('user.interests')}
           </span>
           <div className='ml-4 flex-1'>

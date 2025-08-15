@@ -5,12 +5,12 @@ const MyPageMenu = () => {
   const { t } = useTranslation();
 
   return (
-    <nav className='hidden h-[291px] w-[326px] rounded-xl bg-white p-10 shadow-md md:ml-[-40px] md:block'>
+    <nav className='hidden rounded-xl bg-white p-10 shadow-md md:ml-[-40px] md:block'>
       {/* 사용자 이름 */}
       <div className='mb-6 text-4xl font-normal text-slate-800'>김태율</div>
 
       {/* 메뉴 목록 */}
-      <ul className='m-4 flex flex-col gap-4 text-sm'>
+      <ul className='m-4 flex flex-col gap-4'>
         <li>
           <NavLink
             to='/mypage'
