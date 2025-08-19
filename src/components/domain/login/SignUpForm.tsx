@@ -47,7 +47,7 @@ const signUpSchema = z
   });
 
 // Zod 스키마로부터 폼 데이터 타입 추론
-type SignUpFormInputs = z.infer<typeof signUpSchema>;
+export type SignUpFormInputs = z.infer<typeof signUpSchema>;
 
 const SignUpForm = () => {
   const { t } = useTranslation();
