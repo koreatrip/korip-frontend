@@ -62,7 +62,15 @@
     "temp_password_sent": "입력하신 이메일로 임시 비밀번호를 발송했습니다.",
     "change_after_login": "로그인 후 새로운 비밀번호로 변경해주세요.",
     "email_not_received": "이메일을 받지 못하셨나요?",
-    "check_spam_or_retry": "스팸함을 확인하거나 몇 분 후 다시 시도해주세요."
+    "check_spam_or_retry": "스팸함을 확인하거나 몇 분 후 다시 시도해주세요.",
+    "title": "페이지를 찾을 수 없습니다",
+    "description": "요청하신 페이지를 찾을 수 없습니다. 입력하신 주소가 정확한지 확인하시거나, 홈으로 돌아가 다시 이용해 주시기 바랍니다.",
+    "button": "홈으로 돌아가기",
+    "finding_beautiful_places": "한국의 멋진 여행지를 찾고 있어요",
+    "discovering_hidden_gems": "숨겨진 명소들을 발견하는 중",
+    "error_generic_title": "문제가 발생했습니다",
+    "error_generic_description": "서비스 이용 중 오류가 발생했습니다. 잠시 후 다시 시도해 주시기 바랍니다.",
+    "refresh_button": "새로고침"
   },
 
   "auth": {
