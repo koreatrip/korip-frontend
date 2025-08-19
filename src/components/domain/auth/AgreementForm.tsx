@@ -6,8 +6,7 @@ import PrivacyPolicyContent from './PrivacyPolicyContent';
 import LocationServiceContent from './LocationServiceContent';
 import { useModalStore } from '@/stores/useModalStore';
 import AgreementCheckbox from './AgreementCheckbox';
-import { useState } from 'react';
-import { SignUpFormInputs } from '@/components/domain/auth/signup/SignUpForm'; // SignUpFormInputs 타입을 임포트
+import type { SignUpFormInputs } from '@/components/domain/login/SignUpForm';
 
 // AgreementFormProps에 control prop을 추가합니다.
 type AgreementFormProps = {
