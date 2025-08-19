@@ -7,7 +7,7 @@ import {
 import { useHeaderStore } from '@/stores/useHeaderStore';
 import { useState, useEffect } from 'react';
 import SideMenu from './sideMenu/SideMenu';
-import SearchBar from './searchBar/SearchBar';
+import SearchBar from '../domain/searchBar/searchBar';
 import type { TDropdownItem } from './dropdown/Dropdown';
 import Dropdown from './dropdown/Dropdown';
 import { Link } from 'react-router';
