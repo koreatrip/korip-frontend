@@ -5,6 +5,7 @@ import star_full from './star/star_full.svg';
 import star from './star/star.svg';
 import star_sm from './star/star_sm.svg';
 import star_full_sm from './star/star_full_sm.svg';
+import airplane from './airplane/airplane.svg';
 
 export {
   logo_sm,
@@ -14,4 +15,5 @@ export {
   star,
   star_sm,
   star_full_sm,
+  airplane,
 };
