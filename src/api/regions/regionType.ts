@@ -26,7 +26,7 @@ export type SubRegion = {
   favorite_count: number;
   latitude: number; // ✅ 누락된 필드 추가
   longitude: number; // ✅ 누락된 필드 추가
-  region?: number; // ❔ 데이터에 없으므로 옵셔널 처리
+  regions?: number; // ❔ 데이터에 없으므로 옵셔널 처리
   created_at?: string; // ❔ 데이터에 없으므로 옵셔널 처리
   updated_at?: string; // ❔ 데이터에 없으므로 옵셔널 처리
 };
@@ -47,5 +47,5 @@ export type RegionDetail = {
 };
 
 export type RegionDetailResponse = {
-  region: RegionDetail;
+  regions: RegionDetail;
 };
