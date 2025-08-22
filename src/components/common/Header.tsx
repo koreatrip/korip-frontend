@@ -62,7 +62,23 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
 
   // 언어 변경 핸들러
   const handleLanguageChange = (languageCode: string) => {
+    // 1. i18next의 현재 세션 언어 변경
     i18n.changeLanguage(languageCode);
+
+    // ✨ 2. LocalStorage에 언어 설정 "수동으로" 덮어쓰기 (이것이 핵심!) ✨
+    // 'i18nextLng'는 i18n.ts의 lookupLocalStorage에 설정된 키 이름입니다.
+    localStorage.setItem('i18nextLng', languageCode);
+
+    // 3. 현재 URL에 language 파라미터 추가/수정
+    const currentParams = new URLSearchParams(window.location.search);
+    currentParams.set('lang', languageCode);
+
+    // 4. URL 업데이트 (페이지 리로드 없이)
+    window.history.replaceState(
+      null,
+      '',
+      `${window.location.pathname}?${currentParams}`
+    );
     actions.closeLangDropdown();
   };
 
@@ -130,13 +146,13 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
     },
     {
       label: t('languages.japanese'),
-      value: 'ja',
-      onClick: () => handleLanguageChange('ja'),
+      value: 'jp',
+      onClick: () => handleLanguageChange('jp'),
     },
     {
       label: t('languages.chinese'),
-      value: 'zh',
-      onClick: () => handleLanguageChange('zh'),
+      value: 'cn',
+      onClick: () => handleLanguageChange('cn'),
     },
   ];
 

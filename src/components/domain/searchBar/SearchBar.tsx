@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { MapPinIcon } from '@heroicons/react/24/solid';
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { twMerge } from 'tailwind-merge';
 
@@ -38,6 +39,9 @@ const SearchBar = ({
 
   const { showToast } = useToast();
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+
+  const currentLanguage = i18n.language || 'ko';
 
   // 시/도 목록 조회
   const {
@@ -54,7 +58,7 @@ const SearchBar = ({
   } = useRegionDetailQuery(selectedRegion?.id || null);
 
   const regions = regionsResponse?.regions || [];
-  const subregions = regionDetail?.region?.subregions?.results || [];
+  const subregions = regionDetail?.regions?.subregions?.results || [];
 
   // 드롭다운 외부 클릭 시 닫기 처리
   useEffect(() => {
@@ -82,7 +86,7 @@ const SearchBar = ({
       // 쿼리 파라미터로 넘기기
       const params = new URLSearchParams({
         q: searchTerm,
-        language: 'ko', // 나중에 언어 상태로 변경
+        lang: currentLanguage, // 나중에 언어 상태로 변경
       });
 
       navigate(`/explore/regions?${params.toString()}`);
@@ -124,7 +128,7 @@ const SearchBar = ({
     const params = new URLSearchParams({
       region_id: selectedRegion.id.toString(),
       subregion_id: district.id.toString(),
-      language: 'ko', // 나중에 언어 상태로 변경
+      lang: currentLanguage, // 나중에 언어 상태로 변경
     });
 
     navigate(`/explore/regions?${params.toString()}`);
@@ -143,7 +147,7 @@ const SearchBar = ({
     // 쿼리 파라미터로 넘기기 (subregion_id 없음)
     const params = new URLSearchParams({
       region_id: region.id.toString(),
-      language: 'ko', // 나중에 언어 상태로 변경
+      lang: currentLanguage, // 나중에 언어 상태로 변경
     });
 
     navigate(`/explore/regions?${params.toString()}`);
@@ -195,13 +199,13 @@ const SearchBar = ({
       </div>
 
       {isDropdownOpen && (
-        <div className='border-outline-gray shadow-medium absolute top-full right-0 left-0 z-50 mt-2 overflow-hidden rounded-2xl border bg-white'>
+        <div className='border-outline-gray shadow-medium bg-bg-white absolute top-full right-0 left-0 z-50 mt-2 overflow-hidden rounded-2xl border'>
           <div className='p-4'>
             {currentView === 'city' ? (
               <>
                 {isRegionsLoading ? (
                   <div className='flex items-center justify-center py-8'>
-                    <div className='h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600'></div>
+                    <div className='border-outline-gray h-6 w-6 animate-spin rounded-full border-2 border-t-gray-600'></div>
                   </div>
                 ) : (
                   <div className='grid max-h-80 grid-cols-2 gap-2 overflow-y-auto'>
