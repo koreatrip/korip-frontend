@@ -3,15 +3,17 @@ import { getAirQualityInfo } from '@/utils/weatherUtils';
 import { useTranslation } from 'react-i18next';
 
 interface AirQualityData {
-  pm10: { grade: string; value: string };
-  pm25: { grade: string; value: string };
+  pm10_grade: string;
+  pm10_value: number;
+  pm25_grade: string;
+  pm25_value: number;
 }
 interface AirQualityProps {
   data: AirQualityData;
 }
 const AirQuality = ({ data }: AirQualityProps) => {
-  const pm10Info = getAirQualityInfo(data.pm10.grade);
-  const pm25Info = getAirQualityInfo(data.pm25.grade);
+  const pm10Info = getAirQualityInfo(data.pm10_grade);
+  const pm25Info = getAirQualityInfo(data.pm25_grade);
   const { t } = useTranslation();
 
   return (
@@ -32,7 +34,7 @@ const AirQuality = ({ data }: AirQualityProps) => {
             </span>
           </div>
           <div className='text-xs break-words opacity-60'>
-            PM2.5: {data.pm25.value}µg/m³
+            PM2.5: {data.pm25_value}µg/m³
           </div>
         </div>
         <div
@@ -47,7 +49,7 @@ const AirQuality = ({ data }: AirQualityProps) => {
             </span>
           </div>
           <div className='text-xs break-words opacity-60'>
-            PM10: {data.pm10.value}µg/m³
+            PM10: {data.pm10_value}µg/m³
           </div>
         </div>
       </div>

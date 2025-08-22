@@ -2,31 +2,24 @@ import InfoCard from '@/components/domain/regions/InfoCard';
 import Carousel from '@/components/domain/regions/Carousel';
 import Weather from '@/components/domain/weather/Weather';
 import Container from '@/components/common/Container';
-import { useLocationStore } from '@/stores/useLocationStore';
-import { useToast } from '@/hooks/useToast';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Trans } from 'react-i18next';
 import { useModalStore } from '@/stores/useModalStore';
 import LoginPromptModal from '@/components/domain/auth/LoginPromptModal';
-import { useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { usePlacesQuery } from '@/api/place/placeHooks';
 import LoadingPage from './statusPage/loadingPage';
+import { useEffect } from 'react';
 
 const RegionsPage = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+
+  const { stack, actions } = useModalStore();
 
   const regionId = searchParams.get('region_id');
   const subregionId = searchParams.get('subregion_id');
-
-  const activeLocation = useLocationStore((state) => state.activeLocation);
-  const searchAndSetLocation = useLocationStore(
-    (state) => state.searchAndSetLocation
-  );
-  const { stack, data, actions } = useModalStore();
-
-  const { showToast } = useToast();
-  const { t, i18n } = useTranslation();
 
   // 헤더에서 선택한 현재 언어 가져오기
   const currentLanguage = i18n.language || 'ko';
@@ -35,40 +28,32 @@ const RegionsPage = () => {
     data: placesData,
     isLoading,
     error,
-  } = usePlacesQuery({
-    region_id: Number(regionId),
-    ...(subregionId && { subregion_id: Number(subregionId) }),
-    lang: currentLanguage,
-  });
+  } = usePlacesQuery(
+    {
+      region_id: Number(regionId),
+      ...(subregionId && { subregion_id: Number(subregionId) }),
+      lang: currentLanguage,
+    },
+    {
+      enabled: !!regionId, // region_id가 있을 때만 쿼리 실행
+    }
+  );
 
   console.log('placesData:', placesData);
   console.log('현재 i18n.language:', i18n.language);
   console.log('currentLanguage 값:', currentLanguage);
 
-  // 앱이 처음 시작될 때 기본 위치를 '종로구'로 설정
-  useEffect(() => {
-    if (!activeLocation) {
-      searchAndSetLocation('종로구', showToast);
-    }
-  }, [activeLocation, searchAndSetLocation, showToast]);
-
-  // 위치 표시명 결정 함수
+  // 위치 표시명 결정 함수 - API 데이터 기반으로 수정
   const getLocationDisplayName = () => {
-    if (!activeLocation) return '날씨 정보';
+    if (!placesData?.region?.name) return '날씨 정보';
 
-    // displayName이 있으면 우선 사용
-    if (activeLocation.displayName) {
-      return `${activeLocation.displayName} 날씨`;
+    // subregion이 선택되어 있고 데이터가 있으면 함께 표시
+    if (subregionId && placesData?.subregion?.name) {
+      return `${placesData.region.name} ${placesData.subregion.name} 날씨`;
     }
 
-    // 기본 로직
-    if (activeLocation['3단계']) {
-      return `${activeLocation['1단계']} ${activeLocation['2단계']} ${activeLocation['3단계']} 날씨`;
-    } else if (activeLocation['2단계']) {
-      return `${activeLocation['1단계']} ${activeLocation['2단계']} 날씨`;
-    } else {
-      return `${activeLocation['1단계']} 날씨`;
-    }
+    // region만 선택된 경우
+    return `${placesData.region.name} 날씨`;
   };
 
   // 현재 보고 있는 지역명 결정 - API 데이터 우선, 로케이션 스토어 fallback
@@ -116,9 +101,22 @@ const RegionsPage = () => {
     return '지역을 선택해주세요';
   };
 
+  // 기본 서울특별시로 리다이렉트
+  useEffect(() => {
+    if (!regionId) {
+      // region_id가 없으면 서울특별시(ID: 1)로 리다이렉트
+      navigate(`/explore/regions?region_id=1&lang=${currentLanguage}`, {
+        replace: true,
+      });
+      return;
+    }
+  }, [regionId, currentLanguage, navigate]);
+
   if (isLoading) return <LoadingPage />;
+  if (!regionId) {
+    return <LoadingPage />;
+  }
   if (error) return <div>Error occurred</div>;
-  // placesData가 없어도 일단 렌더링하도록 변경
 
   return (
     <div className='mt-8 w-full'>
@@ -143,12 +141,10 @@ const RegionsPage = () => {
           <h1 className='tablet-bp:text-[32px] mb-4 text-xl font-semibold'>
             {getLocationDisplayName()}
           </h1>
-          {/* 검색된 위치 정보 표시 */}
-          {activeLocation && activeLocation.searchedQuery && (
+
+          {(regionId || subregionId) && (
             <div className='text-sub-text-gray mb-4 text-sm'>
-              "{activeLocation.searchedQuery}" {t('common.search_result')} →{' '}
-              {activeLocation.displayName ||
-                `${activeLocation['1단계']} ${activeLocation['2단계']} ${activeLocation['3단계'] || ''}`.trim()}
+              {t('common.search_result')} → {getCurrentRegionName()}
             </div>
           )}
           <div className='flex justify-center'>
