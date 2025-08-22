@@ -90,7 +90,10 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
 
   // 데스크톱 헤더용 메뉴 아이템들
   const mainMenuItems = [
-    { label: t('places.explore_regions'), href: '/explore/regions' },
+    {
+      label: t('places.explore_regions'),
+      href: `/explore/regions?region_id=1&lang=${i18n.language || 'ko'}`,
+    },
     { label: t('common.travel'), href: '/travel' },
     { label: t('places.travel_tips'), href: '/tips' },
   ];
@@ -99,7 +102,7 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
   const sideMenuItems: TSideMenuItem[] = [
     {
       label: t('places.explore_regions'),
-      href: '/explore/regions',
+      href: `/explore/regions?region_id=1&lang=${i18n.language || 'ko'}`,
     },
     {
       label: t('common.travel'),
