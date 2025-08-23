@@ -6,20 +6,20 @@ import { useTranslation } from 'react-i18next';
 import { Trans } from 'react-i18next';
 import { useModalStore } from '@/stores/useModalStore';
 import LoginPromptModal from '@/components/domain/auth/LoginPromptModal';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import { usePlacesQuery } from '@/api/place/placeHooks';
 import LoadingPage from './statusPage/loadingPage';
 import { useEffect } from 'react';
+import { useNumericSearchParam } from '@/hooks/useNumericSearchParam';
 
 const RegionsPage = () => {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
   const { stack, actions } = useModalStore();
 
-  const regionId = searchParams.get('region_id');
-  const subregionId = searchParams.get('subregion_id');
+  const regionId = useNumericSearchParam('region_id');
+  const subregionId = useNumericSearchParam('subregion_id');
 
   // 헤더에서 선택한 현재 언어 가져오기
   const currentLanguage = i18n.language || 'ko';
@@ -30,8 +30,8 @@ const RegionsPage = () => {
     error,
   } = usePlacesQuery(
     {
-      region_id: Number(regionId),
-      ...(subregionId && { subregion_id: Number(subregionId) }),
+      region_id: regionId!,
+      ...(subregionId && { subregion_id: subregionId }),
       lang: currentLanguage,
     },
     {
@@ -197,7 +197,13 @@ const RegionsPage = () => {
             )}
           </ul>
           <div className='mt-2 flex w-full justify-end'>
-            <button className='cursor-pointer font-medium'>
+            <button
+              onClick={() =>
+                navigate(
+                  `/explore/districts?region_id=${regionId}&subregion_id=${subregionId}&lang=${currentLanguage}`
+                )
+              }
+            >
               {t('places.explore_all_districts')}
             </button>
           </div>
