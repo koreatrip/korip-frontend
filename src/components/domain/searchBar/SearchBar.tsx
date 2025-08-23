@@ -160,7 +160,9 @@ const SearchBar = ({
     });
 
     // 메인페이지에서는 /explore/regions로 이동, 나머지는 현재 경로 유지
-    if (location.pathname === '/') {
+    if (location.pathname === '/explore/attractions') {
+      navigate(`/explore/districts?${params.toString()}`);
+    } else if (location.pathname === '/') {
       navigate(`/explore/regions?${params.toString()}`);
     } else {
       // 현재 URL params 가져와서 업데이트
