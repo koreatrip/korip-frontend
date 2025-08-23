@@ -25,11 +25,13 @@ export const userAPI = {
   },
 
   // 사용자 정보 수정
-  updateUserInfo: async (data: UpdateUserProfileRequest): Promise<ApiResponse> => {
+  updateUserInfo: async (
+    data: UpdateUserProfileRequest
+  ): Promise<ApiResponse> => {
     const response = await axios.put('/api/users/info', data, {
-      headers: { 
+      headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     });
     return response.data;
@@ -38,9 +40,9 @@ export const userAPI = {
   // 비밀번호 변경
   changePassword: async (data: ChangePasswordRequest): Promise<ApiResponse> => {
     const response = await axios.post('/api/users/change-pwd', data, {
-      headers: { 
+      headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     });
     return response.data;
@@ -49,22 +51,29 @@ export const userAPI = {
   // 비밀번호 찾기
   findPassword: async (data: FindPasswordRequest): Promise<ApiResponse> => {
     const response = await axios.post('/api/users/find-pwd', data, {
-      headers: { 
+      headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     });
     return response.data;
   },
 
   // 사용자 관심사 등록/수정
-  updatePreferences: async (userId: number, data: UpdatePreferencesRequest): Promise<ApiResponse> => {
-    const response = await axios.post(`/api/users/${userId}/preferences`, data, {
-      headers: { 
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-    });
+  updatePreferences: async (
+    userId: number,
+    data: UpdatePreferencesRequest
+  ): Promise<ApiResponse> => {
+    const response = await axios.post(
+      `/api/users/${userId}/preferences`,
+      data,
+      {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     return response.data;
   },
 
@@ -77,7 +86,9 @@ export const userAPI = {
   },
 
   // 사용자 즐겨찾기 장소 조회
-  getFavoritePlaces: async (userId: number): Promise<FavoritePlacesResponse> => {
+  getFavoritePlaces: async (
+    userId: number
+  ): Promise<FavoritePlacesResponse> => {
     const response = await axios.get(`/api/users/${userId}/favorite-places`, {
       headers: { Accept: 'application/json' },
     });
@@ -85,7 +96,9 @@ export const userAPI = {
   },
 
   // 사용자 즐겨찾기 지역 조회
-  getFavoriteRegions: async (userId: number): Promise<FavoriteRegionsResponse> => {
+  getFavoriteRegions: async (
+    userId: number
+  ): Promise<FavoriteRegionsResponse> => {
     const response = await axios.get(`/api/users/${userId}/favorite-regions`, {
       headers: { Accept: 'application/json' },
     });
@@ -93,36 +106,51 @@ export const userAPI = {
   },
 
   // 즐겨찾기 장소 토글
-  toggleFavoritePlace: async (userId: number, placeId: number): Promise<ApiResponse> => {
-    const response = await axios.post(`/api/users/${userId}/favorite-places/${placeId}/toggle`, {}, {
-      headers: { 
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-    });
+  toggleFavoritePlace: async (
+    userId: number,
+    placeId: number
+  ): Promise<ApiResponse> => {
+    const response = await axios.post(
+      `/api/users/${userId}/favorite-places/${placeId}/toggle`,
+      {},
+      {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     return response.data;
   },
 
   // 즐겨찾기 지역 토글
-  toggleFavoriteRegion: async (userId: number, regionId: number): Promise<ApiResponse> => {
-    const response = await axios.post(`/api/users/${userId}/favorite-regions/${regionId}/toggle`, {}, {
-      headers: { 
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-    });
+  toggleFavoriteRegion: async (
+    userId: number,
+    regionId: number
+  ): Promise<ApiResponse> => {
+    const response = await axios.post(
+      `/api/users/${userId}/favorite-regions/${regionId}/toggle`,
+      {},
+      {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     return response.data;
   },
 
   // 토큰 갱신
-  reissueToken: async (data: ReissueTokenRequest): Promise<ReissueTokenResponse> => {
+  reissueToken: async (
+    data: ReissueTokenRequest
+  ): Promise<ReissueTokenResponse> => {
     const response = await axios.post('/api/users/reissue-token', data, {
-      headers: { 
+      headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     });
     return response.data;
   },
-
 };

@@ -42,19 +42,22 @@ const PlannerAddButtonMini = ({
       id: Date.now(), // 임시 ID
       title: tripData.tripName,
       description: tripData.tripDescription || `${tripData.location} 여행`,
-      dateRange: `${new Date().toLocaleDateString('ko-KR', {
-        year: '2-digit',
-        month: '2-digit',
-        day: '2-digit'
-      }).replace(/\./g, '.').replace(/ /g, '')} ~ 미정`,
+      dateRange: `${new Date()
+        .toLocaleDateString('ko-KR', {
+          year: '2-digit',
+          month: '2-digit',
+          day: '2-digit',
+        })
+        .replace(/\./g, '.')
+        .replace(/ /g, '')} ~ 미정`,
       isNew: true,
-      createdAt: new Date().toISOString().split('T')[0]
+      createdAt: new Date().toISOString().split('T')[0],
     };
-    
+
     if (onAddPlanner) {
       onAddPlanner(newPlanner);
     }
-    
+
     console.log('새 여행 일정 생성:', newPlanner);
   };
 
@@ -62,7 +65,7 @@ const PlannerAddButtonMini = ({
     <>
       <button
         onClick={handleButtonClick}
-        className='flex h-14 w-14 items-center justify-center rounded-full bg-main-pink text-white transition-all duration-200 hover:bg-main-hover-pink'
+        className='bg-main-pink hover:bg-main-hover-pink flex h-14 w-14 items-center justify-center rounded-full text-white transition-all duration-200'
       >
         <svg
           className='h-5 w-5'
@@ -78,7 +81,7 @@ const PlannerAddButtonMini = ({
           />
         </svg>
       </button>
-      
+
       <CreateTripModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

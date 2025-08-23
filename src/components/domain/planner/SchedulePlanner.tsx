@@ -15,7 +15,11 @@ type TSchedulePlannerProps = {
 /**
  * 날짜 선택, 일차별 탭, 타임라인 등 가운데 계획 영역 전체를 책임지는 핵심 컴포넌트
  */
-const SchedulePlanner = ({ schedule, onRemovePlace, readOnly = false }: TSchedulePlannerProps) => {
+const SchedulePlanner = ({
+  schedule,
+  onRemovePlace,
+  readOnly = false,
+}: TSchedulePlannerProps) => {
   // 1. 시작일과 종료일 상태 관리
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());

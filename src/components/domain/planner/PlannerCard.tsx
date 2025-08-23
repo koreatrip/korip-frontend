@@ -11,7 +11,7 @@ type TPlannerCardProps = {
   onEdit: () => void;
   onDelete: () => void;
   onClick?: () => void;
-}
+};
 
 const PlannerCard = ({
   title,
@@ -23,7 +23,6 @@ const PlannerCard = ({
   onDelete,
   onClick,
 }: TPlannerCardProps) => {
-
   const { t } = useTranslation();
 
   return (
@@ -32,7 +31,10 @@ const PlannerCard = ({
       onClick={onClick}
     >
       {/* 이미지 영역 */}
-      <div className='relative h-[200px]' style={{backgroundColor: '#F8F9FA'}}>
+      <div
+        className='relative h-[200px]'
+        style={{ backgroundColor: '#F8F9FA' }}
+      >
         {imageUrl ? (
           <img
             src={imageUrl}
@@ -53,11 +55,11 @@ const PlannerCard = ({
         {/* 제목과 NEW 태그 */}
         <div className='mb-2'>
           <div className='mb-1 flex items-center gap-1'>
-            <h3 className='truncate text-lg font-semibold text-main-text-navy'>
+            <h3 className='text-main-text-navy truncate text-lg font-semibold'>
               {title}
             </h3>
             {isNew && (
-              <span className='ml-1 text-sm font-medium text-main-pink'>
+              <span className='text-main-pink ml-1 text-sm font-medium'>
                 NEW
               </span>
             )}

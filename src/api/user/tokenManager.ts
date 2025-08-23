@@ -1,5 +1,8 @@
 // tokenManager.ts
-import axios, { type AxiosResponse, type InternalAxiosRequestConfig } from 'axios';
+import axios, {
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
+} from 'axios';
 import { userAPI } from './userAPI';
 
 let isRefreshing = false;
@@ -16,7 +19,7 @@ const processQueue = (error: any, token: string | null = null) => {
       resolve(token!);
     }
   });
-  
+
   failedQueue = [];
 };
 
@@ -43,14 +46,14 @@ export const tokenManager = {
   // 토큰 갱신 함수
   refreshToken: async (): Promise<string> => {
     const refreshToken = tokenManager.getRefreshToken();
-    
+
     if (!refreshToken) {
       throw new Error('No refresh token available');
     }
 
     try {
       const response = await userAPI.reissueToken({ refreshToken });
-      
+
       if (response.success && response.data) {
         const { accessToken, refreshToken: newRefreshToken } = response.data;
         tokenManager.setTokens(accessToken, newRefreshToken);
@@ -88,12 +91,14 @@ axios.interceptors.response.use(
         // 이미 토큰 갱신 중인 경우 대기열에 추가
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
-        }).then((token) => {
-          originalRequest.headers.Authorization = `Bearer ${token}`;
-          return axios(originalRequest);
-        }).catch((err) => {
-          return Promise.reject(err);
-        });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return axios(originalRequest);
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
       }
 
       originalRequest._retry = true;
