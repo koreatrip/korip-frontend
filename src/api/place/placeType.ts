@@ -3,13 +3,29 @@ export type Place = {
   content_id: string | null;
   name: string;
   description: string | null;
-  feature: string | null;
-  category_id: number | null;
-  sub_category_id: number | null;
-  region_id: number;
-  sub_region_id: number | null;
+  address: string;
   latitude: number | null;
   longitude: number | null;
+  phone_number: string;
+  use_time: string;
+  link_url: string;
+  image_url: string | null;
+  category: {
+    id: number;
+    name: string;
+  };
+  sub_category: {
+    id: number;
+    name: string;
+  } | null;
+  region: {
+    id: number;
+    name: string;
+  };
+  sub_region: {
+    id: number;
+    name: string;
+  };
   favorite_count: number;
   created_at: string;
   updated_at: string;
@@ -35,10 +51,20 @@ export type SubRegion = {
   updated_at: string;
 };
 
+// 기존 PlacesResponse
 export type PlacesResponse = {
   popular_subregions: SubRegion[];
   major_places: Place[];
   region: Region[];
   subregion: SubRegion[];
-  user_recommended_places?: Place[]; // 인증 시에만 포함
+  user_recommended_places?: Place[];
+};
+
+// 새로운 SubregionPlacesResponse 추가
+export type SubregionPlacesResponse = {
+  count: number;
+  total_pages: number;
+  page: number;
+  page_size: number;
+  places: Place[];
 };

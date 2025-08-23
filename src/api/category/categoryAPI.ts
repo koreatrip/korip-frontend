@@ -6,9 +6,7 @@ import {
 } from './categoryType';
 
 export const categoryAPI = {
-  getAllCategories: async (
-    lang: string = 'ko'
-  ): Promise<CategoriesResponse> => {
+  getAllCategories: async (lang: string): Promise<CategoriesResponse> => {
     const response = await axios.get('/api/categories', {
       params: { lang },
       headers: { Accept: 'application/json' },
@@ -19,7 +17,7 @@ export const categoryAPI = {
 
   getSubcategories: async (
     categoryId: number,
-    lang: string = 'ko'
+    lang: string
   ): Promise<SubcategoriesResponse> => {
     const response = await axios.get(
       `/api/categories/${categoryId}/subcategories`,

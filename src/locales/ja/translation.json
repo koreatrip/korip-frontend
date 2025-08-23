@@ -56,7 +56,7 @@
     "create_new_travel_plan": "新しい旅行計画を立てましょう。",
     "total_planners": "合計{{count}}件のプランナー",
     "added_to_schedule": "{{place?.title}} がスケジュールに追加されました。",
-    "view_details": "{{place?.title}} の詳細情報を確認します。",
+    "view_details_alert": "{{place?.title}} の詳細情報を確認します。",
     "select_region": "地域を選択してください。",
     "temp_password_issued": "仮パスワードが発行されました。",
     "temp_password_sent": "ご入力いただいたメールアドレスに仮パスワードを送信しました。",
@@ -64,13 +64,17 @@
     "email_not_received": "メールを受信できませんでしたか？",
     "check_spam_or_retry": "迷惑メールフォルダを確認するか、数分後にもう一度お試しください。",
     "title": "ページが見つかりません",
-    "description": "ご指定のページが見つかりません。入力されたアドレスが正しいかご確認いただくか、ホームに戻って再度ご利用ください。",
+    "page_description": "ご指定のページが見つかりません。入力されたアドレスが正しいかご確認いただくか、ホームに戻って再度ご利用ください。",
     "button": "ホームに戻る",
     "finding_beautiful_places": "韓国の素晴らしい旅行先を探しています",
     "discovering_hidden_gems": "隠れた名所を発見中",
     "error_generic_title": "エラーが発生しました",
     "error_generic_description": "リクエストの処理中にエラーが発生しました。しばらくしてから再度お試しください。",
-    "refresh_button": "更新"
+    "refresh_button": "更新",
+    "search_select_region": "地域を選択",
+    "loading_districts": "区/郡の情報を読み込み中...",
+    "failed_districts": "区/郡の情報を読み込めません。",
+    "no_subregion": "下位地域がありません。"
   },
 
   "auth": {
@@ -343,6 +347,7 @@
     "selected_based_on_interests": "お客様の興味　<InterestSpan>{{interest}}</InterestSpan> を基に選別しました。",
     "recommended_accommodations": "旅行者におすすめの宿泊施設",
     "explore_all_areas": "{{regions}} 全ての区域を見回す",
+    "explore_attractions": "{{regions}}名所を見て回る",
     "total_districts": "計{{count}}区",
     "45_attractions": "{{attractions_count}}の観光スポット",
     "website_url": "サイトURL",
