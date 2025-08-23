@@ -48,14 +48,14 @@ const SearchBar = ({
     data: regionsResponse,
     isLoading: isRegionsLoading,
     error: isRegionsError,
-  } = useRegionsQuery();
+  } = useRegionsQuery(currentLanguage);
 
   // 선택된 시/도의 구/군 목록 조회
   const {
     data: regionDetail,
     isLoading: isRegionDetailLoading,
     error: isRegionDetailError,
-  } = useRegionDetailQuery(selectedRegion?.id || null);
+  } = useRegionDetailQuery(selectedRegion?.id || null, currentLanguage);
 
   const regions = regionsResponse?.regions || [];
   const subregions = regionDetail?.regions?.subregions?.results || [];
@@ -124,14 +124,24 @@ const SearchBar = ({
     const locationQuery = `${selectedRegion.name} ${district.name}`;
     setSearchQuery(locationQuery);
 
-    // 쿼리 파라미터로 넘기기
     const params = new URLSearchParams({
       region_id: selectedRegion.id.toString(),
       subregion_id: district.id.toString(),
-      lang: currentLanguage, // 나중에 언어 상태로 변경
+      lang: currentLanguage,
     });
 
-    navigate(`/explore/regions?${params.toString()}`);
+    // 메인페이지에서는 /explore/regions로 이동, 나머지는 현재 경로 유지
+    if (location.pathname === '/') {
+      navigate(`/explore/regions?${params.toString()}`);
+    } else {
+      const currentParams = new URLSearchParams(location.search);
+      currentParams.set('region_id', selectedRegion.id.toString());
+      currentParams.set('subregion_id', district.id.toString());
+      currentParams.set('lang', currentLanguage);
+
+      navigate(`${location.pathname}?${currentParams.toString()}`);
+    }
+
     setIsDropdownOpen(false);
   };
 
@@ -144,13 +154,24 @@ const SearchBar = ({
   const handleCityAll = (region: { id: number; name: string }) => {
     setSearchQuery(region.name);
 
-    // 쿼리 파라미터로 넘기기 (subregion_id 없음)
     const params = new URLSearchParams({
       region_id: region.id.toString(),
-      lang: currentLanguage, // 나중에 언어 상태로 변경
+      lang: currentLanguage,
     });
 
-    navigate(`/explore/regions?${params.toString()}`);
+    // 메인페이지에서는 /explore/regions로 이동, 나머지는 현재 경로 유지
+    if (location.pathname === '/') {
+      navigate(`/explore/regions?${params.toString()}`);
+    } else {
+      // 현재 URL params 가져와서 업데이트
+      const currentParams = new URLSearchParams(location.search);
+      currentParams.set('region_id', region.id.toString());
+      currentParams.delete('subregion_id');
+      currentParams.set('lang', currentLanguage);
+
+      navigate(`${location.pathname}?${currentParams.toString()}`);
+    }
+
     setIsDropdownOpen(false);
   };
 
@@ -221,7 +242,9 @@ const SearchBar = ({
                           }
                           className='hover:bg-hover-gray flex items-center justify-between rounded-lg px-4 py-3 transition-colors duration-150'
                         >
-                          <span className='font-medium'>{region.name}</span>
+                          <span className='text-left font-medium'>
+                            {region.name}
+                          </span>
                           <ChevronRightIcon className='h-4 w-4 text-gray-400' />
                         </button>
                       ))
