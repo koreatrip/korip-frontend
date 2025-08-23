@@ -14,6 +14,8 @@ import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useModalStore } from '@/stores/useModalStore';
 import CreateTripModal from '../modals/CreateTripModal';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { i } from 'node_modules/react-router/dist/development/components-CjQijYga.d.mts';
 
 // --- Props 타입 정의 ---
 type THeaderProps = {
@@ -48,6 +50,8 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
   const { stack: modalStack, actions: modalActions } = useModalStore();
 
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const isLogin = useAuthStore((state) => state.auth.isLogin);
 
   // 스크롤 감지
   useEffect(() => {
@@ -220,17 +224,20 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
               <div className='tablet-bp:flex desktop-bp:hidden hidden flex-grow'></div>
 
               {/* 데스크톱: 우측 메뉴 */}
+
               <ul className='desktop-bp:flex hidden items-center font-medium'>
-                {authMenuItems.map((item) => (
-                  <li
-                    key={item.label}
-                    className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
-                  >
-                    <a href={item.href}>
-                      <p>{item.label}</p>
-                    </a>
-                  </li>
-                ))}
+                {!isLogin &&
+                  authMenuItems.map((item) => (
+                    <li
+                      key={item.label}
+                      className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
+                    >
+                      <a href={item.href}>
+                        <p>{item.label}</p>
+                      </a>
+                    </li>
+                  ))}
+
                 <li className='relative'>
                   <button
                     onClick={actions.toggleLangDropdown}
@@ -285,16 +292,18 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
 
               {/* 데스크톱: 우측 메뉴 (햄버거 없음) */}
               <ul className='desktop-bp:flex hidden items-center font-medium'>
-                {authMenuItems.map((item) => (
-                  <li
-                    key={item.label}
-                    className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
-                  >
-                    <a href={item.href}>
-                      <p>{item.label}</p>
-                    </a>
-                  </li>
-                ))}
+                {!isLogin &&
+                  authMenuItems.map((item) => (
+                    <li
+                      key={item.label}
+                      className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
+                    >
+                      <a href={item.href}>
+                        <p>{item.label}</p>
+                      </a>
+                    </li>
+                  ))}
+
                 <li className='relative'>
                   <button
                     onClick={actions.toggleLangDropdown}
@@ -313,12 +322,15 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
 
               {/* 태블릿: 우측 메뉴 (로그인 + 햄버거만) */}
               <div className='tablet-bp:flex desktop-bp:hidden hidden items-center gap-x-2'>
-                <a
-                  href={authMenuItems[0].href}
-                  className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-medium'
-                >
-                  <p>{authMenuItems[0].label}</p>
-                </a>
+                {!isLogin && (
+                  <a
+                    href={authMenuItems[0].href}
+                    className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-medium'
+                  >
+                    <p>{authMenuItems[0].label}</p>
+                  </a>
+                )}
+
                 <button
                   onClick={actions.toggleMenu}
                   className='hover:bg-hover-gray rounded-lg p-2'
@@ -335,12 +347,15 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
 
           {/* 모바일 우측 메뉴 (공통) */}
           <div className='tablet-bp:hidden flex items-center gap-x-2'>
-            <a
-              href='/login'
-              className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-semibold'
-            >
-              <p>{t('auth.login')}</p>
-            </a>
+            {!isLogin && (
+              <a
+                href='/login'
+                className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-semibold'
+              >
+                <p>{t('auth.login')}</p>
+              </a>
+            )}
+
             <button
               onClick={actions.toggleMenu}
               className='hover:bg-hover-gray rounded-lg p-2'

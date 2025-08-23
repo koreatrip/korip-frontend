@@ -4,8 +4,10 @@ import Cookies from 'js-cookie';
 const { VITE_BASE_URL } = import.meta.env;
 
 // 토큰을 저장하고 가져오는 함수
-const getAccessToken = (): string | undefined => Cookies.get('access_token');
-const getRefreshToken = (): string | undefined => Cookies.get('refresh_token');
+export const getAccessToken = (): string | undefined =>
+  Cookies.get('access_token');
+export const getRefreshToken = (): string | undefined =>
+  Cookies.get('refresh_token');
 
 // 액세스 토큰 설정
 export const setAccessToken = (token: string) => {
