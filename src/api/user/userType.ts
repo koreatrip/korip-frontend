@@ -113,7 +113,6 @@ export type ReissueTokenResponse = {
   message?: string;
 };
 
-
 export type UserProfileResponse = {
   success: boolean;
   data: UserProfile;

@@ -11,7 +11,6 @@ const FirstSearchingPage = () => {
     { title: '서울', imageUrl: 'https://via.placeholder.com/300x200' },
     { title: '서울', imageUrl: 'https://via.placeholder.com/300x200' },
     { title: '서울', imageUrl: 'https://via.placeholder.com/300x200' },
-
   ];
 
   return (

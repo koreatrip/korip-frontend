@@ -10,7 +10,9 @@ const InterestContext = createContext<InterestContextType | undefined>(
 );
 
 export const InterestProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedDetailInterests, setSelectedDetailInterests] = useState<string[]>([]);
+  const [selectedDetailInterests, setSelectedDetailInterests] = useState<
+    string[]
+  >([]);
 
   return (
     <InterestContext.Provider

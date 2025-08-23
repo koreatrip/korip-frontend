@@ -17,7 +17,7 @@ async function enableMocking() {
   // once the Service Worker is up and ready to intercept requests.
   return worker.start({
     onUnhandledRequest: 'bypass',
-    quiet: true
+    quiet: true,
   });
 }
 

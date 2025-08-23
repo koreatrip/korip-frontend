@@ -47,7 +47,7 @@ const mockUserData = {
       favorites: 12,
       visitedPlaces: 8,
     },
-  }
+  },
 };
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ onSave, onCancel }) => {
@@ -96,7 +96,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ onSave, onCancel }) => {
   const handleInterestAdd = async (interest: string) => {
     if (interest.trim() && !tempFormData.interests.includes(interest.trim())) {
       const newInterests = [...tempFormData.interests, interest.trim()];
-      
+
       // UI 먼저 업데이트
       setTempFormData((prev) => ({
         ...prev,
@@ -108,7 +108,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ onSave, onCancel }) => {
         try {
           await updatePreferences.mutateAsync({
             userId: userProfileData.data.id,
-            data: { interests: newInterests }
+            data: { interests: newInterests },
           });
           showToast('관심사가 추가되었습니다.', 'success');
         } catch (error) {
@@ -117,7 +117,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ onSave, onCancel }) => {
           // 실패 시 원복
           setTempFormData((prev) => ({
             ...prev,
-            interests: prev.interests.filter(i => i !== interest.trim()),
+            interests: prev.interests.filter((i) => i !== interest.trim()),
           }));
         }
       }
@@ -140,7 +140,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ onSave, onCancel }) => {
       try {
         await updatePreferences.mutateAsync({
           userId: userProfileData.data.id,
-          data: { interests: newInterests }
+          data: { interests: newInterests },
         });
         showToast('관심사가 제거되었습니다.', 'success');
       } catch (error) {
@@ -210,7 +210,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ onSave, onCancel }) => {
     setShowAccountDeleteModal(true);
   };
 
-  const handleAccountDeleteConfirm = (selectedReasons: string[], customReason?: string) => {
+  const handleAccountDeleteConfirm = (
+    selectedReasons: string[],
+    customReason?: string
+  ) => {
     // TODO: 계정 탈퇴 API 호출
     console.log('계정 탈퇴 요청:', { selectedReasons, customReason });
     showToast('계정 탈퇴가 요청되었습니다.', 'success');
@@ -276,7 +279,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ onSave, onCancel }) => {
           stats={formData.stats}
         />
 
-        <SecuritySection 
+        <SecuritySection
           onPasswordChange={() => setShowPasswordModal(true)}
           onAccountDelete={handleAccountDelete}
         />
