@@ -84,9 +84,9 @@ const TripEditPage: React.FC = () => {
     const newTimeSlots = currentTimeSlots.map((slot) =>
       slot.id === id ? { ...slot, title: '', description: '' } : slot
     );
-    setDaySchedules(prev => ({
+    setDaySchedules((prev) => ({
       ...prev,
-      [selectedDay]: newTimeSlots
+      [selectedDay]: newTimeSlots,
     }));
   };
 
@@ -115,9 +115,9 @@ const TripEditPage: React.FC = () => {
             title: item.name,
             description: item.category,
           };
-          setDaySchedules(prev => ({
+          setDaySchedules((prev) => ({
             ...prev,
-            [selectedDay]: newTimeSlots
+            [selectedDay]: newTimeSlots,
           }));
         }
       }
@@ -152,9 +152,9 @@ const TripEditPage: React.FC = () => {
       description: draggedContent.description,
     };
 
-    setDaySchedules(prev => ({
+    setDaySchedules((prev) => ({
       ...prev,
-      [selectedDay]: newTimeSlots
+      [selectedDay]: newTimeSlots,
     }));
   };
 
@@ -347,7 +347,7 @@ const TripEditPage: React.FC = () => {
                 >
                   {day}일차 (7/{day})
                   {selectedDay === day && (
-                    <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-[#4A9B8E]'></div>
+                    <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-[#4A9B8E]'></div>
                   )}
                 </button>
               ))}
@@ -429,9 +429,9 @@ const TripEditPage: React.FC = () => {
                                 title: item.name,
                                 description: item.category,
                               };
-                              setDaySchedules(prev => ({
+                              setDaySchedules((prev) => ({
                                 ...prev,
-                                [selectedDay]: newTimeSlots
+                                [selectedDay]: newTimeSlots,
                               }));
                             }
                           } catch (error) {
@@ -456,14 +456,15 @@ const TripEditPage: React.FC = () => {
                                   type='text'
                                   value={slot.title}
                                   onChange={(e) => {
-                                    const updatedSlots = currentTimeSlots.map((s) =>
-                                      s.id === slot.id
-                                        ? { ...s, title: e.target.value }
-                                        : s
+                                    const updatedSlots = currentTimeSlots.map(
+                                      (s) =>
+                                        s.id === slot.id
+                                          ? { ...s, title: e.target.value }
+                                          : s
                                     );
-                                    setDaySchedules(prev => ({
+                                    setDaySchedules((prev) => ({
                                       ...prev,
-                                      [selectedDay]: updatedSlots
+                                      [selectedDay]: updatedSlots,
                                     }));
                                   }}
                                   className='mb-1 w-full border-none bg-transparent text-sm font-medium text-gray-900 focus:outline-none'
@@ -473,14 +474,18 @@ const TripEditPage: React.FC = () => {
                                   type='text'
                                   value={slot.description}
                                   onChange={(e) => {
-                                    const updatedSlots = currentTimeSlots.map((s) =>
-                                      s.id === slot.id
-                                        ? { ...s, description: e.target.value }
-                                        : s
+                                    const updatedSlots = currentTimeSlots.map(
+                                      (s) =>
+                                        s.id === slot.id
+                                          ? {
+                                              ...s,
+                                              description: e.target.value,
+                                            }
+                                          : s
                                     );
-                                    setDaySchedules(prev => ({
+                                    setDaySchedules((prev) => ({
                                       ...prev,
-                                      [selectedDay]: updatedSlots
+                                      [selectedDay]: updatedSlots,
                                     }));
                                   }}
                                   className='w-full border-none bg-transparent text-xs text-gray-500 focus:outline-none'
@@ -524,7 +529,7 @@ const TripEditPage: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
       {/* 태블릿 레이아웃 */}
       <div className='hidden py-6 md:block lg:hidden'>
         <div className='space-y-6'>
@@ -534,44 +539,60 @@ const TripEditPage: React.FC = () => {
             </h1>
             <p className='text-gray-600'>일정을 수정해보세요</p>
           </div>
-          
+
           {/* 사용법 박스 */}
           <div className='flex items-center rounded-lg border border-[#D4A574] bg-[#F7F0E8] p-4'>
             <p className='text-sm text-[#2C3E50]'>
-              💡사용법: 왼쪽 명소를 드래그 해서 가운데 시간대에 놓으세요. 날짜와 시간을 자유롭게 조정할 수 있습니다.
+              💡사용법: 왼쪽 명소를 드래그 해서 가운데 시간대에 놓으세요. 날짜와
+              시간을 자유롭게 조정할 수 있습니다.
             </p>
           </div>
-          
+
           {/* 3개 박스 가로 정렬 */}
           <div className='grid grid-cols-3 gap-4'>
             <div className='rounded-lg bg-white p-4 shadow-sm'>
-              <h3 className='mb-3 text-sm font-medium text-gray-900'>일정 요약</h3>
-              <div className='space-y-2 overflow-y-auto' style={{ maxHeight: '200px' }}>
+              <h3 className='mb-3 text-sm font-medium text-gray-900'>
+                일정 요약
+              </h3>
+              <div
+                className='space-y-2 overflow-y-auto'
+                style={{ maxHeight: '200px' }}
+              >
                 {scheduleSummary.map((item) => (
                   <DraggableCard key={item.id} item={item} />
                 ))}
               </div>
             </div>
-            
+
             <div className='rounded-lg bg-white p-4 shadow-sm'>
-              <h3 className='mb-3 text-sm font-medium text-gray-900'>선택된 장소들</h3>
-              <div className='space-y-2 overflow-y-auto' style={{ maxHeight: '200px' }}>
+              <h3 className='mb-3 text-sm font-medium text-gray-900'>
+                선택된 장소들
+              </h3>
+              <div
+                className='space-y-2 overflow-y-auto'
+                style={{ maxHeight: '200px' }}
+              >
                 {selectedPlaces.map((item) => (
                   <DraggableCard key={item.id} item={item} />
                 ))}
               </div>
             </div>
-            
+
             <div className='rounded-lg bg-white p-4 shadow-sm'>
-              <h3 className='mb-3 text-sm font-medium text-gray-900'>즐겨찾는 장소들</h3>
-              <div className='space-y-2 overflow-y-auto' style={{ maxHeight: '200px' }}>
+              <h3 className='mb-3 text-sm font-medium text-gray-900'>
+                즐겨찾는 장소들
+              </h3>
+              <div
+                className='space-y-2 overflow-y-auto'
+                style={{ maxHeight: '200px' }}
+              >
                 {favoritePlaces.map((item) => (
                   <DraggableCard key={item.id} item={item} />
                 ))}
               </div>
             </div>
           </div>
-          
+
           {/* 날짜 선택 및 시간별 일정 통합 박스 */}
           <div className='rounded-lg bg-white p-6 shadow-sm'>
             <div className='mb-4'>
@@ -595,7 +616,7 @@ const TripEditPage: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className='mb-4 flex gap-6'>
               {[1, 2, 3].map((day) => (
                 <button
@@ -609,12 +630,12 @@ const TripEditPage: React.FC = () => {
                 >
                   {day}일차 (7/{day})
                   {selectedDay === day && (
-                    <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-[#4A9B8E]'></div>
+                    <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-[#4A9B8E]'></div>
                   )}
                 </button>
               ))}
             </div>
-            
+
             <div
               className={`min-h-64 rounded-lg border-2 border-none p-4 transition-all duration-300 ease-in-out ${
                 isDragOver
@@ -678,8 +699,7 @@ const TripEditPage: React.FC = () => {
                               ) {
                                 swapTimeSlotContent(dragData.index, index);
                               }
-                            }
-                            else if (placeData) {
+                            } else if (placeData) {
                               const item = JSON.parse(placeData) as PlaceItem;
                               const newTimeSlots = [...currentTimeSlots];
                               newTimeSlots[index] = {
@@ -687,9 +707,9 @@ const TripEditPage: React.FC = () => {
                                 title: item.name,
                                 description: item.category,
                               };
-                              setDaySchedules(prev => ({
+                              setDaySchedules((prev) => ({
                                 ...prev,
-                                [selectedDay]: newTimeSlots
+                                [selectedDay]: newTimeSlots,
                               }));
                             }
                           } catch (error) {
@@ -711,14 +731,15 @@ const TripEditPage: React.FC = () => {
                                   type='text'
                                   value={slot.title}
                                   onChange={(e) => {
-                                    const updatedSlots = currentTimeSlots.map((s) =>
-                                      s.id === slot.id
-                                        ? { ...s, title: e.target.value }
-                                        : s
+                                    const updatedSlots = currentTimeSlots.map(
+                                      (s) =>
+                                        s.id === slot.id
+                                          ? { ...s, title: e.target.value }
+                                          : s
                                     );
-                                    setDaySchedules(prev => ({
+                                    setDaySchedules((prev) => ({
                                       ...prev,
-                                      [selectedDay]: updatedSlots
+                                      [selectedDay]: updatedSlots,
                                     }));
                                   }}
                                   className='mb-1 w-full border-none bg-transparent text-sm font-medium text-gray-900 focus:outline-none'
@@ -728,14 +749,18 @@ const TripEditPage: React.FC = () => {
                                   type='text'
                                   value={slot.description}
                                   onChange={(e) => {
-                                    const updatedSlots = currentTimeSlots.map((s) =>
-                                      s.id === slot.id
-                                        ? { ...s, description: e.target.value }
-                                        : s
+                                    const updatedSlots = currentTimeSlots.map(
+                                      (s) =>
+                                        s.id === slot.id
+                                          ? {
+                                              ...s,
+                                              description: e.target.value,
+                                            }
+                                          : s
                                     );
-                                    setDaySchedules(prev => ({
+                                    setDaySchedules((prev) => ({
                                       ...prev,
-                                      [selectedDay]: updatedSlots
+                                      [selectedDay]: updatedSlots,
                                     }));
                                   }}
                                   className='w-full border-none bg-transparent text-xs text-gray-500 focus:outline-none'
@@ -765,7 +790,7 @@ const TripEditPage: React.FC = () => {
               )}
             </div>
           </div>
-          
+
           <div className='flex justify-end'>
             <button
               onClick={handleSave}
@@ -777,7 +802,7 @@ const TripEditPage: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
       {/* 모바일 레이아웃 */}
       <div className='block py-4 md:hidden'>
         <div className='space-y-4'>
@@ -787,14 +812,14 @@ const TripEditPage: React.FC = () => {
             </h1>
             <p className='text-sm text-gray-600'>일정을 수정해보세요</p>
           </div>
-          
+
           {/* 사용법 박스 */}
           <div className='rounded-lg border border-[#D4A574] bg-[#F7F0E8] p-3'>
             <p className='text-xs text-[#2C3E50]'>
               💡사용법: 드래그해서 시간대에 놓으세요.
             </p>
           </div>
-          
+
           {/* 날짜 선택 */}
           <div className='rounded-lg bg-white p-4 shadow-sm'>
             <div className='mb-3'>
@@ -818,7 +843,7 @@ const TripEditPage: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className='mb-3 flex gap-4'>
               {[1, 2, 3].map((day) => (
                 <button
@@ -832,12 +857,12 @@ const TripEditPage: React.FC = () => {
                 >
                   {day}일차
                   {selectedDay === day && (
-                    <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-[#4A9B8E]'></div>
+                    <div className='absolute right-0 bottom-0 left-0 h-0.5 bg-[#4A9B8E]'></div>
                   )}
                 </button>
               ))}
             </div>
-            
+
             {/* 시간별 일정 */}
             <div className='space-y-2'>
               {currentTimeSlots.map((slot, index) => (
@@ -883,46 +908,76 @@ const TripEditPage: React.FC = () => {
               ))}
             </div>
           </div>
-          
+
           {/* 3개 박스 세로 정렬 */}
           <div className='space-y-3'>
             <div className='rounded-lg bg-white p-4 shadow-sm'>
-              <h3 className='mb-3 text-sm font-medium text-gray-900'>일정 요약</h3>
-              <div className='space-y-2 overflow-y-auto' style={{ maxHeight: '150px' }}>
+              <h3 className='mb-3 text-sm font-medium text-gray-900'>
+                일정 요약
+              </h3>
+              <div
+                className='space-y-2 overflow-y-auto'
+                style={{ maxHeight: '150px' }}
+              >
                 {scheduleSummary.map((item) => (
-                  <div key={item.id} className='rounded-lg border-l-4 border-l-[#4A9B8E] bg-gray-50 p-2'>
-                    <div className='text-xs font-medium text-gray-900'>{item.name}</div>
+                  <div
+                    key={item.id}
+                    className='rounded-lg border-l-4 border-l-[#4A9B8E] bg-gray-50 p-2'
+                  >
+                    <div className='text-xs font-medium text-gray-900'>
+                      {item.name}
+                    </div>
                     <div className='text-xs text-gray-500'>{item.category}</div>
                   </div>
                 ))}
               </div>
             </div>
-            
+
             <div className='rounded-lg bg-white p-4 shadow-sm'>
-              <h3 className='mb-3 text-sm font-medium text-gray-900'>선택된 장소들</h3>
-              <div className='space-y-2 overflow-y-auto' style={{ maxHeight: '150px' }}>
+              <h3 className='mb-3 text-sm font-medium text-gray-900'>
+                선택된 장소들
+              </h3>
+              <div
+                className='space-y-2 overflow-y-auto'
+                style={{ maxHeight: '150px' }}
+              >
                 {selectedPlaces.map((item) => (
-                  <div key={item.id} className='rounded-lg border-l-4 border-l-[#4A9B8E] bg-gray-50 p-2'>
-                    <div className='text-xs font-medium text-gray-900'>{item.name}</div>
+                  <div
+                    key={item.id}
+                    className='rounded-lg border-l-4 border-l-[#4A9B8E] bg-gray-50 p-2'
+                  >
+                    <div className='text-xs font-medium text-gray-900'>
+                      {item.name}
+                    </div>
                     <div className='text-xs text-gray-500'>{item.category}</div>
                   </div>
                 ))}
               </div>
             </div>
-            
+
             <div className='rounded-lg bg-white p-4 shadow-sm'>
-              <h3 className='mb-3 text-sm font-medium text-gray-900'>즐겨찾는 장소들</h3>
-              <div className='space-y-2 overflow-y-auto' style={{ maxHeight: '150px' }}>
+              <h3 className='mb-3 text-sm font-medium text-gray-900'>
+                즐겨찾는 장소들
+              </h3>
+              <div
+                className='space-y-2 overflow-y-auto'
+                style={{ maxHeight: '150px' }}
+              >
                 {favoritePlaces.map((item) => (
-                  <div key={item.id} className='rounded-lg border-l-4 border-l-[#4A9B8E] bg-gray-50 p-2'>
-                    <div className='text-xs font-medium text-gray-900'>{item.name}</div>
+                  <div
+                    key={item.id}
+                    className='rounded-lg border-l-4 border-l-[#4A9B8E] bg-gray-50 p-2'
+                  >
+                    <div className='text-xs font-medium text-gray-900'>
+                      {item.name}
+                    </div>
                     <div className='text-xs text-gray-500'>{item.category}</div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-          
+
           <button
             onClick={handleSave}
             className='w-full rounded-lg bg-[#FF6B7A] py-3 font-medium text-white transition-colors hover:bg-[#e55a6e]'

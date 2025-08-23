@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 const MyPageMenu = () => {
   const { t } = useTranslation();
   // const { data: userProfileData, isLoading } = useUserProfile();
-  
+
   // 임시 목 데이터
   const userName = '김태율';
   const isLoading = false;
