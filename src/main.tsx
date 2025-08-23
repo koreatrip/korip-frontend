@@ -6,28 +6,28 @@ import { StrictMode } from 'react';
 import './i18n/i18n.ts';
 const queryClient = new QueryClient();
 
-async function enableMocking() {
-  if (process.env.NODE_ENV !== 'development') {
-    return;
-  }
+// async function enableMocking() {
+//   if (process.env.NODE_ENV !== 'development') {
+//     return;
+//   }
 
-  const { worker } = await import('./mocks/browser');
+//   const { worker } = await import('./mocks/browser');
 
-  // `worker.start()` returns a Promise that resolves
-  // once the Service Worker is up and ready to intercept requests.
-  return worker.start({
-    onUnhandledRequest: 'bypass',
-    quiet: true,
-  });
-}
+//   // `worker.start()` returns a Promise that resolves
+//   // once the Service Worker is up and ready to intercept requests.
+//   return worker.start({
+//     onUnhandledRequest: 'bypass',
+//     quiet: true
+//   });
+// }
 
-enableMocking().then(() => {
-  createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <App />
-        {/* <ReactQueryDevtools initialIsOpen={true} /> */}
-      </QueryClientProvider>
-    </StrictMode>
-  );
-});
+// enableMocking().then(() => {
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <App />
+      {/* <ReactQueryDevtools initialIsOpen={true} /> */}
+    </QueryClientProvider>
+  </StrictMode>
+);
+// });

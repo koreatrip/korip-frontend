@@ -1,15 +1,16 @@
+import { getWeatherIcon } from '@/utils/weatherUtils';
 import { useTranslation } from 'react-i18next';
 
 // src/components/domain/weather/HourlyForecast.tsx
-interface HourlyData {
+type HourlyData = {
   time: string;
-  icon: string;
-  temp: string;
+  weather_condition: string;
+  temperature: string;
   pop?: string;
-}
-interface HourlyForecastProps {
+};
+type HourlyForecastProps = {
   data: HourlyData[];
-}
+};
 const HourlyForecast = ({ data }: HourlyForecastProps) => {
   const { t } = useTranslation();
   return (
@@ -21,8 +22,12 @@ const HourlyForecast = ({ data }: HourlyForecastProps) => {
         {data.map((hour, index) => (
           <div key={index} className='min-w-16 flex-shrink-0 text-center'>
             <div className='mb-3 text-sm opacity-70'>{hour.time}</div>
-            <div className='mb-3 text-3xl'>{hour.icon}</div>
-            <div className='mb-1 text-lg font-semibold'>{hour.temp}°</div>
+            <div className='mb-3 text-3xl'>
+              {getWeatherIcon(hour.weather_condition)}
+            </div>
+            <div className='mb-1 text-lg font-semibold'>
+              {hour.temperature}°
+            </div>
             {hour.pop && hour.pop !== '0' && (
               <div className='text-sub-text-gray text-xs opacity-70'>
                 {hour.pop}%
