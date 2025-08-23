@@ -268,7 +268,14 @@ const RegionsPage = () => {
             )}
           </ul>
           <div className='mt-2 flex w-full justify-end'>
-            <button className='cursor-pointer font-medium'>
+            <button
+              className='cursor-pointer font-medium'
+              onClick={() =>
+                navigate(
+                  `/explore/attractions?subregion_id=${subregionId}&lang=${currentLanguage}`
+                )
+              }
+            >
               {t('common.view_all')}
             </button>
           </div>
