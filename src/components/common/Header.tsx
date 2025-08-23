@@ -271,12 +271,22 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
 
               {/* 태블릿: 우측 메뉴 (로그인 + 햄버거만) */}
               <div className='tablet-bp:flex desktop-bp:hidden hidden items-center gap-x-2'>
-                <a
-                  href={authMenuItems[0].href}
-                  className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-medium'
-                >
-                  <p>{authMenuItems[0].label}</p>
-                </a>
+                {!isLogin ? (
+                  <a
+                    href={authMenuItems[0].href}
+                    className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-medium'
+                  >
+                    <p>{authMenuItems[0].label}</p>
+                  </a>
+                ) : (
+                  <a
+                    className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-medium'
+                    onClick={handleLogout}
+                  >
+                    <p>{logoutMenuItem.label}</p>
+                  </a>
+                )}
+
                 <button
                   onClick={actions.toggleMenu}
                   className='hover:bg-hover-gray rounded-lg p-2'
