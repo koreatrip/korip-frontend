@@ -25,7 +25,7 @@ const NotFoundPage = () => {
 
         {/* 설명 텍스트 */}
         <p className='text-sub-text-gray mb-8 max-w-md'>
-          {t('common.description')}
+          {t('common.page_description')}
         </p>
 
         {/* 홈으로 가기 버튼 */}
