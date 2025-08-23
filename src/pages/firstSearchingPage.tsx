@@ -1,5 +1,5 @@
 import Container from '@/components/common/Container';
-import SearchBar from '@/components/common/searchBar/SearchBar';
+import SearchBar from '@/components/domain/searchBar/SearchBar';
 import CarouselForCard from '@/components/domain/regions/CarouselForCard';
 import FirstInfoCard from '@/components/domain/regions/FirstInfoCard';
 

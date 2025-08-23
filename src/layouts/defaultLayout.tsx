@@ -1,4 +1,5 @@
 import Header from '@/components/common/Header';
+import LanguageRedirect from '@/components/common/LanguageRedirect';
 import { ToastProvider } from '@/context/ToastContextProvider';
 import { Outlet, useLocation } from 'react-router';
 
@@ -13,12 +14,14 @@ const defaultLayout = () => {
 
   return (
     <ToastProvider>
-      <div className='bg-bg-white text-main-text-navy font-pretendard min-h-screen'>
-        <Header variant={headerVariant} />
-        <main className='flex flex-col'>
-          <Outlet />
-        </main>
-      </div>
+      <LanguageRedirect>
+        <div className='bg-bg-white text-main-text-navy font-pretendard min-h-screen'>
+          <Header variant={headerVariant} />
+          <main className='flex flex-col'>
+            <Outlet />
+          </main>
+        </div>
+      </LanguageRedirect>
     </ToastProvider>
   );
 };

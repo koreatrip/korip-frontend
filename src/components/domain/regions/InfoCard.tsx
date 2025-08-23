@@ -90,13 +90,25 @@ const InfoCard = ({
       {/* --- 하단 텍스트 영역 --- */}
       <div className='p-5'>
         <h3 className='text-main-text-navy text-lg font-semibold'>{title}</h3>
-        <p className='text-sub-text-gray mt-1 truncate font-normal'>
+
+        {/* 여러 줄 description with ellipsis */}
+        <p
+          className='text-sub-text-gray mt-1 leading-relaxed font-normal'
+          style={{
+            display: '-webkit-box',
+            WebkitLineClamp: 2, // 최대 2줄까지 표시
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
           {description}
         </p>
+
         {/* details 정보가 있을 때만 표시 */}
         {details && (
-          <div className='text-sub-text-gray mt-2 flex items-center'>
-            <span>{details}</span>
+          <div className='text-sub-text-gray flex items-center'>
+            <span className='truncate'>{details}</span>
           </div>
         )}
       </div>
