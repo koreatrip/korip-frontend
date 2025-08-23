@@ -25,7 +25,8 @@ export const useUpdateUserProfile = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdateUserProfileRequest) => userAPI.updateUserInfo(data),
+    mutationFn: (data: UpdateUserProfileRequest) =>
+      userAPI.updateUserInfo(data),
     onSuccess: () => {
       // 사용자 정보 쿼리 무효화하여 재조회
       queryClient.invalidateQueries({ queryKey: ['user', 'profile'] });
@@ -52,8 +53,13 @@ export const useUpdatePreferences = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ userId, data }: { userId: number; data: UpdatePreferencesRequest }) => 
-      userAPI.updatePreferences(userId, data),
+    mutationFn: ({
+      userId,
+      data,
+    }: {
+      userId: number;
+      data: UpdatePreferencesRequest;
+    }) => userAPI.updatePreferences(userId, data),
     onSuccess: () => {
       // 사용자 정보 쿼리 무효화하여 재조회
       queryClient.invalidateQueries({ queryKey: ['user', 'profile'] });
@@ -96,11 +102,13 @@ export const useToggleFavoritePlace = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ userId, placeId }: { userId: number; placeId: number }) => 
+    mutationFn: ({ userId, placeId }: { userId: number; placeId: number }) =>
       userAPI.toggleFavoritePlace(userId, placeId),
     onSuccess: (_, { userId }) => {
       // 즐겨찾기 장소 목록 재조회
-      queryClient.invalidateQueries({ queryKey: ['user', userId, 'favorite-places'] });
+      queryClient.invalidateQueries({
+        queryKey: ['user', userId, 'favorite-places'],
+      });
     },
   });
 };
@@ -110,11 +118,13 @@ export const useToggleFavoriteRegion = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ userId, regionId }: { userId: number; regionId: number }) => 
+    mutationFn: ({ userId, regionId }: { userId: number; regionId: number }) =>
       userAPI.toggleFavoriteRegion(userId, regionId),
     onSuccess: (_, { userId }) => {
       // 즐겨찾기 지역 목록 재조회
-      queryClient.invalidateQueries({ queryKey: ['user', userId, 'favorite-regions'] });
+      queryClient.invalidateQueries({
+        queryKey: ['user', userId, 'favorite-regions'],
+      });
     },
   });
 };
@@ -125,4 +135,3 @@ export const useReissueToken = () => {
     mutationFn: (data: ReissueTokenRequest) => userAPI.reissueToken(data),
   });
 };
-

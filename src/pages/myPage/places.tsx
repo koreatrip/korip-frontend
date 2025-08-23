@@ -6,7 +6,11 @@ import type { PlaceData } from '@/types/plannerType';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFavoritePlaces, useUserProfile, useToggleFavoritePlace } from '@/api/user/userHooks';
+import {
+  useFavoritePlaces,
+  useUserProfile,
+  useToggleFavoritePlace,
+} from '@/api/user/userHooks';
 import type { FavoritePlace } from '@/api/user/userType';
 
 const Places: React.FC = () => {
@@ -58,7 +62,7 @@ const Places: React.FC = () => {
   // API 데이터를 로컬 형식으로 변환
   const places: PlaceData[] = useMemo(() => {
     if (!favoritePlacesData?.data) return [];
-    
+
     return favoritePlacesData.data.map((place: FavoritePlace) => ({
       id: place.id,
       type: place.type,
@@ -141,7 +145,7 @@ const Places: React.FC = () => {
   const handleFavorite = async (id: number): Promise<void> => {
     // 임시로 비활성화
     // if (!userId) return;
-    
+
     try {
       // await toggleFavoritePlace.mutateAsync({ userId, placeId: id });
       console.log('즐겨찾기 토글:', id);
@@ -155,11 +159,11 @@ const Places: React.FC = () => {
     return (
       <div className='max-w-screen-2xl py-8'>
         <div className='animate-pulse space-y-4'>
-          <div className='h-8 bg-gray-200 rounded w-1/3'></div>
-          <div className='h-12 bg-gray-200 rounded'></div>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+          <div className='h-8 w-1/3 rounded bg-gray-200'></div>
+          <div className='h-12 rounded bg-gray-200'></div>
+          <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
             {[...Array(6)].map((_, i) => (
-              <div key={i} className='h-[200px] bg-gray-200 rounded'></div>
+              <div key={i} className='h-[200px] rounded bg-gray-200'></div>
             ))}
           </div>
         </div>
@@ -171,9 +175,13 @@ const Places: React.FC = () => {
   if (error) {
     return (
       <div className='max-w-screen-2xl py-8'>
-        <div className='text-center py-16'>
-          <p className='text-red-500'>즐겨찾기 장소를 불러오는데 실패했습니다.</p>
-          <p className='text-gray-400 text-sm mt-2'>잠시 후 다시 시도해주세요.</p>
+        <div className='py-16 text-center'>
+          <p className='text-red-500'>
+            즐겨찾기 장소를 불러오는데 실패했습니다.
+          </p>
+          <p className='mt-2 text-sm text-gray-400'>
+            잠시 후 다시 시도해주세요.
+          </p>
         </div>
       </div>
     );
