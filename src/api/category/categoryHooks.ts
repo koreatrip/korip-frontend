@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { categoryQueries } from './categoryQueries';
 import type { CategoriesResponse } from './categoryType';
 
-export const useAllCategoriesQuery = (lang: string = 'ko', options?: any) => {
+export const useAllCategoriesQuery = (lang: string, options?: any) => {
   return useQuery<CategoriesResponse>({
     ...categoryQueries.categories.all(lang),
     ...options,
@@ -12,7 +12,7 @@ export const useAllCategoriesQuery = (lang: string = 'ko', options?: any) => {
 
 export const useSubcategoriesQuery = (
   categoryId: number,
-  lang: string = 'ko',
+  lang: string,
   options?: any
 ) => {
   return useQuery({
