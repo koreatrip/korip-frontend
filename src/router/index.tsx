@@ -22,6 +22,7 @@ import LanguagePage from '@/pages/languagePage';
 import ResetPasswordPage from '@/pages/resetPasswordPage';
 import NotFoundPage from '@/pages/statusPage/notFoundPage';
 import ErrorPage from '@/pages/statusPage/errorPage';
+import AttractionsPage from '@/pages/attractionsPage';
 
 export const router = createBrowserRouter([
   {
@@ -61,8 +62,8 @@ export const router = createBrowserRouter([
         element: <DistrictListPage />,
       },
       {
-        path: 'explore/attractions/:district',
-        element: <DistrictListPage />,
+        path: 'explore/attractions',
+        element: <AttractionsPage />,
       },
       {
         path: 'planner',
