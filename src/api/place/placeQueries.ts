@@ -40,5 +40,22 @@ export const placesQueries = createQueryKeyStore({
           page: pageParam,
         }),
     }),
+    detail: (params: { place_id: number | null; lang?: string }) => ({
+      queryKey: [
+        'places',
+        'detail',
+        params.place_id?.toString() || '',
+        params.lang || 'ko',
+      ],
+      queryFn: () => {
+        if (!params.place_id) {
+          throw new Error('place_id is required');
+        }
+        return placesAPI.getPlaceDetail({
+          place_id: params.place_id,
+          lang: params.lang,
+        });
+      },
+    }),
   },
 });

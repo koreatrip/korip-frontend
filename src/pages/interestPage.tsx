@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 const InterestPage = () => {
   const { data, isLoading, isError, error } = useAllCategoriesQuery('ko');
   const { showToast } = useToast();
-  const [slectedId, setSletedId] = useState<number>();
+  const [selectedId, setSelectedId] = useState<number>();
   const [subCate, setSubCate] = useState<Subcategory[]>([]);
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -26,7 +26,7 @@ const InterestPage = () => {
   let mainCate: Category[] = [];
 
   const handleClickSubCate = (id: number) => {
-    setSletedId(id);
+    setSelectedId(id);
   };
 
   const handleClickName = (data: Subcategory) => {
@@ -67,11 +67,11 @@ const InterestPage = () => {
   };
 
   useEffect(() => {
-    const tempCate = mainCate.find((item) => item.id === slectedId);
+    const tempCate = mainCate.find((item) => item.id === selectedId);
     if (tempCate) {
       setSubCate(tempCate.subcategories);
     }
-  }, [slectedId]);
+  }, [selectedId]);
 
   if (data) {
     mainCate = data.data;
@@ -96,14 +96,14 @@ const InterestPage = () => {
         {/* 대분류 해시태그 뿌림 */}
         {mainCate && mainCate.length > 0 && (
           <SelectButtonGroup
-            slectedId={slectedId}
+            slectedId={selectedId}
             mainCateData={mainCate}
             handleClickSubCate={handleClickSubCate}
           />
         )}
 
         {/* 소분류 해시태그 뿌림 */}
-        {slectedId && slectedId !== 6 && (
+        {selectedId && selectedId !== 6 && (
           <SelectDetailBox
             subCateData={subCate}
             // ui 확인용 프롭스
@@ -113,7 +113,7 @@ const InterestPage = () => {
         )}
 
         {/* K-POP 아이돌/그룹 선택 */}
-        {slectedId === 6 && (
+        {selectedId === 6 && (
           <div className='border-main-pink bg-main-pink/2 my-6 rounded-3xl border p-6'>
             <p className='mb-4'>관심있는 K-POP 아이돌/그룹을 선택하세요</p>
             <Input

@@ -60,3 +60,20 @@ export const useInfiniteSubregionPlacesQuery = (
     ...options,
   });
 };
+
+// 명소 상세 정보 훅 추가
+export const usePlaceDetailQuery = (
+  params: {
+    place_id: number | null;
+    lang?: string;
+  },
+  options = {}
+) => {
+  return useQuery({
+    ...placesQueries.places.detail(params),
+    enabled: !!params.place_id,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    ...options,
+  });
+};
