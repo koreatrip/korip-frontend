@@ -1,6 +1,6 @@
 import Modal from '@/components/common/Modal';
 import { useTranslation } from 'react-i18next';
-import { Controller, Control } from 'react-hook-form'; // Controller와 Control 타입을 임포트
+import { Controller, type Control } from 'react-hook-form'; // Controller와 Control 타입을 임포트
 import TermsOfServiceContent from './TermsOfServiceContent';
 import PrivacyPolicyContent from './PrivacyPolicyContent';
 import LocationServiceContent from './LocationServiceContent';

@@ -1,7 +1,7 @@
 import Modal, { Body, Footer, Header } from '@/components/common/Modal';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 
 type FormValues = {
   idolName: string;

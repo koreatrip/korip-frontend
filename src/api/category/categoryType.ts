@@ -1,23 +1,19 @@
-// categoryType.ts
+export type Category = {
+  subcategories(subcategories: any): unknown;
+  id: number;
+  name: string;
+};
+
 export type Subcategory = {
   id: number;
   name: string;
 };
 
-export type Category = {
-  id: number;
-  name: string;
-  subcategories: Subcategory[];
-};
-
 export type CategoriesResponse = {
-  success: boolean;
-  data: Category[];
-  message?: string;
+  categories: Category[];
+  // subcategories: Subcategory[];
 };
 
 export type SubcategoriesResponse = {
-  success: boolean;
-  data: Subcategory[];
-  message?: string;
+  subcategories: Subcategory[];
 };

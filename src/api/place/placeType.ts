@@ -1,4 +1,5 @@
 export type Place = {
+  feature: string | null | undefined;
   id: number;
   content_id: string | null;
   name: string;
@@ -21,6 +22,8 @@ export type Place = {
   region: {
     id: number;
     name: string;
+    description: string;
+    feature: string;
   };
   sub_region: {
     id: number;
@@ -55,8 +58,8 @@ export type SubRegion = {
 export type PlacesResponse = {
   popular_subregions: SubRegion[];
   major_places: Place[];
-  region: Region[];
-  subregion: SubRegion[];
+  region: Region;
+  subregion?: SubRegion;
   user_recommended_places?: Place[];
 };
 
