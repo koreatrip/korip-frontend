@@ -1,4 +1,6 @@
 import { star } from '@/assets/assets';
+import { useAuthCheck } from '@/hooks/useAuthCheck';
+import { useToast } from '@/hooks/useToast';
 import { useModalStore } from '@/stores/useModalStore';
 
 type TCard = {
@@ -27,7 +29,8 @@ const InfoCard = ({
   onFavorite = () => {},
 }: TCard) => {
   const { actions } = useModalStore();
-
+  const { isLoggedIn } = useAuthCheck();
+  const { showToast } = useToast();
   // 일정 추가 버튼 클릭 핸들러
   const handleAddSchedule = (e?: React.MouseEvent) => {
     // 이벤트 버블링 방지 (selectable 카드의 onClick과 충돌 방지)
@@ -35,6 +38,11 @@ const InfoCard = ({
 
     if (onAddSchedule) {
       onAddSchedule();
+    } else if (isLoggedIn) {
+      showToast(
+        '일정추가드롭다운이보여야하는데이거는또일정 폴더가 만들어져잇어야함',
+        'success'
+      );
     } else {
       // 기본 동작: 로그인 프롬프트 모달 열기
       console.log('Opening login prompt modal'); // 디버깅용
