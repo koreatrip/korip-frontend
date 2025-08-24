@@ -2,12 +2,49 @@ import Container from '@/components/common/Container';
 import bg from '@assets/lagnage_bg.png';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 const LanguagePage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
 
-  const [selectedLanguage, setSelectedLanguage] = useState('한국어');
+  const langCodeMap: { [key: string]: string } = {
+    한국어: 'ko',
+    English: 'en',
+    日本語: 'jp',
+    中文: 'cn',
+  };
+
+  const codeLangMap: { [key: string]: string } = {
+    ko: '한국어',
+    en: 'English',
+    ja: '日本語',
+    zh: '中文',
+  };
+
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    codeLangMap[i18n.language] || '한국어'
+  );
   const languages = ['한국어', 'English', '日本語', '中文'];
+
+  const handleLanguageSelect = (language: string) => {
+    setSelectedLanguage(language);
+    const codeToSet = langCodeMap[language] || 'ko';
+
+    if (i18n.language !== codeToSet) {
+      i18n.changeLanguage(codeToSet);
+
+      const currentParams = new URLSearchParams(window.location.search);
+      currentParams.set('lang', codeToSet);
+      navigate(`${window.location.pathname}?${currentParams.toString()}`, {
+        replace: true,
+      });
+    }
+  };
+
+  const handleConfirm = () => {
+    navigate('/');
+  };
 
   return (
     <div>
@@ -34,7 +71,7 @@ const LanguagePage = () => {
             {languages.map((language) => (
               <button
                 key={language}
-                onClick={() => setSelectedLanguage(language)}
+                onClick={() => handleLanguageSelect(language)}
                 className={`hover:text-sub-green flex aspect-square w-full cursor-pointer items-center justify-center rounded-2xl border-2 text-xl font-bold shadow-md transition-all duration-300 ${
                   selectedLanguage === language
                     ? 'border-sub-green bg-sub-green text-white hover:text-white'
@@ -48,7 +85,10 @@ const LanguagePage = () => {
           <p className='font-sm text-ph-gray text-center'>
             {t('languages.language_can_be_changed_anytime')}
           </p>
-          <button className='bg-sub-green hover:text-sub-green hover:border-sub-green m-auto mt-8 w-fit cursor-pointer rounded-full border-2 border-white px-7 py-3 text-white transition-all duration-100 hover:border-2 hover:bg-white'>
+          <button
+            className='bg-sub-green hover:text-sub-green hover:border-sub-green m-auto mt-8 w-fit cursor-pointer rounded-full border-2 border-white px-7 py-3 text-white transition-all duration-100 hover:border-2 hover:bg-white'
+            onClick={handleConfirm}
+          >
             {t('common.confirm_selection')}
           </button>
         </div>
