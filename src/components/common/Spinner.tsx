@@ -1,5 +1,10 @@
 import { motion } from 'framer-motion';
-const Spinner = ({ size = 'md' }) => {
+
+type SpinnerProps = {
+  size?: 'sm' | 'md' | 'lg';
+};
+
+const Spinner = ({ size = 'md' }: SpinnerProps) => {
   const sizeClasses = {
     sm: 'w-2 h-2',
     md: 'w-3 h-3',
@@ -11,7 +16,7 @@ const Spinner = ({ size = 'md' }) => {
       transition: {
         staggerChildren: 0.15,
         repeat: Infinity,
-        repeatType: 'loop',
+        repeatType: 'loop' as const, // 타입 명시
       },
     },
   };
@@ -23,7 +28,7 @@ const Spinner = ({ size = 'md' }) => {
       backgroundColor: ['#2c3e50', '#ff5566', '#ff6b7a', '#2c3e50'],
       transition: {
         duration: 1.2,
-        ease: 'easeInOut',
+        ease: 'easeInOut' as const,
         repeat: Infinity,
       },
     },
@@ -45,4 +50,5 @@ const Spinner = ({ size = 'md' }) => {
     </motion.div>
   );
 };
+
 export default Spinner;

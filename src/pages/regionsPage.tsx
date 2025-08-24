@@ -1,4 +1,5 @@
 import InfoCard from '@/components/domain/regions/InfoCard';
+import InfoCardSkeleton from '@/components/common/ui/InfoCardSkeleton';
 import Carousel from '@/components/domain/regions/Carousel';
 import Weather from '@/components/domain/weather/Weather';
 import Container from '@/components/common/Container';
@@ -11,6 +12,7 @@ import { usePlacesQuery } from '@/api/place/placeHooks';
 import LoadingPage from './statusPage/loadingPage';
 import { useEffect } from 'react';
 import { useNumericSearchParam } from '@/hooks/useNumericSearchParam';
+import EmptyCard from '@/components/common/ui/EmptyCard';
 
 const RegionsPage = () => {
   const navigate = useNavigate();
@@ -39,32 +41,40 @@ const RegionsPage = () => {
     }
   );
 
+  // 안전한 데이터 추출 (배열 접근 포함)
+  const region = placesData?.region; // 첫 번째 요소
+  const subregion = placesData?.subregion; // 첫 번째 요소
+  const popularSubregions = placesData?.popular_subregions || [];
+  const majorPlaces = placesData?.major_places || [];
+  const userRecommendedPlaces = placesData?.user_recommended_places || [];
+  const accommodations = placesData?.accommodations || [];
+
   console.log('placesData:', placesData);
   console.log('현재 i18n.language:', i18n.language);
   console.log('currentLanguage 값:', currentLanguage);
 
   // 위치 표시명 결정 함수 - API 데이터 기반으로 수정
   const getLocationDisplayName = () => {
-    if (!placesData?.region?.name) return '날씨 정보';
+    if (!region?.name) return '날씨 정보';
 
     // subregion이 선택되어 있고 데이터가 있으면 함께 표시
-    if (subregionId && placesData?.subregion?.name) {
-      return `${placesData.region.name} ${placesData.subregion.name} 날씨`;
+    if (subregionId && subregion?.name) {
+      return `${region.name} ${subregion.name} 날씨`;
     }
 
     // region만 선택된 경우
-    return `${placesData.region.name} 날씨`;
+    return `${region.name} 날씨`;
   };
 
   // 현재 보고 있는 지역명 결정 - API 데이터 우선, 로케이션 스토어 fallback
   const getCurrentRegionName = () => {
     // 1순위: API 데이터 조합
-    if (placesData?.region?.name) {
-      const regionName = placesData.region.name;
+    if (region?.name) {
+      const regionName = region.name;
 
       // subregion이 선택되어 있고 데이터가 있으면 함께 표시
-      if (subregionId && placesData?.subregion?.name) {
-        return `${regionName} ${placesData.subregion.name}`;
+      if (subregionId && subregion?.name) {
+        return `${regionName} ${subregion.name}`;
       }
 
       // region만 선택된 경우
@@ -73,18 +83,18 @@ const RegionsPage = () => {
 
     // 2순위: URL 파라미터 기반 fallback
     if (regionId) {
-      const regionNames = {
-        '1': '서울특별시',
-        '2': '부산광역시',
-        '3': '대구광역시',
-        '4': '인천광역시',
+      const regionNames: Record<number, string> = {
+        1: '서울특별시',
+        2: '부산광역시',
+        3: '대구광역시',
+        4: '인천광역시',
       };
 
-      const subregionNames = {
-        '526': '강남구',
-        '527': '강동구',
-        '548': '종로구',
-        '549': '중구',
+      const subregionNames: Record<number, string> = {
+        526: '강남구',
+        527: '강동구',
+        548: '종로구',
+        549: '중구',
       };
 
       const regionName = regionNames[regionId] || `지역 ${regionId}`;
@@ -126,13 +136,13 @@ const RegionsPage = () => {
         {/* 지역 정보 섹션 */}
         <div className='mt-[60px] flex flex-col'>
           <h1 className='tablet-bp:text-4xl mb-4 text-2xl font-semibold'>
-            {placesData?.region?.name || '서울특별시'}
+            {region?.name || '서울특별시'}
           </h1>
           <h2 className='tablet-bp:text-[32px] mb-3.5 text-xl font-semibold'>
-            {placesData?.region?.description || '대한민국의 수도'}
+            {region?.description || '대한민국의 수도'}
           </h2>
           <p className='text-sub-text-gray tablet-bp:text-base text-sm'>
-            {placesData?.region.feature}
+            {region?.feature}
           </p>
         </div>
 
@@ -157,56 +167,52 @@ const RegionsPage = () => {
           <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
             {t('places.popular_area_info')}
           </h2>
+
           <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-4 mt-7 grid grid-cols-1 gap-4'>
-            {placesData?.popular_subregions?.length > 0 ? (
-              // API 데이터 사용
-              placesData.popular_subregions.map((subregion) => (
-                <li key={subregion.id}>
-                  <InfoCard
-                    variant='selectable'
-                    title={subregion.name}
-                    description={subregion.description || ''}
-                    details={subregion.feature || ''}
-                  />
-                </li>
-              ))
-            ) : (
-              // 로딩 중이거나 데이터 없을 때 fallback
-              <>
-                <li>
-                  <InfoCard variant='interactive' />
-                </li>
-                <li>
-                  <InfoCard variant='selectable' title='종로구' />
-                </li>
-                <li>
-                  <InfoCard
-                    variant='selectable'
-                    title='강남구'
-                    description='트렌디한 쇼핑과 엔터테인먼트의 중심지'
-                  />
-                </li>
-                <li>
-                  <InfoCard
-                    variant='selectable'
-                    title='홍대입구'
-                    description='젊음과 예술이 넘치는 문화의 거리'
-                  />
-                </li>
-              </>
-            )}
+            {isLoading
+              ? Array.from({ length: 4 }, (_, i) => (
+                  <li key={`skeleton-subregion-${i}`}>
+                    <InfoCardSkeleton variant='selectable' />
+                  </li>
+                ))
+              : popularSubregions.length > 0
+                ? popularSubregions.map((subregion) => (
+                    <li key={subregion.id}>
+                      <InfoCard
+                        variant='selectable'
+                        title={subregion.name}
+                        description={subregion.description || ''}
+                        details={subregion.feature || ''}
+                      />
+                    </li>
+                  ))
+                : // EmptyCard로 교체
+                  Array.from({ length: 4 }, (_, i) => (
+                    <li key={`empty-subregion-${i}`}>
+                      <EmptyCard
+                        variant='selectable'
+                        type='subregions'
+                        onActionClick={() =>
+                          navigate('/explore/regions?region_id=1')
+                        }
+                      />
+                    </li>
+                  ))}
           </ul>
-          <div className='mt-2 flex w-full justify-end'>
-            <button
-              onClick={() =>
-                navigate(
-                  `/explore/districts?region_id=${regionId}&subregion_id=${subregionId}&lang=${currentLanguage}`
-                )
-              }
-            >
-              {t('places.explore_all_districts')}
-            </button>
-          </div>
+
+          {popularSubregions.length > 0 && (
+            <div className='mt-2 flex w-full justify-end'>
+              <button
+                onClick={() =>
+                  navigate(
+                    `/explore/districts?region_id=${regionId}&subregion_id=${subregionId}&lang=${currentLanguage}`
+                  )
+                }
+              >
+                {t('places.explore_all_districts')}
+              </button>
+            </div>
+          )}
         </div>
 
         <h1 className='tablet-bp:text-4xl mt-14 text-2xl font-semibold'>
@@ -222,51 +228,37 @@ const RegionsPage = () => {
           <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
             {t('places.main_attractions')}
           </h2>
+
           <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-4 mt-7 grid grid-cols-1 gap-4'>
-            {placesData.major_places?.length > 0 ? (
-              placesData.major_places.slice(0, 4).map((place) => (
-                <li key={place.id}>
-                  <InfoCard
-                    variant='interactive'
-                    title={place.name}
-                    description={place.description}
-                    details={place.feature}
-                  />
-                </li>
-              ))
-            ) : (
-              // 데이터가 없을 때 기본 카드들
-              <>
-                <li>
-                  <InfoCard variant='interactive' />
-                </li>
-                <li>
-                  <InfoCard
-                    variant='interactive'
-                    title='경복궁'
-                    description='조선시대 왕궁 한복입고 방문시 어쩌고'
-                    details='오전9시 ~ 6시 3호선 경복궁 역 '
-                  />
-                </li>
-                <li>
-                  <InfoCard
-                    variant='selectable'
-                    title='경복궁'
-                    description='조선시대 왕궁 한복입고 방문시 어쩌고'
-                    details='오전9시 ~ 6시 3호선 경복궁 역 '
-                  />
-                </li>
-                <li>
-                  <InfoCard
-                    variant='selectable'
-                    title='경복궁'
-                    description='조선시대 왕궁 한복입고 방문시 어쩌고'
-                    details='오전9시 ~ 6시 3호선 경복궁 역 '
-                  />
-                </li>
-              </>
-            )}
+            {isLoading
+              ? Array.from({ length: 4 }, (_, i) => (
+                  <li key={`skeleton-major-${i}`}>
+                    <InfoCardSkeleton variant='interactive' />
+                  </li>
+                ))
+              : majorPlaces.length > 0
+                ? majorPlaces.slice(0, 4).map((place) => (
+                    <li key={place.id}>
+                      <InfoCard
+                        variant='interactive'
+                        title={place.name}
+                        description={place.description ?? ''} // null이면 빈 문자열
+                        details={place.feature ?? ''}
+                      />
+                    </li>
+                  ))
+                : // EmptyCard로 교체
+                  Array.from({ length: 4 }, (_, i) => (
+                    <li key={`empty-attraction-${i}`}>
+                      <EmptyCard
+                        variant='interactive'
+                        type='attractions'
+                        onActionClick={() => navigate('/explore/attractions')}
+                      />
+                    </li>
+                  ))}
           </ul>
+
           <div className='mt-2 flex w-full justify-end'>
             <button
               className='cursor-pointer font-medium'
@@ -282,7 +274,7 @@ const RegionsPage = () => {
         </div>
 
         {/* 사용자 추천 명소 섹션 */}
-        {placesData.user_recommended_places && (
+        {userRecommendedPlaces.length > 0 ? (
           <div className='mt-7'>
             <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
               {t('places.recommended_spots_for_user')}
@@ -297,13 +289,30 @@ const RegionsPage = () => {
               />
             </p>
             <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-3 mt-7 grid grid-cols-1 gap-4'>
-              {placesData.user_recommended_places.slice(0, 3).map((place) => (
+              {userRecommendedPlaces.slice(0, 3).map((place) => (
                 <li key={place.id}>
                   <InfoCard
                     variant='selectable'
                     title={place.name}
-                    description={place.description}
-                    details={place.feature}
+                    description={place.description ?? ''}
+                    details={place.feature ?? ''}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className='mt-7'>
+            <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
+              {t('places.recommended_spots_for_user')}
+            </h2>
+            <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-3 mt-7 grid grid-cols-1 gap-4'>
+              {Array.from({ length: 3 }, (_, i) => (
+                <li key={`empty-user-recommended-${i}`}>
+                  <EmptyCard
+                    variant='selectable'
+                    type='user-recommended'
+                    onActionClick={() => actions.openLoginPrompt()}
                   />
                 </li>
               ))}
@@ -311,40 +320,36 @@ const RegionsPage = () => {
           </div>
         )}
 
-        {/* 숙박 시설 섹션 - 현재는 하드코딩 유지 */}
+        {/* 숙박 시설 섹션 */}
         <div className='my-16'>
           <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
             {t('places.recommended_accommodations')}
           </h2>
+
           <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-4 mt-7 grid grid-cols-1 gap-4'>
-            <li>
-              <InfoCard variant='selectable' />
-            </li>
-            <li>
-              <InfoCard
-                variant='selectable'
-                title='경복궁'
-                description='조선시대 왕궁 한복입고 방문시 어쇼고'
-                details='오전9시 ~ 6시 3호선 경복궁 역 '
-              />
-            </li>
-            <li>
-              <InfoCard
-                variant='selectable'
-                title='경복궁'
-                description='조선시대 왕궁 한복입고 방문시 어쩌고'
-                details='오전9시 ~ 6시 3호선 경복궁 역 '
-              />
-            </li>
-            <li>
-              <InfoCard
-                variant='selectable'
-                title='경복궁'
-                description='조선시대 왕궁 한복입고 방문시 어쩌고'
-                details='오전9시 ~ 6시 3호선 경복궁 역 '
-              />
-            </li>
+            {accommodations.length > 0
+              ? accommodations.map((accommodation) => (
+                  <li key={accommodation.id}>
+                    <InfoCard
+                      variant='selectable'
+                      title={accommodation.name}
+                      description={accommodation.description}
+                      details={accommodation.feature}
+                    />
+                  </li>
+                ))
+              : // EmptyCard로 교체
+                Array.from({ length: 4 }, (_, i) => (
+                  <li key={`empty-accommodation-${i}`}>
+                    <EmptyCard
+                      variant='selectable'
+                      type='accommodations'
+                      onActionClick={() => navigate('/explore/accommodations')}
+                    />
+                  </li>
+                ))}
           </ul>
+
           <div className='mt-2 flex w-full justify-end'>
             <button className='cursor-pointer font-medium'>
               {t('common.view_all')}
@@ -352,6 +357,7 @@ const RegionsPage = () => {
           </div>
         </div>
       </Container>
+
       <LoginPromptModal
         isOpen={stack.isLoginPromptOpen}
         onClose={actions.closeLoginPrompt}

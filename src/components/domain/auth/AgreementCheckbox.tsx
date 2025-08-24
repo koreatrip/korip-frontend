@@ -1,7 +1,16 @@
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
 
-const AgreementCheckbox = ({
+type AgreementCheckboxProps = {
+  id: string;
+  type: string;
+  checked: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onLinkClick: () => void;
+  required?: boolean;
+};
+
+const AgreementCheckbox: React.FC<AgreementCheckboxProps> = ({
   id,
   type,
   checked,
