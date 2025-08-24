@@ -68,3 +68,7 @@ export type SubregionPlacesResponse = {
   page_size: number;
   places: Place[];
 };
+
+export type PlaceDetailResponse = {
+  place: Place;
+};

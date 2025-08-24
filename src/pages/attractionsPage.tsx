@@ -6,12 +6,19 @@ import LoadingPage from './statusPage/loadingPage';
 import PlaceCard from '@/components/domain/regions/PlaceCard';
 import { useEffect, useRef } from 'react';
 import Spinner from '@/components/common/Spinner';
+import { useLocation, useNavigate } from 'react-router';
+import PlaceDetailModal from '@/components/domain/regions/PlaceDetailModal';
 
 const AttractionsPage = () => {
   const { t, i18n } = useTranslation();
-  const subregionId = useNumericSearchParam('subregion_id');
-  const categoryId = useNumericSearchParam('category_id'); // 카테고리 ID 추가
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  const subregionId = useNumericSearchParam('subregion_id');
+  const categoryId = useNumericSearchParam('category_id');
+  const placeId = useNumericSearchParam('place_id');
 
   const {
     data,
@@ -43,6 +50,18 @@ const AttractionsPage = () => {
     }
 
     return '선택된 지역';
+  };
+
+  const handlePlaceCardClick = (placeId: number) => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set('place_id', placeId.toString());
+    navigate(`${location.pathname}?${searchParams.toString()}`);
+  };
+
+  const handleModalClose = () => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.delete('place_id');
+    navigate(`${location.pathname}?${searchParams.toString()}`);
   };
 
   // Intersection Observer를 사용한 무한스크롤
@@ -81,35 +100,47 @@ const AttractionsPage = () => {
   if (error) return <div>error: {error.message}</div>;
 
   return (
-    <ListPageLayout
-      title={t('places.explore_attractions', {
-        regions: getCurrentSubregionName(),
-      })}
-      subtitle={t('places.45_attractions', {
-        attractions_count: firstPageData?.count || 0,
-      })}
-    >
-      {allPlaces.length > 0 ? (
-        <>
-          {allPlaces.map((place) => (
-            <PlaceCard key={place.id} data={place} />
-          ))}
+    <>
+      <ListPageLayout
+        title={t('places.explore_attractions', {
+          regions: getCurrentSubregionName(),
+        })}
+        subtitle={t('places.45_attractions', {
+          attractions_count: firstPageData?.count || 0,
+        })}
+      >
+        {allPlaces.length > 0 ? (
+          <>
+            {allPlaces.map((place) => (
+              <PlaceCard
+                key={place.id}
+                data={place}
+                onClick={() => handlePlaceCardClick(place.id)}
+              />
+            ))}
 
-          {/* 무한스크롤 트리거 요소 */}
-          <div ref={loadMoreRef} className='col-span-full h-10'>
-            {isFetchingNextPage && (
-              <div className='flex justify-center py-4'>
-                <Spinner />
-              </div>
-            )}
+            {/* 무한스크롤 트리거 요소 */}
+            <div ref={loadMoreRef} className='col-span-full h-10'>
+              {isFetchingNextPage && (
+                <div className='flex justify-center py-4'>
+                  <Spinner />
+                </div>
+              )}
+            </div>
+          </>
+        ) : (
+          <div className='col-span-full text-center text-gray-500'>
+            해당 지역의 명소 정보가 없습니다.
           </div>
-        </>
-      ) : (
-        <div className='col-span-full text-center text-gray-500'>
-          해당 지역의 명소 정보가 없습니다.
-        </div>
-      )}
-    </ListPageLayout>
+        )}
+      </ListPageLayout>
+      <PlaceDetailModal
+        isOpen={!!placeId}
+        onClose={handleModalClose}
+        placeId={placeId}
+        lang={i18n.language || 'ko'}
+      />
+    </>
   );
 };
 

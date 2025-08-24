@@ -1,5 +1,9 @@
 import axios from 'axios';
-import type { PlacesResponse, SubregionPlacesResponse } from './placeType';
+import type {
+  PlaceDetailResponse,
+  PlacesResponse,
+  SubregionPlacesResponse,
+} from './placeType';
 
 export const placesAPI = {
   getPlaces: async (params: {
@@ -65,6 +69,37 @@ export const placesAPI = {
     } catch (error) {
       console.error(
         `Error fetching subregion places for ID ${params.subregion_id}:`,
+        error
+      );
+      throw error;
+    }
+  },
+  getPlaceDetail: async (params: {
+    place_id: number;
+    lang?: string;
+  }): Promise<PlaceDetailResponse> => {
+    // 응답 타입은 실제 데이터 구조에 맞게 수정 필요
+    try {
+      console.log(
+        `Calling API: /api/places/${params.place_id}/ with params:`,
+        params
+      );
+
+      const response = await axios.get(`/api/places/${params.place_id}/`, {
+        params: {
+          ...(params.lang && { lang: params.lang }),
+        },
+        headers: { Accept: 'application/json' },
+      });
+
+      console.log(
+        `Place detail response for ${params.place_id}:`,
+        response.data
+      );
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error fetching place detail for ID ${params.place_id}:`,
         error
       );
       throw error;
