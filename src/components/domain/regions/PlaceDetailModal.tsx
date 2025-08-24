@@ -1,66 +1,36 @@
+import { usePlaceDetailQuery } from '@/api/place/placeHooks';
 import Button from '@/components/common/Button';
 import { Modal } from '@/components/common/Modal';
+import Spinner from '@/components/common/Spinner';
+import { parseOperatingHours } from '@/utils/timeUtils';
 import { useTranslation } from 'react-i18next';
+import { Map, MapMarker } from 'react-kakao-maps-sdk';
 
-// --- 데이터 타입 정의 ---
-type TPlaceData = {
-  name: string;
-  address: string;
-  description: string;
-  operatingTime: string;
-  closingDays: string;
-  phoneNumber: string;
-};
-
-type OperatingHour = {
-  day: string;
-  time: string;
-};
-
-// --- 데이터 가공 로직 ---
-const processOperatingHours = (apiData: TPlaceData): OperatingHour[] => {
-  const allDays = [
-    '월요일',
-    '화요일',
-    '수요일',
-    '목요일',
-    '금요일',
-    '토요일',
-    '일요일',
-  ];
-  const { operatingTime, closingDays } = apiData;
-
-  if (closingDays === '연중무휴') {
-    return allDays.map((day) => ({ day, time: operatingTime }));
-  }
-  if (closingDays.startsWith('매주')) {
-    const closedDay = closingDays.replace('매주', '').trim();
-    return allDays.map((day) => ({
-      day,
-      time: day === closedDay ? '휴무일' : operatingTime,
-    }));
-  }
-  return allDays.map((day) => ({ day, time: operatingTime }));
-};
-
-// --- 메인 컴포넌트: PlaceDetailModal ---
-type TPlaceDetailModalProps = {
+type PlaceDetailModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  placeId: number | null;
+  lang: string;
 };
 
-const PlaceDetailModal = ({ isOpen, onClose }: TPlaceDetailModalProps) => {
-  const mockPlaceData: TPlaceData = {
-    name: '경복궁',
-    address: '서울특별시 종로구 사직로 161',
-    phoneNumber: '02-3700-3900',
-    description:
-      "경복궁은 서울의 중심에 자리한 조선 왕조의 가장 위대한 궁궐입니다. 아름다운 건축물과 넓은 정원을 거닐며 한국의 유구한 역사와 전통미를 느낄 수 있는 곳이에요. '큰 복을 누리다'라는 의미를 지닌 이곳에서 조선 왕조의 번영과 이야기를 만나보세요.",
-    operatingTime: '09:00 ~ 18:00',
-    closingDays: '매주 화요일',
-  };
+const PlaceDetailModal = ({
+  isOpen,
+  onClose,
+  placeId,
+  lang,
+}: PlaceDetailModalProps) => {
+  const { t } = useTranslation();
 
-  const processedHours = processOperatingHours(mockPlaceData);
+  const { data: placeDetailData, isLoading } = usePlaceDetailQuery(
+    { place_id: placeId, lang },
+    { enabled: !!placeId && isOpen }
+  );
+
+  const place = placeDetailData?.place;
+  console.log('디테일 모달입니당', place);
+  const processedHours = place?.use_time
+    ? parseOperatingHours(place.use_time)
+    : [];
   const dayOfWeekMap = [
     '일요일',
     '월요일',
@@ -72,71 +42,125 @@ const PlaceDetailModal = ({ isOpen, onClose }: TPlaceDetailModalProps) => {
   ];
   const todayName = dayOfWeekMap[new Date().getDay()];
 
-  const { t } = useTranslation();
+  // const markerImageInfo = {
+  //   src: '/pin.svg', // 마커 이미지 주소
+  //   size: {
+  //     width: 36,
+  //     height: 52,
+  //   }, // 마커 이미지의 크기
+  //   options: {
+  //     offset: {
+  //       x: 18, // 마커의 가로 위치 (중앙으로 설정)
+  //       y: 52, // 마커의 세로 위치 (하단으로 설정)
+  //     },
+  //   },
+  // };
 
+  if (isLoading) {
+    return (
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal.Body>
+          <div className='flex justify-center py-8'>
+            <Spinner />
+          </div>
+        </Modal.Body>
+      </Modal>
+    );
+  }
+
+  if (!place) {
+    return (
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal.Body>
+          <div className='py-8 text-center text-gray-500'>
+            명소 정보를 불러올 수 없습니다.
+          </div>
+        </Modal.Body>
+      </Modal>
+    );
+  }
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Modal.Header>경복궁</Modal.Header>
+      <Modal.Header>{place.name}</Modal.Header>
       <Modal.Body>
-        <div className='h-[182px] w-full rounded-lg bg-gray-200'></div>
+        <div className='h-[182px] w-full rounded-lg'>
+          {place.latitude && place.longitude && (
+            <Map
+              center={{ lat: place.latitude, lng: place.longitude }} // 맵의 중심을 장소의 좌표로 설정
+              style={{ width: '100%', height: '100%', borderRadius: '0.5rem' }}
+              level={3} // 확대 레벨
+            >
+              <MapMarker
+                position={{ lat: place.latitude, lng: place.longitude }}
+                // image={markerImageInfo}
+              />{' '}
+              {/* 장소 위치에 마커 표시 */}
+            </Map>
+          )}
+        </div>
         <div className='mt-7 flex h-80 flex-col space-y-5 overflow-y-scroll'>
           <div className='flex flex-col'>
             <p className='font-semibold'>{t('common.address')}</p>
-            <p className='text-main-text-navy/80'>{mockPlaceData.address}</p>
+            <p className='text-main-text-navy/80'>{place.address}</p>
           </div>
-          <div className='flex flex-col'>
-            <p className='font-semibold'>{t('common.description')}</p>
-            <p className='text-main-text-navy/80 leading-relaxed'>
-              {mockPlaceData.description}
-            </p>
-          </div>
-
+          {place.description && place.description !== '-' && (
+            <div className='flex flex-col'>
+              <p className='font-semibold'>{t('common.description')}</p>
+              <p className='text-main-text-navy/80 leading-relaxed'>
+                {place.description}
+              </p>
+            </div>
+          )}
           <div className='mb-3 flex items-center justify-between border-b border-gray-200 pb-3'>
             <h4 className='font-semibold text-gray-600'>
               {t('common.inquiry_and_info')}
             </h4>
             <a
-              href={`tel:${mockPlaceData.phoneNumber}`}
+              href={`tel:${place.phone_number}`}
               className='text-sub-green font-semibold hover:underline'
             >
-              {mockPlaceData.phoneNumber}
+              {place.phone_number}
             </a>
           </div>
 
-          <h4 className='mb-3 font-semibold text-gray-600'>
-            {t('places.available_hours')}
-          </h4>
-          <div className='space-y-2'>
-            {processedHours.map(({ day, time }) => {
-              const isToday = day === todayName;
-              const isClosed = time === t('common.closed_days');
-              return (
-                <div
-                  key={day}
-                  className={`flex items-center justify-between text-sm ${isToday ? 'font-bold' : ''}`}
-                >
-                  <span
-                    className={
-                      isToday ? 'text-sub-green' : 'text-main-text-navy'
-                    }
-                  >
-                    {day}
-                  </span>
-                  <span
-                    className={
-                      isClosed
-                        ? 'text-main-pink font-semibold'
-                        : isToday
-                          ? 'text-sub-green'
-                          : 'text-main-text-navy'
-                    }
-                  >
-                    {time}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+          {place.use_time && (
+            <>
+              <h4 className='mb-3 font-semibold text-gray-600'>
+                {t('places.available_hours')}
+              </h4>
+              <div className='space-y-2'>
+                {processedHours.map(({ day, time }) => {
+                  const isToday = day === todayName;
+                  const isClosed = time === '휴무';
+                  return (
+                    <div
+                      key={day}
+                      className={`flex items-center justify-between text-sm ${isToday ? 'font-bold' : ''}`}
+                    >
+                      <span
+                        className={
+                          isToday ? 'text-sub-green' : 'text-main-text-navy'
+                        }
+                      >
+                        {day}
+                      </span>
+                      <span
+                        className={
+                          isClosed
+                            ? 'font-semibold text-red-500'
+                            : isToday
+                              ? 'text-sub-green'
+                              : 'text-main-text-navy'
+                        }
+                      >
+                        {time}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
       </Modal.Body>
       <Modal.Footer>
