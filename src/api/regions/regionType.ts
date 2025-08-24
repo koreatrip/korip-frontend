@@ -4,6 +4,8 @@ export type Region = {
   id: number;
   name: string;
   name_en: string;
+  description: string;
+  feature: string;
   created_at: string;
   updated_at: string;
 };

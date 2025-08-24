@@ -14,7 +14,6 @@ const DistrictListPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const regionId = useNumericSearchParam('region_id');
-  const subregionId = useNumericSearchParam('subregion_id');
   const currentLanguage = i18n.language || 'ko';
   // 시/도 목록 조회
   const {
