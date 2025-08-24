@@ -1,4 +1,4 @@
-import { Children, ReactNode, useState } from 'react';
+import { Children, type ReactNode, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { left_arrow, right_arrow } from '@/assets/assets';
 

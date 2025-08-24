@@ -2,7 +2,7 @@ import {
   useAllCategoriesQuery,
   useSubcategoriesQuery,
 } from '@/api/category/categoryHooks';
-import { TagSkeleton } from '@/components/ui/TagSkeleton';
+import { TagSkeleton } from '@/components/common/ui/TagSkeleton';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router';
 import { useNumericSearchParam } from '@/hooks/useNumericSearchParam';
@@ -28,6 +28,8 @@ const Tag = () => {
   } = useSubcategoriesQuery(selectedCategory!, i18n.language || 'ko', {
     enabled: !!selectedCategory,
   });
+
+  console.log('subcategoriesData:', subcategoriesData);
 
   // URL 파라미터 업데이트 헬퍼 함수
   const updateURLParams = (updates: Record<string, string | null>) => {
