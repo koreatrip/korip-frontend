@@ -113,14 +113,37 @@ export type ReissueTokenResponse = {
   message?: string;
 };
 
-export type UserProfileResponse = {
-  success: boolean;
-  data: UserProfile;
-  message?: string;
-};
-
 export type ApiResponse = {
   success: boolean;
   message: string;
   data?: any;
 };
+
+// userType.ts
+export type UserPreference = {
+  id: number;
+  name: string;
+};
+
+export type UserProfileResponse = {
+  id: number;
+  email: string;
+  name: string;
+  phone_number: string;
+  login_type: string;
+  is_social: boolean;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  preferences_display: UserPreference[];
+};
+
+// API 요청/응답 타입들
+export type UpdateUserRequest = {
+  name?: string;
+  phone_number?: string;
+};
+
+// export type UpdateUserResponse = {
+//   user: User;
+// };

@@ -1,7 +1,6 @@
 // userAPI.ts
 import axios from 'axios';
 import {
-  type UserProfile,
   type UpdateUserProfileRequest,
   type ChangePasswordRequest,
   type FindPasswordRequest,
@@ -14,11 +13,12 @@ import {
   type ReissueTokenRequest,
   type ReissueTokenResponse,
 } from './userType';
+import axiosInstance from '../axiosInstance';
 
 export const userAPI = {
   // 사용자 정보 조회
   getUserInfo: async (): Promise<UserProfileResponse> => {
-    const response = await axios.get('/api/users/info?lang=ko', {
+    const response = await axiosInstance.get('/api/users/info', {
       headers: { Accept: 'application/json' },
     });
     return response.data;
@@ -28,7 +28,7 @@ export const userAPI = {
   updateUserInfo: async (
     data: UpdateUserProfileRequest
   ): Promise<ApiResponse> => {
-    const response = await axios.put('/api/users/info', data, {
+    const response = await axios.patch('/api/users/info', data, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
