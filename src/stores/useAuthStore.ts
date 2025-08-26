@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 // 로그인 상태만 포함하는 타입을 정의합니다.
 export type LoginCheck = {
   isLogin: boolean;
+  isInitialized: boolean;
 };
 
 // 스토어의 '상태' 부분에 대한 타입을 정의합니다.
@@ -14,6 +15,7 @@ type AuthState = {
 // 스토어의 '액션' 부분에 대한 타입을 정의합니다.
 type AuthActions = {
   actions: {
+    initialize(): unknown;
     setLogin: () => void;
     setLogout: () => void;
   };
@@ -23,31 +25,41 @@ type AuthActions = {
 type AuthStoreType = AuthState & AuthActions;
 
 // useAuthStore 훅을 생성합니다.
-export const useAuthStore = create<AuthStoreType>((set) => {
-  // ⭐️ 스토어 초기화 시 쿠키에서 액세스 토큰을 확인합니다.
+export const useAuthStore = create<AuthStoreType>((set, get) => {
+  // 초기화 시점에 바로 쿠키 확인
   const accessToken = Cookies.get('access_token');
-  const initialIsLogin = !!accessToken; // 토큰이 존재하면 true, 없으면 false
+  const initialIsLogin = !!accessToken;
 
   return {
-    // 초기 상태를 설정합니다. isLogin 값을 쿠키 유무에 따라 결정합니다.
     auth: {
       isLogin: initialIsLogin,
+      isInitialized: true, // 이미 초기화됨
     },
-    // 액션 함수들을 정의합니다.
     actions: {
+      initialize: () => {
+        // 이미 초기화되었지만 다시 확인이 필요한 경우
+        const accessToken = Cookies.get('access_token');
+        set(() => ({
+          auth: {
+            isLogin: !!accessToken,
+            isInitialized: true,
+          },
+        }));
+      },
       setLogin: () =>
         set(() => ({
           auth: {
             isLogin: true,
+            isInitialized: true,
           },
         })),
-      // ⭐️ 로그아웃 시 스토어 상태 변경과 함께 쿠키를 삭제합니다.
       setLogout: () => {
         Cookies.remove('access_token');
         Cookies.remove('refresh_token');
         set(() => ({
           auth: {
             isLogin: false,
+            isInitialized: true,
           },
         }));
       },
