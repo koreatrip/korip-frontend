@@ -13,12 +13,15 @@ import LoadingPage from './statusPage/loadingPage';
 import { useEffect } from 'react';
 import { useNumericSearchParam } from '@/hooks/useNumericSearchParam';
 import EmptyCard from '@/components/common/ui/EmptyCard';
+import { useUserProfile } from '@/api/user/userHooks';
+import { useAuthCheck } from '@/hooks/useAuthCheck';
 
 const RegionsPage = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
   const { stack, actions } = useModalStore();
+  const { isLoggedIn } = useAuthCheck();
 
   const regionId = useNumericSearchParam('region_id');
   const subregionId = useNumericSearchParam('subregion_id');
@@ -41,6 +44,8 @@ const RegionsPage = () => {
     }
   );
 
+  const { data: userProfile } = useUserProfile();
+
   // 안전한 데이터 추출 (배열 접근 포함)
   const region = placesData?.region; // 첫 번째 요소
   const subregion = placesData?.subregion; // 첫 번째 요소
@@ -52,6 +57,11 @@ const RegionsPage = () => {
   console.log('placesData:', placesData);
   console.log('현재 i18n.language:', i18n.language);
   console.log('currentLanguage 값:', currentLanguage);
+
+  const translatedText = t('places.recommended_spots_for_user', {
+    name: userProfile?.name || '사용자',
+  });
+  console.log('번역된 텍스트:', translatedText);
 
   // 위치 표시명 결정 함수 - API 데이터 기반으로 수정
   const getLocationDisplayName = () => {
@@ -274,51 +284,56 @@ const RegionsPage = () => {
         </div>
 
         {/* 사용자 추천 명소 섹션 */}
-        {userRecommendedPlaces.length > 0 ? (
-          <div className='mt-7'>
-            <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
-              {t('places.recommended_spots_for_user')}
-            </h2>
-            <p className='text-sub-text-gray tablet-bp:text-base text-sm'>
-              <Trans
-                i18nKey='places.selected_based_on_interests'
-                values={{ interest: 'k-pop,맛집/카페' }}
-                components={{
-                  InterestSpan: <span className='font-medium' />,
-                }}
-              />
-            </p>
-            <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-3 mt-7 grid grid-cols-1 gap-4'>
-              {userRecommendedPlaces.slice(0, 3).map((place) => (
-                <li key={place.id}>
-                  <InfoCard
-                    variant='selectable'
-                    title={place.name}
-                    description={place.description ?? ''}
-                    details={place.feature ?? ''}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          <div className='mt-7'>
-            <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
-              {t('places.recommended_spots_for_user')}
-            </h2>
-            <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-3 mt-7 grid grid-cols-1 gap-4'>
-              {Array.from({ length: 3 }, (_, i) => (
-                <li key={`empty-user-recommended-${i}`}>
-                  <EmptyCard
-                    variant='selectable'
-                    type='user-recommended'
-                    onActionClick={() => actions.openLoginPrompt()}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {isLoggedIn &&
+          (userRecommendedPlaces.length > 0 ? (
+            <div className='mt-7'>
+              <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
+                {t('places.recommended_spots_for_user', {
+                  name: userProfile?.name || '사용자',
+                })}
+              </h2>
+              <p className='text-sub-text-gray tablet-bp:text-base text-sm'>
+                <Trans
+                  i18nKey='places.selected_based_on_interests'
+                  values={{ interest: 'k-pop,맛집/카페' }}
+                  components={{
+                    InterestSpan: <span className='font-medium' />,
+                  }}
+                />
+              </p>
+              <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-3 mt-7 grid grid-cols-1 gap-4'>
+                {userRecommendedPlaces.slice(0, 3).map((place) => (
+                  <li key={place.id}>
+                    <InfoCard
+                      variant='selectable'
+                      title={place.name}
+                      description={place.description ?? ''}
+                      details={place.feature ?? ''}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <div className='mt-7'>
+              <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
+                {t('places.recommended_spots_for_user', {
+                  name: userProfile?.name || '사용자',
+                })}
+              </h2>
+              <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-3 mt-7 grid grid-cols-1 gap-4'>
+                {Array.from({ length: 3 }, (_, i) => (
+                  <li key={`empty-user-recommended-${i}`}>
+                    <EmptyCard
+                      variant='selectable'
+                      type='user-recommended'
+                      // onActionClick={() => actions.openLoginPrompt()}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
 
         {/* 숙박 시설 섹션 */}
         <div className='my-16'>
