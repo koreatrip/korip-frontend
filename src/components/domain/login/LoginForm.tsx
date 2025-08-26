@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useLoginMutation } from '@/api/auth/login/loginHooks';
 import Cookies from 'js-cookie';
 import { useAuthStore } from '@store/useAuthStore'; // ⭐️ 1. useAuthStore 임포트
+import { useToast } from '@/hooks/useToast';
 
 const loginSchema = z.object({
   email: z.string().email('올바른 이메일 형식이 아닙니다.'),
@@ -19,6 +20,7 @@ type LogInFormInputs = z.infer<typeof loginSchema>;
 const LogInForm = () => {
   const navigate = useNavigate();
   const { setLogin } = useAuthStore((state) => state.actions); // ⭐️ 2. setLogin 액션 가져오기
+  const { showToast } = useToast();
 
   const { mutate, isPending } = useLoginMutation({
     onSuccess: (response) => {
@@ -37,7 +39,7 @@ const LogInForm = () => {
     },
     onError: (error) => {
       console.error('로그인 실패:', error);
-      // 로그인 실패 시 에러 메시지 설정
+      showToast('아이디 또는 비밀번호가 일치하지않습니다.', 'error');
     },
   });
 

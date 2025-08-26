@@ -23,12 +23,14 @@ import ResetPasswordPage from '@/pages/resetPasswordPage';
 import NotFoundPage from '@/pages/statusPage/notFoundPage';
 import ErrorPage from '@/pages/statusPage/errorPage';
 import AttractionsPage from '@/pages/attractionsPage';
+import ProtectedRoute from '@/components/domain/auth/ProtectedRoute';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     Component: defaultLayout,
     children: [
+      // 공개 페이지들
       {
         index: true,
         element: <FirstSearchingPage />,
@@ -66,10 +68,6 @@ export const router = createBrowserRouter([
         element: <AttractionsPage />,
       },
       {
-        path: 'planner',
-        element: <PlannerPage />,
-      },
-      {
         path: 'tips',
         element: <TravelTipsPage />,
       },
@@ -81,34 +79,45 @@ export const router = createBrowserRouter([
         path: 'language',
         element: <LanguagePage />,
       },
+
+      // 보호된 페이지들
       {
-        path: 'mypage',
-        element: <MyPage />,
+        element: <ProtectedRoute />,
         children: [
           {
-            index: true,
-            element: <ProfileCard />,
+            path: 'planner',
+            element: <PlannerPage />,
           },
-          { path: 'plan', element: <MyPlannerPage /> },
-          { path: 'places', element: <FavoritePlacesPage /> },
-          { path: 'regions', element: <FavoriteRegionsPage /> },
+          {
+            path: 'mypage',
+            element: <MyPage />,
+            children: [
+              {
+                index: true,
+                element: <ProfileCard />,
+              },
+              { path: 'plan', element: <MyPlannerPage /> },
+              { path: 'places', element: <FavoritePlacesPage /> },
+              { path: 'regions', element: <FavoriteRegionsPage /> },
+            ],
+          },
+          {
+            path: 'interest',
+            element: (
+              <InterestProvider>
+                <InterestPage />
+              </InterestProvider>
+            ),
+          },
+          {
+            path: 'trip/:id',
+            element: <TripDetailPage />,
+          },
+          {
+            path: 'trip/:id/edit',
+            element: <PlannerPage />,
+          },
         ],
-      },
-      {
-        path: 'interest',
-        element: (
-          <InterestProvider>
-            <InterestPage />
-          </InterestProvider>
-        ),
-      },
-      {
-        path: 'trip/:id',
-        element: <TripDetailPage />,
-      },
-      {
-        path: 'trip/:id/edit',
-        element: <PlannerPage />,
       },
     ],
   },

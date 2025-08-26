@@ -56,6 +56,13 @@ const PlaceDetailModal = ({
   //   },
   // };
 
+  const extractUrlFromHtml = (htmlString: string): string => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, 'text/html');
+    const anchor = doc.querySelector('a');
+    return anchor?.href || htmlString;
+  };
+
   if (isLoading) {
     return (
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -103,6 +110,19 @@ const PlaceDetailModal = ({
             <p className='font-semibold'>{t('common.address')}</p>
             <p className='text-main-text-navy/80'>{place.address}</p>
           </div>
+          {place.link_url && (
+            <div className='flex flex-col'>
+              <p className='font-semibold'>{t('places.visit_website')}</p>
+              <a
+                href={extractUrlFromHtml(place.link_url)}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-main-text-navy/80 hover:underline'
+              >
+                {extractUrlFromHtml(place.link_url)}
+              </a>
+            </div>
+          )}
           {place.description && place.description !== '-' && (
             <div className='flex flex-col'>
               <p className='font-semibold'>{t('common.description')}</p>

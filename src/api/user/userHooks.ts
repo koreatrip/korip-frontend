@@ -8,15 +8,19 @@ import type {
   UpdatePreferencesRequest,
   ReissueTokenRequest,
 } from './userType';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 // 사용자 정보 조회 Hook
 export const useUserProfile = () => {
+  const { auth } = useAuthStore();
+
   return useQuery({
     queryKey: ['user', 'profile'],
     queryFn: userAPI.getUserInfo,
-    staleTime: 5 * 60 * 1000, // 5분
-    retry: 1, // API 실패 시 1회만 재시도
-    retryDelay: 1000, // 1초 후 재시도
+    enabled: auth.isLogin, // 로그인 상태일 때만 실행
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+    retryDelay: 1000,
   });
 };
 
