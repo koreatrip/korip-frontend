@@ -54,15 +54,6 @@ const RegionsPage = () => {
   const userRecommendedPlaces = placesData?.user_recommended_places || [];
   const accommodations = placesData?.accommodations || [];
 
-  console.log('placesData:', placesData);
-  console.log('현재 i18n.language:', i18n.language);
-  console.log('currentLanguage 값:', currentLanguage);
-
-  const translatedText = t('places.recommended_spots_for_user', {
-    name: userProfile?.name || '사용자',
-  });
-  console.log('번역된 텍스트:', translatedText);
-
   // 위치 표시명 결정 함수 - API 데이터 기반으로 수정
   const getLocationDisplayName = () => {
     if (!region?.name) return '날씨 정보';

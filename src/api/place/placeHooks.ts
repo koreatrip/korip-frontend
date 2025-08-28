@@ -1,6 +1,9 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { placesQueries } from './placeQueries';
-import type { SubregionPlacesResponse } from './placeType';
+import type {
+  SubcategoryPlacesResponse,
+  SubregionPlacesResponse,
+} from './placeType';
 
 export const usePlacesQuery = (
   params: {
@@ -72,6 +75,51 @@ export const usePlaceDetailQuery = (
   return useQuery({
     ...placesQueries.places.detail(params),
     enabled: !!params.place_id,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    ...options,
+  });
+};
+
+// 서브카테고리별 명소 조회 훅 추가
+export const useSubcategoryPlacesQuery = (
+  params: {
+    subcategory_id: number;
+    lang?: string;
+    page?: number;
+    page_size?: number;
+  },
+  options = {}
+) => {
+  return useQuery({
+    ...placesQueries.places.subcategory(params),
+    enabled: !!params.subcategory_id, // subcategory_id가 있을 때만 실행
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    ...options,
+  });
+};
+
+// 서브카테고리별 무한 스크롤 훅 추가
+export const useInfiniteSubcategoryPlacesQuery = (
+  params: {
+    subcategory_id: number;
+    lang?: string;
+    page_size?: number;
+  },
+  options = {}
+) => {
+  return useInfiniteQuery({
+    ...placesQueries.places.infiniteSubcategory(params),
+    enabled: !!params.subcategory_id,
+    getNextPageParam: (
+      lastPage: SubcategoryPlacesResponse
+    ): number | undefined => {
+      const currentPage = lastPage.page;
+      const totalPages = lastPage.total_pages;
+      return currentPage < totalPages ? currentPage + 1 : undefined;
+    },
+    initialPageParam: 1,
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     ...options,
