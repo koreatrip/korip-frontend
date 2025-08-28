@@ -22,8 +22,8 @@ export type Place = {
   region: {
     id: number;
     name: string;
-    description: string;
-    feature: string;
+    description?: string;
+    feature?: string;
   };
   sub_region: {
     id: number;
@@ -63,8 +63,17 @@ export type PlacesResponse = {
   user_recommended_places?: Place[];
 };
 
-// 새로운 SubregionPlacesResponse 추가
+// 서브지역별 명소 응답 타입
 export type SubregionPlacesResponse = {
+  count: number;
+  total_pages: number;
+  page: number;
+  page_size: number;
+  places: Place[];
+};
+
+// 서브카테고리별 명소 응답 타입 추가
+export type SubcategoryPlacesResponse = {
   count: number;
   total_pages: number;
   page: number;
