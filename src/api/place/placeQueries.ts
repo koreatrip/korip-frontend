@@ -51,6 +51,8 @@ export const placesQueries = createQueryKeyStore({
       lang?: string;
       page?: number;
       page_size?: number;
+      region_id?: number;
+      subregion_id?: number;
     }) => ({
       queryKey: ['places', 'subcategory', params],
       queryFn: () => placesAPI.getSubcategoryPlaces(params),
@@ -61,6 +63,8 @@ export const placesQueries = createQueryKeyStore({
       subcategory_id: number | null;
       lang?: string;
       page_size?: number;
+      region_id?: number;
+      subregion_id?: number;
     }) => ({
       queryKey: [
         'places',
@@ -68,6 +72,8 @@ export const placesQueries = createQueryKeyStore({
         params.subcategory_id?.toString() || 'null',
         params.lang || 'ko',
         params.page_size?.toString() || '10',
+        params.region_id?.toString() || 'all',
+        params.subregion_id?.toString() || 'all',
       ],
       queryFn: ({ pageParam = 1 }: { pageParam?: number }) => {
         if (!params.subcategory_id) {
@@ -77,6 +83,8 @@ export const placesQueries = createQueryKeyStore({
           subcategory_id: params.subcategory_id,
           lang: params.lang,
           page_size: params.page_size,
+          region_id: params.region_id,
+          subregion_id: params.subregion_id,
           page: pageParam,
         });
       },

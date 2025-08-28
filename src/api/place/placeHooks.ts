@@ -1,8 +1,8 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { placesQueries } from './placeQueries';
 import type {
-  SubcategoryPlacesResponse,
   SubregionPlacesResponse,
+  SubcategoryPlacesResponse,
 } from './placeType';
 
 export const usePlacesQuery = (
@@ -57,24 +57,7 @@ export const useInfiniteSubregionPlacesQuery = (
       const totalPages = lastPage.total_pages;
       return currentPage < totalPages ? currentPage + 1 : undefined;
     },
-    initialPageParam: 1, // 이 부분 추가
-    staleTime: 10 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
-    ...options,
-  });
-};
-
-// 명소 상세 정보 훅 추가
-export const usePlaceDetailQuery = (
-  params: {
-    place_id: number | null;
-    lang?: string;
-  },
-  options = {}
-) => {
-  return useQuery({
-    ...placesQueries.places.detail(params),
-    enabled: !!params.place_id,
+    initialPageParam: 1,
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     ...options,
@@ -88,6 +71,8 @@ export const useSubcategoryPlacesQuery = (
     lang?: string;
     page?: number;
     page_size?: number;
+    region_id?: number;
+    subregion_id?: number;
   },
   options = {}
 ) => {
@@ -103,9 +88,11 @@ export const useSubcategoryPlacesQuery = (
 // 서브카테고리별 무한 스크롤 훅 추가
 export const useInfiniteSubcategoryPlacesQuery = (
   params: {
-    subcategory_id: number;
+    subcategory_id: number | null;
     lang?: string;
     page_size?: number;
+    region_id?: number;
+    subregion_id?: number;
   },
   options = {}
 ) => {
@@ -120,6 +107,23 @@ export const useInfiniteSubcategoryPlacesQuery = (
       return currentPage < totalPages ? currentPage + 1 : undefined;
     },
     initialPageParam: 1,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    ...options,
+  });
+};
+
+// 명소 상세 정보 훅
+export const usePlaceDetailQuery = (
+  params: {
+    place_id: number | null;
+    lang?: string;
+  },
+  options = {}
+) => {
+  return useQuery({
+    ...placesQueries.places.detail(params),
+    enabled: !!params.place_id,
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     ...options,

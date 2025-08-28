@@ -19,6 +19,7 @@ const AttractionsPage = () => {
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
+  const regionId = useNumericSearchParam('region_id');
   const subregionId = useNumericSearchParam('subregion_id');
   const categoryId = useNumericSearchParam('category_id');
   const subcategoryId = useNumericSearchParam('subcategory_id');
@@ -43,9 +44,11 @@ const AttractionsPage = () => {
   // 서브카테고리별 명소 쿼리
   const subcategoryQuery = useInfiniteSubcategoryPlacesQuery(
     {
-      subcategory_id: subcategoryId!, // null일 수 있음
+      subcategory_id: subcategoryId,
       lang: i18n.language || 'ko',
       page_size: 12,
+      region_id: regionId || undefined,
+      subregion_id: subregionId || undefined,
     },
     {
       enabled: !!subcategoryId && useSubcategoryQuery,
