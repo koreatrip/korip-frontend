@@ -35,11 +35,9 @@ const signUpSchema = z
       .max(PASSWORD_MAX_LENGTH, '비밀번호는 최대 20자 이하여야 합니다.')
       .regex(PASSWORD_REGEX, '영문, 숫자, 특수문자를 포함해야 합니다.'),
     confirmPassword: z.string(),
-    agreements: z
-      .array(z.boolean())
-      .refine((data) => data.every((item) => item), {
-        message: '모든 필수 약관에 동의해야 합니다.',
-      }),
+    agreements: z.array(z.boolean()).refine((data) => data[0] && data[1], {
+      message: '필수 약관에 동의해야 합니다.',
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: '비밀번호가 일치하지 않습니다.',
@@ -158,7 +156,7 @@ const SignUpForm = () => {
     currentPassword.length <= PASSWORD_MAX_LENGTH;
   const hasLetterNumberSpecial = PASSWORD_REGEX.test(currentPassword);
   const agreements = watch('agreements');
-  const allAgreementsChecked = agreements?.every((item) => item) ?? false;
+  const allAgreementsChecked = (agreements?.[0] && agreements?.[1]) ?? false;
 
   const getErrorMessage = (error: string) => {
     const errorMap: Record<string, string> = {
