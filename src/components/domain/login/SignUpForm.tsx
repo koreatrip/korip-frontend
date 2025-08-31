@@ -14,6 +14,9 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { useSignupMutation } from '@/api/auth/signup/signupHooks';
 import { useNavigate } from 'react-router';
+import { AxiosError } from 'axios';
+import { type emailCheckRequset, type emailSendRequest } from '@/api/auth/signup/email/emailType';
+import { type SignupRequest } from '@/api/auth/signup/signupType';
 
 // 상수로 조건 정의
 const PASSWORD_MIN_LENGTH = 8;
@@ -87,9 +90,9 @@ const SignUpForm = () => {
       );
       navigate('/login', { replace: true });
     },
-    onError: (error) => {
-      const errorMessage =
-        error.response?.data?.error_message || '회원가입에 실패했습니다.';
+    onError: (error: Error, variables: SignupRequest, context: unknown) => {
+      const axiosError = error as AxiosError;
+      const errorMessage = String((axiosError.response?.data as { error_message?: string })?.error_message || '') || '회원가입에 실패했습니다.';
       showToast(errorMessage, 'error');
     },
   });
@@ -101,10 +104,9 @@ const SignUpForm = () => {
         setIsVerifying(true);
         setTimeLeft(60);
       },
-      onError: (error) => {
-        const errorMessage =
-          error.response?.data?.error_message ||
-          '인증 메일 발송에 실패했습니다.';
+      onError: (error: Error, variables: emailSendRequest, context: unknown) => {
+        const axiosError = error as AxiosError;
+        const errorMessage = String((axiosError.response?.data as { error_message?: string })?.error_message || '') || '인증 메일 발송에 실패했습니다.';
         showToast(errorMessage, 'error');
       },
     });
@@ -119,10 +121,9 @@ const SignUpForm = () => {
           clearInterval(timerRef.current);
         }
       },
-      onError: (error) => {
-        const errorMessage =
-          error.response?.data?.error_message ||
-          '인증 코드 확인에 실패했습니다.';
+      onError: (error: Error, variables: emailCheckRequset, context: unknown) => {
+        const axiosError = error as AxiosError;
+        const errorMessage = String((axiosError.response?.data as { error_message?: string })?.error_message || '') || '인증 코드 확인에 실패했습니다.';
         showToast(errorMessage, 'error');
       },
     });
@@ -158,7 +159,8 @@ const SignUpForm = () => {
   const agreements = watch('agreements');
   const allAgreementsChecked = (agreements?.[0] && agreements?.[1]) ?? false;
 
-  const getErrorMessage = (error: string) => {
+  const getErrorMessage = (error: string | undefined) => {
+    if (!error) return ''; // Handle undefined or null error messages
     const errorMap: Record<string, string> = {
       '유효한 이메일 주소를 입력해주세요.': t('auth.invalid_email_format'),
       '이름은 최소 2자 이상이어야 합니다.': t('auth.name_min_length'),
@@ -176,7 +178,7 @@ const SignUpForm = () => {
         'auth.letter_number_special_combo'
       ),
       '비밀번호가 일치하지 않습니다.': t('auth.password_mismatch'),
-      '모든 필수 약관에 동의해야 합니다.': t('auth.agreement_required'),
+      '필수 약관에 동의해야 합니다.': t('auth.agreement_required'),
     };
     return errorMap[error] || error;
   };
@@ -212,7 +214,7 @@ const SignUpForm = () => {
 
   const handleEmailCheck = async () => {
     const email = getValues('email');
-    const code = getValues('verificationCode');
+    const code = getValues('verificationCode') ?? '';
 
     // 이메일과 인증 코드 필드 유효성 검사
     const isValidEmailAndCode = await trigger(['email', 'verificationCode']);
@@ -261,7 +263,7 @@ const SignUpForm = () => {
 
           {errors.email && (
             <p className='text-error-red my-2 text-sm'>
-              {getErrorMessage(errors.email.message!)}
+              {getErrorMessage(errors.email.message ?? '')}
             </p>
           )}
         </div>
@@ -287,7 +289,7 @@ const SignUpForm = () => {
           </div>
           {errors.verificationCode && (
             <p className='text-error-red my-2 text-sm'>
-              {getErrorMessage(errors.verificationCode.message!)}
+              {getErrorMessage(errors.verificationCode.message ?? '')}
             </p>
           )}
         </div>
@@ -304,7 +306,7 @@ const SignUpForm = () => {
           />
           {errors.name && (
             <p className='text-error-red my-2 text-sm'>
-              {getErrorMessage(errors.name.message!)}
+              {getErrorMessage(errors.name.message ?? '')}
             </p>
           )}
         </div>
@@ -323,7 +325,7 @@ const SignUpForm = () => {
           />
           {errors.phoneNumber && (
             <p className='text-error-red my-2 text-sm'>
-              {getErrorMessage(errors.phoneNumber.message!)}
+              {getErrorMessage(errors.phoneNumber.message ?? '')}
             </p>
           )}
         </div>
@@ -340,7 +342,7 @@ const SignUpForm = () => {
           />
           {errors.password && (
             <p className='text-error-red my-2 text-sm'>
-              {getErrorMessage(errors.password.message!)}
+              {getErrorMessage(errors.password.message ?? '')}
             </p>
           )}
 
@@ -375,7 +377,7 @@ const SignUpForm = () => {
           />
           {errors.confirmPassword && (
             <p className='text-error-red my-2 text-sm'>
-              {getErrorMessage(errors.confirmPassword.message!)}
+              {getErrorMessage(errors.confirmPassword.message ?? '')}
             </p>
           )}
         </div>
