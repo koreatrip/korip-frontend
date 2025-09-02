@@ -49,7 +49,7 @@ const MobileSlideMenu = () => {
     }
   }, [location.pathname, t]);
   return (
-    <nav className='block w-full bg-white md:hidden'>
+    <nav className='bg-bg-white block w-full md:hidden'>
       <div className='relative'>
         <ul
           ref={scrollRef}

@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 
 type InterestsFieldProps = {
   interests: string[];
@@ -26,7 +27,7 @@ const InterestsField: React.FC<InterestsFieldProps> = ({
 
   if (isEditing) {
     return (
-      <div className='focus-within:border-main-pink focus-within:ring-main-pink flex h-10 items-center rounded-lg border border-gray-300 bg-white px-4 focus-within:ring-2'>
+      <div className='focus-within:border-main-pink focus-within:ring-main-pink bg-bg-white border-outline-gray flex h-10 items-center rounded-lg border px-4 focus-within:ring-2'>
         <div className='flex w-full items-center justify-between'>
           <span className='text-main-text-navy w-20 font-medium'>
             {t('user.interests')}
@@ -36,22 +37,21 @@ const InterestsField: React.FC<InterestsFieldProps> = ({
               {interests.map((interest) => (
                 <span
                   key={interest}
-                  className='bg-main-pink text-bg-white inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm'
+                  className='inline-flex items-center gap-x-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-800'
                 >
-                  #{interest}
+                  <span># {interest}</span>
                   <button
-                    type='button'
                     onClick={() => onRemove(interest)}
-                    className='hover:text-main-hover-pink'
+                    className='-mr-0.5 rounded-full p-0.5 text-gray-500 hover:bg-gray-200 hover:text-gray-700'
                   >
-                    ×
+                    <XMarkIcon className='h-4 w-4' />
                   </button>
                 </span>
               ))}
               <input
                 type='text'
                 placeholder='+'
-                className='w-16 flex-shrink-0 border-none bg-transparent text-right text-sm text-gray-800 outline-none placeholder:text-gray-400'
+                className='placeholder:text-ph-gray w-16 flex-shrink-0 border-none bg-transparent text-right text-sm text-gray-800 outline-none'
                 onKeyPress={handleKeyPress}
               />
             </div>
