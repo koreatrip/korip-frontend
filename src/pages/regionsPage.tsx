@@ -206,7 +206,7 @@ const RegionsPage = () => {
               <button
                 onClick={() =>
                   navigate(
-                    `/explore/districts?region_id=${regionId}&subregion_id=${subregionId}&lang=${currentLanguage}`
+                    `/explore/districts?region_id=${regionId}&subregion_id=${subregionId || 1}&lang=${currentLanguage}`
                   )
                 }
               >
@@ -265,7 +265,7 @@ const RegionsPage = () => {
               className='cursor-pointer font-medium'
               onClick={() =>
                 navigate(
-                  `/explore/attractions?subregion_id=${subregionId}&lang=${currentLanguage}`
+                  `/explore/attractions?subregion_id=${subregionId || 1}&lang=${currentLanguage}`
                 )
               }
             >

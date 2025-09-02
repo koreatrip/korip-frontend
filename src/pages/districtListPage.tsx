@@ -32,7 +32,7 @@ const DistrictListPage = () => {
   });
   console.log('dddd', regionDetail);
   const regions = regionsResponse?.regions || [];
-  const subregions = regionDetail?.regions?.subregions?.results || [];
+  const subregions = regionDetail?.regions?.subregions.regions || [];
 
   // 현재 선택된 지역 이름 찾기
   const getCurrentRegionName = () => {

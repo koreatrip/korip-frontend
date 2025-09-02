@@ -295,7 +295,9 @@
     "privacy_concerns": "担忧个人信息保护",
     "select_interests": "请选择兴趣",
     "korip_recommended_interests": "推荐兴趣 - Korip",
-    "selected_interests": "已选兴趣"
+    "selected_interests": "已选兴趣",
+    "profile_updated_success": "个人资料已更新。",
+    "profile_update_failed": "更新个人资料失败。"
   },
 
   "travel": {

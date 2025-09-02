@@ -292,7 +292,9 @@
     "privacy_concerns": "Privacy concerns",
     "select_interests": "Select your interests",
     "korip_recommended_interests": "Recommended interests from Korip",
-    "selected_interests": "Selected Interests"
+    "selected_interests": "Selected Interests",
+    "profile_updated_success": "Profile has been updated.",
+    "profile_update_failed": "Failed to update profile."
   },
 
   "travel": {

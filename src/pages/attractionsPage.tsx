@@ -83,7 +83,7 @@ const AttractionsPage = () => {
     // 카테고리 필터링으로 인해 subcategoryQuery 결과가 비어있더라도,
     // 이 캐시된 데이터는 그대로 남아있어 안정적으로 지역명을 가져올 수 있습니다.
     if (subregionQuery.data?.pages?.[0]?.places?.length > 0) {
-      const firstPlace = subregionQuery.data.pages[0].places[0];
+      const firstPlace = subregionQuery?.data?.pages[0].places[0];
       if (firstPlace?.sub_region?.name && firstPlace?.region?.name) {
         return `${firstPlace.region.name} ${firstPlace.sub_region.name}`;
       }

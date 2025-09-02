@@ -5,7 +5,6 @@ import type {
   UpdateUserProfileRequest,
   ChangePasswordRequest,
   FindPasswordRequest,
-  UpdatePreferencesRequest,
   ReissueTokenRequest,
 } from './userType';
 import { useAuthStore } from '@/stores/useAuthStore';
@@ -52,24 +51,24 @@ export const useFindPassword = () => {
   });
 };
 
-// 사용자 관심사 업데이트 Hook
-export const useUpdatePreferences = () => {
-  const queryClient = useQueryClient();
+// // 사용자 관심사 업데이트 Hook
+// export const useUpdatePreferences = () => {
+//   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: ({
-      userId,
-      data,
-    }: {
-      userId: number;
-      data: UpdatePreferencesRequest;
-    }) => userAPI.updatePreferences(userId, data),
-    onSuccess: () => {
-      // 사용자 정보 쿼리 무효화하여 재조회
-      queryClient.invalidateQueries({ queryKey: ['user', 'profile'] });
-    },
-  });
-};
+//   return useMutation({
+//     mutationFn: ({
+//       userId,
+//       data,
+//     }: {
+//       userId: number;
+//       data: UpdatePreferencesRequest;
+//     }) => userAPI.updatePreferences(userId, data),
+//     onSuccess: () => {
+//       // 사용자 정보 쿼리 무효화하여 재조회
+//       queryClient.invalidateQueries({ queryKey: ['user', 'profile'] });
+//     },
+//   });
+// };
 
 // 사용자 여행 일정 조회 Hook
 export const useTravelPlans = (userId: number) => {

@@ -18,7 +18,7 @@ type TSearchBarProps = {
   className?: string;
   height?: string;
   showLocationIcon?: boolean;
-  onSearch: (value: string) => void;
+  onSearch?: (value: string) => void;
 };
 
 const SearchBar = ({
@@ -58,7 +58,7 @@ const SearchBar = ({
   } = useRegionDetailQuery(selectedRegion?.id || null, currentLanguage);
 
   const regions = regionsResponse?.regions || [];
-  const subregions = regionDetail?.regions?.subregions?.results || [];
+  const subregions = regionDetail?.regions?.subregions?.regions || [];
 
   // 드롭다운 외부 클릭 시 닫기 처리
   useEffect(() => {
