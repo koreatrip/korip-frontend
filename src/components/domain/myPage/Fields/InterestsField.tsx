@@ -1,5 +1,5 @@
 import { useProfileEditStore } from '@/stores/useProfileEditStore';
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
@@ -24,7 +24,7 @@ const InterestsField: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const interests = tempFormData?.preferences_display.map((p) => p.name) || [];
-  const selectedInterestsSet = useMemo(() => new Set(interests), [interests]);
+  // const selectedInterestsSet = useMemo(() => new Set(interests), [interests]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -42,7 +42,7 @@ const InterestsField: React.FC = () => {
   if (!isEditing) {
     return (
       <div className='flex min-h-10 items-start justify-between'>
-        <span className='text-main-text-navy w-20 pt-2 text-sm font-medium'>
+        <span className='text-main-text-navy w-20 pt-2 font-medium'>
           {t('user.interests')}
         </span>
         <div className='ml-4 flex-1'>
