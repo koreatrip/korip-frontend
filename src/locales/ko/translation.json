@@ -294,7 +294,8 @@
     "select_interests": "관심사를 선택하세요",
     "korip_recommended_interests": "korip에서 추천하는 관심사예요",
     "selected_interests": "선택한 관심사",
-    "welcome_user": "반갑습니다, {{name}}님"
+    "welcome_user": "반갑습니다, {{name}}님",
+    "profile_updated_success": "프로필이 업데이트 되었습니다."
   },
 
   "travel": {

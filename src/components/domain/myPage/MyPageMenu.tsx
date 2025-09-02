@@ -1,23 +1,25 @@
+import { useUserProfile } from '@/api/user/userHooks';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 // import { useUserProfile } from '@/api/user/userHooks';
 
 const MyPageMenu = () => {
   const { t } = useTranslation();
-  // const { data: userProfileData, isLoading } = useUserProfile();
+  const { data: userProfileData, isLoading, error } = useUserProfile();
 
   // 임시 목 데이터
   const userName = '김태율';
-  const isLoading = false;
+
+  console.log('유저 정보', userProfileData);
 
   return (
-    <nav className='hidden rounded-xl bg-white p-10 shadow-md md:ml-[-40px] md:block'>
+    <nav className='hidden w-64 rounded-xl bg-white p-10 shadow-md md:block'>
       {/* 사용자 이름 */}
       <div className='mb-6 text-4xl font-normal text-slate-800'>
         {isLoading ? (
-          <div className='h-10 w-20 animate-pulse rounded bg-gray-200'></div>
+          <div className='h-10 w-20 animate-pulse rounded bg-gray-200' />
         ) : (
-          userName
+          userProfileData?.name
         )}
       </div>
 

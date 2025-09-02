@@ -28,7 +28,7 @@ export const userAPI = {
   updateUserInfo: async (
     data: UpdateUserProfileRequest
   ): Promise<ApiResponse> => {
-    const response = await axios.patch('/api/users/info', data, {
+    const response = await axiosInstance.patch('/api/users/info', data, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
