@@ -38,7 +38,7 @@ export type SubRegionsResponse = {
   page: number;
   page_size: number;
   total_pages: number;
-  results: SubRegion[];
+  regions: SubRegion[];
 };
 
 export type RegionDetail = {
