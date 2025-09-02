@@ -18,7 +18,7 @@ type TSearchBarProps = {
   className?: string;
   height?: string;
   showLocationIcon?: boolean;
-  onSearch: (value: string) => void;
+  onSearch?: (value: string) => void;
 };
 
 const SearchBar = ({
