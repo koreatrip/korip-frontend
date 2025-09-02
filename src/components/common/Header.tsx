@@ -7,7 +7,7 @@ import {
 import { useHeaderStore } from '@/stores/useHeaderStore';
 import { useState, useEffect } from 'react';
 import SideMenu from './sideMenu/SideMenu';
-import SearchBar from '../domain/searchBar/searchBar';
+import SearchBar from '../domain/searchBar/SearchBar';
 import type { TDropdownItem } from './dropdown/Dropdown';
 import Dropdown from './dropdown/Dropdown';
 import { Link } from 'react-router';
@@ -15,7 +15,6 @@ import { useTranslation } from 'react-i18next';
 import { useModalStore } from '@/stores/useModalStore';
 import CreateTripModal from '../modals/CreateTripModal';
 import { useAuthStore } from '@/stores/useAuthStore';
-import { i } from 'node_modules/react-router/dist/development/components-CjQijYga.d.mts';
 
 // --- Props 타입 정의 ---
 type THeaderProps = {

@@ -295,7 +295,8 @@
     "korip_recommended_interests": "korip에서 추천하는 관심사예요",
     "selected_interests": "선택한 관심사",
     "welcome_user": "반갑습니다, {{name}}님",
-    "profile_updated_success": "프로필이 업데이트 되었습니다."
+    "profile_updated_success": "프로필이 업데이트 되었습니다.",
+    "profile_update_failed": "프로필을 업데이트하는데 실패했습니다."
   },
 
   "travel": {

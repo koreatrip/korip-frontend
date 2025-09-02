@@ -296,7 +296,8 @@
     "select_interests": "興味を選択してください",
     "korip_recommended_interests": "Koripがおすすめする興味",
     "selected_interests": "選択した興味",
-    "profile_updated_success": "プロフィールが更新されました。"
+    "profile_updated_success": "プロフィールが更新されました。",
+    "profile_update_failed": "プロフィールの更新に失敗しました。"
   },
 
   "travel": {
