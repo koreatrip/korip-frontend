@@ -7,6 +7,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 type TMenuItem = {
   label: string;
@@ -38,6 +39,7 @@ const SideMenu = ({
   title = '메뉴',
 }: TSideMenuProps) => {
   const { t } = useTranslation();
+  const isLogin = useAuthStore((state) => state.auth.isLogin);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
 
   const handleMenuClick = (item: TMenuItem) => {
@@ -137,15 +139,16 @@ const SideMenu = ({
               ))}
 
               {/* 인증 메뉴 아이템들 */}
-              {authMenuItems.map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => handleMenuClick(item)}
-                  className='border-outline-gray text-main-text-navy hover:bg-hover-gray w-full border-b px-6 py-4 text-left'
-                >
-                  {item.label}
-                </button>
-              ))}
+              {!isLogin &&
+                authMenuItems.map((item) => (
+                  <button
+                    key={item.label}
+                    onClick={() => handleMenuClick(item)}
+                    className='border-outline-gray text-main-text-navy hover:bg-hover-gray w-full border-b px-6 py-4 text-left'
+                  >
+                    {item.label}
+                  </button>
+                ))}
 
               {/* 언어 선택 */}
               <div className='px-6 py-4'>

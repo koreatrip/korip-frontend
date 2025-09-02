@@ -12,18 +12,15 @@ const MyPageLayout = ({ children }: { children: React.ReactNode }) => {
       </div>
       <div className='bg-bg-section mx-auto min-h-screen w-full px-4 md:px-6'>
         <Container>
-          {/* PC용 레이아웃 - 40px gap */}
-          <div className='hidden py-6 md:flex'>
-            {/* 왼쪽 메뉴 */}
-            <aside style={{ width: '20%' }}>
+          {/* PC용 레이아웃 */}
+          <div className='hidden py-6 md:flex md:gap-10'>
+            {/* 왼쪽 메뉴 - 고정 너비 */}
+            <aside className='flex-shrink-0'>
               <MyPageMenu />
             </aside>
 
-            {/* 오른쪽 콘텐츠 */}
-            <section
-              className='relative flex flex-col gap-3 overflow-visible'
-              style={{ width: '80%', marginLeft: '40px' }}
-            >
+            {/* 오른쪽 콘텐츠 - 나머지 공간 */}
+            <section className='relative flex min-w-0 flex-1 flex-col gap-3 overflow-visible'>
               {children}
             </section>
           </div>

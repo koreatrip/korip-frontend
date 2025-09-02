@@ -2,12 +2,6 @@
 import axios from 'axios';
 import {
   type UpdateUserProfileRequest,
-  type ChangePasswordRequest,
-  type FindPasswordRequest,
-  type UpdatePreferencesRequest,
-  type TravelPlansResponse,
-  type FavoritePlacesResponse,
-  type FavoriteRegionsResponse,
   type UserProfileResponse,
   type ApiResponse,
   type ReissueTokenRequest,
@@ -28,7 +22,7 @@ export const userAPI = {
   updateUserInfo: async (
     data: UpdateUserProfileRequest
   ): Promise<ApiResponse> => {
-    const response = await axios.patch('/api/users/info', data, {
+    const response = await axiosInstance.patch('/api/users/info', data, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -59,23 +53,23 @@ export const userAPI = {
     return response.data;
   },
 
-  // 사용자 관심사 등록/수정
-  updatePreferences: async (
-    userId: number,
-    data: UpdatePreferencesRequest
-  ): Promise<ApiResponse> => {
-    const response = await axios.post(
-      `/api/users/${userId}/preferences`,
-      data,
-      {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    return response.data;
-  },
+  // // 사용자 관심사 등록/수정
+  // updatePreferences: async (
+  //   userId: number,
+  //   data: UpdatePreferencesRequest
+  // ): Promise<ApiResponse> => {
+  //   const response = await axios.post(
+  //     `/api/users/${userId}/preferences`,
+  //     data,
+  //     {
+  //       headers: {
+  //         Accept: 'application/json',
+  //         'Content-Type': 'application/json',
+  //       },
+  //     }
+  //   );
+  //   return response.data;
+  // },
 
   // 사용자 여행 일정 조회
   getTravelPlans: async (userId: number): Promise<TravelPlansResponse> => {
