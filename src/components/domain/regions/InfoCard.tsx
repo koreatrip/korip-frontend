@@ -16,7 +16,7 @@ type TCard = {
   details?: string | null;
   imageUrl?: string | null;
   isSelected?: boolean;
-  id?: string;
+  id?: number;
   onClick?: () => void;
   onAddSchedule?: () => void;
   onViewDetails?: () => void;
