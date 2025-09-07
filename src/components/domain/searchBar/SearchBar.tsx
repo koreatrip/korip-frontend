@@ -19,6 +19,11 @@ type TSearchBarProps = {
   height?: string;
   showLocationIcon?: boolean;
   onSearch?: (value: string) => void;
+  disableNavigation?: boolean; // URL 변경을 막기
+  onRegionSelect?: (
+    region: { id: number; name: string },
+    subregion?: { id: number; name: string }
+  ) => void;
 };
 
 const SearchBar = ({
@@ -26,6 +31,9 @@ const SearchBar = ({
   className = '',
   height = 'h-14',
   showLocationIcon = true,
+  onSearch,
+  disableNavigation = false, // 🔥 기본값 false
+  onRegionSelect, // 🔥 새로 추가
 }: TSearchBarProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -80,6 +88,11 @@ const SearchBar = ({
   const handleSearch = async (query?: string) => {
     const searchTerm = query || searchQuery;
     if (!searchTerm.trim()) return;
+    if (disableNavigation && onSearch) {
+      onSearch(searchTerm);
+      setIsDropdownOpen(false);
+      return;
+    }
     setIsLoading(true);
 
     try {
@@ -124,6 +137,12 @@ const SearchBar = ({
     const locationQuery = `${selectedRegion.name} ${district.name}`;
     setSearchQuery(locationQuery);
 
+    if (disableNavigation && onRegionSelect) {
+      onRegionSelect(selectedRegion, district);
+      setIsDropdownOpen(false);
+      return;
+    }
+
     const params = new URLSearchParams({
       region_id: selectedRegion.id.toString(),
       subregion_id: district.id.toString(),
@@ -153,6 +172,12 @@ const SearchBar = ({
   // 🔥 핵심 수정 부분: 시/도 전체 선택 시 path parameter로 이동
   const handleCityAll = (region: { id: number; name: string }) => {
     setSearchQuery(region.name);
+
+    if (disableNavigation && onRegionSelect) {
+      onRegionSelect(region);
+      setIsDropdownOpen(false);
+      return;
+    }
 
     const params = new URLSearchParams({
       region_id: region.id.toString(),
