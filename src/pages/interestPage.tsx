@@ -13,32 +13,37 @@ import WelcomeCard from '@/components/domain/login/WelcomeCard';
 import { useToast } from '@/hooks/useToast';
 import IdolCateBox from '@/components/domain/interest/IdolCateBox';
 import { interestAPI } from '@/api/interest/interestAPI';
+import { useUserProfile } from '@/api/user/userHooks';
 
 const InterestPage = () => {
   const { showToast } = useToast();
-
   const { data, isLoading, isError, error } = useAllCategoriesQuery('ko'); // 메인 카테고리 불러옴.
-
   const [selectedId, setSelectedId] = useState<number>(); // 서브 카테고리 선택시 (역할 1. 핑크, 2. get)
-
   const [subSelected, setSubSelected] = useState<Category[]>([]); // 1.post 로 보낼 데이터 목록 2. 핑크
-
+  const {
+    data: userProfileData,
+    isLoading: userLoading,
+    error: userError,
+  } = useUserProfile();
   const handleClickMainCate = (id: number) => {
     setSelectedId(id);
   };
-
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (subSelected.length === 0) {
       showToast('관심사를 하나 이상 선택해주세요.', 'error');
       return;
     }
-
-    const subSelectedIds: number[] = subSelected.map((item) => item.id);
-    console.log('최종 선택된 관심사:', subSelectedIds);
-
+    const requestPayload = {
+      preferences: subSelected.map((item) => item.id),
+    };
+    if (!userProfileData || !userProfileData.id) {
+      showToast('사용자 정보를 찾을 수 없습니다.', 'error');
+      return;
+    }
+    const userId = userProfileData.id;
     try {
-      await interestAPI(subSelectedIds);
+      await interestAPI(userId, requestPayload);
       showToast('관심사 선택이 완료되었습니다!', 'success');
     } catch (error) {
       console.error('관심사 선택 전송 실패:', error);
