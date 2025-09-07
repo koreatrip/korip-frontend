@@ -2,6 +2,12 @@ import { star } from '@/assets/assets';
 import { useAuthCheck } from '@/hooks/useAuthCheck';
 import { useToast } from '@/hooks/useToast';
 import { useModalStore } from '@/stores/useModalStore';
+import { useHeaderStore } from '@/stores/useHeaderStore';
+import { usePlansQuery } from '@/api/planner/plannerHooks';
+import Dropdown, {
+  type TDropdownItem,
+} from '@/components/common/dropdown/Dropdown';
+import { useEffect, useRef } from 'react';
 
 type TCard = {
   variant?: 'interactive' | 'selectable';
@@ -10,10 +16,12 @@ type TCard = {
   details?: string | null;
   imageUrl?: string | null;
   isSelected?: boolean;
+  id?: string;
   onClick?: () => void;
   onAddSchedule?: () => void;
   onViewDetails?: () => void;
   onFavorite?: () => void;
+  onAddToSchedule?: (planId: string, planName: string) => void;
 };
 
 const InfoCard = ({
@@ -23,30 +31,76 @@ const InfoCard = ({
   details = null,
   imageUrl = null,
   isSelected = false,
+  id,
   onClick = () => {},
   onAddSchedule,
   onViewDetails = () => {},
   onFavorite = () => {},
+  onAddToSchedule,
 }: TCard) => {
-  const { actions } = useModalStore();
+  const { actions: modalActions } = useModalStore();
+  const { stack, actions } = useHeaderStore();
   const { isLoggedIn } = useAuthCheck();
   const { showToast } = useToast();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  // 일정 데이터 가져오기
+  const { data: plansData, isLoading, error } = usePlansQuery();
+
+  console.log('Plans Data:', plansData);
+
+  // 현재 카드의 드롭다운이 열려있는지 확인
+  const isDropdownOpen =
+    stack.isScheduleDropdownOpen && stack.scheduleDropdownCardId === String(id);
+
+  console.log('Dropdown State:', {
+    isScheduleDropdownOpen: stack.isScheduleDropdownOpen,
+    scheduleDropdownCardId: stack.scheduleDropdownCardId,
+    currentCardId: String(id),
+    isDropdownOpen,
+  });
+
+  // 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      // 드롭다운이나 버튼 영역 외부 클릭 시 닫기
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(target)
+      ) {
+        actions.closeScheduleDropdown();
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [isDropdownOpen, actions]);
+
   // 일정 추가 버튼 클릭 핸들러
   const handleAddSchedule = (e?: React.MouseEvent) => {
-    // 이벤트 버블링 방지 (selectable 카드의 onClick과 충돌 방지)
+    e?.preventDefault();
     e?.stopPropagation();
+
+    console.log('Add Schedule clicked', { id, isLoggedIn });
 
     if (onAddSchedule) {
       onAddSchedule();
     } else if (isLoggedIn) {
-      showToast(
-        '일정추가드롭다운이보여야하는데이거는또일정 폴더가 만들어져잇어야함',
-        'success'
-      );
+      // 로그인된 상태: 드롭다운 토글
+      console.log('Toggling dropdown for card:', String(id));
+      actions.toggleScheduleDropdown(String(id));
     } else {
-      // 기본 동작: 로그인 프롬프트 모달 열기
-      console.log('Opening login prompt modal'); // 디버깅용
-      actions.openLoginPrompt();
+      // 비로그인 상태: 로그인 프롬프트 모달 열기
+      modalActions.openLoginPrompt();
     }
   };
 
@@ -60,18 +114,43 @@ const InfoCard = ({
     onFavorite();
   };
 
-  /**
-   * 카드의 기본이 되는 스타일
-   */
-  const baseCardClasses =
-    'relative group rounded-2xl bg-white shadow-medium overflow-hidden transition-all duration-300 h-[350px]';
+  // 특정 일정에 추가하는 핸들러
+  const handleSelectPlan = (planId: string, planName: string) => {
+    if (onAddToSchedule) {
+      onAddToSchedule(planId, planName);
+    }
+    actions.closeScheduleDropdown();
+    showToast(`"${planName}" 일정에 추가되었습니다.`, 'success');
+  };
 
-  /**
-   * 카드 종류(variant)에 따라 달라지는 스타일
-   */
+  // 드롭다운 아이템 생성
+  const createDropdownItems = (): TDropdownItem[] => {
+    const plans = plansData?.plans;
+
+    if (isLoading) {
+      return [{ value: 'loading', label: '일정 불러오는 중...' }];
+    }
+
+    // 데이터가 없거나, 에러가 발생한 경우 '생성된 일정이 없습니다'만 표시
+    if (error || !plans || !Array.isArray(plans) || plans.length === 0) {
+      return [{ value: 'empty', label: '생성된 일정이 없습니다' }];
+    }
+
+    // 데이터가 있는 경우, plans 배열만 map으로 변환하여 반환
+    return plans.map((plan) => ({
+      value: String(plan.id),
+      label: plan.title || `일정 ${plan.id}`,
+      onClick: () =>
+        handleSelectPlan(String(plan.id), plan.title || `일정 ${plan.id}`),
+    }));
+  };
+
+  const baseCardClasses =
+    'relative group rounded-2xl bg-white shadow-medium transition-all duration-300 h-[350px]';
+
   const variantClasses = {
-    interactive: 'hover:shadow-xl',
-    selectable: `cursor-pointer ${isSelected ? 'border-sub-green border' : 'border-transparent'}`,
+    interactive: 'hover:shadow-xl overflow-visible', // 카드 자체는 overflow-visible
+    selectable: `cursor-pointer overflow-hidden ${isSelected ? 'border-sub-green border' : 'border-transparent'}`,
   };
 
   return (
@@ -79,9 +158,9 @@ const InfoCard = ({
       className={`${baseCardClasses} ${variantClasses[variant]}`}
       onClick={variant === 'selectable' ? onClick : undefined}
     >
-      {/* --- 상단 이미지/배경 영역 --- */}
+      {/* 상단 이미지/배경 영역 */}
       <div
-        className='bg-bg-section relative h-[223px] w-full bg-cover bg-center'
+        className='bg-bg-section relative h-[223px] w-full overflow-hidden rounded-t-2xl bg-cover bg-center'
         style={{
           backgroundImage: `url(${imageUrl || 'https://via.placeholder.com/300x200'})`,
         }}
@@ -95,16 +174,15 @@ const InfoCard = ({
         </button>
       </div>
 
-      {/* --- 하단 텍스트 영역 --- */}
-      <div className='p-5'>
+      {/* 하단 텍스트 영역 */}
+      <div className='overflow-hidden p-5'>
         <h3 className='text-main-text-navy text-lg font-semibold'>{title}</h3>
 
-        {/* 여러 줄 description with ellipsis */}
         <p
           className='text-sub-text-gray mt-1 leading-relaxed font-normal'
           style={{
             display: '-webkit-box',
-            WebkitLineClamp: 2, // 최대 2줄까지 표시
+            WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -113,7 +191,6 @@ const InfoCard = ({
           {description}
         </p>
 
-        {/* details 정보가 있을 때만 표시 */}
         {details && (
           <div className='text-sub-text-gray flex items-center'>
             <span className='truncate'>{details}</span>
@@ -121,15 +198,42 @@ const InfoCard = ({
         )}
       </div>
 
-      {/* --- 호버 시 나타나는 액션 버튼 (interactive 타입일 때만) --- */}
+      {/* 호버 시 나타나는 액션 버튼 (interactive 타입일 때만) */}
       {variant === 'interactive' && (
-        <div className='bg-main-text-navy/50 absolute inset-0 flex items-center justify-center space-x-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
-          <button
-            onClick={handleAddSchedule}
-            className='bg-main-text-navy hover:bg-main-text-navy/70 cursor-pointer rounded-full px-5 py-2 font-medium text-white'
-          >
-            일정 추가
-          </button>
+        <div className='bg-main-text-navy/50 absolute inset-0 flex items-center justify-center space-x-4 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
+          {/* 일정 추가 버튼 */}
+          <div className='relative'>
+            <button
+              ref={buttonRef}
+              onClick={handleAddSchedule}
+              className={`bg-main-text-navy hover:bg-main-text-navy/70 cursor-pointer rounded-full px-5 py-2 font-medium text-white transition-colors ${
+                isDropdownOpen ? 'bg-main-text-navy/70' : ''
+              }`}
+            >
+              일정 추가
+            </button>
+
+            {/* 드롭다운 - 버튼 바로 아래에 위치 */}
+            {isDropdownOpen && (
+              <div
+                ref={dropdownRef}
+                className='absolute top-full left-1/2 mt-2 -translate-x-1/2 transform'
+                style={{
+                  minWidth: '200px',
+                  zIndex: 9999,
+                }}
+              >
+                <Dropdown
+                  isOpen={true}
+                  items={createDropdownItems()}
+                  onClose={() => actions.closeScheduleDropdown()}
+                  position='center'
+                  width='w-48'
+                />
+              </div>
+            )}
+          </div>
+
           <button
             onClick={handleViewDetails}
             className='text-main-text-navy bg-bg-white cursor-pointer rounded-full px-5 py-2 font-medium hover:bg-gray-200'
