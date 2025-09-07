@@ -19,11 +19,12 @@ const IdolCateBox = () => {
             value={idolInput}
             onChange={(e) => handleSerchIdol(e.target.value)}
           />
+          <hr className='text-outline-gray my-5' />
           <p className='my-2 text-center'>원하는 아이돌이 없나요?</p>
           <Button
             variant='active'
             onClick={() => setModalOpen(true)}
-            className='m-auto mt-4 w-fit rounded-full px-5'
+            className='m-auto mt-4 h-12 w-fit rounded-full px-5'
           >
             아이돌 신청하기
           </Button>

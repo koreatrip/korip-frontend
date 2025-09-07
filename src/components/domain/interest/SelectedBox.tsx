@@ -18,7 +18,7 @@ const SelectedBox = ({ subSelected, setSubSelected }: SelectedBoxProps) => {
         subSelected.map((data) => (
           <div
             key={data.id}
-            className='bg-main-pink animate-in fade-in-50 flex items-center gap-x-1.5 rounded-full py-1 pr-2 pl-3 text-sm text-white'
+            className='bg-main-pink animate-in fade-in-50 flex h-8 items-center gap-x-1.5 rounded-full py-1 pr-2 pl-3 text-sm text-white'
           >
             <span># {data.name}</span>
             <button
