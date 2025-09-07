@@ -1,5 +1,6 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
+import { useAuthStore } from '@store/useAuthStore'; // 주스탠드 스토어를 가져옵니다.
 
 const { VITE_BASE_URL } = import.meta.env;
 
@@ -76,9 +77,8 @@ axiosInstance.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean;
-    };
+    }; // 401 에러이고, 재시도한 요청이 아닐 때
 
-    // 401 에러이고, 재시도한 요청이 아닐 때
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         // 토큰 갱신이 이미 진행 중이면, 이 요청은 큐에 추가합니다.
@@ -99,19 +99,21 @@ axiosInstance.interceptors.response.use(
 
       const refresh_token = getRefreshToken();
       if (!refresh_token) {
-        console.error('리프레시 토큰이 없습니다. 로그아웃 처리합니다.');
+        console.error('리프레시 토큰이 없습니다. 로그아웃 처리합니다.'); // 리프레시 토큰이 없는 경우 주스탠드 상태도 로그아웃으로 설정
+        useAuthStore.getState().actions.setLogout();
         clearTokens();
         window.location.href = '/login'; // 로그인 페이지로 리디렉션
         return Promise.reject(error);
       }
 
       try {
-        // 토큰 갱신 API 호출 (이 API는 인증 인터셉터를 타지 않도록 기본 axios를 사용할 수 있습니다)
+        // 토큰 갱신 API 호출
         const { data } = await axios.post('/api/auth/refresh', {
           refresh_token,
         });
         const newAccessToken = data.accessToken;
-        setAccessToken(newAccessToken);
+        setAccessToken(newAccessToken); // 토큰 갱신에 성공하면 주스탠드 상태를 로그인으로 업데이트합니다.
+        useAuthStore.getState().actions.setLogin();
 
         if (originalRequest.headers) {
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
@@ -119,7 +121,8 @@ axiosInstance.interceptors.response.use(
         processQueue(null, newAccessToken);
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        console.error('토큰 갱신에 실패했습니다.', refreshError);
+        console.error('토큰 갱신에 실패했습니다.', refreshError); // 토큰 갱신 실패 시 주스탠드 상태도 로그아웃으로 설정
+        useAuthStore.getState().actions.setLogout();
         clearTokens();
         if (refreshError instanceof Error) {
           processQueue(refreshError, null);
