@@ -1,7 +1,7 @@
 export type Category = {
-  subcategories(subcategories: any): unknown;
   id: number;
   name: string;
+  subcategories: Subcategory[];
 };
 
 export type Subcategory = {

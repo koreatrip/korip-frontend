@@ -74,7 +74,7 @@ const InterestPage = () => {
   }, [selectedId]);
 
   if (data) {
-    mainCate = data.data;
+    mainCate = data.categories;
   }
 
   if (isLoading) {
@@ -96,7 +96,7 @@ const InterestPage = () => {
         {/* 대분류 해시태그 뿌림 */}
         {mainCate && mainCate.length > 0 && (
           <SelectButtonGroup
-            slectedId={selectedId}
+            selectedId={selectedId}
             mainCateData={mainCate}
             handleClickSubCate={handleClickSubCate}
           />
