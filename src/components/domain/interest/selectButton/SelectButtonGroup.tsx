@@ -3,7 +3,7 @@ import SelectButton from '@/components/domain/interest/selectButton/SelectButton
 import type { Category } from '@/api/category/categoryType';
 
 type SelectButtonGroupProps = {
-  slectedId: number | undefined;
+  selectedId: number | undefined;
   mainCateData: Category[];
 
   handleClickSubCate: (id: number) => void;
@@ -11,7 +11,7 @@ type SelectButtonGroupProps = {
 };
 
 const SelectButtonGroup = ({
-  slectedId,
+  selectedId,
   mainCateData,
   handleClickSubCate,
 
@@ -31,7 +31,7 @@ const SelectButtonGroup = ({
       {mainCateData.map((item) => (
         <SelectButton
           key={item.id}
-          selected={item.id === slectedId}
+          selected={item.id === selectedId}
           onClick={() => handleButtonClick(item.id)}
         >
           # {item.name}
