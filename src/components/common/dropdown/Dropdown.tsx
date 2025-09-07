@@ -12,7 +12,7 @@ export type TDropdownProps = {
   items: TDropdownItem[];
   onClose: () => void;
   className?: string;
-  position?: 'left' | 'right';
+  position?: 'left' | 'right' | 'center';
   width?: string;
 };
 
