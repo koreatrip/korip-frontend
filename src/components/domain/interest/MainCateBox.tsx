@@ -2,25 +2,19 @@ import { twMerge } from 'tailwind-merge';
 import SelectButton from '@/components/domain/interest/selectButton/SelectButton';
 import type { Category } from '@/api/category/categoryType';
 
-type SelectButtonGroupProps = {
+type MainCateBoxProps = {
   selectedId: number | undefined;
-  mainCateData: Category[];
-
-  handleClickSubCate: (id: number) => void;
+  mainData: Category[];
+  handleClickMainCate: (id: number) => void;
   className?: string;
 };
 
-const SelectButtonGroup = ({
+const MainCateBox = ({
   selectedId,
-  mainCateData,
-  handleClickSubCate,
-
+  mainData,
+  handleClickMainCate,
   className,
-}: SelectButtonGroupProps) => {
-  const handleButtonClick = (id: number) => {
-    handleClickSubCate(id);
-  };
-
+}: MainCateBoxProps) => {
   return (
     <div
       className={twMerge(
@@ -28,11 +22,11 @@ const SelectButtonGroup = ({
         className
       )}
     >
-      {mainCateData.map((item) => (
+      {mainData.map((item) => (
         <SelectButton
           key={item.id}
           selected={item.id === selectedId}
-          onClick={() => handleButtonClick(item.id)}
+          onClick={() => handleClickMainCate(item.id)}
         >
           # {item.name}
         </SelectButton>
@@ -41,4 +35,4 @@ const SelectButtonGroup = ({
   );
 };
 
-export default SelectButtonGroup;
+export default MainCateBox;
