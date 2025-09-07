@@ -44,6 +44,8 @@ const RegionsPage = () => {
     }
   );
 
+  console.log('명소데이터', placesData);
+
   const { data: userProfile } = useUserProfile();
 
   // 안전한 데이터 추출 (배열 접근 포함)
@@ -245,6 +247,7 @@ const RegionsPage = () => {
                         title={place.name}
                         description={place.description ?? ''} // null이면 빈 문자열
                         details={place.feature ?? ''}
+                        id={place.id}
                       />
                     </li>
                   ))
