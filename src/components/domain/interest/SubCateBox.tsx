@@ -38,13 +38,14 @@ const SubCateBox = ({
   const subData: Subcategory[] = data.subcategories;
 
   return (
-    <div className='border-outline-gray shadow-light bg-bg-white my-4 rounded-lg border p-4'>
+    <div className='border-outline-gray shadow-light bg-bg-white my-4 rounded-lg border p-4 text-sm'>
       <div className='flex flex-wrap gap-2'>
         {subData.map((item) => {
           return (
             <SelectButton
               key={item.id}
               selected={subSelected.some((c) => c.id === item.id)}
+              className='text-md rounded-all h-8'
               onClick={() =>
                 setSubSelected((prev) => {
                   if (prev.length >= 9 && !prev.some((c) => c.id === item.id)) {
