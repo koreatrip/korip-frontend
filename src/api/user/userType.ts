@@ -26,22 +26,10 @@ export type UpdateUserRequest = {
   phone_number?: string;
 };
 
-// 토큰 갱신 관련 타입
-export type ReissueTokenRequest = {
-  refreshToken: string;
-};
-
-export type TokenData = {
-  accessToken: string;
-  refreshToken: string;
-  tokenType: string;
-  expiresIn: number;
-};
-
-export type ReissueTokenResponse = {
-  success: boolean;
-  data: TokenData;
-  message?: string;
+// 비밀번호 변경 요청 타입
+export type ChangePasswordRequest = {
+  current_password: string;
+  new_password: string;
 };
 
 export type ApiResponse = {

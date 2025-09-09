@@ -1,16 +1,11 @@
 // userHooks.ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { userAPI } from './userAPI';
-import type {
-  UpdateUserProfileRequest,
-  ChangePasswordRequest,
-  FindPasswordRequest,
-  ReissueTokenRequest,
-} from './userType';
+import type { UpdateUserRequest, ChangePasswordRequest } from './userType';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 // 사용자 정보 조회 Hook
-export const useUserProfile = () => {
+export const useUserProfileQuery = () => {
   const { auth } = useAuthStore();
 
   return useQuery({
@@ -24,12 +19,11 @@ export const useUserProfile = () => {
 };
 
 // 사용자 정보 수정 Hook
-export const useUpdateUserProfile = () => {
+export const useUpdateUserProfileMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdateUserProfileRequest) =>
-      userAPI.updateUserInfo(data),
+    mutationFn: (data: UpdateUserRequest) => userAPI.updateUserInfo(data),
     onSuccess: () => {
       // 사용자 정보 쿼리 무효화하여 재조회
       queryClient.invalidateQueries({ queryKey: ['user', 'profile'] });
@@ -38,21 +32,21 @@ export const useUpdateUserProfile = () => {
 };
 
 // 비밀번호 변경 Hook
-export const useChangePassword = () => {
+export const useChangePasswordMutation = () => {
   return useMutation({
     mutationFn: (data: ChangePasswordRequest) => userAPI.changePassword(data),
   });
 };
 
 // 비밀번호 찾기 Hook
-export const useFindPassword = () => {
+export const useFindPasswordMutation = () => {
   return useMutation({
     mutationFn: (data: FindPasswordRequest) => userAPI.findPassword(data),
   });
 };
 
 // // 사용자 관심사 업데이트 Hook
-// export const useUpdatePreferences = () => {
+// export const useUpdatePreferencesMutation = () => {
 //   const queryClient = useQueryClient();
 
 //   return useMutation({
@@ -71,7 +65,7 @@ export const useFindPassword = () => {
 // };
 
 // 사용자 여행 일정 조회 Hook
-export const useTravelPlans = (userId: number) => {
+export const useTravelPlansQuery = (userId: number) => {
   return useQuery({
     queryKey: ['user', userId, 'travel-plans'],
     queryFn: () => userAPI.getTravelPlans(userId),
@@ -81,7 +75,7 @@ export const useTravelPlans = (userId: number) => {
 };
 
 // 사용자 즐겨찾기 장소 조회 Hook
-export const useFavoritePlaces = (userId: number) => {
+export const useFavoritePlacesQuery = (userId: number) => {
   return useQuery({
     queryKey: ['user', userId, 'favorite-places'],
     queryFn: () => userAPI.getFavoritePlaces(userId),
@@ -91,7 +85,7 @@ export const useFavoritePlaces = (userId: number) => {
 };
 
 // 사용자 즐겨찾기 지역 조회 Hook
-export const useFavoriteRegions = (userId: number) => {
+export const useFavoriteRegionsQuery = (userId: number) => {
   return useQuery({
     queryKey: ['user', userId, 'favorite-regions'],
     queryFn: () => userAPI.getFavoriteRegions(userId),
@@ -101,7 +95,7 @@ export const useFavoriteRegions = (userId: number) => {
 };
 
 // 즐겨찾기 장소 토글 Hook
-export const useToggleFavoritePlace = () => {
+export const useToggleFavoritePlaceMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -117,7 +111,7 @@ export const useToggleFavoritePlace = () => {
 };
 
 // 즐겨찾기 지역 토글 Hook
-export const useToggleFavoriteRegion = () => {
+export const useToggleFavoriteRegionMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -129,12 +123,5 @@ export const useToggleFavoriteRegion = () => {
         queryKey: ['user', userId, 'favorite-regions'],
       });
     },
-  });
-};
-
-// 토큰 갱신 Hook
-export const useReissueToken = () => {
-  return useMutation({
-    mutationFn: (data: ReissueTokenRequest) => userAPI.reissueToken(data),
   });
 };

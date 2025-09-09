@@ -86,7 +86,7 @@
     "enter_password": "パスワードを入力してください",
     "confirm_password": "パスワード確認",
     "enter_confirm_password": "パスワードをもう一度入力してください。",
-    "username": "ユーザー名",
+    "username": "名前",
     "phone_number": "電話番号",
     "please_enter_name": "名前を入力してください",
     "email_password_mismatch": "メールまたはパスワードが一致しません。",
@@ -122,9 +122,11 @@
     "phone_number_placeholder": "電話番号を入力してください",
     "password_length_8_20": "8〜20文字",
     "signup_date": "加入日",
+    "email_send": "メール送信",
     "email_verification": "メール認証",
     "agree_terms": "利用規約に同意",
-    "agree_privacy": "プライバシーポリシーに同意"
+    "agree_privacy": "プライバシーポリシーに同意",
+    "password_changed_success": "パスワードが正常に変更されました。"
   },
 
   "agreement": {

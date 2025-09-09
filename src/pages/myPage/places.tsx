@@ -7,11 +7,10 @@ import { HeartIcon } from '@heroicons/react/24/outline';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  useFavoritePlaces,
-  useUserProfile,
-  useToggleFavoritePlace,
+  // useUserProfileQuery,
+  useToggleFavoritePlaceMutation,
 } from '@/api/user/userHooks';
-import type { FavoritePlace } from '@/api/user/userType';
+// import type { FavoritePlace } from '@/api/user/userType';
 
 const Places: React.FC = () => {
   const { t } = useTranslation();
@@ -22,10 +21,10 @@ const Places: React.FC = () => {
   const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
 
   // API에서 사용자 정보와 즐겨찾기 장소 조회 - 임시로 비활성화
-  // const { data: userProfileData } = useUserProfile();
+  // const { data: userProfileData } = useUserProfileQuery();
   // const userId = userProfileData?.data?.id;
   // const { data: favoritePlacesData, isLoading, error } = useFavoritePlaces(userId || 0);
-  const toggleFavoritePlace = useToggleFavoritePlace();
+  const toggleFavoritePlace = useToggleFavoritePlaceMutation();
 
   // 임시 목 데이터
   const mockFavoritePlacesData = {
