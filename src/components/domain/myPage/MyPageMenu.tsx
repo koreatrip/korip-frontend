@@ -1,11 +1,11 @@
-import { useUserProfile } from '@/api/user/userHooks';
+import { useUserProfileQuery } from '@/api/user/userHooks';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 // import { useUserProfile } from '@/api/user/userHooks';
 
 const MyPageMenu = () => {
   const { t } = useTranslation();
-  const { data: userProfileData, isLoading, error } = useUserProfile();
+  const { data: userProfileData, isLoading, error } = useUserProfileQuery();
 
   // 임시 목 데이터
   const userName = '김태율';

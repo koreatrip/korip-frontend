@@ -1,4 +1,4 @@
-import { useToggleFavoriteRegion } from '@/api/user/userHooks';
+import { useToggleFavoriteRegionMutation } from '@/api/user/userHooks';
 import type { FavoriteRegion } from '@/api/user/userType';
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
 import SearchBar from '@/components/common/searchBar/SearchBar';
@@ -33,7 +33,7 @@ const Regions: React.FC = () => {
   // const { data: userProfileData } = useUserProfile();
   // const userId = userProfileData?.data?.id;
   // const { data: favoriteRegionsData, isLoading, error } = useFavoriteRegions(userId || 0);
-  const toggleFavoriteRegion = useToggleFavoriteRegion();
+  const toggleFavoriteRegion = useToggleFavoriteRegionMutation();
 
   // 임시 목 데이터
   const mockFavoriteRegionsData = {
