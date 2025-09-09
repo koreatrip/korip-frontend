@@ -22,7 +22,9 @@ const EditableField: React.FC<EditableFieldProps> = ({
     return (
       <div className='focus-within:border-main-pink focus-within:ring-main-pink bg-bg-white border-outline-gray flex h-10 items-center rounded-lg border px-4 focus-within:ring-1'>
         <div className='flex w-full items-center justify-between'>
-          <span className='text-main-text-navy w-20 font-medium'>{label}</span>
+          <span className='text-main-text-navy w-auto font-medium'>
+            {label}
+          </span>
           <div className='ml-4 flex-1'>
             <input
               type={type}
@@ -40,7 +42,7 @@ const EditableField: React.FC<EditableFieldProps> = ({
   return (
     <>
       <div className='flex h-10 items-center justify-between'>
-        <span className='text-main-text-navy w-20 font-medium'>{label}</span>
+        <span className='text-main-text-navy w-auto font-medium'>{label}</span>
         <span className='text-gray-400'>{value}</span>
       </div>
       <hr className='border-outline-gray -mt-4 border-t' />

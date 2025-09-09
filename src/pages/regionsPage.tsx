@@ -13,7 +13,7 @@ import LoadingPage from './statusPage/loadingPage';
 import { useEffect, useState } from 'react';
 import { useNumericSearchParam } from '@/hooks/useNumericSearchParam';
 import EmptyCard from '@/components/common/ui/EmptyCard';
-import { useUserProfile } from '@/api/user/userHooks';
+import { useUserProfileQuery } from '@/api/user/userHooks';
 import { useAuthCheck } from '@/hooks/useAuthCheck';
 import PlaceDetailModal from '@/components/domain/regions/PlaceDetailModal';
 
@@ -50,7 +50,7 @@ const RegionsPage = () => {
 
   console.log('명소데이터', placesData);
 
-  const { data: userProfile } = useUserProfile();
+  const { data: userProfile } = useUserProfileQuery();
 
   // 안전한 데이터 추출 (배열 접근 포함)
   const region = placesData?.region; // 첫 번째 요소
