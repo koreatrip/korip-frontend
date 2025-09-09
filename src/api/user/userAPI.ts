@@ -1,11 +1,10 @@
 // userAPI.ts
 import axios from 'axios';
 import {
-  type UpdateUserProfileRequest,
+  type UpdateUserRequest,
   type UserProfileResponse,
   type ApiResponse,
-  type ReissueTokenRequest,
-  type ReissueTokenResponse,
+  type ChangePasswordRequest,
 } from './userType';
 import axiosInstance from '../axiosInstance';
 
@@ -19,9 +18,7 @@ export const userAPI = {
   },
 
   // 사용자 정보 수정
-  updateUserInfo: async (
-    data: UpdateUserProfileRequest
-  ): Promise<ApiResponse> => {
+  updateUserInfo: async (data: UpdateUserRequest): Promise<ApiResponse> => {
     const response = await axiosInstance.patch('/api/users/info', data, {
       headers: {
         Accept: 'application/json',
@@ -32,8 +29,8 @@ export const userAPI = {
   },
 
   // 비밀번호 변경
-  changePassword: async (data: ChangePasswordRequest): Promise<ApiResponse> => {
-    const response = await axios.post('/api/users/change-pwd', data, {
+  changePassword: async (data: ChangePasswordRequest) => {
+    const response = await axiosInstance.post('/api/users/change-pwd', data, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',

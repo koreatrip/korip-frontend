@@ -86,7 +86,7 @@
     "enter_password": "Enter your password",
     "confirm_password": "Confirm Password",
     "enter_confirm_password": "Please enter your password again.",
-    "username": "Username",
+    "username": "Name",
     "phone_number": "Phone Number",
     "please_enter_name": "Please enter your name",
     "email_password_mismatch": "Incorrect email or password.",
@@ -121,7 +121,9 @@
     "phone_number_placeholder": "Enter your phone number",
     "password_length_8_20": "8 to 20 characters",
     "signup_date": "Sign-up Date",
-    "email_verification": "Email Verification"
+    "email_send": "Send Email",
+    "email_verification": "Email Verification",
+    "password_changed_success": "Your password has been successfully changed."
   },
 
   "agreement": {
