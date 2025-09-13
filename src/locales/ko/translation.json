@@ -124,7 +124,9 @@
     "email_send": "이메일 전송",
     "email_verification": "이메일 인증",
     "password_length_requirement": "길이는 8~20자 사이여야 합니다.",
-    "password_changed_success": "비밀번호가 성공적으로 변경되었습니다."
+    "password_changed_success": "비밀번호가 성공적으로 변경되었습니다.",
+    "account_deleted_success": "회원탈퇴가 정상적으로 처리되었습니다.\n그동안 저희 서비스를 이용해 주셔서 감사합니다.",
+    "password_incorrect": "입력하신 비밀번호가 정확하지 않습니다.\n대소문자를 확인하여 다시 시도해주세요."
   },
 
   "agreement": {

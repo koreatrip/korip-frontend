@@ -123,7 +123,10 @@
     "signup_date": "Sign-up Date",
     "email_send": "Send Email",
     "email_verification": "Email Verification",
-    "password_changed_success": "Your password has been successfully changed."
+    "password_changed_success": "Your password has been successfully changed.",
+    "password_change_failed": "Password change failed.",
+    "account_deleted_success": "Your account has been successfully deleted.\nThank you for using our service.",
+    "password_incorrect": "The password you entered is incorrect.\nPlease check the capitalization and try again."
   },
 
   "agreement": {
