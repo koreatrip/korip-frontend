@@ -5,6 +5,7 @@ import {
   type UserProfileResponse,
   type ApiResponse,
   type ChangePasswordRequest,
+  type DeleteUserRequest,
 } from './userType';
 import axiosInstance from '../axiosInstance';
 
@@ -24,6 +25,18 @@ export const userAPI = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+    });
+    return response.data;
+  },
+
+  // 회원 탈퇴
+  deleteUser: async (data: DeleteUserRequest): Promise<ApiResponse> => {
+    const response = await axiosInstance.delete('/api/users/info', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      data: data, // DELETE 요청에 body 데이터 포함
     });
     return response.data;
   },
@@ -49,24 +62,6 @@ export const userAPI = {
     });
     return response.data;
   },
-
-  // // 사용자 관심사 등록/수정
-  // updatePreferences: async (
-  //   userId: number,
-  //   data: UpdatePreferencesRequest
-  // ): Promise<ApiResponse> => {
-  //   const response = await axios.post(
-  //     `/api/users/${userId}/preferences`,
-  //     data,
-  //     {
-  //       headers: {
-  //         Accept: 'application/json',
-  //         'Content-Type': 'application/json',
-  //       },
-  //     }
-  //   );
-  //   return response.data;
-  // },
 
   // 사용자 여행 일정 조회
   getTravelPlans: async (userId: number): Promise<TravelPlansResponse> => {
@@ -129,19 +124,6 @@ export const userAPI = {
         },
       }
     );
-    return response.data;
-  },
-
-  // 토큰 갱신
-  reissueToken: async (
-    data: ReissueTokenRequest
-  ): Promise<ReissueTokenResponse> => {
-    const response = await axios.post('/api/users/reissue-token', data, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
     return response.data;
   },
 };

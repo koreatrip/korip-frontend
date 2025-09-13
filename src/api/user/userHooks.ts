@@ -1,7 +1,11 @@
 // userHooks.ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { userAPI } from './userAPI';
-import type { UpdateUserRequest, ChangePasswordRequest } from './userType';
+import type {
+  UpdateUserRequest,
+  ChangePasswordRequest,
+  DeleteUserRequest,
+} from './userType';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 // 사용자 정보 조회 Hook
@@ -27,6 +31,25 @@ export const useUpdateUserProfileMutation = () => {
     onSuccess: () => {
       // 사용자 정보 쿼리 무효화하여 재조회
       queryClient.invalidateQueries({ queryKey: ['user', 'profile'] });
+    },
+  });
+};
+
+// 회원 탈퇴 Hook
+export const useDeleteUserMutation = () => {
+  const queryClient = useQueryClient();
+  const { actions } = useAuthStore();
+
+  return useMutation({
+    mutationFn: (data: DeleteUserRequest) => userAPI.deleteUser(data),
+    onSuccess: () => {
+      // 모든 사용자 관련 쿼리 삭제
+      queryClient.removeQueries({ queryKey: ['user'] });
+
+      // 토스트가 보일 시간을 주기 위해 2초 후 로그아웃
+      setTimeout(() => {
+        actions.setLogout();
+      }, 2000);
     },
   });
 };
