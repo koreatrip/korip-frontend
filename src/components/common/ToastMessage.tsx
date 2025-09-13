@@ -92,7 +92,7 @@ const ToastMessage = ({
         <Icon className={`h-5 w-5 flex-shrink-0 ${config.iconColor}`} />
 
         {/* 메시지 */}
-        <span className='flex-1'>{message}</span>
+        <span className='flex-1 whitespace-pre-line'>{message}</span>
 
         {/* 진행 바 (선택사항) */}
         <div className='absolute bottom-0 left-0 h-1 overflow-hidden rounded-b-xl bg-white/30'>

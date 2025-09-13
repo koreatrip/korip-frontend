@@ -32,6 +32,11 @@ export type ChangePasswordRequest = {
   new_password: string;
 };
 
+// 회원 탈퇴 요청 타입
+export type DeleteUserRequest = {
+  password: string;
+};
+
 export type ApiResponse = {
   success: boolean;
   message: string;
