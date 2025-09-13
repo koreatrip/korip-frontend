@@ -126,7 +126,10 @@
     "email_verification": "メール認証",
     "agree_terms": "利用規約に同意",
     "agree_privacy": "プライバシーポリシーに同意",
-    "password_changed_success": "パスワードが正常に変更されました。"
+    "password_changed_success": "パスワードが正常に変更されました。",
+    "password_change_failed": "パスワードの変更に失敗しました。",
+    "account_deleted_success": "会員退会が正常に処理されました。\nこれまで当サービスをご利用いただき、ありがとうございました。",
+    "password_incorrect": "入力されたパスワードが正しくありません。\n大文字と小文字を確認して、もう一度お試しください。"
   },
 
   "agreement": {

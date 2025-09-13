@@ -126,7 +126,10 @@
     "email_verification": "邮箱验证",
     "agree_terms": "同意服务条款",
     "agree_privacy": "同意隐私政策",
-    "password_changed_success": "您的密码已成功更改。"
+    "password_changed_success": "您的密码已成功更改。",
+    "password_change_failed": "密码更改失败。",
+    "account_deleted_success": "您的账号已成功注销。\n感谢您一直以来使用我们的服务。",
+    "password_incorrect": "您输入的密码不正确。\n请检查大小写后再试一次。"
   },
 
   "agreement": {

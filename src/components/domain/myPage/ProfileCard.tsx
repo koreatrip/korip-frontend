@@ -87,9 +87,7 @@ const ProfileCard = () => {
       <AccountDeleteModal
         isOpen={showAccountDeleteModal}
         onClose={() => setShowAccountDeleteModal(false)}
-        onConfirm={() => {
-          /* ... */
-        }}
+        onConfirm={() => {}}
       />
     </>
   );

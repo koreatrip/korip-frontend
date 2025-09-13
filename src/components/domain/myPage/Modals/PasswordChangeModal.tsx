@@ -74,12 +74,13 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
 
     changePassword(passwordChangeData, {
       onSuccess: () => {
-        showToast('비밀번호가 성공적으로 변경되었습니다.', 'success');
+        showToast(t('auth.password_changed_success'), 'success');
         handleClose();
       },
       onError: (error: any) => {
         const message =
-          error.response?.data?.message || '비밀번호 변경에 실패했습니다.';
+          error.response?.data?.error_message ||
+          t('auth.password_change_failed');
         showToast(message, 'error');
       },
     });
@@ -194,7 +195,6 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
               </Button>
               <Button
                 type='submit'
-                // 👈 3. 로딩 중일 때도 버튼 비활성화
                 disabled={!isValid || isPending}
                 className='text-bg-white h-12 w-full rounded-lg bg-[#FF6B7A] font-medium transition-colors hover:bg-[#ff5a6b] disabled:cursor-not-allowed disabled:bg-gray-300'
               >
