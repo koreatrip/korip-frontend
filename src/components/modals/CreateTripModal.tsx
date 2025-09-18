@@ -15,8 +15,9 @@ type TCreateTripModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: (planId: number) => void; // API 성공시 콜백 추가
-  startDate: string; // 외부에서 설정된 시작일
-  endDate: string; // 외부에서 설정된 종료일
+  startDate?: string; // 외부에서 설정된 시작일
+  endDate?: string; // 외부에서 설정된 종료일
+  onSubmit: (tripData: TTripData) => void;
 };
 
 type TTripData = {
@@ -33,6 +34,7 @@ const CreateTripModal = ({
   onSuccess,
   startDate,
   endDate,
+  // onSubmit,
 }: TCreateTripModalProps) => {
   const [tripName, setTripName] = useState('');
   const [tripDescription, setTripDescription] = useState('');

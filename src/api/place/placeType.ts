@@ -61,6 +61,7 @@ export type PlacesResponse = {
   region: Region;
   subregion?: SubRegion;
   user_recommended_places?: Place[];
+  stay_places?: Place[];
 };
 
 // 서브지역별 명소 응답 타입

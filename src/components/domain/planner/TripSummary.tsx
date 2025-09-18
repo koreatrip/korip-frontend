@@ -22,7 +22,7 @@ const TripSummary = ({
   totalPlaces,
   completedPlaces,
   progress,
-  readOnly = false,
+  // readOnly = false,
 }: TripSummaryProps) => {
   // 각 항목을 렌더링하기 위한 작은 헬퍼 컴포넌트
   const SummaryItem = ({ label, value }: { label: string; value: string }) => (

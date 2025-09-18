@@ -16,17 +16,39 @@ const SubcategoryGroup = ({ categoryId, lang }: SubcategoryGroupProps) => {
   const { data, isLoading, isError } = useSubcategoriesQuery(categoryId, lang);
   const { showToast } = useToast();
 
-  // 👇 여기가 수정된 부분입니다. id -> name 으로 변경
+  // tempFormData가 null인 경우 빈 Set으로 처리
   const selectedInterestsSet = new Set(
-    tempFormData?.preferences_display.map((p) => p.name) || []
+    tempFormData?.preferences_display?.map((p) => p.name) || []
   );
 
   const handleClick = (subCategory: { id: number; name: string }) => {
-    const success = addInterest(subCategory);
-    if (!success) {
-      showToast('관심사는 최대 9개까지 선택할 수 있습니다.', 'warning');
+    // tempFormData null 체크 추가
+    if (!tempFormData) {
+      console.error('tempFormData is null');
+      return;
     }
+
+    // 현재 관심사 개수 체크를 컴포넌트에서 직접 처리
+    if (tempFormData.preferences_display.length >= 9) {
+      showToast('관심사는 최대 9개까지 선택할 수 있습니다.', 'warning');
+      return;
+    }
+
+    // 이미 선택된 관심사인지 체크
+    if (selectedInterestsSet.has(subCategory.name)) {
+      return;
+    }
+
+    // addInterest 호출
+    addInterest(subCategory);
   };
+
+  // tempFormData가 null인 경우 로딩 또는 에러 처리
+  if (!tempFormData) {
+    return (
+      <div className='px-1 text-xs text-gray-500'>데이터를 불러오는 중...</div>
+    );
+  }
 
   if (isLoading) return <Spinner size='sm' />;
   if (isError) return <div className='px-1 text-xs text-red-500'>오류</div>;
@@ -34,7 +56,6 @@ const SubcategoryGroup = ({ categoryId, lang }: SubcategoryGroupProps) => {
   return (
     <div className='flex flex-wrap gap-2'>
       {data?.subcategories.map((subCategory) => {
-        // 이제 name을 기준으로 정상적으로 비교합니다.
         const isSelected = selectedInterestsSet.has(subCategory.name);
         return (
           <button
