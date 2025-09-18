@@ -11,7 +11,7 @@ type TFirstCard = {
 };
 
 const FirstInfoCard = ({
-  variant = 'interactive', // 'interactive' | 'selectable'
+  // variant = 'interactive', // 'interactive' | 'selectable'
   title,
   imageUrl,
   onViewDetails = () => {},

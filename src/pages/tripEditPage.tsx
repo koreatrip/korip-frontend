@@ -19,7 +19,7 @@ const TripEditPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState('2025-07-01');
   const [selectedDay, setSelectedDay] = useState(1);
   const [isDragOver, setIsDragOver] = useState(false);
-  const [draggedOverIndex, setDraggedOverIndex] = useState<number | null>(null);
+  // const [draggedOverIndex, setDraggedOverIndex] = useState<number | null>(null);
   const [draggedItemId, setDraggedItemId] = useState<string | null>(null);
 
   // 일차별 스케줄 데이터 - 각 일차마다 별도 저장
@@ -98,7 +98,7 @@ const TripEditPage: React.FC = () => {
   const handleDrop = (e: React.DragEvent, targetIndex?: number) => {
     e.preventDefault();
     setIsDragOver(false);
-    setDraggedOverIndex(null);
+    // setDraggedOverIndex(null);
 
     const placeData = e.dataTransfer.getData('text/plain');
 
@@ -173,14 +173,14 @@ const TripEditPage: React.FC = () => {
     // 드롭 영역을 완전히 벗어났을 때만 상태 초기화
     if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
       setIsDragOver(false);
-      setDraggedOverIndex(null);
+      // setDraggedOverIndex(null);
     }
   };
 
   const handleDragEnd = () => {
     setDraggedItemId(null);
     setIsDragOver(false);
-    setDraggedOverIndex(null);
+    // setDraggedOverIndex(null);
   };
 
   // 드래그 가능한 카드 컴포넌트
@@ -865,7 +865,7 @@ const TripEditPage: React.FC = () => {
 
             {/* 시간별 일정 */}
             <div className='space-y-2'>
-              {currentTimeSlots.map((slot, index) => (
+              {currentTimeSlots.map((slot, _index) => (
                 <div
                   key={slot.id}
                   className='flex items-center rounded-lg bg-gray-50 p-3'

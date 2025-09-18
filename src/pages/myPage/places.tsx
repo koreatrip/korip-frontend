@@ -6,10 +6,7 @@ import type { PlaceData } from '@/types/plannerType';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  // useUserProfileQuery,
-  useToggleFavoritePlaceMutation,
-} from '@/api/user/userHooks';
+import {} from '@/api/user/userHooks';
 // import type { FavoritePlace } from '@/api/user/userType';
 
 const Places: React.FC = () => {
@@ -24,7 +21,7 @@ const Places: React.FC = () => {
   // const { data: userProfileData } = useUserProfileQuery();
   // const userId = userProfileData?.data?.id;
   // const { data: favoritePlacesData, isLoading, error } = useFavoritePlaces(userId || 0);
-  const toggleFavoritePlace = useToggleFavoritePlaceMutation();
+  // const toggleFavoritePlace = useToggleFavoritePlaceMutation();
 
   // 임시 목 데이터
   const mockFavoritePlacesData = {
@@ -62,17 +59,19 @@ const Places: React.FC = () => {
   const places: PlaceData[] = useMemo(() => {
     if (!favoritePlacesData?.data) return [];
 
-    return favoritePlacesData.data.map((place: FavoritePlace) => ({
-      id: place.id,
-      type: place.type,
-      title: place.title,
-      description: place.description,
-      details: place.details,
-      location: place.location,
-      imageUrl: place.imageUrl,
-      isFavorite: place.isFavorite,
-      createdAt: place.createdAt,
-    }));
+    return favoritePlacesData.data.map(
+      (/* place: FavoritePlace */ place: any) => ({
+        id: place.id,
+        type: place.type,
+        title: place.title,
+        description: place.description,
+        details: place.details,
+        location: place.location,
+        imageUrl: place.imageUrl,
+        isFavorite: place.isFavorite,
+        createdAt: place.createdAt,
+      })
+    );
   }, [favoritePlacesData]);
 
   const sortOptions: DropdownItem[] = [

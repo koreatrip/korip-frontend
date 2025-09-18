@@ -62,11 +62,11 @@ export const useChangePasswordMutation = () => {
 };
 
 // 비밀번호 찾기 Hook
-export const useFindPasswordMutation = () => {
-  return useMutation({
-    mutationFn: (data: FindPasswordRequest) => userAPI.findPassword(data),
-  });
-};
+// export const useFindPasswordMutation = () => {
+//   return useMutation({
+//     mutationFn: (data: FindPasswordRequest) => userAPI.findPassword(data),
+//   });
+// };
 
 // // 사용자 관심사 업데이트 Hook
 // export const useUpdatePreferencesMutation = () => {
@@ -88,63 +88,63 @@ export const useFindPasswordMutation = () => {
 // };
 
 // 사용자 여행 일정 조회 Hook
-export const useTravelPlansQuery = (userId: number) => {
-  return useQuery({
-    queryKey: ['user', userId, 'travel-plans'],
-    queryFn: () => userAPI.getTravelPlans(userId),
-    enabled: !!userId,
-    staleTime: 5 * 60 * 1000, // 5분
-  });
-};
+// export const useTravelPlansQuery = (userId: number) => {
+//   return useQuery({
+//     queryKey: ['user', userId, 'travel-plans'],
+//     queryFn: () => userAPI.getTravelPlans(userId),
+//     enabled: !!userId,
+//     staleTime: 5 * 60 * 1000, // 5분
+//   });
+// };
 
-// 사용자 즐겨찾기 장소 조회 Hook
-export const useFavoritePlacesQuery = (userId: number) => {
-  return useQuery({
-    queryKey: ['user', userId, 'favorite-places'],
-    queryFn: () => userAPI.getFavoritePlaces(userId),
-    enabled: !!userId,
-    staleTime: 5 * 60 * 1000, // 5분
-  });
-};
+// // 사용자 즐겨찾기 장소 조회 Hook
+// export const useFavoritePlacesQuery = (userId: number) => {
+//   return useQuery({
+//     queryKey: ['user', userId, 'favorite-places'],
+//     queryFn: () => userAPI.getFavoritePlaces(userId),
+//     enabled: !!userId,
+//     staleTime: 5 * 60 * 1000, // 5분
+//   });
+// };
 
-// 사용자 즐겨찾기 지역 조회 Hook
-export const useFavoriteRegionsQuery = (userId: number) => {
-  return useQuery({
-    queryKey: ['user', userId, 'favorite-regions'],
-    queryFn: () => userAPI.getFavoriteRegions(userId),
-    enabled: !!userId,
-    staleTime: 5 * 60 * 1000, // 5분
-  });
-};
+// // 사용자 즐겨찾기 지역 조회 Hook
+// export const useFavoriteRegionsQuery = (userId: number) => {
+//   return useQuery({
+//     queryKey: ['user', userId, 'favorite-regions'],
+//     queryFn: () => userAPI.getFavoriteRegions(userId),
+//     enabled: !!userId,
+//     staleTime: 5 * 60 * 1000, // 5분
+//   });
+// };
 
-// 즐겨찾기 장소 토글 Hook
-export const useToggleFavoritePlaceMutation = () => {
-  const queryClient = useQueryClient();
+// // 즐겨찾기 장소 토글 Hook
+// export const useToggleFavoritePlaceMutation = () => {
+//   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: ({ userId, placeId }: { userId: number; placeId: number }) =>
-      userAPI.toggleFavoritePlace(userId, placeId),
-    onSuccess: (_, { userId }) => {
-      // 즐겨찾기 장소 목록 재조회
-      queryClient.invalidateQueries({
-        queryKey: ['user', userId, 'favorite-places'],
-      });
-    },
-  });
-};
+//   return useMutation({
+//     mutationFn: ({ userId, placeId }: { userId: number; placeId: number }) =>
+//       userAPI.toggleFavoritePlace(userId, placeId),
+//     onSuccess: (_, { userId }) => {
+//       // 즐겨찾기 장소 목록 재조회
+//       queryClient.invalidateQueries({
+//         queryKey: ['user', userId, 'favorite-places'],
+//       });
+//     },
+//   });
+// };
 
-// 즐겨찾기 지역 토글 Hook
-export const useToggleFavoriteRegionMutation = () => {
-  const queryClient = useQueryClient();
+// // 즐겨찾기 지역 토글 Hook
+// export const useToggleFavoriteRegionMutation = () => {
+//   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: ({ userId, regionId }: { userId: number; regionId: number }) =>
-      userAPI.toggleFavoriteRegion(userId, regionId),
-    onSuccess: (_, { userId }) => {
-      // 즐겨찾기 지역 목록 재조회
-      queryClient.invalidateQueries({
-        queryKey: ['user', userId, 'favorite-regions'],
-      });
-    },
-  });
-};
+//   return useMutation({
+//     mutationFn: ({ userId, regionId }: { userId: number; regionId: number }) =>
+//       userAPI.toggleFavoriteRegion(userId, regionId),
+//     onSuccess: (_, { userId }) => {
+//       // 즐겨찾기 지역 목록 재조회
+//       queryClient.invalidateQueries({
+//         queryKey: ['user', userId, 'favorite-regions'],
+//       });
+//     },
+//   });
+// };
