@@ -1,4 +1,3 @@
-import { star } from '@/assets/assets';
 import { useAuthCheck } from '@/hooks/useAuthCheck';
 import { useToast } from '@/hooks/useToast';
 import { useModalStore } from '@/stores/useModalStore';
@@ -7,6 +6,8 @@ import { usePlansQuery } from '@/api/planner/plannerHooks';
 import Dropdown, {
   type TDropdownItem,
 } from '@/components/common/dropdown/Dropdown';
+import { StarIcon as StarOutline } from '@heroicons/react/24/outline';
+import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
 import { useEffect, useRef } from 'react';
 
 type TCard = {
@@ -16,6 +17,7 @@ type TCard = {
   details?: string | null;
   imageUrl?: string | null;
   isSelected?: boolean;
+  isFavorite?: boolean; // 즐겨찾기 상태 추가
   id?: number;
   onClick?: () => void;
   onAddSchedule?: () => void;
@@ -31,6 +33,7 @@ const InfoCard = ({
   details = null,
   imageUrl = null,
   isSelected = false,
+  isFavorite = false, // 기본값 false
   id,
   onClick = () => {},
   onAddSchedule,
@@ -170,7 +173,13 @@ const InfoCard = ({
           onClick={handleFavorite}
           className='absolute top-3 right-3 z-10 cursor-pointer'
         >
-          <img src={star} alt='star' />
+          <div className='border-outline-gray flex h-16 w-16 items-center justify-center rounded-full border bg-white shadow-sm transition-all duration-200 hover:shadow-md'>
+            {isFavorite ? (
+              <StarSolid className='h-8 w-8 text-yellow-400 hover:text-yellow-500' />
+            ) : (
+              <StarOutline className='text-outline-gray h-8 w-8 hover:text-yellow-400' />
+            )}
+          </div>
         </button>
       </div>
 
