@@ -2,77 +2,53 @@ import SortDropdown from '@/components/common/dropdown/SortDropdown';
 import SearchBar from '@/components/common/searchBar/SearchBar';
 import InfoCard from '@/components/domain/regions/InfoCard';
 import { SortOption, type DropdownItem } from '@/types/dropdown';
-import type { PlaceData } from '@/types/plannerType';
 import { HeartIcon } from '@heroicons/react/24/outline';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import {} from '@/api/user/userHooks';
-// import type { FavoritePlace } from '@/api/user/userType';
+import { useInView } from 'react-intersection-observer';
+import {
+  useFavoritePlacesInfiniteQuery,
+  useToggleFavoritePlaceMutation,
+} from '@/api/favorites/favoriteHooks';
+import type { FavoritePlace } from '@/api/favorites/favoriteType';
 
-const Places: React.FC = () => {
-  const { t } = useTranslation();
+const Places = () => {
+  const { t, i18n } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>(
     SortOption.DATE_DESC
   );
   const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
 
-  // API에서 사용자 정보와 즐겨찾기 장소 조회 - 임시로 비활성화
-  // const { data: userProfileData } = useUserProfileQuery();
-  // const userId = userProfileData?.data?.id;
-  // const { data: favoritePlacesData, isLoading, error } = useFavoritePlaces(userId || 0);
-  // const toggleFavoritePlace = useToggleFavoritePlaceMutation();
+  // 무한스크롤 훅 사용
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useFavoritePlacesInfiniteQuery({ lang: i18n.language || 'ko' });
 
-  // 임시 목 데이터
-  const mockFavoritePlacesData = {
-    data: [
-      {
-        id: 1,
-        type: '관광지',
-        title: '경복궁',
-        description: '조선왕조 제일의 법궁',
-        details: '서울 종로구에 위치한 조선왕조의 정궁',
-        location: '서울특별시 종로구',
-        imageUrl: null,
-        isFavorite: true,
-        createdAt: '2024-02-20',
-      },
-      {
-        id: 2,
-        type: '맛집',
-        title: '명동교자',
-        description: '유명한 만두 전문점',
-        details: '50년 전통의 손만두 맛집',
-        location: '서울특별시 중구 명동',
-        imageUrl: null,
-        isFavorite: true,
-        createdAt: '2024-02-18',
-      },
-    ],
-  };
+  const toggleFavoritePlaceMutation = useToggleFavoritePlaceMutation();
 
-  const favoritePlacesData = mockFavoritePlacesData;
-  const isLoading = false;
-  const error = null;
+  // intersection observer 설정
+  const { ref: loadMoreRef, inView } = useInView({
+    threshold: 0.1,
+    triggerOnce: false,
+  });
 
-  // API 데이터를 로컬 형식으로 변환
-  const places: PlaceData[] = useMemo(() => {
-    if (!favoritePlacesData?.data) return [];
+  // 뷰포트에 들어오면 다음 페이지 로드
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-    return favoritePlacesData.data.map(
-      (/* place: FavoritePlace */ place: any) => ({
-        id: place.id,
-        type: place.type,
-        title: place.title,
-        description: place.description,
-        details: place.details,
-        location: place.location,
-        imageUrl: place.imageUrl,
-        isFavorite: place.isFavorite,
-        createdAt: place.createdAt,
-      })
-    );
-  }, [favoritePlacesData]);
+  // 모든 페이지의 데이터를 하나의 배열로 합치기
+  const allFavoritePlaces: FavoritePlace[] = useMemo(() => {
+    return data?.pages.flatMap((page) => page.favorite_places) ?? [];
+  }, [data]);
 
   const sortOptions: DropdownItem[] = [
     {
@@ -97,56 +73,60 @@ const Places: React.FC = () => {
     },
   ];
 
-  const filteredAndSortedData: PlaceData[] = useMemo(() => {
-    let filtered = places.filter((place) => place.isFavorite);
+  const filteredAndSortedData: FavoritePlace[] = useMemo(() => {
+    let filtered = [...allFavoritePlaces];
 
+    // 검색 필터링
     if (searchValue.trim()) {
       const lower = searchValue.toLowerCase();
       filtered = filtered.filter((place) =>
-        [place.title, place.location, place.type, place.description]
+        [place.name, place.address, place.category?.name, place.description]
           .filter(Boolean)
           .some((field) => field!.toLowerCase().includes(lower))
       );
     }
 
+    // 정렬
     return filtered.sort((a, b) => {
       switch (sortOption) {
         case SortOption.DATE_DESC:
           return (
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            new Date(b.favorited_at).getTime() -
+            new Date(a.favorited_at).getTime()
           );
         case SortOption.DATE_ASC:
           return (
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+            new Date(a.favorited_at).getTime() -
+            new Date(b.favorited_at).getTime()
           );
         case SortOption.NAME_ASC:
-          return a.title.localeCompare(b.title);
+          return a.name.localeCompare(b.name);
         case SortOption.NAME_DESC:
-          return b.title.localeCompare(a.title);
+          return b.name.localeCompare(a.name);
         default:
           return 0;
       }
     });
-  }, [places, searchValue, sortOption]);
+  }, [allFavoritePlaces, searchValue, sortOption]);
 
   const handleSearch = (value: string): void => setSearchValue(value);
+
   const handleCardClick = (id: number): void =>
     setSelectedPlaceId((prev) => (prev === id ? null : id));
-  const handleAddSchedule = (id: number): void => {
-    const place = places.find((p) => p.id === id);
-    alert(`"${place?.title}"이(가) 일정에 추가되었습니다.`);
-  };
-  const handleViewDetails = (id: number): void => {
-    const place = places.find((p) => p.id === id);
-    alert(`"${place?.title}" 상세 정보를 확인합니다.`);
-  };
-  const handleFavorite = async (id: number): Promise<void> => {
-    // 임시로 비활성화
-    // if (!userId) return;
 
+  const handleAddSchedule = (id: number): void => {
+    const place = allFavoritePlaces.find((p) => p.id === id);
+    alert(`"${place?.name}"이(가) 일정에 추가되었습니다.`);
+  };
+
+  const handleViewDetails = (id: number): void => {
+    const place = allFavoritePlaces.find((p) => p.id === id);
+    alert(`"${place?.name}" 상세 정보를 확인합니다.`);
+  };
+
+  const handleFavorite = async (id: number): Promise<void> => {
     try {
-      // await toggleFavoritePlace.mutateAsync({ userId, placeId: id });
-      console.log('즐겨찾기 토글:', id);
+      await toggleFavoritePlaceMutation.mutateAsync({ place_id: id });
     } catch (error) {
       console.error('즐겨찾기 토글 실패:', error);
     }
@@ -170,7 +150,7 @@ const Places: React.FC = () => {
   }
 
   // 에러 상태 처리
-  if (error) {
+  if (isError) {
     return (
       <div className='max-w-screen-2xl py-8'>
         <div className='py-16 text-center'>
@@ -216,20 +196,35 @@ const Places: React.FC = () => {
           <InfoCard
             key={item.id}
             variant='interactive'
-            title={item.title}
+            title={item.name}
             description={item.description}
-            details={item.details}
-            imageUrl={item.imageUrl}
+            details={item.address}
+            imageUrl={item.image_url}
             isSelected={selectedPlaceId === item.id}
+            id={item.id}
             onClick={() => handleCardClick(item.id)}
             onAddSchedule={() => handleAddSchedule(item.id)}
             onViewDetails={() => handleViewDetails(item.id)}
-            onFavorite={() => handleFavorite(item.id)}
+            onFavorite={() => handleFavorite(item)}
           />
         ))}
       </div>
 
-      {filteredAndSortedData.length === 0 && (
+      {/* 무한스크롤 트리거 */}
+      {hasNextPage && (
+        <div ref={loadMoreRef} className='mt-8 flex justify-center'>
+          {isFetchingNextPage ? (
+            <div className='flex items-center gap-2'>
+              <div className='border-t-sub-green h-5 w-5 animate-spin rounded-full border-2 border-gray-300'></div>
+              <span className='text-sm text-gray-500'>로딩중...</span>
+            </div>
+          ) : (
+            <div className='h-10'></div> // 트리거 영역
+          )}
+        </div>
+      )}
+
+      {filteredAndSortedData.length === 0 && !isLoading && (
         <div className='py-16 text-center'>
           <div className='mb-4 flex w-full justify-center'>
             <HeartIcon className='text-sub-text-gray h-8 w-8' />
@@ -256,7 +251,7 @@ const Places: React.FC = () => {
 
       <div className='mt-12 text-right text-sm text-gray-400'>
         {t('places.total_favorites', {
-          count: filteredAndSortedData.length,
+          count: allFavoritePlaces.length,
         })}
       </div>
     </div>
