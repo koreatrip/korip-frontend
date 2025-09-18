@@ -20,7 +20,7 @@ const ItineraryMap = ({ places }: ItineraryMapProps) => {
 
     // 장소들의 좌표로 LatLngBounds 객체를 생성합니다.
     const bounds = new window.kakao.maps.LatLngBounds();
-    places.forEach((place) => {
+    places.forEach((/* place */) => {
       // place 객체에 위도(lat), 경도(lng)가 있다고 가정합니다.
       // 실제 데이터 구조에 맞게 수정해야 합니다.
       // 예시: bounds.extend(new window.kakao.maps.LatLng(place.lat, place.lng));
@@ -40,7 +40,7 @@ const ItineraryMap = ({ places }: ItineraryMapProps) => {
       {places.map((place) => (
         <MapMarker
           key={place.id}
-          // position={{ lat: place.lat, lng: place.lng }} // 실제 데이터 구조에 맞게 수정
+          position={{ lat: /* place.lat */ 24, lng: /*  place.lng */ 22 }} // 실제 데이터 구조에 맞게 수정
           title={place.title}
         />
       ))}

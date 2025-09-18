@@ -6,19 +6,21 @@ import {
   ChevronDownIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/useAuthStore';
 
+type TSubmenuItem = {
+  label: string;
+  href?: string;
+  onClick?: () => void;
+};
+
+// 메인 메뉴 아이템 타입 - submenu에서 TSubmenuItem 사용
 type TMenuItem = {
   label: string;
   href?: string;
   onClick?: () => void;
   hasSubmenu?: boolean;
-  submenu?: {
-    label: string;
-    href?: string;
-    onClick?: () => void;
-  }[];
+  submenu?: TSubmenuItem[];
 };
 
 type TSideMenuProps = {
@@ -38,7 +40,6 @@ const SideMenu = ({
   languages,
   title = '메뉴',
 }: TSideMenuProps) => {
-  const { t } = useTranslation();
   const isLogin = useAuthStore((state) => state.auth.isLogin);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
 
@@ -57,7 +58,7 @@ const SideMenu = ({
     }
   };
 
-  const handleSubmenuClick = (submenuItem: TMenuItem['submenu'][0]) => {
+  const handleSubmenuClick = (submenuItem: TSubmenuItem) => {
     if (submenuItem.onClick) {
       submenuItem.onClick();
       onClose();

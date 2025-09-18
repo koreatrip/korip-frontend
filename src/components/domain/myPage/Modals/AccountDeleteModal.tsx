@@ -8,7 +8,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDeleteUserMutation } from '@/api/user/userHooks';
 import { useToast } from '@/hooks/useToast';
-import { useAuthStore } from '@/stores/useAuthStore';
 
 // Zod 스키마 정의
 const accountDeleteSchema = z.object({
@@ -30,7 +29,7 @@ const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
   const { t } = useTranslation();
   const { showToast } = useToast();
   const deleteUserMutation = useDeleteUserMutation();
-  const { actions } = useAuthStore();
+  // const { actions } = useAuthStore();
 
   const {
     register,

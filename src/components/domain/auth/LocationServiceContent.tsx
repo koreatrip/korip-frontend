@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
+type TranslationArray = string[];
+
 const LocationServiceContent = () => {
   const { t } = useTranslation();
 
@@ -13,11 +15,13 @@ const LocationServiceContent = () => {
         </h4>
         <p>{t('location_content.article1.content')}</p>
         <ul className='mt-2 ml-4 list-inside list-disc space-y-1'>
-          {t('location_content.article1.purposes', { returnObjects: true }).map(
-            (purpose, index) => (
-              <li key={index}>{purpose}</li>
-            )
-          )}
+          {(
+            t('location_content.article1.purposes', {
+              returnObjects: true,
+            }) as TranslationArray
+          ).map((purpose: string, index: number) => (
+            <li key={index}>{purpose}</li>
+          ))}
         </ul>
       </div>
 
@@ -27,11 +31,13 @@ const LocationServiceContent = () => {
         </h4>
         <p>{t('location_content.article2.content')}</p>
         <ul className='mt-2 ml-4 list-inside list-disc space-y-1'>
-          {t('location_content.article2.methods', { returnObjects: true }).map(
-            (method, index) => (
-              <li key={index}>{method}</li>
-            )
-          )}
+          {(
+            t('location_content.article2.methods', {
+              returnObjects: true,
+            }) as TranslationArray
+          ).map((method: string, index: number) => (
+            <li key={index}>{method}</li>
+          ))}
         </ul>
       </div>
 
@@ -50,9 +56,11 @@ const LocationServiceContent = () => {
         </h4>
         <p>{t('location_content.article4.content')}</p>
         <ul className='mt-2 ml-4 list-inside list-disc space-y-1'>
-          {t('location_content.article4.exceptions', {
-            returnObjects: true,
-          }).map((exception, index) => (
+          {(
+            t('location_content.article4.exceptions', {
+              returnObjects: true,
+            }) as TranslationArray
+          ).map((exception: string, index: number) => (
             <li key={index}>{exception}</li>
           ))}
         </ul>

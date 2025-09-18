@@ -15,8 +15,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useSignupMutation } from '@/api/auth/signup/signupHooks';
 import { useNavigate } from 'react-router';
 import { AxiosError } from 'axios';
-import { type emailCheckRequset, type emailSendRequest } from '@/api/auth/signup/email/emailType';
-import { type SignupRequest } from '@/api/auth/signup/signupType';
 
 // 상수로 조건 정의
 const PASSWORD_MIN_LENGTH = 8;
@@ -90,9 +88,15 @@ const SignUpForm = () => {
       );
       navigate('/login', { replace: true });
     },
-    onError: (error: Error, variables: SignupRequest, context: unknown) => {
+    onError: (
+      error: Error /* variables: SignupRequest, context: unknown */
+    ) => {
       const axiosError = error as AxiosError;
-      const errorMessage = String((axiosError.response?.data as { error_message?: string })?.error_message || '') || '회원가입에 실패했습니다.';
+      const errorMessage =
+        String(
+          (axiosError.response?.data as { error_message?: string })
+            ?.error_message || ''
+        ) || '회원가입에 실패했습니다.';
       showToast(errorMessage, 'error');
     },
   });
@@ -104,9 +108,17 @@ const SignUpForm = () => {
         setIsVerifying(true);
         setTimeLeft(60);
       },
-      onError: (error: Error, variables: emailSendRequest, context: unknown) => {
+      onError: (
+        error: Error
+        /* variables: emailSendRequest,
+        context: unknown */
+      ) => {
         const axiosError = error as AxiosError;
-        const errorMessage = String((axiosError.response?.data as { error_message?: string })?.error_message || '') || '인증 메일 발송에 실패했습니다.';
+        const errorMessage =
+          String(
+            (axiosError.response?.data as { error_message?: string })
+              ?.error_message || ''
+          ) || '인증 메일 발송에 실패했습니다.';
         showToast(errorMessage, 'error');
       },
     });
@@ -121,9 +133,17 @@ const SignUpForm = () => {
           clearInterval(timerRef.current);
         }
       },
-      onError: (error: Error, variables: emailCheckRequset, context: unknown) => {
+      onError: (
+        error: Error
+        /* variables: emailCheckRequset,
+        context: unknown */
+      ) => {
         const axiosError = error as AxiosError;
-        const errorMessage = String((axiosError.response?.data as { error_message?: string })?.error_message || '') || '인증 코드 확인에 실패했습니다.';
+        const errorMessage =
+          String(
+            (axiosError.response?.data as { error_message?: string })
+              ?.error_message || ''
+          ) || '인증 코드 확인에 실패했습니다.';
         showToast(errorMessage, 'error');
       },
     });

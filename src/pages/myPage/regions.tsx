@@ -1,5 +1,5 @@
-import { useToggleFavoriteRegionMutation } from '@/api/user/userHooks';
-import type { FavoriteRegion } from '@/api/user/userType';
+// import { useToggleFavoriteRegionMutation } from '@/api/user/userHooks';
+// import type { FavoriteRegion } from '@/api/user/userType';
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
 import SearchBar from '@/components/common/searchBar/SearchBar';
 import InfoCard from '@/components/domain/regions/InfoCard';
@@ -33,7 +33,7 @@ const Regions: React.FC = () => {
   // const { data: userProfileData } = useUserProfile();
   // const userId = userProfileData?.data?.id;
   // const { data: favoriteRegionsData, isLoading, error } = useFavoriteRegions(userId || 0);
-  const toggleFavoriteRegion = useToggleFavoriteRegionMutation();
+  // const toggleFavoriteRegion = useToggleFavoriteRegionMutation();
 
   // 임시 목 데이터
   const mockFavoriteRegionsData = {
@@ -71,17 +71,19 @@ const Regions: React.FC = () => {
   const favoriteData: RegionsData[] = useMemo(() => {
     if (!favoriteRegionsData?.data) return [];
 
-    return favoriteRegionsData.data.map((region: FavoriteRegion) => ({
-      id: region.id,
-      type: region.type,
-      title: region.title,
-      description: region.description,
-      details: region.details,
-      location: region.location,
-      imageUrl: region.imageUrl,
-      isFavorite: region.isFavorite,
-      createdAt: region.createdAt,
-    }));
+    return favoriteRegionsData.data.map(
+      (/* region: FavoriteRegion */ region: any) => ({
+        id: region.id,
+        type: region.type,
+        title: region.title,
+        description: region.description,
+        details: region.details,
+        location: region.location,
+        imageUrl: region.imageUrl,
+        isFavorite: region.isFavorite,
+        createdAt: region.createdAt,
+      })
+    );
   }, [favoriteRegionsData]);
 
   const sortOptions: DropdownItem[] = useMemo(
