@@ -58,7 +58,7 @@ const RegionsPage = () => {
   const popularSubregions = placesData?.popular_subregions || [];
   const majorPlaces = placesData?.major_places || [];
   const userRecommendedPlaces = placesData?.user_recommended_places || [];
-  const accommodations = placesData?.accommodations || [];
+  const accommodations = placesData?.stay_places || [];
 
   // 모달 관련 핸들러
   const handlePlaceDetailOpen = (placeId: number) => {
@@ -70,7 +70,7 @@ const RegionsPage = () => {
   };
 
   // 일정에 장소 추가 핸들러
-  const handleAddToSchedule = (planId: string, planName: string) => {
+  const handleAddToSchedule = (/* planId: string, */ planName: string) => {
     console.log(`장소 ${selectedPlaceId}를 ${planName} 일정에 추가`);
     // 여기에 실제 일정 추가 API 호출 로직 추가
   };
@@ -363,8 +363,8 @@ const RegionsPage = () => {
                     <InfoCard
                       variant='selectable'
                       title={accommodation.name}
-                      description={accommodation.description}
-                      details={accommodation.feature}
+                      description={accommodation.description ?? undefined}
+                      details={accommodation.feature ?? undefined}
                     />
                   </li>
                 ))

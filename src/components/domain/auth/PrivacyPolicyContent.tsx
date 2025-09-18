@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
+type TranslationArray = string[];
+
 const PrivacyPolicyContent = () => {
   const { t } = useTranslation();
 
@@ -13,11 +15,13 @@ const PrivacyPolicyContent = () => {
         </h4>
         <p>{t('privacy_content.article1.content')}</p>
         <ul className='mt-2 ml-4 list-inside list-disc space-y-1'>
-          {t('privacy_content.article1.purposes', { returnObjects: true }).map(
-            (purpose, index) => (
-              <li key={index}>{purpose}</li>
-            )
-          )}
+          {(
+            t('privacy_content.article1.purposes', {
+              returnObjects: true,
+            }) as TranslationArray
+          ).map((purpose: string, index: number) => (
+            <li key={index}>{purpose}</li>
+          ))}
         </ul>
       </div>
 
@@ -45,9 +49,11 @@ const PrivacyPolicyContent = () => {
         </h4>
         <p>{t('privacy_content.article4.content')}</p>
         <ul className='mt-2 ml-4 list-inside list-disc space-y-1'>
-          {t('privacy_content.article4.exceptions', {
-            returnObjects: true,
-          }).map((exception, index) => (
+          {(
+            t('privacy_content.article4.exceptions', {
+              returnObjects: true,
+            }) as TranslationArray
+          ).map((exception: string, index: number) => (
             <li key={index}>{exception}</li>
           ))}
         </ul>
@@ -59,11 +65,13 @@ const PrivacyPolicyContent = () => {
         </h4>
         <p>{t('privacy_content.article5.content')}</p>
         <ul className='mt-2 ml-4 list-inside list-disc space-y-1'>
-          {t('privacy_content.article5.partners', { returnObjects: true }).map(
-            (partner, index) => (
-              <li key={index}>{partner}</li>
-            )
-          )}
+          {(
+            t('privacy_content.article5.partners', {
+              returnObjects: true,
+            }) as TranslationArray
+          ).map((partner: string, index: number) => (
+            <li key={index}>{partner}</li>
+          ))}
         </ul>
       </div>
 
