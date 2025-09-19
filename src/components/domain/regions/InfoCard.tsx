@@ -3,7 +3,10 @@ import { useToast } from '@/hooks/useToast';
 import { useModalStore } from '@/stores/useModalStore';
 import { useHeaderStore } from '@/stores/useHeaderStore';
 import { usePlansQuery } from '@/api/planner/plannerHooks';
-import { useToggleFavoritePlaceMutation } from '@/api/favorites/favoriteHooks';
+import {
+  useToggleFavoritePlaceMutation,
+  useToggleFavoriteRegionMutation,
+} from '@/api/favorites/favoriteHooks';
 import Dropdown, {
   type TDropdownItem,
 } from '@/components/common/dropdown/Dropdown';
@@ -18,12 +21,13 @@ type TCard = {
   details?: string | null;
   imageUrl?: string | null;
   isSelected?: boolean;
-  isFavorite?: boolean; // 즐겨찾기 상태 추가
+  isFavorite?: boolean;
   id?: number;
+  type?: 'place' | 'region';
   onClick?: () => void;
   onAddSchedule?: () => void;
   onViewDetails?: () => void;
-  onFavorite?: () => void; // 외부에서 추가 로직이 필요할 때 사용 (선택사항)
+  onFavorite?: () => void;
   onAddToSchedule?: (planId: string, planName: string) => void;
 };
 
@@ -36,10 +40,11 @@ const InfoCard = ({
   isSelected = false,
   isFavorite = false,
   id,
+  type = 'place', // 기본값은 장소
   onClick = () => {},
   onAddSchedule,
   onViewDetails = () => {},
-  onFavorite, // 외부 콜백 (선택사항)
+  onFavorite,
   onAddToSchedule,
 }: TCard) => {
   const { actions: modalActions } = useModalStore();
@@ -47,46 +52,26 @@ const InfoCard = ({
   const { isLoggedIn } = useAuthCheck();
   const { showToast } = useToast();
 
-  // 내부 즐겨찾기 상태 관리
   const [localIsFavorite, setLocalIsFavorite] = useState(isFavorite);
-
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  // 일정 데이터 가져오기
   const { data: plansData, isLoading, error } = usePlansQuery();
-
-  // 즐겨찾기 토글 mutation
   const toggleFavoritePlaceMutation = useToggleFavoritePlaceMutation();
+  const toggleFavoriteRegionMutation = useToggleFavoriteRegionMutation();
 
-  console.log('Plans Data:', plansData);
-
-  // 현재 카드의 드롭다운이 열려있는지 확인
   const isDropdownOpen =
     stack.isScheduleDropdownOpen && stack.scheduleDropdownCardId === String(id);
 
-  console.log('Dropdown State:', {
-    isScheduleDropdownOpen: stack.isScheduleDropdownOpen,
-    scheduleDropdownCardId: stack.scheduleDropdownCardId,
-    currentCardId: String(id),
-    isDropdownOpen,
-  });
-
-  // 일정 추가 버튼 클릭 핸들러
   const handleAddSchedule = (e?: React.MouseEvent) => {
     e?.preventDefault();
     e?.stopPropagation();
 
-    console.log('Add Schedule clicked', { id, isLoggedIn });
-
     if (onAddSchedule) {
       onAddSchedule();
     } else if (isLoggedIn) {
-      // 로그인된 상태: 드롭다운 토글
-      console.log('Toggling dropdown for card:', String(id));
       actions.toggleScheduleDropdown(String(id));
     } else {
-      // 비로그인 상태: 로그인 프롬프트 모달 열기
       modalActions.openLoginPrompt();
     }
   };
@@ -96,7 +81,7 @@ const InfoCard = ({
     onViewDetails();
   };
 
-  // 즐겨찾기 토글 핸들러 (내장 로직)
+  // 즐겨찾기 토글 핸들러
   const handleFavorite = async (e?: React.MouseEvent) => {
     e?.stopPropagation();
 
@@ -106,42 +91,40 @@ const InfoCard = ({
     }
 
     if (!id) {
-      console.error('Place ID is required for favorite toggle');
+      console.error('ID is required for favorite toggle');
       return;
     }
 
+    // 이전 상태를 저장해두어 롤백에 사용
+    const previousIsFavorite = localIsFavorite;
+    // 낙관적 업데이트 (UI 즉시 반영)
+    setLocalIsFavorite(!previousIsFavorite);
+
     try {
-      console.log('❤️ Toggle favorite:', id, 'Current state:', localIsFavorite);
+      // API 호출 (장소/지역 구분)
+      if (type === 'region') {
+        await toggleFavoriteRegionMutation.mutateAsync({ sub_region_id: id });
+      } else {
+        await toggleFavoritePlaceMutation.mutateAsync({ place_id: id });
+      }
 
-      // 낙관적 업데이트 (즉시 UI 반영)
-      setLocalIsFavorite(!localIsFavorite);
+      const itemType = type === 'region' ? '지역이' : '장소가';
+      const message = !previousIsFavorite
+        ? `즐겨찾기에 추가되었습니다.`
+        : `즐겨찾기에서 제거되었습니다.`;
+      showToast(`${itemType} ${message}`, 'success');
 
-      // API 호출
-      await toggleFavoritePlaceMutation.mutateAsync({ place_id: id });
-
-      // 성공 토스트
-      const message = !localIsFavorite
-        ? '즐겨찾기에 추가되었습니다.'
-        : '즐겨찾기에서 제거되었습니다.';
-      showToast(message, 'success');
-
-      console.log('✅ Favorite toggled successfully');
-
-      // 외부 콜백이 있으면 실행 (추가 로직이 필요한 경우)
       if (onFavorite) {
         onFavorite();
       }
     } catch (error) {
-      console.error('❌ 즐겨찾기 토글 실패:', error);
-
+      console.error('즐겨찾기 토글 실패:', error);
       // 에러 발생 시 상태 롤백
-      setLocalIsFavorite(localIsFavorite);
-
+      setLocalIsFavorite(previousIsFavorite);
       showToast('즐겨찾기 처리에 실패했습니다.', 'error');
     }
   };
 
-  // 특정 일정에 추가하는 핸들러
   const handleSelectPlan = (planId: string, planName: string) => {
     if (onAddToSchedule) {
       onAddToSchedule(planId, planName);
@@ -150,20 +133,12 @@ const InfoCard = ({
     showToast(`"${planName}" 일정에 추가되었습니다.`, 'success');
   };
 
-  // 드롭다운 아이템 생성
   const createDropdownItems = (): TDropdownItem[] => {
     const plans = plansData?.plans;
-
-    if (isLoading) {
-      return [{ value: 'loading', label: '일정 불러오는 중...' }];
-    }
-
-    // 데이터가 없거나, 에러가 발생한 경우 '생성된 일정이 없습니다'만 표시
+    if (isLoading) return [{ value: 'loading', label: '일정 불러오는 중...' }];
     if (error || !plans || !Array.isArray(plans) || plans.length === 0) {
       return [{ value: 'empty', label: '생성된 일정이 없습니다' }];
     }
-
-    // 데이터가 있는 경우, plans 배열만 map으로 변환하여 반환
     return plans.map((plan) => ({
       value: String(plan.id),
       label: plan.title || `일정 ${plan.id}`,
@@ -172,17 +147,13 @@ const InfoCard = ({
     }));
   };
 
-  // props가 변경되면 내부 상태도 업데이트
   useEffect(() => {
     setLocalIsFavorite(isFavorite);
   }, [isFavorite]);
 
-  // 외부 클릭 감지
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-
-      // 드롭다운이나 버튼 영역 외부 클릭 시 닫기
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(target) &&
@@ -203,9 +174,8 @@ const InfoCard = ({
 
   const baseCardClasses =
     'relative group rounded-2xl bg-white shadow-medium transition-all duration-300 h-[350px]';
-
   const variantClasses = {
-    interactive: 'hover:shadow-xl overflow-visible', // 카드 자체는 overflow-visible
+    interactive: 'hover:shadow-xl overflow-visible',
     selectable: `cursor-pointer overflow-hidden ${isSelected ? 'border-sub-green border' : 'border-transparent'}`,
   };
 
@@ -214,14 +184,12 @@ const InfoCard = ({
       className={`${baseCardClasses} ${variantClasses[variant]}`}
       onClick={variant === 'selectable' ? onClick : undefined}
     >
-      {/* 상단 이미지/배경 영역 */}
       <div
         className='bg-bg-section relative h-[223px] w-full overflow-hidden rounded-t-2xl bg-cover bg-center'
         style={{
-          backgroundImage: `url(${imageUrl || '이미지가 없습니다'})`,
+          backgroundImage: `url(${imageUrl || 'https://via.placeholder.com/300x200'})`,
         }}
       >
-        {/* 즐겨찾기(별) 버튼 */}
         <button
           onClick={handleFavorite}
           className='absolute top-3 right-3 z-10 cursor-pointer'
@@ -236,10 +204,8 @@ const InfoCard = ({
         </button>
       </div>
 
-      {/* 하단 텍스트 영역 */}
       <div className='overflow-hidden p-5'>
         <h3 className='text-main-text-navy text-lg font-semibold'>{title}</h3>
-
         <p
           className='text-sub-text-gray mt-1 leading-relaxed font-normal'
           style={{
@@ -252,7 +218,6 @@ const InfoCard = ({
         >
           {description}
         </p>
-
         {details && (
           <div className='text-sub-text-gray flex items-center'>
             <span className='truncate'>{details}</span>
@@ -260,10 +225,8 @@ const InfoCard = ({
         )}
       </div>
 
-      {/* 호버 시 나타나는 액션 버튼 (interactive 타입일 때만) */}
       {variant === 'interactive' && (
         <div className='bg-main-text-navy/50 absolute inset-0 flex items-center justify-center space-x-4 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
-          {/* 일정 추가 버튼 */}
           <div className='relative'>
             <button
               ref={buttonRef}
@@ -274,8 +237,6 @@ const InfoCard = ({
             >
               일정 추가
             </button>
-
-            {/* 드롭다운 - 버튼 바로 아래에 위치 */}
             {isDropdownOpen && (
               <div
                 ref={dropdownRef}
@@ -295,7 +256,6 @@ const InfoCard = ({
               </div>
             )}
           </div>
-
           <button
             onClick={handleViewDetails}
             className='text-main-text-navy bg-bg-white cursor-pointer rounded-full px-5 py-2 font-medium hover:bg-gray-200'
