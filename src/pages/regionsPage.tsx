@@ -201,6 +201,7 @@ const RegionsPage = () => {
                 ? popularSubregions.map((subregion) => (
                     <li key={subregion.id}>
                       <InfoCard
+                        type='region'
                         variant='selectable'
                         title={subregion.name}
                         id={subregion.id}
@@ -264,6 +265,7 @@ const RegionsPage = () => {
                 ? majorPlaces.slice(0, 4).map((place) => (
                     <li key={place.id}>
                       <InfoCard
+                        type='place'
                         variant='interactive'
                         title={place.name}
                         description={place.description ?? ''} // null이면 빈 문자열
@@ -324,6 +326,7 @@ const RegionsPage = () => {
                 {userRecommendedPlaces.slice(0, 3).map((place) => (
                   <li key={place.id}>
                     <InfoCard
+                      type='place'
                       variant='selectable'
                       title={place.name}
                       description={place.description ?? ''}
@@ -366,6 +369,7 @@ const RegionsPage = () => {
               ? accommodations.map((accommodation) => (
                   <li key={accommodation.id}>
                     <InfoCard
+                      type='place'
                       variant='selectable'
                       id={accommodation.id}
                       imageUrl={accommodation.image_url}
