@@ -29,12 +29,20 @@ const Weather = () => {
         {error?.message || '날씨 데이터를 불러올 수 없습니다.'}
       </div>
     );
-  if (!weatherData)
+
+  // 🔥 안전한 데이터 검증
+  if (!weatherData || !weatherData.current_weather) {
     return (
       <div className='p-4 text-center text-gray-500'>
         날씨 데이터를 표시할 수 없습니다.
       </div>
     );
+  }
+
+  // 🔥 안전한 데이터 추출
+  const currentWeather = weatherData.current_weather || {};
+  const tomorrowWeather = weatherData.tomorrow_weather || {};
+  const detailInfo = weatherData.detail_info || {};
 
   return (
     <div className='flex w-full flex-col gap-y-4'>
@@ -43,28 +51,29 @@ const Weather = () => {
           {/* 현재 날씨 */}
           <div className='flex flex-col items-center justify-center'>
             <div className='mb-2'>
-              {t('common.current')} {weatherData.current_weather.current_date}
+              {t('common.current')}{' '}
+              {currentWeather.current_date || '날짜 정보 없음'}
             </div>
             <div className='mb-2 text-6xl font-semibold'>
-              {weatherData.current_weather.temperature}°
+              {currentWeather.temperature || '--'}°
             </div>
             <div className='text-center'>
               <p>
                 <span className='text-xl font-medium'>
-                  {weatherData.current_weather.weather_condition}
+                  {currentWeather.weather_condition || '정보 없음'}
                 </span>{' '}
-                <span>
-                  어제보다 {weatherData.current_weather.temperature_change}
-                </span>
+                {currentWeather.temperature_change && (
+                  <span>어제보다 {currentWeather.temperature_change}</span>
+                )}
               </p>
               <p>
                 {t('common.min')}{' '}
                 <span className='text-xl font-medium'>
-                  {weatherData.current_weather.min_temperature}°
+                  {currentWeather.min_temperature || '--'}°
                 </span>{' '}
                 {t('common.max')}{' '}
                 <span className='text-xl font-medium'>
-                  {weatherData.current_weather.max_temperature}°
+                  {currentWeather.max_temperature || '--'}°
                 </span>
               </p>
             </div>
@@ -77,26 +86,26 @@ const Weather = () => {
           <div className='flex flex-col items-center justify-center'>
             <div className='mb-2'>
               {t('common.tomorrow')}{' '}
-              {weatherData.tomorrow_weather.tomorrow_date}
+              {tomorrowWeather.tomorrow_date || '날짜 정보 없음'}
             </div>
             <div className='mb-1'>
               {t('common.min')} {t('common.max')}
             </div>
             <div className='mb-2 text-5xl font-semibold'>
-              {weatherData.tomorrow_weather.min_temperature}°
+              {tomorrowWeather.min_temperature || '--'}°
               <span className='text-3xl'>/</span>{' '}
-              {weatherData.tomorrow_weather.max_temperature}°
+              {tomorrowWeather.max_temperature || '--'}°
             </div>
             <div className='text-sm'>
               <div>
                 {t('common.am')}{' '}
-                {weatherData.tomorrow_weather.morning_condition}{' '}
-                {weatherData.tomorrow_weather.morning_precipitation}%
+                {tomorrowWeather.morning_condition || '정보 없음'}{' '}
+                {tomorrowWeather.morning_precipitation || 0}%
               </div>
               <div>
                 {t('common.pm')}{' '}
-                {weatherData.tomorrow_weather.afternoon_condition}{' '}
-                {weatherData.tomorrow_weather.afternoon_precipitation}%
+                {tomorrowWeather.afternoon_condition || '정보 없음'}{' '}
+                {tomorrowWeather.afternoon_precipitation || 0}%
               </div>
             </div>
           </div>
@@ -109,38 +118,32 @@ const Weather = () => {
           <li className='tablet-bp:flex-1 flex-shrink-0'>
             <WeatherDetail
               label='습도'
-              value={`${weatherData.detail_info.humidity}%`}
+              value={`${detailInfo.humidity || '--'}%`}
             />
           </li>
           <li className='tablet-bp:flex-1 flex-shrink-0'>
             <WeatherDetail
               label='바람'
-              value={`${weatherData.detail_info.wind_speed}m/s`}
+              value={`${detailInfo.wind_speed || '--'}m/s`}
             />
           </li>
           <li className='tablet-bp:flex-1 flex-shrink-0'>
             <WeatherDetail
               label='체감온도'
-              value={`${weatherData.detail_info.feels_like}°`}
+              value={`${detailInfo.feels_like || '--'}°`}
             />
           </li>
           <li className='tablet-bp:flex-1 flex-shrink-0'>
             <WeatherDetail
               label='자외선'
-              value={weatherData.detail_info.uv_level}
+              value={detailInfo.uv_level || '정보 없음'}
             />
           </li>
           <li className='tablet-bp:flex-1 flex-shrink-0'>
-            <WeatherDetail
-              label='일출'
-              value={weatherData.detail_info.sunrise}
-            />
+            <WeatherDetail label='일출' value={detailInfo.sunrise || '--:--'} />
           </li>
           <li className='tablet-bp:flex-1 flex-shrink-0'>
-            <WeatherDetail
-              label='일몰'
-              value={weatherData.detail_info.sunset}
-            />
+            <WeatherDetail label='일몰' value={detailInfo.sunset || '--:--'} />
           </li>
         </ul>
       </div>
