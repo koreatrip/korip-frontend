@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://korip.me/',
+        target: 'https://api.korip.me/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '/api'),
         secure: true,

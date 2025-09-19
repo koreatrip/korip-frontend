@@ -11,6 +11,7 @@ export type Place = {
   use_time: string;
   link_url: string;
   image_url: string | null;
+  is_favorite: boolean;
   category: {
     id: number;
     name: string;
@@ -22,8 +23,6 @@ export type Place = {
   region: {
     id: number;
     name: string;
-    description?: string;
-    feature?: string;
   };
   sub_region: {
     id: number;
@@ -49,6 +48,7 @@ export type SubRegion = {
   region_id: number;
   latitude: number | null;
   longitude: number | null;
+  is_favorite: boolean;
   favorite_count: number;
   created_at: string;
   updated_at: string;
