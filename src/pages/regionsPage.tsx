@@ -203,8 +203,10 @@ const RegionsPage = () => {
                       <InfoCard
                         variant='selectable'
                         title={subregion.name}
+                        id={subregion.id}
                         description={subregion.description || ''}
                         details={subregion.feature || ''}
+                        isFavorite={subregion.is_favorite}
                       />
                     </li>
                   ))
@@ -267,8 +269,10 @@ const RegionsPage = () => {
                         description={place.description ?? ''} // null이면 빈 문자열
                         details={place.feature ?? ''}
                         id={place.id}
+                        imageUrl={place.image_url}
                         onViewDetails={() => handlePlaceDetailOpen(place.id)}
                         onAddToSchedule={handleAddToSchedule}
+                        isFavorite={place.is_favorite}
                       />
                     </li>
                   ))
@@ -324,6 +328,7 @@ const RegionsPage = () => {
                       title={place.name}
                       description={place.description ?? ''}
                       details={place.feature ?? ''}
+                      isFavorite={place.is_favorite}
                     />
                   </li>
                 ))}
@@ -362,9 +367,12 @@ const RegionsPage = () => {
                   <li key={accommodation.id}>
                     <InfoCard
                       variant='selectable'
+                      id={accommodation.id}
+                      imageUrl={accommodation.image_url}
                       title={accommodation.name}
                       description={accommodation.description ?? undefined}
                       details={accommodation.feature ?? undefined}
+                      isFavorite={accommodation.is_favorite}
                     />
                   </li>
                 ))

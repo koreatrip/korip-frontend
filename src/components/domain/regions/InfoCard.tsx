@@ -1,13 +1,15 @@
-import { star } from '@/assets/assets';
 import { useAuthCheck } from '@/hooks/useAuthCheck';
 import { useToast } from '@/hooks/useToast';
 import { useModalStore } from '@/stores/useModalStore';
 import { useHeaderStore } from '@/stores/useHeaderStore';
 import { usePlansQuery } from '@/api/planner/plannerHooks';
+import { useToggleFavoritePlaceMutation } from '@/api/favorites/favoriteHooks';
 import Dropdown, {
   type TDropdownItem,
 } from '@/components/common/dropdown/Dropdown';
-import { useEffect, useRef } from 'react';
+import { StarIcon as StarOutline } from '@heroicons/react/24/outline';
+import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
+import { useEffect, useRef, useState } from 'react';
 
 type TCard = {
   variant?: 'interactive' | 'selectable';
@@ -16,11 +18,12 @@ type TCard = {
   details?: string | null;
   imageUrl?: string | null;
   isSelected?: boolean;
+  isFavorite?: boolean; // 즐겨찾기 상태 추가
   id?: number;
   onClick?: () => void;
   onAddSchedule?: () => void;
   onViewDetails?: () => void;
-  onFavorite?: () => void;
+  onFavorite?: () => void; // 외부에서 추가 로직이 필요할 때 사용 (선택사항)
   onAddToSchedule?: (planId: string, planName: string) => void;
 };
 
@@ -31,22 +34,30 @@ const InfoCard = ({
   details = null,
   imageUrl = null,
   isSelected = false,
+  isFavorite = false,
   id,
   onClick = () => {},
   onAddSchedule,
   onViewDetails = () => {},
-  onFavorite = () => {},
+  onFavorite, // 외부 콜백 (선택사항)
   onAddToSchedule,
 }: TCard) => {
   const { actions: modalActions } = useModalStore();
   const { stack, actions } = useHeaderStore();
   const { isLoggedIn } = useAuthCheck();
   const { showToast } = useToast();
+
+  // 내부 즐겨찾기 상태 관리
+  const [localIsFavorite, setLocalIsFavorite] = useState(isFavorite);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   // 일정 데이터 가져오기
   const { data: plansData, isLoading, error } = usePlansQuery();
+
+  // 즐겨찾기 토글 mutation
+  const toggleFavoritePlaceMutation = useToggleFavoritePlaceMutation();
 
   console.log('Plans Data:', plansData);
 
@@ -60,30 +71,6 @@ const InfoCard = ({
     currentCardId: String(id),
     isDropdownOpen,
   });
-
-  // 외부 클릭 감지
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-
-      // 드롭다운이나 버튼 영역 외부 클릭 시 닫기
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(target) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(target)
-      ) {
-        actions.closeScheduleDropdown();
-      }
-    };
-
-    if (isDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [isDropdownOpen, actions]);
 
   // 일정 추가 버튼 클릭 핸들러
   const handleAddSchedule = (e?: React.MouseEvent) => {
@@ -109,9 +96,49 @@ const InfoCard = ({
     onViewDetails();
   };
 
-  const handleFavorite = (e?: React.MouseEvent) => {
+  // 즐겨찾기 토글 핸들러 (내장 로직)
+  const handleFavorite = async (e?: React.MouseEvent) => {
     e?.stopPropagation();
-    onFavorite();
+
+    if (!isLoggedIn) {
+      modalActions.openLoginPrompt();
+      return;
+    }
+
+    if (!id) {
+      console.error('Place ID is required for favorite toggle');
+      return;
+    }
+
+    try {
+      console.log('❤️ Toggle favorite:', id, 'Current state:', localIsFavorite);
+
+      // 낙관적 업데이트 (즉시 UI 반영)
+      setLocalIsFavorite(!localIsFavorite);
+
+      // API 호출
+      await toggleFavoritePlaceMutation.mutateAsync({ place_id: id });
+
+      // 성공 토스트
+      const message = !localIsFavorite
+        ? '즐겨찾기에 추가되었습니다.'
+        : '즐겨찾기에서 제거되었습니다.';
+      showToast(message, 'success');
+
+      console.log('✅ Favorite toggled successfully');
+
+      // 외부 콜백이 있으면 실행 (추가 로직이 필요한 경우)
+      if (onFavorite) {
+        onFavorite();
+      }
+    } catch (error) {
+      console.error('❌ 즐겨찾기 토글 실패:', error);
+
+      // 에러 발생 시 상태 롤백
+      setLocalIsFavorite(localIsFavorite);
+
+      showToast('즐겨찾기 처리에 실패했습니다.', 'error');
+    }
   };
 
   // 특정 일정에 추가하는 핸들러
@@ -145,6 +172,35 @@ const InfoCard = ({
     }));
   };
 
+  // props가 변경되면 내부 상태도 업데이트
+  useEffect(() => {
+    setLocalIsFavorite(isFavorite);
+  }, [isFavorite]);
+
+  // 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      // 드롭다운이나 버튼 영역 외부 클릭 시 닫기
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(target)
+      ) {
+        actions.closeScheduleDropdown();
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [isDropdownOpen, actions]);
+
   const baseCardClasses =
     'relative group rounded-2xl bg-white shadow-medium transition-all duration-300 h-[350px]';
 
@@ -162,7 +218,7 @@ const InfoCard = ({
       <div
         className='bg-bg-section relative h-[223px] w-full overflow-hidden rounded-t-2xl bg-cover bg-center'
         style={{
-          backgroundImage: `url(${imageUrl || 'https://via.placeholder.com/300x200'})`,
+          backgroundImage: `url(${imageUrl || '이미지가 없습니다'})`,
         }}
       >
         {/* 즐겨찾기(별) 버튼 */}
@@ -170,7 +226,13 @@ const InfoCard = ({
           onClick={handleFavorite}
           className='absolute top-3 right-3 z-10 cursor-pointer'
         >
-          <img src={star} alt='star' />
+          <div className='border-outline-gray flex h-16 w-16 items-center justify-center rounded-full border bg-white shadow-sm transition-all duration-200 hover:shadow-md'>
+            {localIsFavorite ? (
+              <StarSolid className='h-8 w-8 text-yellow-400 hover:text-yellow-500' />
+            ) : (
+              <StarOutline className='text-outline-gray h-8 w-8 hover:text-yellow-400' />
+            )}
+          </div>
         </button>
       </div>
 
