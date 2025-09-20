@@ -12,5 +12,9 @@ export const regionsQueries = createQueryKeyStore({
       queryKey: ['regions', regionId, lang],
       queryFn: () => regionsAPI.getRegionDetail(regionId, lang),
     }),
+    major: (lang?: string) => ({
+      queryKey: ['major', lang],
+      queryFn: () => regionsAPI.getRegionsMajor(lang),
+    }),
   },
 });
