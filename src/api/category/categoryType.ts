@@ -1,7 +1,6 @@
 export type Category = {
   id: number;
   name: string;
-  subcategories: Subcategory[];
 };
 
 export type Subcategory = {
@@ -17,3 +16,7 @@ export type CategoriesResponse = {
 export type SubcategoriesResponse = {
   subcategories: Subcategory[];
 };
+
+// export type interestPost = {
+//   id: number[];
+// };
