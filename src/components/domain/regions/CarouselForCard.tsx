@@ -74,7 +74,7 @@ const CarouselForCard = ({ children, length }: CarouselProps) => {
 
   return (
     <div className='relative mx-auto w-full'>
-      <div className='relative flex items-center overflow-hidden'>
+      <div className='relative flex w-full items-center overflow-hidden'>
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={currentIndex}
@@ -88,6 +88,7 @@ const CarouselForCard = ({ children, length }: CarouselProps) => {
               // opacity: { duration: 0.2 },
             }}
             className='grid w-full grid-cols-2 gap-4 lg:grid-cols-4'
+            style={{ minHeight: '200px', minWidth: '100%' }}
           >
             {getVisibleItems()}
           </motion.div>
