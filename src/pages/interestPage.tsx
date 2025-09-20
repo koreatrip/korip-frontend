@@ -20,11 +20,7 @@ const InterestPage = () => {
   const { data, isLoading, isError, error } = useAllCategoriesQuery('ko'); // 메인 카테고리 불러옴.
   const [selectedId, setSelectedId] = useState<number>(); // 서브 카테고리 선택시 (역할 1. 핑크, 2. get)
   const [subSelected, setSubSelected] = useState<Category[]>([]); // 1.post 로 보낼 데이터 목록 2. 핑크
-  const {
-    data: userProfileData,
-    isLoading: userLoading,
-    error: userError,
-  } = useUserProfileQuery();
+  const { data: userProfileData } = useUserProfileQuery();
   const handleClickMainCate = (id: number) => {
     setSelectedId(id);
   };
