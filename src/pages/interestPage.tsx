@@ -13,7 +13,7 @@ import WelcomeCard from '@/components/domain/login/WelcomeCard';
 import { useToast } from '@/hooks/useToast';
 import IdolCateBox from '@/components/domain/interest/IdolCateBox';
 import { interestAPI } from '@/api/interest/interestAPI';
-import { useUserProfile } from '@/api/user/userHooks';
+import { useUserProfileQuery } from '@/api/user/userHooks';
 
 const InterestPage = () => {
   const { showToast } = useToast();
@@ -24,7 +24,7 @@ const InterestPage = () => {
     data: userProfileData,
     isLoading: userLoading,
     error: userError,
-  } = useUserProfile();
+  } = useUserProfileQuery();
   const handleClickMainCate = (id: number) => {
     setSelectedId(id);
   };
@@ -78,15 +78,22 @@ const InterestPage = () => {
           />
         )}
         {/* 소분류 해시태그 뿌림 */}
-        {selectedId && (
+        {selectedId && selectedId !== 7 && (
           <SubCateBox
             selectedId={selectedId}
             subSelected={subSelected}
             setSubSelected={setSubSelected}
           />
         )}
+
         {/* K-POP 아이돌/그룹 선택 */}
-        {selectedId === 7 && <IdolCateBox />}
+        {selectedId === 7 && (
+          <IdolCateBox
+            selectedId={selectedId}
+            subSelected={subSelected}
+            setSubSelected={setSubSelected}
+          />
+        )}
         <h3 className='mt-6 mb-2 text-lg font-semibold'>최종 선택된 관심사</h3>
 
         <SelectedBox
