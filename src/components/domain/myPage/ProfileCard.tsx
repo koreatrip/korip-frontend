@@ -1,8 +1,7 @@
 import { useProfileEditStore } from '@/stores/useProfileEditStore';
 import {
-  useChangePassword,
-  useUpdateUserProfile,
-  useUserProfile,
+  useUpdateUserProfileMutation,
+  useUserProfileQuery,
 } from '@/api/user/userHooks';
 import { useToast } from '@/hooks/useToast';
 import { useState, useEffect } from 'react';
@@ -24,9 +23,8 @@ const ProfileCard = () => {
   const { t } = useTranslation();
   const { showToast } = useToast();
 
-  const { data: userProfileData, isLoading, error } = useUserProfile();
-  const updateUserProfile = useUpdateUserProfile();
-  const changePassword = useChangePassword();
+  const { data: userProfileData, isLoading, error } = useUserProfileQuery();
+  const updateUserProfile = useUpdateUserProfileMutation();
 
   useEffect(() => {
     if (userProfileData) {
@@ -48,24 +46,6 @@ const ProfileCard = () => {
     } catch (error) {
       console.error('프로필 업데이트 실패:', error);
       showToast(t('user.profile_update_failed'), 'error');
-    }
-  };
-
-  const handlePasswordChange = async (passwords: {
-    current: string;
-    new: string;
-    confirm: string;
-  }) => {
-    try {
-      await changePassword.mutateAsync({
-        currentPassword: passwords.current,
-        newPassword: passwords.new,
-        confirmPassword: passwords.confirm,
-      });
-      showToast(t('user.password_changed_success'), 'success');
-    } catch (err) {
-      console.error('비밀번호 변경 실패:', err);
-      showToast(t('user.password_change_failed'), 'error');
     }
   };
 
@@ -103,14 +83,11 @@ const ProfileCard = () => {
       <PasswordChangeModal
         isOpen={showPasswordModal}
         onClose={() => setShowPasswordModal(false)}
-        onSave={handlePasswordChange}
       />
       <AccountDeleteModal
         isOpen={showAccountDeleteModal}
         onClose={() => setShowAccountDeleteModal(false)}
-        onConfirm={() => {
-          /* ... */
-        }}
+        // onConfirm={() => {}}
       />
     </>
   );
