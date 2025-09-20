@@ -14,6 +14,12 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '/api'),
         secure: true,
       },
+      '/auth/api': {
+        target: 'https://api.korip.me/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api'),
+        secure: true,
+      },
     },
   },
 });
