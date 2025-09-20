@@ -20,7 +20,7 @@ const FirstInfoCard = ({
   return (
     <div>
       <div
-        className='bg-bg-section relative h-[250px] w-full rounded-2xl bg-cover bg-center'
+        className='bg-bg-section relative aspect-square w-full rounded-2xl bg-cover bg-center md:h-[250px]'
         style={{
           backgroundImage: `url(${imageUrl || 'https://via.placeholder.com/300x200'})`,
         }}
