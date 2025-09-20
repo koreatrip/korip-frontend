@@ -24,3 +24,11 @@ export const useRegionDetailQuery = (
     gcTime: 30 * 60 * 1000,
   });
 };
+
+export const useRegionMajorQuery = (lang?: string) => {
+  return useQuery({
+    ...regionsQueries.regions.major(lang),
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+  });
+};

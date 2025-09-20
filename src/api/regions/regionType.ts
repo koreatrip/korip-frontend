@@ -51,3 +51,7 @@ export type RegionDetail = {
 export type RegionDetailResponse = {
   regions: RegionDetail;
 };
+
+export type RegionsMajorResponse = {
+  regions: Region[];
+};

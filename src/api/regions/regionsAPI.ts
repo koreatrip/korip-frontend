@@ -1,5 +1,9 @@
 import axios from 'axios';
-import type { RegionDetailResponse, RegionsResponse } from './regionType';
+import type {
+  RegionDetailResponse,
+  RegionsResponse,
+  RegionsMajorResponse,
+} from './regionType';
 
 export const regionsAPI = {
   // 새로 추가된 regions API들
@@ -10,6 +14,21 @@ export const regionsAPI = {
       headers: { Accept: 'application/json' },
     });
     return response.data;
+  },
+
+  getRegionsMajor: async (lang?: string): Promise<RegionsMajorResponse> => {
+    try {
+      const params = lang ? { lang } : {};
+      const response = await axios.get('/api/regions/major', {
+        params,
+        headers: { Accept: 'application/json' },
+      });
+      console.log('Major regions response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching major regions:', error);
+      throw error;
+    }
   },
 
   getRegionDetail: async (
