@@ -4,9 +4,10 @@ import { left_arrow, right_arrow } from '@/assets/assets';
 
 type CarouselProps = {
   children: ReactNode;
+  lenght: number;
 };
 
-const CarouselForCard = ({ children }: CarouselProps) => {
+const CarouselForCard = ({ children, lenght }: CarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const items = Children.toArray(children);
@@ -52,9 +53,7 @@ const CarouselForCard = ({ children }: CarouselProps) => {
 
   return (
     <div className='relative mx-auto w-full'>
-      {/* 고정 높이를 가진 컨테이너로 수정 */}
-      <div className='relative flex h-[380px] items-center overflow-hidden'>
-        {/* mode="wait" 추가 */}
+      <div className='relative flex h-[1400px] items-center overflow-hidden md:h-[700px] lg:h-[380px]'>
         <AnimatePresence initial={false} custom={direction} mode='wait'>
           <motion.div
             key={currentIndex}
@@ -68,32 +67,36 @@ const CarouselForCard = ({ children }: CarouselProps) => {
               opacity: { duration: 0.2 },
             }}
             // absolute 포지션으로 레이아웃 깨짐 방지
-            className='absolute grid w-full grid-cols-4 gap-4'
+            className='absolute grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4'
           >
             {getVisibleItems()}
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* 좌측 화살표 */}
-      <motion.button
-        className='text-main-text-navy absolute top-2/5 -left-5 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full shadow-lg backdrop-blur-sm transition-all duration-200 hover:scale-105'
-        onClick={() => paginate(-1)}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <img src={left_arrow} alt='Previous' />
-      </motion.button>
+      {lenght > 4 ? (
+        <>
+          {/* 좌측 화살표 */}
+          <motion.button
+            className='text-main-text-navy absolute top-2/5 -left-5 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full shadow-lg backdrop-blur-sm transition-all duration-200 hover:scale-105'
+            onClick={() => paginate(-1)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <img src={left_arrow} alt='Previous' />
+          </motion.button>
 
-      {/* 우측 화살표 */}
-      <motion.button
-        className='text-main-text-navy absolute top-2/5 -right-5 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full shadow-lg backdrop-blur-sm transition-all duration-200 hover:scale-105'
-        onClick={() => paginate(1)}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <img src={right_arrow} alt='Next' />
-      </motion.button>
+          {/* 우측 화살표 */}
+          <motion.button
+            className='text-main-text-navy absolute top-2/5 -right-5 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full shadow-lg backdrop-blur-sm transition-all duration-200 hover:scale-105'
+            onClick={() => paginate(1)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <img src={right_arrow} alt='Next' />
+          </motion.button>
+        </>
+      ) : null}
     </div>
   );
 };

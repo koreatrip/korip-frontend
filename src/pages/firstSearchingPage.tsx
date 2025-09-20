@@ -2,16 +2,18 @@ import Container from '@/components/common/Container';
 import SearchBar from '@/components/domain/searchBar/SearchBar';
 import CarouselForCard from '@/components/domain/regions/CarouselForCard';
 import FirstInfoCard from '@/components/domain/regions/FirstInfoCard';
+import { useRegionMajorQuery } from '@/api/regions/regionsHooks';
 
 const FirstSearchingPage = () => {
-  const places = [
-    { title: '서울', imageUrl: 'https://via.placeholder.com/300x200' },
-    { title: '서울', imageUrl: 'https://via.placeholder.com/300x200' },
-    { title: '서울', imageUrl: 'https://via.placeholder.com/300x200' },
-    { title: '서울', imageUrl: 'https://via.placeholder.com/300x200' },
-    { title: '서울', imageUrl: 'https://via.placeholder.com/300x200' },
-    { title: '서울', imageUrl: 'https://via.placeholder.com/300x200' },
-  ];
+  const { data: places } = useRegionMajorQuery('ko');
+
+  // if (isLoading) {
+  //   return <div>지역 목록을 불러오는 중...</div>;
+  // }
+
+  // if (error) {
+  //   return <div>오류가 발생했습니다: {error.message}</div>;
+  // }
 
   return (
     <Container>
@@ -26,13 +28,13 @@ const FirstSearchingPage = () => {
       <div className='my-16'>
         <h2 className='text-[32px] font-semibold'>지역 둘러보기</h2>
         <div className='relative'>
-          <CarouselForCard>
-            {places.map((place) => (
+          <CarouselForCard lenght={places?.regions?.length ?? 0}>
+            {places?.regions?.map((place) => (
               <FirstInfoCard
-                key={place.title}
+                key={place.id}
                 variant='selectable'
-                title={place.title}
-                imageUrl={place.imageUrl}
+                title={place.name}
+                imageUrl={''}
                 isSelected={false}
                 onClick={() => {}}
                 onViewDetails={() => {}}
@@ -46,20 +48,24 @@ const FirstSearchingPage = () => {
       <div className='my-16'>
         <h2 className='text-[32px] font-semibold'>테마별 여행</h2>
         <div className='relative'>
-          <CarouselForCard>
-            {places.map((place) => (
-              <FirstInfoCard
-                key={place.title}
-                variant='selectable'
-                title={place.title}
-                imageUrl={place.imageUrl}
-                isSelected={false}
-                onClick={() => {}}
-                onViewDetails={() => {}}
-                onFavorite={() => {}}
-              />
-            ))}
-          </CarouselForCard>
+          {/* <CarouselForCard>
+           {Array.isArray(places) ? (
+              places?.map((place) => (
+                <FirstInfoCard
+                  key={place.title}
+                  variant='selectable'
+                  title={place.title}
+                  imageUrl={place.imageUrl}
+                  isSelected={false}
+                  onClick={() => {}}
+                  onViewDetails={() => {}}
+                  onFavorite={() => {}}
+                />
+              ))
+            ) : (
+              <div>No places available.</div>
+            )}
+          </CarouselForCard> */}
         </div>
       </div>
     </Container>
