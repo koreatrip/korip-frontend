@@ -30,7 +30,7 @@ type ProfileEditStore = {
   state: ProfileEditState;
 } & ProfileEditActions;
 
-export const useProfileEditStore = create<ProfileEditStore>((set, get) => ({
+export const useProfileEditStore = create<ProfileEditStore>((set) => ({
   // 초기 상태
   state: {
     isEditing: false,

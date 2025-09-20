@@ -1,5 +1,7 @@
+import { usePlansQuery } from '@/api/planner/plannerHooks';
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
 import SearchBar from '@/components/common/searchBar/SearchBar';
+import Spinner from '@/components/common/Spinner';
 import PlannerAddButton from '@/components/domain/planner/PlannerAddButton';
 import PlannerAddButtonMini from '@/components/domain/planner/PlannerAddButtonMini';
 import PlannerCard from '@/components/domain/planner/PlannerCard';
@@ -18,6 +20,7 @@ type TPlannerData = {
 };
 
 const MyPlannerPage = () => {
+  const { data: plansData, isLoading, error } = usePlansQuery();
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -26,28 +29,19 @@ const MyPlannerPage = () => {
     SortOption.DATE_DESC
   );
 
-  // --- 임시 목 데이터 (API 연동 전)
-  const mockTravelPlansData: TPlannerData[] = [
-    {
-      id: 1,
-      title: '제주도 여행',
-      description: '가족과 함께하는 제주도 3박 4일 여행',
-      dateRange: '2024-03-15 ~ 2024-03-18',
-      isNew: true,
-      createdAt: '2024-02-20',
-    },
-    {
-      id: 2,
-      title: '부산 여행',
-      description: '친구들과 함께하는 부산 2박 3일 여행',
-      dateRange: '2024-04-10 ~ 2024-04-12',
-      isNew: false,
-      createdAt: '2024-02-15',
-    },
-  ];
+  // API 데이터를 컴포넌트 형식에 맞게 변환
+  const planners: TPlannerData[] = useMemo(() => {
+    if (!plansData?.plans) return [];
 
-  // planners 상태 (API 연동 시 서버 응답으로 대체)
-  const [planners, setPlanners] = useState<TPlannerData[]>(mockTravelPlansData);
+    return plansData.plans.map((plan) => ({
+      id: plan.id,
+      title: plan.title,
+      description: plan.description,
+      dateRange: '날짜 정보 없음', // API에 날짜 필드가 없어서 임시
+      isNew: false, // API에 isNew 필드가 없어서 기본값
+      createdAt: plan.created_at,
+    }));
+  }, [plansData]);
 
   // 검색 + 정렬
   const filteredAndSortedPlanners: TPlannerData[] = useMemo(() => {
@@ -119,12 +113,39 @@ const MyPlannerPage = () => {
   };
 
   const handleAddPlannerSubmit = (newPlanner: TPlannerData) => {
-    setPlanners((prev) => [newPlanner, ...prev]);
+    // TODO: 실제로는 여기서 API 호출해서 새 플래너 추가하고 리프레시해야 함
+    console.log('새 플래너 추가:', newPlanner);
   };
 
   const handlePlannerCardClick = (plannerId: number) => {
     navigate(`/trip/${plannerId}`);
   };
+
+  // 로딩 상태
+  if (isLoading) {
+    return (
+      <div className='flex min-h-screen w-full items-center justify-center'>
+        <div className='flex flex-col items-center text-center'>
+          <Spinner />
+          <p className='text-gray-500'>플래너를 불러오는 중...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 에러 상태
+  if (error) {
+    return (
+      <div className='flex min-h-screen w-full items-center justify-center'>
+        <div className='text-center'>
+          <p className='text-error-red mb-2'>
+            플래너를 불러오는데 실패했습니다.
+          </p>
+          <p className='text-sm text-gray-500'>페이지를 새로고침해주세요.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='flex min-h-screen w-full'>

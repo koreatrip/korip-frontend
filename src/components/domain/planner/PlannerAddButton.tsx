@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import CreateTripModal from '../../modals/CreateTripModal';
 
 type TPlannerAddButtonProps = {

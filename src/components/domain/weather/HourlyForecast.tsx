@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 type HourlyData = {
   time: string;
   weather_condition: string;
-  temperature: string;
+  temperature: number;
   pop?: string;
 };
 type HourlyForecastProps = {

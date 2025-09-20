@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import MyPageLayout from '@/components/domain/myPage/MyPageLayout';
-import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { TrashIcon } from '@heroicons/react/24/outline';
 import { useNavigate, useParams } from 'react-router-dom';
 
-interface TimeSlot {
-  time: string;
-  title: string;
-  description: string;
-}
+// interface TimeSlot {
+//   time: string;
+//   title: string;
+//   description: string;
+// }
 
-interface TripDay {
-  date: string;
-  day: number;
-  timeSlots: TimeSlot[];
-}
+// interface TripDay {
+//   date: string;
+//   day: number;
+//   timeSlots: TimeSlot[];
+// }
 
-const TripDetailPage: React.FC = () => {
+const TripDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [selectedDay, setSelectedDay] = useState(1);

@@ -25,7 +25,7 @@ type AuthActions = {
 type AuthStoreType = AuthState & AuthActions;
 
 // useAuthStore 훅을 생성합니다.
-export const useAuthStore = create<AuthStoreType>((set, get) => {
+export const useAuthStore = create<AuthStoreType>((set) => {
   // 초기화 시점에 바로 쿠키 확인
   const accessToken = Cookies.get('access_token');
   const initialIsLogin = !!accessToken;

@@ -57,7 +57,7 @@
     "total_planners": "총 {{count}}《狗的策划人》",
     " added_to_schedule": " {{place?.title}}已添加到日程中。 ",
     "view_details_alert": "{{place? .title}} 确认详细信息。 ",
-    " select_region": " 请选择地区",
+    "select_region": " 请选择地区",
     "temp_password_issued": "已生成临时密码。",
     "temp_password_sent": "我们已将临时密码发送至您填写的电子邮箱。",
     "change_after_login": "请登录后将其更改为新密码。",
@@ -86,7 +86,7 @@
     "enter_password": "请输入密码",
     "confirm_password": "确认密码",
     "enter_confirm_password": "请再次输入密码。",
-    "username": "用户名",
+    "username": "姓名",
     "phone_number": "联系方式",
     "please_enter_name": "请输入姓名",
     "email_password_mismatch": "邮箱或密码不匹配。",
@@ -122,9 +122,14 @@
     "phone_number_placeholder": "请输入您的电话号码",
     "password_length_8_20": "8到20个字符",
     "signup_date": "注册日期",
+    "email_send": "发送邮件",
     "email_verification": "邮箱验证",
     "agree_terms": "同意服务条款",
-    "agree_privacy": "同意隐私政策"
+    "agree_privacy": "同意隐私政策",
+    "password_changed_success": "您的密码已成功更改。",
+    "password_change_failed": "密码更改失败。",
+    "account_deleted_success": "您的账号已成功注销。\n感谢您一直以来使用我们的服务。",
+    "password_incorrect": "您输入的密码不正确。\n请检查大小写后再试一次。"
   },
 
   "agreement": {

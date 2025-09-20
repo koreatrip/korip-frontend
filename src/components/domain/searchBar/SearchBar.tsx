@@ -6,6 +6,8 @@ import { useToast } from '@/hooks/useToast';
 import {
   ChevronRightIcon,
   MagnifyingGlassIcon,
+  ExclamationCircleIcon,
+  ArrowPathIcon,
 } from '@heroicons/react/24/outline';
 import { MapPinIcon } from '@heroicons/react/24/solid';
 import React, { useEffect, useRef, useState } from 'react';
@@ -19,6 +21,11 @@ type TSearchBarProps = {
   height?: string;
   showLocationIcon?: boolean;
   onSearch?: (value: string) => void;
+  disableNavigation?: boolean;
+  onRegionSelect?: (
+    region: { id: number; name: string },
+    subregion?: { id: number; name: string }
+  ) => void;
 };
 
 const SearchBar = ({
@@ -26,6 +33,9 @@ const SearchBar = ({
   className = '',
   height = 'h-14',
   showLocationIcon = true,
+  onSearch,
+  disableNavigation = false,
+  onRegionSelect,
 }: TSearchBarProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -47,18 +57,56 @@ const SearchBar = ({
   const {
     data: regionsResponse,
     isLoading: isRegionsLoading,
-    error: isRegionsError,
+    error: regionsError,
+    refetch: refetchRegions,
   } = useRegionsQuery(currentLanguage);
 
   // 선택된 시/도의 구/군 목록 조회
   const {
     data: regionDetail,
     isLoading: isRegionDetailLoading,
-    error: isRegionDetailError,
+    error: regionDetailError,
+    refetch: refetchRegionDetail,
   } = useRegionDetailQuery(selectedRegion?.id || null, currentLanguage);
 
   const regions = regionsResponse?.regions || [];
   const subregions = regionDetail?.regions?.subregions?.regions || [];
+
+  // 에러 메시지 파싱 함수
+  const getErrorMessage = (error: any) => {
+    if (!error) return '';
+
+    // HTTP 상태 코드별 메시지
+    if (error.status || error.response?.status) {
+      const status = error.status || error.response?.status;
+      switch (status) {
+        case 500:
+        case 502:
+        case 503:
+        case 504:
+          return '서버에 일시적인 문제가 발생했습니다.';
+        case 404:
+          return '요청한 정보를 찾을 수 없습니다.';
+        case 403:
+          return '접근 권한이 없습니다.';
+        case 429:
+          return '너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.';
+        default:
+          return '데이터를 불러오는 중 오류가 발생했습니다.';
+      }
+    }
+
+    // 네트워크 에러
+    if (
+      error.message?.includes('Network Error') ||
+      error.code === 'NETWORK_ERROR'
+    ) {
+      return '네트워크 연결을 확인해주세요.';
+    }
+
+    // 기본 에러 메시지
+    return '일시적인 오류가 발생했습니다.';
+  };
 
   // 드롭다운 외부 클릭 시 닫기 처리
   useEffect(() => {
@@ -80,13 +128,17 @@ const SearchBar = ({
   const handleSearch = async (query?: string) => {
     const searchTerm = query || searchQuery;
     if (!searchTerm.trim()) return;
+    if (disableNavigation && onSearch) {
+      onSearch(searchTerm);
+      setIsDropdownOpen(false);
+      return;
+    }
     setIsLoading(true);
 
     try {
-      // 쿼리 파라미터로 넘기기
       const params = new URLSearchParams({
         q: searchTerm,
-        lang: currentLanguage, // 나중에 언어 상태로 변경
+        lang: currentLanguage,
       });
 
       navigate(`/explore/regions?${params.toString()}`);
@@ -117,12 +169,17 @@ const SearchBar = ({
     setCurrentView('district');
   };
 
-  // 🔥 핵심 수정 부분: 구/군 선택 시 path parameter로 이동
   const handleDistrictSelect = (district: { id: number; name: string }) => {
     if (!selectedRegion) return;
 
     const locationQuery = `${selectedRegion.name} ${district.name}`;
     setSearchQuery(locationQuery);
+
+    if (disableNavigation && onRegionSelect) {
+      onRegionSelect(selectedRegion, district);
+      setIsDropdownOpen(false);
+      return;
+    }
 
     const params = new URLSearchParams({
       region_id: selectedRegion.id.toString(),
@@ -130,7 +187,6 @@ const SearchBar = ({
       lang: currentLanguage,
     });
 
-    // 메인페이지에서는 /explore/regions로 이동, 나머지는 현재 경로 유지
     if (location.pathname === '/') {
       navigate(`/explore/regions?${params.toString()}`);
     } else {
@@ -150,22 +206,25 @@ const SearchBar = ({
     setSelectedRegion(null);
   };
 
-  // 🔥 핵심 수정 부분: 시/도 전체 선택 시 path parameter로 이동
   const handleCityAll = (region: { id: number; name: string }) => {
     setSearchQuery(region.name);
+
+    if (disableNavigation && onRegionSelect) {
+      onRegionSelect(region);
+      setIsDropdownOpen(false);
+      return;
+    }
 
     const params = new URLSearchParams({
       region_id: region.id.toString(),
       lang: currentLanguage,
     });
 
-    // 메인페이지에서는 /explore/regions로 이동, 나머지는 현재 경로 유지
     if (location.pathname === '/explore/attractions') {
       navigate(`/explore/districts?${params.toString()}`);
     } else if (location.pathname === '/') {
       navigate(`/explore/regions?${params.toString()}`);
     } else {
-      // 현재 URL params 가져와서 업데이트
       const currentParams = new URLSearchParams(location.search);
       currentParams.set('region_id', region.id.toString());
       currentParams.delete('subregion_id');
@@ -177,7 +236,30 @@ const SearchBar = ({
     setIsDropdownOpen(false);
   };
 
-  if (isRegionsError) return <div>{isRegionsError.message}</div>;
+  // 에러 상태 컴포넌트
+  const ErrorState = ({
+    error,
+    onRetry,
+    message,
+  }: {
+    error: any;
+    onRetry: () => void;
+    message?: string;
+  }) => (
+    <div className='flex flex-col items-center justify-center px-4 py-8'>
+      <ExclamationCircleIcon className='text-main-hover-pink mb-3 h-12 w-12' />
+      <p className='text-error-red mb-2 text-center text-sm font-medium'>
+        {message || getErrorMessage(error)}
+      </p>
+      <button
+        onClick={onRetry}
+        className='text-error-red flex items-center gap-2 rounded-lg bg-red-50 px-4 py-2 text-sm transition-colors hover:bg-red-100'
+      >
+        <ArrowPathIcon className='h-4 w-4' />
+        다시 시도
+      </button>
+    </div>
+  );
 
   return (
     <div
@@ -229,7 +311,16 @@ const SearchBar = ({
                 {isRegionsLoading ? (
                   <div className='flex items-center justify-center py-8'>
                     <div className='border-outline-gray h-6 w-6 animate-spin rounded-full border-2 border-t-gray-600'></div>
+                    <span className='ml-2 text-sm text-gray-500'>
+                      지역 정보를 불러오는 중...
+                    </span>
                   </div>
+                ) : regionsError ? (
+                  <ErrorState
+                    error={regionsError}
+                    onRetry={refetchRegions}
+                    message='지역 목록을 불러올 수 없습니다.'
+                  />
                 ) : (
                   <div className='grid max-h-80 grid-cols-2 gap-2 overflow-y-auto'>
                     {regions.length > 0 ? (
@@ -252,7 +343,7 @@ const SearchBar = ({
                       ))
                     ) : (
                       <div className='col-span-2 py-4 text-center text-gray-500'>
-                        지역 정보를 불러올 수 없습니다.
+                        지역 정보가 없습니다.
                       </div>
                     )}
                   </div>
@@ -281,7 +372,6 @@ const SearchBar = ({
                       className='mr-3 h-4 w-4 rounded text-blue-600 focus:ring-blue-500'
                       onChange={(e) => {
                         if (e.target.checked && selectedRegion) {
-                          // 🔥 수정: 체크박스 클릭 시도 path parameter로 이동
                           handleCityAll(selectedRegion);
                         }
                       }}
@@ -301,12 +391,12 @@ const SearchBar = ({
                         구/군 정보를 불러오는 중...
                       </span>
                     </div>
-                  ) : isRegionDetailError ? (
-                    <div className='flex flex-col items-center justify-center py-8'>
-                      <span className='mb-2 text-sm text-red-500'>
-                        구/군 정보를 불러올 수 없습니다.
-                      </span>
-                    </div>
+                  ) : regionDetailError ? (
+                    <ErrorState
+                      error={regionDetailError}
+                      onRetry={refetchRegionDetail}
+                      message='구/군 정보를 불러올 수 없습니다.'
+                    />
                   ) : (
                     <div className='grid max-h-60 grid-cols-3 gap-2 overflow-y-auto'>
                       {subregions.length > 0 ? (
@@ -314,7 +404,6 @@ const SearchBar = ({
                           <button
                             key={subregion.id}
                             onClick={() =>
-                              // 🔥 수정: subregion 객체 전체를 넘겨서 id를 활용
                               handleDistrictSelect({
                                 id: subregion.id,
                                 name: subregion.name,

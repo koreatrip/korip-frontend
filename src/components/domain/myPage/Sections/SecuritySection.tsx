@@ -1,5 +1,4 @@
 import Button from '@/components/common/Button';
-import { useTranslation } from 'react-i18next';
 
 type SecuritySectionProps = {
   onPasswordChange: () => void;
@@ -10,7 +9,7 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({
   onPasswordChange,
   onAccountDelete,
 }) => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   return (
     <section className='mb-6 rounded-md bg-gray-50 p-6 shadow-md'>

@@ -10,11 +10,12 @@ import LoginPromptModal from '@/components/domain/auth/LoginPromptModal';
 import { useNavigate } from 'react-router';
 import { usePlacesQuery } from '@/api/place/placeHooks';
 import LoadingPage from './statusPage/loadingPage';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNumericSearchParam } from '@/hooks/useNumericSearchParam';
 import EmptyCard from '@/components/common/ui/EmptyCard';
-import { useUserProfile } from '@/api/user/userHooks';
+import { useUserProfileQuery } from '@/api/user/userHooks';
 import { useAuthCheck } from '@/hooks/useAuthCheck';
+import PlaceDetailModal from '@/components/domain/regions/PlaceDetailModal';
 
 const RegionsPage = () => {
   const navigate = useNavigate();
@@ -22,6 +23,9 @@ const RegionsPage = () => {
 
   const { stack, actions } = useModalStore();
   const { isLoggedIn } = useAuthCheck();
+
+  // 선택된 장소 ID 상태 관리
+  const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
 
   const regionId = useNumericSearchParam('region_id');
   const subregionId = useNumericSearchParam('subregion_id');
@@ -44,7 +48,9 @@ const RegionsPage = () => {
     }
   );
 
-  const { data: userProfile } = useUserProfile();
+  console.log('명소데이터', placesData);
+
+  const { data: userProfile } = useUserProfileQuery();
 
   // 안전한 데이터 추출 (배열 접근 포함)
   const region = placesData?.region; // 첫 번째 요소
@@ -52,7 +58,22 @@ const RegionsPage = () => {
   const popularSubregions = placesData?.popular_subregions || [];
   const majorPlaces = placesData?.major_places || [];
   const userRecommendedPlaces = placesData?.user_recommended_places || [];
-  const accommodations = placesData?.accommodations || [];
+  const accommodations = placesData?.stay_places || [];
+
+  // 모달 관련 핸들러
+  const handlePlaceDetailOpen = (placeId: number) => {
+    setSelectedPlaceId(placeId);
+  };
+
+  const handlePlaceDetailClose = () => {
+    setSelectedPlaceId(null);
+  };
+
+  // 일정에 장소 추가 핸들러
+  const handleAddToSchedule = (/* planId: string, */ planName: string) => {
+    console.log(`장소 ${selectedPlaceId}를 ${planName} 일정에 추가`);
+    // 여기에 실제 일정 추가 API 호출 로직 추가
+  };
 
   // 위치 표시명 결정 함수 - API 데이터 기반으로 수정
   const getLocationDisplayName = () => {
@@ -180,10 +201,13 @@ const RegionsPage = () => {
                 ? popularSubregions.map((subregion) => (
                     <li key={subregion.id}>
                       <InfoCard
+                        type='region'
                         variant='selectable'
                         title={subregion.name}
+                        id={subregion.id}
                         description={subregion.description || ''}
                         details={subregion.feature || ''}
+                        isFavorite={subregion.is_favorite}
                       />
                     </li>
                   ))
@@ -241,10 +265,16 @@ const RegionsPage = () => {
                 ? majorPlaces.slice(0, 4).map((place) => (
                     <li key={place.id}>
                       <InfoCard
+                        type='place'
                         variant='interactive'
                         title={place.name}
                         description={place.description ?? ''} // null이면 빈 문자열
                         details={place.feature ?? ''}
+                        id={place.id}
+                        imageUrl={place.image_url}
+                        onViewDetails={() => handlePlaceDetailOpen(place.id)}
+                        onAddToSchedule={handleAddToSchedule}
+                        isFavorite={place.is_favorite}
                       />
                     </li>
                   ))
@@ -296,10 +326,12 @@ const RegionsPage = () => {
                 {userRecommendedPlaces.slice(0, 3).map((place) => (
                   <li key={place.id}>
                     <InfoCard
+                      type='place'
                       variant='selectable'
                       title={place.name}
                       description={place.description ?? ''}
                       details={place.feature ?? ''}
+                      isFavorite={place.is_favorite}
                     />
                   </li>
                 ))}
@@ -337,10 +369,14 @@ const RegionsPage = () => {
               ? accommodations.map((accommodation) => (
                   <li key={accommodation.id}>
                     <InfoCard
+                      type='place'
                       variant='selectable'
+                      id={accommodation.id}
+                      imageUrl={accommodation.image_url}
                       title={accommodation.name}
-                      description={accommodation.description}
-                      details={accommodation.feature}
+                      description={accommodation.description ?? undefined}
+                      details={accommodation.feature ?? undefined}
+                      isFavorite={accommodation.is_favorite}
                     />
                   </li>
                 ))
@@ -367,6 +403,13 @@ const RegionsPage = () => {
       <LoginPromptModal
         isOpen={stack.isLoginPromptOpen}
         onClose={actions.closeLoginPrompt}
+      />
+
+      <PlaceDetailModal
+        isOpen={selectedPlaceId !== null}
+        onClose={handlePlaceDetailClose}
+        placeId={selectedPlaceId || 0}
+        lang={i18n.language || 'ko'}
       />
     </div>
   );
