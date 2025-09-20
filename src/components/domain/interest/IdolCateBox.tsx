@@ -1,13 +1,53 @@
 import { useState } from 'react';
 import Input from '@/components/common/Input';
+import type { Subcategory } from '@/api/category/categoryType';
+import type { Dispatch, SetStateAction } from 'react';
+import type { Category } from '@/api/category/categoryType';
+import { useSubcategoriesQuery } from '@/api/category/categoryHooks';
 import Button from '@/components/common/Button';
 import IdolRequestModal from '@/components/domain/interest/IdolRequestModal';
-const IdolCateBox = () => {
+import SelectButton from './selectButton/SelectButton';
+import { useToast } from '@/hooks/useToast';
+
+type IdolCateBoxProps = {
+  selectedId: number;
+  subSelected: Category[];
+  setSubSelected: Dispatch<SetStateAction<Category[]>>;
+};
+
+const IdolCateBox = ({
+  selectedId,
+  subSelected,
+  setSubSelected,
+}: IdolCateBoxProps) => {
   const [idolInput, setIdolInput] = useState<string>('');
   const [isModalOpen, setModalOpen] = useState(false); // 아이돌 모달 온오프 여부
   const handleSerchIdol = (value: string) => {
     setIdolInput(value);
   };
+  const { showToast } = useToast();
+  const { data, isLoading, isError, error } = useSubcategoriesQuery(
+    selectedId,
+    'ko'
+  ); // 서브 카테고리 불러옴.
+
+  if (isLoading) {
+    return <div></div>;
+  }
+
+  if (isError) {
+    return <div>서브 카테고리 로딩 에러: {error.message}</div>;
+  }
+
+  if (!data) {
+    return <div>데이터를 불러오는 데 실패했습니다.</div>;
+  }
+  const subData: Subcategory[] = data.subcategories;
+
+  const filteredData = subData.filter((item) =>
+    item.name.toLowerCase().includes(idolInput.toLowerCase())
+  );
+
   return (
     <>
       <div>
@@ -19,6 +59,35 @@ const IdolCateBox = () => {
             value={idolInput}
             onChange={(e) => handleSerchIdol(e.target.value)}
           />
+          <div className='flex flex-wrap gap-2 pt-4'>
+            {filteredData.map((item) => {
+              return (
+                <SelectButton
+                  key={item.id}
+                  selected={subSelected.some((c) => c.id === item.id)}
+                  className='text-md rounded-all h-8'
+                  onClick={() =>
+                    setSubSelected((prev) => {
+                      if (
+                        prev.length >= 9 &&
+                        !prev.some((c) => c.id === item.id)
+                      ) {
+                        showToast('관심사는 9개까지 선택 가능합니다.', 'error');
+                        return prev;
+                      }
+                      if (prev.some((c) => c.id === item.id)) {
+                        return prev.filter((c) => c.id !== item.id);
+                      } else {
+                        return [...prev, { id: item.id, name: item.name }];
+                      }
+                    })
+                  }
+                >
+                  # {item.name}
+                </SelectButton>
+              );
+            })}
+          </div>
           <hr className='text-outline-gray my-5' />
           <p className='my-2 text-center'>원하는 아이돌이 없나요?</p>
           <Button
