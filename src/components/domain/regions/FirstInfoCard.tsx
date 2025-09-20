@@ -34,10 +34,12 @@ const FirstInfoCard = ({
       </div>
 
       <div className='flex items-center justify-between py-5'>
-        <h3 className='text-main-text-navy text-4xl font-semibold'>{title}</h3>
+        <h3 className='text-main-text-navy text-2xl font-semibold lg:text-3xl'>
+          {title}
+        </h3>
         <button
           onClick={onViewDetails}
-          className='text-main-text-navy bg-bg-white border-outline-gray shadow-medium cursor-pointer rounded-full border px-7 py-2 font-medium duration-300 hover:bg-gray-200'
+          className='text-main-text-navy bg-bg-white border-outline-gray shadow-light cursor-pointer rounded-full border px-3 py-2 text-sm font-medium duration-300 hover:bg-gray-200 md:text-xl lg:px-5'
         >
           둘러보기
         </button>
