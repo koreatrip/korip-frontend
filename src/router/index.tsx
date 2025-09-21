@@ -21,6 +21,7 @@ import FirstSearchingPage from '@/pages/firstSearchingPage';
 import LanguagePage from '@/pages/languagePage';
 import ResetPasswordPage from '@/pages/resetPasswordPage';
 import NotFoundPage from '@/pages/statusPage/notFoundPage';
+import OAuthCallbackPage from '@/pages/statusPage/oAuthCallbackPage';
 import ErrorPage from '@/pages/statusPage/errorPage';
 import AttractionsPage from '@/pages/attractionsPage';
 import ProtectedRoute from '@/components/domain/auth/ProtectedRoute';
@@ -78,6 +79,10 @@ export const router = createBrowserRouter([
       {
         path: 'language',
         element: <LanguagePage />,
+      },
+      {
+        path: 'callback',
+        element: <OAuthCallbackPage />,
       },
 
       // 보호된 페이지들

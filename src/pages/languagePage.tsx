@@ -63,7 +63,7 @@ const LanguagePage = () => {
         </p>
       </div>
       <Container>
-        <div className='m-auto mt-[56px] flex max-w-[550px] flex-col gap-6'>
+        <div className='m-auto mt-[56px] mb-15 flex max-w-[550px] flex-col gap-6'>
           <p className='text-center text-[32px] font-semibold'>
             {t('languages.choose_starting_language')}
           </p>
