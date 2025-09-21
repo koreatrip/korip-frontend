@@ -30,17 +30,16 @@ const FirstSearchingPage = () => {
 
       <div className='my-16 px-4'>
         <h2 className='mb-5 text-[32px] font-semibold'>지역 둘러보기</h2>
-        <div className='grid w-full grid-cols-2 gap-4 lg:grid-cols-4'>
+        <div className='grid w-full grid-cols-2 gap-5 lg:grid-cols-4'>
           {major?.regions?.map((place) => (
             <FirstInfoCard
               key={place.id}
-              variant='selectable'
+              // variant='selectable'
               title={place.name}
               imageUrl={''}
               isSelected={false}
-              onClick={() => {}}
-              onViewDetails={() => {}}
-              onFavorite={() => {}}
+              id={place.id}
+              isRegion={true}
             />
           ))}
         </div>
@@ -53,13 +52,12 @@ const FirstSearchingPage = () => {
           {theme?.categories?.map((place) => (
             <FirstInfoCard
               key={place.id}
-              variant='selectable'
+              id={place.id}
+              // variant='selectable'
               title={place.name}
               imageUrl={''}
               isSelected={false}
-              onClick={() => {}}
-              onViewDetails={() => {}}
-              onFavorite={() => {}}
+              isRegion={false}
             />
           ))}
         </CarouselForCard>

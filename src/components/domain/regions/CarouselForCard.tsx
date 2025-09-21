@@ -87,7 +87,7 @@ const CarouselForCard = ({ children, length }: CarouselProps) => {
               x: { type: 'spring', stiffness: 300, damping: 30 },
               // opacity: { duration: 0.2 },
             }}
-            className='grid w-full grid-cols-2 gap-4 lg:grid-cols-4'
+            className='grid w-full grid-cols-2 gap-5 lg:grid-cols-4'
             style={{ minHeight: '200px', minWidth: '100%' }}
           >
             {getVisibleItems()}
