@@ -1,4 +1,4 @@
-import star from '@/assets/star/star.svg';
+// import star from '@/assets/star/star.svg';
 import { useToast } from '@/hooks/useToast';
 import { useNavigate } from 'react-router';
 
@@ -23,7 +23,7 @@ const FirstInfoCard = ({
   function handleClickDetail() {
     // console.log('View details for item with id:', id);
     if (isRegion) {
-      navigator(`explore/regions?region_id=${id}`);
+      navigator(`/explore/regions?region_id=${id}`);
     } else {
       // navigator(`explore/attractions?category_id=${id}`);
       showToast('준비 중인 기능입니다.', 'info');
@@ -53,7 +53,7 @@ const FirstInfoCard = ({
         </h3>
         <button
           onClick={() => handleClickDetail()}
-          className='text-main-text-navy bg-bg-white border-outline-gray shadow-light md:text-md cursor-pointer rounded-full border px-3 py-2 text-sm font-medium whitespace-nowrap duration-300 hover:bg-gray-200 lg:px-5'
+          className='text-main-text-navy bg-bg-white border-outline-gray shadow-light text-md cursor-pointer rounded-full border px-3 py-2 font-medium whitespace-nowrap duration-300 hover:bg-gray-200 lg:px-5'
         >
           둘러보기
         </button>
