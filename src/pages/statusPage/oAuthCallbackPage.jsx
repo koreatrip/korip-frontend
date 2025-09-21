@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { snsLoginAPI } from '@/api/auth/snsLogin/snsLoginAPI.ts';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useToast } from '@/hooks/useToast';
+import Modal, { Body, Header } from '@/components/common/Modal';
+import { PulseLoader } from 'react-spinners';
 
 const OAuthCallbackPage = () => {
   const [status, setStatus] = useState('processing');
@@ -44,7 +46,7 @@ const OAuthCallbackPage = () => {
           document.title,
           window.location.pathname
         );
-        showToast('로그인 성공 !', 'success');
+        showToast('환영합니다!', 'success');
 
         const redirectTo = response.first_login
           ? '/language'
@@ -73,33 +75,19 @@ const OAuthCallbackPage = () => {
 
   useEffect(() => {
     if (status === 'error') {
+      showToast('로그인에 실패하였습니다.', 'error');
       const timer = setTimeout(() => {
         navigate('/');
-      }, 6000);
+      }, 2000);
 
       return () => clearTimeout(timer);
     }
   }, [status, navigate]);
 
   return (
-    <>
-      <p className='p-6 text-center text-lg font-medium'>
-        {status === 'processing' && '로그인 중...'}
-        {status === 'error' &&
-          '로그인에 실패했습니다. 잠시 후 메인 페이지로 이동합니다.'}
-      </p>
-      {/* {status === 'processing' && <p>로그인 중</p>}
-      {status === 'error' && (
-        <>
-          <p>로그인 실패</p>
-          <button
-            onClick={() => navigate('/')}
-          >
-            메인 페이지로 이동
-          </button>
-        </>
-      )} */}
-    </>
+    <div className='fixed inset-0 z-50 flex items-center justify-center'>
+      <PulseLoader color='#5c5c5cff' />
+    </div>
   );
 };
 
