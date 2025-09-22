@@ -5,19 +5,12 @@ import { useNavigate } from 'react-router';
 type TFirstCard = {
   isRegion: boolean;
   id: number;
-  // variant: 'interactive' | 'selectable';
   title: string;
   imageUrl: string | null;
   isSelected: boolean;
 };
 
-const FirstInfoCard = ({
-  // variant = 'interactive', // 'interactive' | 'selectable'
-  id,
-  isRegion,
-  title,
-  imageUrl,
-}: TFirstCard) => {
+const FirstInfoCard = ({ id, isRegion, title, imageUrl }: TFirstCard) => {
   const { showToast } = useToast();
 
   function handleClickDetail() {
@@ -38,14 +31,7 @@ const FirstInfoCard = ({
         style={{
           backgroundImage: `url(${imageUrl || 'https://via.placeholder.com/300x200'})`,
         }}
-      >
-        {isRegion
-          ? // <button className='absolute right-3 bottom-3 z-30 cursor-pointer'>
-            //   <img src={star} alt='star' />
-            // </button>
-            null
-          : null}
-      </div>
+      ></div>
 
       <div className='flex items-center justify-between px-2 py-2 md:py-5'>
         <h3 className='text-main-text-navy text-xl font-semibold md:text-2xl'>
