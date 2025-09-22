@@ -34,7 +34,6 @@ const FirstSearchingPage = () => {
           {major?.regions?.map((place) => (
             <FirstInfoCard
               key={place.id}
-              // variant='selectable'
               title={place.name}
               imageUrl={''}
               isSelected={false}
@@ -53,7 +52,6 @@ const FirstSearchingPage = () => {
             <FirstInfoCard
               key={place.id}
               id={place.id}
-              // variant='selectable'
               title={place.name}
               imageUrl={''}
               isSelected={false}
