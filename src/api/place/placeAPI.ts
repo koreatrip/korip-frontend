@@ -1,10 +1,10 @@
-import axios from 'axios';
 import type {
   PlaceDetailResponse,
   PlacesResponse,
   SubregionPlacesResponse,
   SubcategoryPlacesResponse,
 } from './placeType';
+import axiosInstance from '../axiosInstance';
 
 export const placesAPI = {
   getPlaces: async (params: {
@@ -15,7 +15,7 @@ export const placesAPI = {
     try {
       console.log(`Calling API: /api/places/ with params:`, params);
 
-      const response = await axios.get('/api/places/', {
+      const response = await axiosInstance.get('/api/places/', {
         params: {
           region_id: params.region_id,
           ...(params.subregion_id && { subregion_id: params.subregion_id }),
@@ -49,7 +49,7 @@ export const placesAPI = {
         params
       );
 
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `/api/places/regions/${params.subregion_id}/`,
         {
           params: {
@@ -91,7 +91,7 @@ export const placesAPI = {
         params
       );
 
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `/api/places/subcategories/${params.subcategory_id}/`,
         {
           params: {
@@ -129,12 +129,15 @@ export const placesAPI = {
         params
       );
 
-      const response = await axios.get(`/api/places/${params.place_id}/`, {
-        params: {
-          ...(params.lang && { lang: params.lang }),
-        },
-        headers: { Accept: 'application/json' },
-      });
+      const response = await axiosInstance.get(
+        `/api/places/${params.place_id}/`,
+        {
+          params: {
+            ...(params.lang && { lang: params.lang }),
+          },
+          headers: { Accept: 'application/json' },
+        }
+      );
 
       console.log(
         `Place detail response for ${params.place_id}:`,
