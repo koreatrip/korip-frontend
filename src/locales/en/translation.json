@@ -74,7 +74,12 @@
     "search_select_region": "Select Region",
     "loading_districts": "Loading district/county information...",
     "failed_districts": "Failed to load district/county information.",
-    "no_subregion": "No sub-regions available."
+    "no_subregion": "No sub-regions available.",
+    "plan_not_found": "Unable to load the plan.",
+    "no_schedule_for_day": "No schedule registered for this date.",
+    "map_area": "Map Area",
+    "sync_google_calendar": "Sync with Google Calendar",
+    "save_as_pdf": "Save as PDF"
   },
 
   "auth": {

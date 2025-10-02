@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import CreateTripModal from '../../modals/CreateTripModal';
+import { useCreatePlanMutation } from '@/api/planner/plannerHooks';
+import { useToast } from '@/hooks/useToast';
 
 type TPlannerAddButtonProps = {
   onClick?: () => void;
@@ -19,7 +21,9 @@ type TPlannerData = {
   description: string;
   dateRange: string;
   isNew?: boolean;
-  createdAt: string;
+  created_at: string;
+  start_date: string | null;
+  end_date: string | null;
 };
 
 const PlannerAddButton = ({
@@ -27,6 +31,19 @@ const PlannerAddButton = ({
   onAddPlanner,
 }: TPlannerAddButtonProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { showToast } = useToast();
+
+  const createPlanMutation = useCreatePlanMutation({
+    onSuccess: (data) => {
+      console.log('플래너 생성 성공:', data);
+      showToast('새 여행 일정이 생성되었습니다.', 'success');
+      setIsModalOpen(false);
+    },
+    onError: (error) => {
+      console.error('플래너 생성 실패:', error);
+      showToast('여행 일정 생성에 실패했습니다.', 'error');
+    },
+  });
 
   const handleButtonClick = () => {
     if (onClick) {
@@ -36,29 +53,21 @@ const PlannerAddButton = ({
     }
   };
 
-  const handleModalSubmit = (tripData: TTripData) => {
-    // 새 일정 데이터 생성
-    const newPlanner: TPlannerData = {
-      id: Date.now(), // 임시 ID
-      title: tripData.tripName,
+  const handleModalSubmit = async (tripData: TTripData) => {
+    // API 호출을 위한 데이터 구조
+    const planRequest = {
+      name: tripData.tripName,
       description: tripData.tripDescription || `${tripData.location} 여행`,
-      dateRange: `${new Date()
-        .toLocaleDateString('ko-KR', {
-          year: '2-digit',
-          month: '2-digit',
-          day: '2-digit',
-        })
-        .replace(/\./g, '.')
-        .replace(/ /g, '')} ~ 미정`,
-      isNew: true,
-      createdAt: new Date().toISOString().split('T')[0],
+      destination: tripData.location,
+      subregion_id: Number(tripData.selectedRegion), // selectedRegion이 subregion_id라고 가정
     };
 
-    if (onAddPlanner) {
-      onAddPlanner(newPlanner);
+    try {
+      await createPlanMutation.mutateAsync(planRequest);
+    } catch (error) {
+      // 에러는 mutation의 onError에서 처리됨
+      console.error('플래너 생성 중 에러:', error);
     }
-
-    console.log('새 여행 일정 생성:', newPlanner);
   };
 
   return (
@@ -66,21 +75,26 @@ const PlannerAddButton = ({
       <div className='flex h-full items-center justify-center'>
         <button
           onClick={handleButtonClick}
-          className='flex h-[177px] w-[177px] flex-col items-center justify-center rounded-full bg-gray-200 transition-colors duration-200 hover:bg-gray-300'
+          disabled={createPlanMutation.isPending}
+          className='flex h-[177px] w-[177px] flex-col items-center justify-center rounded-full bg-gray-200 transition-colors duration-200 hover:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50'
         >
-          <svg
-            className='h-[91px] w-[91px] text-white'
-            fill='none'
-            stroke='currentColor'
-            strokeWidth={3}
-            viewBox='0 0 24 24'
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              d='M12 4.5v15m7.5-7.5h-15'
-            />
-          </svg>
+          {createPlanMutation.isPending ? (
+            <div className='h-[91px] w-[91px] animate-spin rounded-full border-4 border-gray-300 border-t-white' />
+          ) : (
+            <svg
+              className='h-[91px] w-[91px] text-white'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth={3}
+              viewBox='0 0 24 24'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M12 4.5v15m7.5-7.5h-15'
+              />
+            </svg>
+          )}
         </button>
       </div>
 

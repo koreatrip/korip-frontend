@@ -74,7 +74,12 @@
     "search_select_region": "地域を選択",
     "loading_districts": "区/郡の情報を読み込み中...",
     "failed_districts": "区/郡の情報を読み込めません。",
-    "no_subregion": "下位地域がありません。"
+    "no_subregion": "下位地域がありません。",
+    "plan_not_found": "プランを読み込めません。",
+    "no_schedule_for_day": "この日に登録された予定はありません。",
+    "map_area": "地図エリア",
+    "sync_google_calendar": "Googleカレンダー連携",
+    "save_as_pdf": "PDFとして保存"
   },
 
   "auth": {
