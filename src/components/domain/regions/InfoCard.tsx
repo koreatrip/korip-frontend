@@ -1,8 +1,12 @@
+// InfoCard.tsx
 import { useAuthCheck } from '@/hooks/useAuthCheck';
 import { useToast } from '@/hooks/useToast';
 import { useModalStore } from '@/stores/useModalStore';
 import { useHeaderStore } from '@/stores/useHeaderStore';
-import { usePlansQuery } from '@/api/planner/plannerHooks';
+import {
+  usePlansQuery,
+  useAddPlaceToPlanMutation,
+} from '@/api/planner/plannerHooks';
 import {
   useToggleFavoritePlaceMutation,
   useToggleFavoriteRegionMutation,
@@ -40,7 +44,7 @@ const InfoCard = ({
   isSelected = false,
   isFavorite = false,
   id,
-  type = 'place', // 기본값은 장소
+  type = 'place',
   onClick = () => {},
   onAddSchedule,
   onViewDetails = () => {},
@@ -59,6 +63,17 @@ const InfoCard = ({
   const { data: plansData, isLoading, error } = usePlansQuery();
   const toggleFavoritePlaceMutation = useToggleFavoritePlaceMutation();
   const toggleFavoriteRegionMutation = useToggleFavoriteRegionMutation();
+
+  // 일정에 장소 추가 mutation
+  const addPlaceToPlanMutation = useAddPlaceToPlanMutation({
+    onSuccess: (data) => {
+      console.log('장소가 일정에 추가되었습니다:', data);
+    },
+    onError: (error) => {
+      console.error('장소 추가 실패:', error);
+      showToast('일정에 장소를 추가하는데 실패했습니다.', 'error');
+    },
+  });
 
   const isDropdownOpen =
     stack.isScheduleDropdownOpen && stack.scheduleDropdownCardId === String(id);
@@ -81,7 +96,6 @@ const InfoCard = ({
     onViewDetails();
   };
 
-  // 즐겨찾기 토글 핸들러
   const handleFavorite = async (e?: React.MouseEvent) => {
     e?.stopPropagation();
 
@@ -95,13 +109,10 @@ const InfoCard = ({
       return;
     }
 
-    // 이전 상태를 저장해두어 롤백에 사용
     const previousIsFavorite = localIsFavorite;
-    // 낙관적 업데이트 (UI 즉시 반영)
     setLocalIsFavorite(!previousIsFavorite);
 
     try {
-      // API 호출 (장소/지역 구분)
       if (type === 'region') {
         await toggleFavoriteRegionMutation.mutateAsync({ sub_region_id: id });
       } else {
@@ -119,18 +130,39 @@ const InfoCard = ({
       }
     } catch (error) {
       console.error('즐겨찾기 토글 실패:', error);
-      // 에러 발생 시 상태 롤백
       setLocalIsFavorite(previousIsFavorite);
       showToast('즐겨찾기 처리에 실패했습니다.', 'error');
     }
   };
 
-  const handleSelectPlan = (planId: string, planName: string) => {
-    if (onAddToSchedule) {
-      onAddToSchedule(planId, planName);
+  const handleSelectPlan = async (planId: string, planName: string) => {
+    if (!id) {
+      console.error('Place ID is required');
+      showToast('장소 정보를 찾을 수 없습니다.', 'error');
+      return;
     }
-    actions.closeScheduleDropdown();
-    showToast(`"${planName}" 일정에 추가되었습니다.`, 'success');
+
+    try {
+      // API 호출: 일정에 장소 추가
+      await addPlaceToPlanMutation.mutateAsync({
+        planId: planId,
+        placeData: { place_id: id },
+      });
+
+      // 드롭다운 닫기
+      actions.closeScheduleDropdown();
+
+      // 성공 토스트 메시지
+      showToast(`"${planName}" 일정에 추가되었습니다.`, 'success');
+
+      // 부모 컴포넌트의 콜백이 있다면 실행
+      if (onAddToSchedule) {
+        onAddToSchedule(planId, planName);
+      }
+    } catch (error) {
+      console.error('일정에 장소 추가 실패:', error);
+      // 에러는 mutation의 onError에서 처리됨
+    }
   };
 
   const createDropdownItems = (): TDropdownItem[] => {
@@ -234,8 +266,9 @@ const InfoCard = ({
               className={`bg-main-text-navy hover:bg-main-text-navy/70 cursor-pointer rounded-full px-5 py-2 font-medium text-white transition-colors ${
                 isDropdownOpen ? 'bg-main-text-navy/70' : ''
               }`}
+              disabled={addPlaceToPlanMutation.isPending}
             >
-              일정 추가
+              {addPlaceToPlanMutation.isPending ? '추가 중...' : '일정 추가'}
             </button>
             {isDropdownOpen && (
               <div

@@ -16,7 +16,9 @@ type TPlannerData = {
   description: string;
   dateRange: string;
   isNew?: boolean;
-  createdAt: string;
+  created_at: string;
+  start_date: string | null;
+  end_date: string | null;
 };
 
 const MyPlannerPage = () => {
@@ -29,6 +31,31 @@ const MyPlannerPage = () => {
     SortOption.DATE_DESC
   );
 
+  // 날짜 포맷팅 함수
+  const formatDateRange = (
+    startDate: string | null,
+    endDate: string | null
+  ): string => {
+    if (!startDate && !endDate) {
+      return '날짜 미정';
+    }
+
+    const formatDate = (dateStr: string) => {
+      const date = new Date(dateStr);
+      return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+    };
+
+    if (startDate && endDate) {
+      return `${formatDate(startDate)} - ${formatDate(endDate)}`;
+    } else if (startDate) {
+      return `${formatDate(startDate)} -`;
+    } else if (endDate) {
+      return `- ${formatDate(endDate)}`;
+    }
+
+    return '날짜 미정';
+  };
+
   // API 데이터를 컴포넌트 형식에 맞게 변환
   const planners: TPlannerData[] = useMemo(() => {
     if (!plansData?.plans) return [];
@@ -37,9 +64,11 @@ const MyPlannerPage = () => {
       id: plan.id,
       title: plan.title,
       description: plan.description,
-      dateRange: '날짜 정보 없음', // API에 날짜 필드가 없어서 임시
-      isNew: false, // API에 isNew 필드가 없어서 기본값
-      createdAt: plan.created_at,
+      dateRange: formatDateRange(plan.start_date, plan.end_date),
+      isNew: false,
+      created_at: plan.created_at,
+      start_date: plan.start_date,
+      end_date: plan.end_date,
     }));
   }, [plansData]);
 
@@ -59,11 +88,11 @@ const MyPlannerPage = () => {
       switch (sortOption) {
         case SortOption.DATE_DESC:
           return (
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
           );
         case SortOption.DATE_ASC:
           return (
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
           );
         case SortOption.NAME_ASC:
           return a.title.localeCompare(b.title);
@@ -117,8 +146,14 @@ const MyPlannerPage = () => {
     console.log('새 플래너 추가:', newPlanner);
   };
 
-  const handlePlannerCardClick = (plannerId: number) => {
-    navigate(`/trip/${plannerId}`);
+  const handlePlannerCardClick = (planner: TPlannerData) => {
+    // start_date와 end_date가 모두 없으면 /planner로 이동
+    if (!planner.start_date && !planner.end_date) {
+      navigate(`/planner/${planner.id}`);
+    } else {
+      // 날짜가 있으면 상세 페이지로 이동
+      navigate(`/trip/${planner.id}`);
+    }
   };
 
   // 로딩 상태
@@ -190,9 +225,10 @@ const MyPlannerPage = () => {
                 description={planner.description}
                 dateRange={planner.dateRange}
                 isNew={planner.isNew ?? false}
+                hasSchedule={!!(planner.start_date && planner.end_date)}
                 onEdit={() => handleEditClick(planner.title)}
                 onDelete={() => handleDeleteClick(planner.title)}
-                onClick={() => handlePlannerCardClick(planner.id)}
+                onClick={() => handlePlannerCardClick(planner)}
               />
             </div>
           ))}

@@ -74,7 +74,12 @@
     "search_select_region": "选择地区",
     "loading_districts": "正在加载区/郡信息...",
     "failed_districts": "无法加载区/郡信息。",
-    "no_subregion": "没有下级地区。"
+    "no_subregion": "没有下级地区。",
+    "plan_not_found": "无法加载计划。",
+    "no_schedule_for_day": "此日期没有注册的行程。",
+    "map_area": "地图区域",
+    "sync_google_calendar": "同步至Google日历",
+    "save_as_pdf": "保存为PDF"
   },
 
   "auth": {

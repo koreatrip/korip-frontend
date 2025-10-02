@@ -1,6 +1,7 @@
 import type { PlannerPlace } from '@/types/plannerType';
 import SelectedPlacesList from './SelectedPlacesList';
 import TripSummary from './TripSummary';
+import { usePlannerStore } from '@/stores/usePlannerStore';
 
 type TPlannerSidebarProps = {
   places: PlannerPlace[];
@@ -8,12 +9,13 @@ type TPlannerSidebarProps = {
 };
 
 const PlannerSidebar = ({ places, readOnly = false }: TPlannerSidebarProps) => {
-  // TripSummary에 필요한 정보는 places만으로 계산하도록 단순화합니다.
-  // 또는 전역 스토어에서 직접 가져올 수도 있습니다.
-  const scheduledPlacesCount = 0; // 이 부분은 실제 로직에 맞게 수정이 필요합니다.
+  const { getScheduledPlacesCount, getTripDuration } = usePlannerStore();
+
+  const scheduledPlacesCount = getScheduledPlacesCount();
+  const tripDuration = getTripDuration();
 
   const tripSummaryProps = {
-    duration: 7, // 예시 값
+    duration: tripDuration,
     totalPlaces: places.length,
     completedPlaces: scheduledPlacesCount,
     progress:

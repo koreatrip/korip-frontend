@@ -1,6 +1,5 @@
 import Button from '@/components/common/Button';
 import Container from '@/components/common/Container';
-import PlannerMap from '@/components/domain/planner/PlannerMap';
 import SchedulePlanner from '@/components/domain/planner/SchedulePlanner';
 import PlannerSidebar from '@/components/domain/planner/PlannerSidebar';
 import type { PlannerPlace } from '@/types/plannerType';
@@ -8,20 +7,109 @@ import { useEffect } from 'react';
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { usePlannerStore } from '@/stores/usePlannerStore';
 import { Trans, useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import {
+  usePlanDetailQuery,
+  useUpdatePlanMutation,
+} from '@/api/planner/plannerHooks';
+import Spinner from '@/components/common/Spinner';
+import ItineraryMap from '@/components/domain/planner/ItineraryMap';
+import { useToast } from '@/hooks/useToast';
+import type { UpdatePlanRequest } from '@/api/planner/plannerType';
 
 const PlannerPage = () => {
   const { t } = useTranslation();
+  const { planId } = useParams<{ planId: string }>();
+  const { showToast } = useToast();
 
-  const { schedule, movePlace, removePlace } = usePlannerStore();
+  const { schedule, movePlace, removePlace, startDate, endDate } =
+    usePlannerStore();
 
-  const availablePlaces: PlannerPlace[] = [
-    { id: '1', title: '가로수길', category: '맛집/카페' },
-    { id: '2', title: '경복궁', category: '역사/문화' },
-    { id: '3', title: 'SM타운', category: '엔터테인먼트' },
-    { id: '4', title: '하이브', category: '엔터테인먼트' },
-    { id: '5', title: 'JYP', category: '엔터테인먼트' },
-    { id: '6', title: 'YG', category: '엔터테인먼트' },
-  ];
+  // Plan detail 조회
+  const {
+    data: planDetail,
+    isLoading,
+    error,
+  } = usePlanDetailQuery(planId!, {
+    enabled: !!planId,
+  });
+
+  // Plan 업데이트 mutation
+  const updatePlanMutation = useUpdatePlanMutation({
+    onSuccess: () => {
+      showToast('일정이 저장되었습니다.', 'success');
+    },
+    onError: () => {
+      showToast('일정 저장에 실패했습니다.', 'error');
+    },
+  });
+
+  const initialStartDate = planDetail?.start_date
+    ? new Date(planDetail.start_date)
+    : null;
+  const initialEndDate = planDetail?.end_date
+    ? new Date(planDetail.end_date)
+    : null;
+
+  // selected_places를 PlannerPlace 형식으로 변환
+  const availablePlaces: PlannerPlace[] =
+    planDetail?.selected_places.map((place) => ({
+      id: String(place.id),
+      title: place.name,
+      category: place.category.name,
+      imageUrl: place.image_url,
+      address: place.address,
+    })) || [];
+
+  // 저장 핸들러
+  const handleSave = async () => {
+    if (!planId || !planDetail) {
+      showToast('플랜 정보를 찾을 수 없습니다.', 'error');
+      return;
+    }
+
+    if (!startDate || !endDate) {
+      showToast('날짜를 선택해주세요.', 'error');
+      return;
+    }
+
+    // 날짜 문자열을 Date 객체로 변환
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // day를 실제 날짜로 변환하는 함수
+    const getDayDate = (day: number): string => {
+      const date = new Date(start);
+      date.setDate(start.getDate() + (day - 1)); // day 1 = 시작일
+      return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식
+    };
+
+    // Zustand schedule을 API 형식으로 변환
+    const places = schedule.map((slot) => ({
+      place_id: slot.place ? Number(slot.place.id) : null,
+      visit_date: getDayDate(slot.day), // day를 실제 날짜로 변환
+      visit_time: slot.time, // "09:00" 형식 그대로
+    }));
+
+    const updateData: UpdatePlanRequest = {
+      title: planDetail.title,
+      description: planDetail.description,
+      start_date: start.toISOString().split('T')[0], // YYYY-MM-DD
+      end_date: end.toISOString().split('T')[0], // YYYY-MM-DD
+      places: places,
+    };
+
+    console.log('저장할 데이터:', updateData);
+
+    try {
+      await updatePlanMutation.mutateAsync({
+        planId: planId,
+        planData: updateData,
+      });
+    } catch (error) {
+      // onError에서 처리됨
+    }
+  };
 
   useEffect(() => {
     const cleanup = monitorForElements({
@@ -53,20 +141,48 @@ const PlannerPage = () => {
     return cleanup;
   }, [movePlace]);
 
+  if (isLoading) {
+    return (
+      <div className='flex min-h-screen items-center justify-center'>
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className='flex min-h-screen items-center justify-center'>
+        <div className='text-center'>
+          <p className='text-error-red mb-2'>플랜을 불러오는데 실패했습니다.</p>
+          <p className='text-sm text-gray-500'>페이지를 새로고침해주세요.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!planDetail) {
+    return (
+      <div className='flex min-h-screen items-center justify-center'>
+        <p className='text-gray-500'>플랜을 찾을 수 없습니다.</p>
+      </div>
+    );
+  }
+
   return (
     <div className='bg-bg-section'>
       <Container className='mt-16'>
-        {/* 헤더 영역 */}
         <div className='flex flex-col items-center justify-center'>
           <h1 className='mb-4 text-center text-2xl font-semibold md:text-3xl lg:text-4xl'>
-            강계령이의 케이크 여정
+            {planDetail.title}
           </h1>
-          <p className='text-center text-sm md:text-base'>
+          <p className='text-center text-sm text-gray-600 md:text-base'>
+            {planDetail.description}
+          </p>
+          <p className='mt-2 text-center text-sm md:text-base'>
             {t('travel.drag_attractions_to_schedule')}
           </p>
         </div>
 
-        {/* 안내 메시지 */}
         <div className='border-point-gold text-main-text-navy mt-6 mb-6 rounded-lg border bg-[#F7F0E8] p-3 text-sm md:mt-7 md:mb-8'>
           <Trans
             i18nKey='travel.drag_instructions'
@@ -76,61 +192,70 @@ const PlannerPage = () => {
           />
         </div>
 
-        {/* 메인 컨텐츠 영역 */}
         <div className='mb-9'>
-          {/* 모바일 레이아웃 (768px 미만) */}
+          {/* 모바일 레이아웃 */}
           <div className='flex flex-col gap-4 md:hidden'>
-            {/* 사이드바 */}
             <div className='w-full'>
               <PlannerSidebar places={availablePlaces} />
             </div>
-
-            {/* 스케줄 플래너 */}
             <div className='w-full'>
               <SchedulePlanner
                 schedule={schedule}
                 onRemovePlace={removePlace}
+                initialStartDate={initialStartDate}
+                initialEndDate={initialEndDate}
               />
             </div>
-
-            {/* 맵과 저장 버튼 */}
             <div className='w-full'>
-              <PlannerMap />
+              <ItineraryMap places={planDetail?.selected_places || []} />
               <div className='mt-4'>
-                <Button variant='active' className='w-full'>
-                  {t('common.save')}
+                <Button
+                  variant='active'
+                  className='w-full'
+                  onClick={handleSave}
+                  disabled={updatePlanMutation.isPending}
+                >
+                  {updatePlanMutation.isPending
+                    ? '저장 중...'
+                    : t('common.save')}
                 </Button>
               </div>
             </div>
           </div>
 
-          {/* 태블릿 레이아웃 (768px - 1024px) */}
+          {/* 태블릿 레이아웃 */}
           <div className='hidden flex-col gap-4 md:flex lg:hidden'>
-            {/* 상단: 사이드바 */}
             <div className='w-full'>
               <PlannerSidebar places={availablePlaces} />
             </div>
-
-            {/* 하단: 스케줄과 맵 */}
             <div className='flex gap-4'>
               <div className='flex-1'>
                 <SchedulePlanner
                   schedule={schedule}
                   onRemovePlace={removePlace}
+                  initialStartDate={initialStartDate}
+                  initialEndDate={initialEndDate}
                 />
               </div>
               <div className='w-80 flex-shrink-0'>
-                <PlannerMap />
+                <ItineraryMap places={planDetail?.selected_places || []} />
                 <div className='mt-4'>
-                  <Button variant='active' className='w-full'>
-                    {t('common.save')}
+                  <Button
+                    variant='active'
+                    className='w-full'
+                    onClick={handleSave}
+                    disabled={updatePlanMutation.isPending}
+                  >
+                    {updatePlanMutation.isPending
+                      ? '저장 중...'
+                      : t('common.save')}
                   </Button>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* 데스크톱 레이아웃 (1024px 이상) - 기존 레이아웃 */}
+          {/* 데스크톱 레이아웃 */}
           <div className='hidden w-full gap-4 lg:flex'>
             <div className='w-80 flex-shrink-0'>
               <PlannerSidebar places={availablePlaces} />
@@ -139,13 +264,22 @@ const PlannerPage = () => {
               <SchedulePlanner
                 schedule={schedule}
                 onRemovePlace={removePlace}
+                initialStartDate={initialStartDate}
+                initialEndDate={initialEndDate}
               />
             </div>
             <div className='flex w-96 flex-shrink-0 flex-col'>
-              <PlannerMap />
-              {/* <ItineraryMap/> */}
+              <ItineraryMap places={planDetail?.selected_places || []} />
               <div className='mt-4'>
-                <Button variant='active'>{t('common.save')}</Button>
+                <Button
+                  variant='active'
+                  onClick={handleSave}
+                  disabled={updatePlanMutation.isPending}
+                >
+                  {updatePlanMutation.isPending
+                    ? '저장 중...'
+                    : t('common.save')}
+                </Button>
               </div>
             </div>
           </div>

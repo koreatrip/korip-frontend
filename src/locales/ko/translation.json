@@ -74,7 +74,12 @@
     "search_select_region": "지역 선택",
     "loading_districts": "구/군 정보를 불러오는 중...",
     "failed_districts": "구/군 정보를 불러올 수 없습니다.",
-    "no_subregion": "하위 지역이 없습니다."
+    "no_subregion": "하위 지역이 없습니다.",
+    "plan_not_found": "플랜을 불러올 수 없습니다.",
+    "no_schedule_for_day": "이 날짜에 등록된 일정이 없습니다.",
+    "map_area": "지도 영역",
+    "sync_google_calendar": "구글캘린더 연동",
+    "save_as_pdf": "PDF 저장하기"
   },
 
   "auth": {

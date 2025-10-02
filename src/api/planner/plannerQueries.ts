@@ -8,5 +8,9 @@ export const plannerQueries = createQueryKeyStore({
       queryKey: ['plans', 'all'],
       queryFn: () => plannerAPI.getAllPlans(),
     }),
+    detail: (planId: string) => ({
+      queryKey: ['plans', 'detail', planId],
+      queryFn: () => plannerAPI.getPlanById(planId),
+    }),
   },
 });

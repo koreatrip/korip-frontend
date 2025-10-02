@@ -10,67 +10,56 @@ type TPlannerCardProps = {
   onEdit: () => void;
   onDelete: () => void;
   onClick?: () => void;
+  hasSchedule?: boolean;
 };
 
 const PlannerCard = ({
   title,
   description,
   dateRange,
-  imageUrl,
-  isNew = false,
   onEdit,
   onDelete,
   onClick,
+  hasSchedule = false,
 }: TPlannerCardProps) => {
   const { t } = useTranslation();
 
   return (
     <div
-      className='h-[372px] w-[348px] cursor-pointer overflow-hidden rounded-2xl bg-white shadow-md transition-shadow hover:shadow-lg'
+      className='w-full min-w-[348px] cursor-pointer overflow-hidden rounded-2xl bg-white shadow-md transition-shadow hover:shadow-lg'
       onClick={onClick}
     >
-      {/* 이미지 영역 */}
-      <div
-        className='relative h-[200px]'
-        style={{ backgroundColor: '#F8F9FA' }}
-      >
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={title}
-            className='h-full w-full object-cover'
-          />
-        ) : (
-          <div className='flex h-full w-full items-center justify-center bg-[#F7FAFC]'>
-            <span className='text-md text-gray-900'>
-              {t('common.empty_schedule')}
-            </span>
-          </div>
-        )}
+      <div className='px-4 pt-4'>
+        <div className='flex items-center'>
+          {hasSchedule ? (
+            <>
+              <div className='bg-main-pink mr-1.5 h-2 w-2 flex-shrink-0 rounded-full'></div>
+              <span className='text-xs text-gray-900'>생성된 일정</span>
+            </>
+          ) : (
+            <>
+              <div className='bg-main-text-navy mr-1.5 h-2 w-2 flex-shrink-0 rounded-full'></div>
+              <span className='text-xs text-gray-900'>
+                {t('common.empty_schedule')}
+              </span>
+            </>
+          )}
+        </div>
       </div>
 
-      {/* 콘텐츠 영역 */}
       <div className='flex h-[172px] flex-col justify-between p-4'>
-        {/* 제목과 NEW 태그 */}
         <div className='mb-2'>
           <div className='mb-1 flex items-center gap-1'>
             <h3 className='text-main-text-navy truncate text-lg font-semibold'>
               {title}
             </h3>
-            {isNew && (
-              <span className='text-main-pink ml-1 text-sm font-medium'>
-                NEW
-              </span>
-            )}
           </div>
           <p className='line-clamp-2 text-base text-gray-500'>{description}</p>
         </div>
 
-        {/* 하단 영역: 날짜와 버튼들 */}
         <div className='flex items-center justify-between'>
           <span className='text-base text-gray-500'>{dateRange}</span>
 
-          {/* 편집/삭제 버튼 */}
           <div className='flex items-center gap-2'>
             <button
               onClick={(e) => {

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import CreateTripModal from '../../modals/CreateTripModal';
+import { useCreatePlanMutation } from '@/api/planner/plannerHooks';
+import { useToast } from '@/hooks/useToast';
 
 type TPlannerAddButtonMiniProps = {
   onClick?: () => void;
@@ -19,14 +21,26 @@ type TPlannerData = {
   description: string;
   dateRange: string;
   isNew?: boolean;
-  createdAt: string;
+  created_at: string;
+  start_date: string | null;
+  end_date: string | null;
 };
 
-const PlannerAddButtonMini = ({
-  onClick,
-  onAddPlanner,
-}: TPlannerAddButtonMiniProps) => {
+const PlannerAddButtonMini = ({ onClick }: TPlannerAddButtonMiniProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { showToast } = useToast();
+
+  const createPlanMutation = useCreatePlanMutation({
+    onSuccess: (data) => {
+      console.log('플래너 생성 성공:', data);
+      showToast('새 여행 일정이 생성되었습니다.', 'success');
+      setIsModalOpen(false);
+    },
+    onError: (error) => {
+      console.error('플래너 생성 실패:', error);
+      showToast('여행 일정 생성에 실패했습니다.', 'error');
+    },
+  });
 
   const handleButtonClick = () => {
     if (onClick) {
@@ -36,50 +50,46 @@ const PlannerAddButtonMini = ({
     }
   };
 
-  const handleModalSubmit = (tripData: TTripData) => {
-    // 새 일정 데이터 생성
-    const newPlanner: TPlannerData = {
-      id: Date.now(), // 임시 ID
-      title: tripData.tripName,
+  const handleModalSubmit = async (tripData: TTripData) => {
+    // API 호출을 위한 데이터 구조
+    const planRequest = {
+      name: tripData.tripName,
       description: tripData.tripDescription || `${tripData.location} 여행`,
-      dateRange: `${new Date()
-        .toLocaleDateString('ko-KR', {
-          year: '2-digit',
-          month: '2-digit',
-          day: '2-digit',
-        })
-        .replace(/\./g, '.')
-        .replace(/ /g, '')} ~ 미정`,
-      isNew: true,
-      createdAt: new Date().toISOString().split('T')[0],
+      destination: tripData.location,
+      subregion_id: Number(tripData.selectedRegion),
     };
 
-    if (onAddPlanner) {
-      onAddPlanner(newPlanner);
+    try {
+      await createPlanMutation.mutateAsync(planRequest);
+    } catch (error) {
+      console.error('플래너 생성 중 에러:', error);
     }
-
-    console.log('새 여행 일정 생성:', newPlanner);
   };
 
   return (
     <>
       <button
         onClick={handleButtonClick}
-        className='bg-main-pink hover:bg-main-hover-pink flex h-14 w-14 items-center justify-center rounded-full text-white transition-all duration-200'
+        disabled={createPlanMutation.isPending}
+        className='bg-main-pink hover:bg-main-hover-pink flex h-14 w-14 items-center justify-center rounded-full text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50'
       >
-        <svg
-          className='h-5 w-5'
-          fill='none'
-          stroke='currentColor'
-          strokeWidth={2.5}
-          viewBox='0 0 24 24'
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='M12 4.5v15m7.5-7.5h-15'
-          />
-        </svg>
+        {createPlanMutation.isPending ? (
+          <div className='h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent' />
+        ) : (
+          <svg
+            className='h-5 w-5'
+            fill='none'
+            stroke='currentColor'
+            strokeWidth={2.5}
+            viewBox='0 0 24 24'
+          >
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M12 4.5v15m7.5-7.5h-15'
+            />
+          </svg>
+        )}
       </button>
 
       <CreateTripModal
