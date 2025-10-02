@@ -26,10 +26,7 @@ type TPlannerData = {
   end_date: string | null;
 };
 
-const PlannerAddButton = ({
-  onClick,
-  onAddPlanner,
-}: TPlannerAddButtonProps) => {
+const PlannerAddButton = ({ onClick }: TPlannerAddButtonProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { showToast } = useToast();
 

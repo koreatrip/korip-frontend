@@ -26,10 +26,7 @@ type TPlannerData = {
   end_date: string | null;
 };
 
-const PlannerAddButtonMini = ({
-  onClick,
-  onAddPlanner,
-}: TPlannerAddButtonMiniProps) => {
+const PlannerAddButtonMini = ({ onClick }: TPlannerAddButtonMiniProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { showToast } = useToast();
 
