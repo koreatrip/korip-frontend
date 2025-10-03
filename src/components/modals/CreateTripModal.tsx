@@ -157,7 +157,7 @@ const CreateTripModal = ({
           type='text'
           value={tripName}
           onChange={(e) => setTripName(e.target.value)}
-          placeholder='예: 서울 여름 휴가'
+          placeholder={t('common.plan_example')}
         />
       </div>
 

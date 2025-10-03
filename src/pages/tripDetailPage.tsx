@@ -14,9 +14,7 @@ const TripDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [selectedDay, setSelectedDay] = useState(1);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const { t } = useTranslation();
-
+  const { t, i18n } = useTranslation();
   const { openDeleteModal, deleteModalProps } = usePlannerDelete({
     onSuccess: () => navigate('/mypage/plan'), // 삭제 성공 시 목록 페이지로 이동
   });
@@ -25,7 +23,7 @@ const TripDetailPage = () => {
     data: planDetail,
     isLoading,
     error,
-  } = usePlanDetailQuery(id!, {
+  } = usePlanDetailQuery(id!, i18n.language || 'ko', {
     enabled: !!id,
   });
 

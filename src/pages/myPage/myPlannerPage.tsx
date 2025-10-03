@@ -237,9 +237,10 @@ const MyPlannerPage = () => {
 
           {searchValue && (
             <div className='mb-4 text-sm text-gray-600'>
-              "{searchValue}" {t('common.search_results')}{' '}
-              {filteredAndSortedPlanners.length}
-              {t('common.count_suffix')}
+              "{searchValue}"{' '}
+              {t('common.total_planners', {
+                count: filteredAndSortedPlanners.length,
+              })}
             </div>
           )}
         </div>
@@ -283,19 +284,19 @@ const MyPlannerPage = () => {
             </div>
             {searchValue ? (
               <>
-                <p className='text-gray-500'>
-                  {t('planner.search_empty_title')}
-                </p>
-                <p className='mt-2 text-sm text-gray-400'>
+                <p className='text-gray-500'>{t('common.no_planner_found')}</p>
+                {/* <p className='mt-2 text-sm text-gray-400'>
                   {t('planner.search_empty_desc')}
-                </p>
+                </p> */}
               </>
             ) : (
               <>
-                <p className='text-gray-500'>{t('planner.empty_title')}</p>
-                <p className='mt-2 text-sm text-gray-400'>
-                  {t('planner.empty_desc')}
+                <p className='text-gray-500'>
+                  {t('common.no_planner_created')}
                 </p>
+                {/* <p className='mt-2 text-sm text-gray-400'>
+                  {t('planner.empty_desc')}
+                </p> */}
               </>
             )}
           </div>

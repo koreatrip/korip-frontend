@@ -1,4 +1,5 @@
 import Button from '@/components/common/Button';
+import { t } from 'i18next';
 
 type SecuritySectionProps = {
   onPasswordChange: () => void;
@@ -29,7 +30,7 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({
             className='flex w-auto items-center justify-center rounded-lg px-3 py-1 font-light text-white'
             style={{ backgroundColor: '#4A9B8E' }}
           >
-            완료
+            {t('common.complete')}
           </span>
         </div>
         <hr className='border-outline-gray -mt-3 border-t' />
@@ -41,7 +42,7 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({
             className='h-[52px] w-[164px]'
             onClick={onPasswordChange}
           >
-            비밀번호 변경
+            {t('user.change_password')}
           </Button>
           {onAccountDelete && (
             <Button
@@ -49,7 +50,7 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({
               className='h-[52px] w-[164px]'
               onClick={onAccountDelete}
             >
-              계정탈퇴
+              {t('user.delete_account')}
             </Button>
           )}
         </div>

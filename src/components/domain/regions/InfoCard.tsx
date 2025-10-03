@@ -11,6 +11,7 @@ import Dropdown, {
 import { StarIcon as StarOutline } from '@heroicons/react/24/outline';
 import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
 import { useEffect, useState, type RefObject } from 'react';
+import { t } from 'i18next';
 
 type TCardProps = {
   id: number;
@@ -166,7 +167,9 @@ const InfoCard = ({
               disabled={isAddingToSchedule}
               className={`bg-main-text-navy hover:bg-main-text-navy/70 cursor-pointer rounded-full px-5 py-2 font-medium text-white transition-colors`}
             >
-              {isAddingToSchedule ? '추가 중...' : '일정 추가'}
+              {isAddingToSchedule
+                ? t('common.adding')
+                : t('travel.add_to_plan')}
             </button>
             {isDropdownOpen && (
               <div

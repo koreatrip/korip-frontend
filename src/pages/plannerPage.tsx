@@ -18,7 +18,7 @@ import { useToast } from '@/hooks/useToast';
 import type { UpdatePlanRequest } from '@/api/planner/plannerType';
 
 const PlannerPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { planId } = useParams<{ planId: string }>();
   const { showToast } = useToast();
@@ -31,7 +31,7 @@ const PlannerPage = () => {
     data: planDetail,
     isLoading,
     error,
-  } = usePlanDetailQuery(planId!, {
+  } = usePlanDetailQuery(planId!, i18n.language || 'ko', {
     enabled: !!planId,
   });
 

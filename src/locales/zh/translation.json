@@ -80,7 +80,12 @@
     "map_area": "地图区域",
     "sync_google_calendar": "同步至Google日历",
     "save_as_pdf": "保存为PDF",
-    "total_count": "共 {{count}}个"
+    "total_count": "共 {{count}}个",
+    "delete_schedule": "删除行程",
+    "delete_schedule_confirm": "您确定要删除此行程吗？已删除的行程无法恢复。",
+    "plan_example": "例: 首尔夏季假期",
+    "deleting": "正在删除...",
+    "adding": "正在添加..."
   },
 
   "auth": {
@@ -339,7 +344,10 @@
     "search_results": "搜索结果",
     "travel_description": "旅行说明",
     "enter_travel_description": "请输入对旅行的简要说明",
-    "search_destination": "搜索目的地"
+    "search_destination": "搜索目的地",
+    "created_schedule": "已生成的行程",
+    "edit_schedule": "修改行程",
+    "try_edit_schedule": "请尝试修改行程"
   },
 
   "places": {

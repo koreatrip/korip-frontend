@@ -80,7 +80,12 @@
     "map_area": "Map Area",
     "sync_google_calendar": "Sync with Google Calendar",
     "save_as_pdf": "Save as PDF",
-    "total_count": "Total {{count}}"
+    "total_count": "Total {{count}}",
+    "delete_schedule": "Delete Schedule",
+    "delete_schedule_confirm": "Are you sure you want to delete this schedule? Deleted schedules cannot be recovered.",
+    "plan_example": "Example: Seoul Summer Vacation",
+    "deleting": "Deleting...",
+    "adding": "Adding..."
   },
 
   "auth": {
@@ -336,7 +341,9 @@
     "search_results": "Search Results",
     "travel_description": "Travel Description",
     "enter_travel_description": "Enter a brief description of the trip",
-    "search_destination": "Search Destination"
+    "search_destination": "Search Destination",
+    "created_schedule": "Created Schedule",
+    "try_edit_schedule": "Edit Schedule"
   },
 
   "places": {
