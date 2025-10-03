@@ -79,7 +79,8 @@
     "no_schedule_for_day": "No schedule registered for this date.",
     "map_area": "Map Area",
     "sync_google_calendar": "Sync with Google Calendar",
-    "save_as_pdf": "Save as PDF"
+    "save_as_pdf": "Save as PDF",
+    "total_count": "Total {{count}}"
   },
 
   "auth": {

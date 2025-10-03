@@ -108,3 +108,28 @@ export const useUpdatePlanMutation = (
     ...options,
   });
 };
+export const useDeletePlanMutation = (
+  options?: UseMutationOptions<void, Error, string>
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (planId: string) => plannerAPI.deletePlan(planId),
+    onSuccess: (data, planId, context) => {
+      // 전체 목록 무효화
+      queryClient.invalidateQueries({
+        queryKey: plannerQueries.plans.all().queryKey,
+      });
+      // 삭제된 plan의 상세 정보도 제거
+      queryClient.removeQueries({
+        queryKey: plannerQueries.plans.detail(planId).queryKey,
+      });
+
+      options?.onSuccess?.(data, planId, context);
+    },
+    onError: (error, planId, context) => {
+      options?.onError?.(error, planId, context);
+    },
+    ...options,
+  });
+};

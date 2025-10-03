@@ -79,7 +79,8 @@
     "no_schedule_for_day": "이 날짜에 등록된 일정이 없습니다.",
     "map_area": "지도 영역",
     "sync_google_calendar": "구글캘린더 연동",
-    "save_as_pdf": "PDF 저장하기"
+    "save_as_pdf": "PDF 저장하기",
+    "total_count": "총 {{count}}개"
   },
 
   "auth": {

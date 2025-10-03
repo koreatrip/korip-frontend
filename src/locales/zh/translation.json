@@ -79,7 +79,8 @@
     "no_schedule_for_day": "此日期没有注册的行程。",
     "map_area": "地图区域",
     "sync_google_calendar": "同步至Google日历",
-    "save_as_pdf": "保存为PDF"
+    "save_as_pdf": "保存为PDF",
+    "total_count": "共 {{count}}个"
   },
 
   "auth": {

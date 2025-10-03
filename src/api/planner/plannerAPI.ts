@@ -78,4 +78,10 @@ export const plannerAPI = {
     console.log('Plan updated:', response.data);
     return response.data;
   },
+  deletePlan: async (planId: string): Promise<void> => {
+    await axiosInstance.delete(`/api/plans/${planId}/`, {
+      headers: { Accept: 'application/json' },
+    });
+    console.log('Plan deleted:', planId);
+  },
 };

@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { usePlannerStore } from '@/stores/usePlannerStore';
 import { Trans, useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   usePlanDetailQuery,
   useUpdatePlanMutation,
@@ -19,6 +19,7 @@ import type { UpdatePlanRequest } from '@/api/planner/plannerType';
 
 const PlannerPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { planId } = useParams<{ planId: string }>();
   const { showToast } = useToast();
 
@@ -62,40 +63,40 @@ const PlannerPage = () => {
     })) || [];
 
   // 저장 핸들러
+  // 저장 핸들러
   const handleSave = async () => {
     if (!planId || !planDetail) {
       showToast('플랜 정보를 찾을 수 없습니다.', 'error');
       return;
     }
 
-    if (!startDate || !endDate) {
-      showToast('날짜를 선택해주세요.', 'error');
-      return;
-    }
+    // startDate/endDate가 없으면 오늘 날짜를 기본값으로 사용
+    const today = new Date().toISOString();
+    const effectiveStartDate = startDate || today;
+    const effectiveEndDate = endDate || today;
 
-    // 날짜 문자열을 Date 객체로 변환
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const start = new Date(effectiveStartDate);
+    const end = new Date(effectiveEndDate);
 
     // day를 실제 날짜로 변환하는 함수
     const getDayDate = (day: number): string => {
       const date = new Date(start);
-      date.setDate(start.getDate() + (day - 1)); // day 1 = 시작일
-      return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식
+      date.setDate(start.getDate() + (day - 1));
+      return date.toISOString().split('T')[0];
     };
 
     // Zustand schedule을 API 형식으로 변환
     const places = schedule.map((slot) => ({
       place_id: slot.place ? Number(slot.place.id) : null,
-      visit_date: getDayDate(slot.day), // day를 실제 날짜로 변환
-      visit_time: slot.time, // "09:00" 형식 그대로
+      visit_date: getDayDate(slot.day),
+      visit_time: slot.time,
     }));
 
     const updateData: UpdatePlanRequest = {
       title: planDetail.title,
       description: planDetail.description,
-      start_date: start.toISOString().split('T')[0], // YYYY-MM-DD
-      end_date: end.toISOString().split('T')[0], // YYYY-MM-DD
+      start_date: start.toISOString().split('T')[0],
+      end_date: end.toISOString().split('T')[0],
       places: places,
     };
 
@@ -106,6 +107,7 @@ const PlannerPage = () => {
         planId: planId,
         planData: updateData,
       });
+      navigate(`/mypage/plan`);
     } catch (error) {
       // onError에서 처리됨
     }

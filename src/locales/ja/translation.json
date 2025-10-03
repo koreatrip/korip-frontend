@@ -79,7 +79,8 @@
     "no_schedule_for_day": "この日に登録された予定はありません。",
     "map_area": "地図エリア",
     "sync_google_calendar": "Googleカレンダー連携",
-    "save_as_pdf": "PDFとして保存"
+    "save_as_pdf": "PDFとして保存",
+    "total_count": "合計 {{count}}件"
   },
 
   "auth": {
