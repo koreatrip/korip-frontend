@@ -2,7 +2,7 @@ import InfoCard from '@/components/domain/regions/InfoCard';
 import Carousel from '@/components/domain/regions/Carousel';
 import Weather from '@/components/domain/weather/Weather';
 import Container from '@/components/common/Container';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useModalStore } from '@/stores/useModalStore';
 import LoginPromptModal from '@/components/domain/auth/LoginPromptModal';
 import { useNavigate } from 'react-router';
@@ -88,6 +88,10 @@ const RegionsPage = () => {
     return '지역을 선택해주세요';
   };
 
+  const interestNames =
+    userProfile?.preferences_display?.map((pref) => pref.name).join(', ') ||
+    '관심사 없음';
+
   useEffect(() => {
     if (!regionId) {
       navigate(`/explore/regions?region_id=1&lang=${currentLanguage}`, {
@@ -95,6 +99,8 @@ const RegionsPage = () => {
       });
     }
   }, [regionId, currentLanguage, navigate]);
+
+  console.log('유저정보보보보보ㅗㅂ보', userProfile);
 
   if (isLoading || !regionId) return <LoadingPage />;
   if (error) return <div>Error occurred</div>;
@@ -192,11 +198,18 @@ const RegionsPage = () => {
           <div className='mt-2 flex w-full justify-end'>
             <button
               className='cursor-pointer font-medium'
-              onClick={() =>
-                navigate(
-                  `/explore/attractions?subregion_id=${subregionId || 1}&lang=${currentLanguage}`
-                )
-              }
+              onClick={() => {
+                const params = new URLSearchParams({ lang: currentLanguage });
+                if (regionId) params.set('region_id', String(regionId));
+
+                const targetSubregionId =
+                  subregionId || popularSubregions[0]?.id;
+                if (targetSubregionId) {
+                  params.set('subregion_id', String(targetSubregionId));
+                }
+
+                navigate(`/explore/attractions?${params.toString()}`);
+              }}
             >
               {t('common.view_all')}
             </button>
@@ -210,6 +223,15 @@ const RegionsPage = () => {
                 name: userProfile?.name || '사용자',
               })}
             </h2>
+            <p className='text-sub-text-gray tablet-bp:text-base text-sm'>
+              <Trans
+                i18nKey='places.selected_based_on_interests'
+                values={{ interest: interestNames }}
+                components={{
+                  InterestSpan: <span className='font-medium' />,
+                }}
+              />
+            </p>
             <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-3 mt-7 grid grid-cols-1 gap-4'>
               {userRecommendedPlaces.length > 0
                 ? userRecommendedPlaces.slice(0, 3).map((place) => (
@@ -219,6 +241,7 @@ const RegionsPage = () => {
                         type='place'
                         variant='selectable'
                         title={place.name}
+                        imageUrl={place.image_url}
                         description={place.description ?? ''}
                         details={place.feature ?? ''}
                         isFavorite={place.is_favorite}
