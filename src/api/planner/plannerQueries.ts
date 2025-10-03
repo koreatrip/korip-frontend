@@ -3,16 +3,15 @@ import { plannerAPI } from './plannerAPI';
 
 export const plannerQueries = createQueryKeyStore({
   plans: {
-    // GET 쿼리만
-    all: () => ({
-      queryKey: ['plans', 'all'],
-      queryFn: () => plannerAPI.getAllPlans(),
-      staleTime: 0, // 항상 최신 데이터
-      gcTime: 1000 * 60 * 5, // 5분
+    all: (lang: string = 'ko') => ({
+      queryKey: ['plans', 'all', lang],
+      queryFn: () => plannerAPI.getAllPlans(lang),
+      staleTime: 0,
+      gcTime: 1000 * 60 * 5,
     }),
-    detail: (planId: string) => ({
-      queryKey: ['plans', 'detail', planId],
-      queryFn: () => plannerAPI.getPlanById(planId),
+    detail: (planId: string, lang: string = 'ko') => ({
+      queryKey: ['plans', 'detail', planId, lang],
+      queryFn: () => plannerAPI.getPlanById(planId, lang),
       staleTime: 0,
       gcTime: 1000 * 60 * 5,
     }),
