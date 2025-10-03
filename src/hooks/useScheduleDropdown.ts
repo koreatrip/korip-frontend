@@ -6,27 +6,32 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { plannerQueries } from '@/api/planner/plannerQueries';
 import { useToast } from './useToast';
+import { useTranslation } from 'react-i18next';
 import type { TDropdownItem } from '@/components/common/dropdown/Dropdown';
 
 export const useScheduleDropdown = () => {
   const { showToast } = useToast();
+  const { i18n } = useTranslation();
   const queryClient = useQueryClient();
   const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
   const dropdownButtonRef = useRef<HTMLButtonElement>(null);
   const dropdownContentRef = useRef<HTMLDivElement>(null);
 
-  const { data: plansData, isLoading: isPlansLoading } = usePlansQuery();
+  const { data: plansData, isLoading: isPlansLoading } = usePlansQuery(
+    i18n.language || 'ko'
+  );
 
   const addPlaceToPlanMutation = useAddPlaceToPlanMutation({
-    onSuccess: async (data, variables) => {
-      // 해당 플랜 상세 정보 refetch
+    onSuccess: async (_data, variables) => {
       await queryClient.refetchQueries({
-        queryKey: plannerQueries.plans.detail(variables.planId).queryKey,
+        queryKey: plannerQueries.plans.detail(
+          variables.planId,
+          i18n.language || 'ko'
+        ).queryKey,
       });
 
-      // 플랜 목록도 refetch
       await queryClient.refetchQueries({
-        queryKey: plannerQueries.plans.all().queryKey,
+        queryKey: plannerQueries.plans.all(i18n.language || 'ko').queryKey,
       });
 
       const planName =
@@ -36,9 +41,6 @@ export const useScheduleDropdown = () => {
       setOpenDropdownId(null);
     },
     onError: (error: any) => {
-      console.error('장소 추가 실패:', error);
-
-      // 400 에러일 경우 특별 처리
       if (error.response?.status === 400) {
         showToast('이미 일정에 추가된 장소입니다.', 'error');
       } else {
@@ -49,10 +51,6 @@ export const useScheduleDropdown = () => {
 
   const toggleDropdown = (cardId: number) => {
     setOpenDropdownId((prevId) => (prevId === cardId ? null : cardId));
-  };
-
-  const closeDropdown = () => {
-    setOpenDropdownId(null);
   };
 
   const dropdownItems = useMemo((): TDropdownItem[] => {
@@ -66,7 +64,7 @@ export const useScheduleDropdown = () => {
       value: String(plan.id),
       label: plan.title || `일정 ${plan.id}`,
       onClick: () => {
-        if (!openDropdownId) return; // 현재 열린 드롭다운의 카드 ID
+        if (!openDropdownId) return;
         addPlaceToPlanMutation.mutate({
           planId: String(plan.id),
           placeData: { place_id: openDropdownId },
@@ -84,7 +82,7 @@ export const useScheduleDropdown = () => {
         dropdownButtonRef.current &&
         !dropdownButtonRef.current.contains(target)
       ) {
-        closeDropdown();
+        setOpenDropdownId(null);
       }
     };
     if (openDropdownId !== null) {
