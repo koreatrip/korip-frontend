@@ -82,7 +82,6 @@ const TripDetailPage = () => {
 
   const currentDaySlots = getCurrentDaySlots();
 
-  // 모든 선택된 장소의 중심점 계산
   const getMapCenterFromAllPlaces = () => {
     const placesWithCoords = currentDaySlots
       .filter((slot) => slot.place)
@@ -114,23 +113,27 @@ const TripDetailPage = () => {
 
   return (
     <MyPageLayout>
-      <div className='p-6'>
-        <div className='mb-8'>
-          <h1 className='text-main-text-navy mb-2 text-3xl font-semibold'>
+      <div className='p-4 md:p-6'>
+        {/* 헤더 */}
+        <div className='mb-6 md:mb-8'>
+          <h1 className='text-main-text-navy mb-2 text-2xl font-semibold md:text-3xl'>
             {planDetail.title}
           </h1>
-          <p className='text-gray-600'>{period}</p>
+          <p className='text-sm text-gray-600 md:text-base'>{period}</p>
         </div>
 
-        <div className='flex gap-8'>
+        {/* 메인 콘텐츠 */}
+        <div className='flex flex-col gap-6 lg:flex-row lg:gap-8'>
+          {/* 일정 리스트 */}
           <div className='flex-1'>
-            <div className='bg-bg-white shadow-light rounded-lg p-6'>
-              <div className='mb-6 flex gap-4 overflow-x-auto'>
+            <div className='bg-bg-white shadow-light rounded-lg p-4 md:p-6'>
+              {/* 날짜 탭 */}
+              <div className='mb-4 flex gap-2 overflow-x-auto md:mb-6 md:gap-4'>
                 {days.map((day) => (
                   <button
                     key={day.day}
                     onClick={() => setSelectedDay(day.day)}
-                    className={`flex-shrink-0 rounded-lg px-4 py-2 font-medium transition-colors ${
+                    className={`flex-shrink-0 rounded-lg px-3 py-2 text-sm font-medium transition-colors md:px-4 md:text-base ${
                       selectedDay === day.day
                         ? 'bg-sub-green text-white'
                         : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
@@ -144,28 +147,32 @@ const TripDetailPage = () => {
                 ))}
               </div>
 
-              <div className='space-y-4'>
+              {/* 시간별 일정 */}
+              <div className='space-y-3 md:space-y-4'>
                 {currentDaySlots.length > 0 ? (
                   currentDaySlots.map((slot, index) => (
-                    <div key={index} className='flex items-start gap-4'>
-                      <div className='mt-1 w-16 text-sm text-gray-600'>
+                    <div
+                      key={index}
+                      className='flex items-start gap-3 md:gap-4'
+                    >
+                      <div className='mt-1 w-12 text-xs text-gray-600 md:w-16 md:text-sm'>
                         {slot.visit_time}
                       </div>
 
-                      <div className='border-l-sub-green flex-1 rounded-lg border-l-4 bg-gray-50 p-4'>
+                      <div className='border-l-sub-green flex-1 rounded-lg border-l-4 bg-gray-50 p-3 md:p-4'>
                         {slot.place ? (
                           <>
                             <div className='mb-1 flex items-center gap-2'>
-                              <h3 className='text-main-text-navy font-medium'>
+                              <h3 className='text-main-text-navy text-sm font-medium md:text-base'>
                                 {slot.place.name}
                               </h3>
                             </div>
-                            <p className='text-sub-text-gray text-sm'>
+                            <p className='text-sub-text-gray text-xs md:text-sm'>
                               {slot.place.address}
                             </p>
                           </>
                         ) : (
-                          <p className='text-sub-text-gray text-sm'>
+                          <p className='text-sub-text-gray text-xs md:text-sm'>
                             {t('common.empty_schedule')}
                           </p>
                         )}
@@ -173,7 +180,7 @@ const TripDetailPage = () => {
                     </div>
                   ))
                 ) : (
-                  <p className='text-sub-text-gray py-8 text-center'>
+                  <p className='text-sub-text-gray py-6 text-center text-sm md:py-8 md:text-base'>
                     {t('common.no_schedule_for_day')}
                   </p>
                 )}
@@ -181,13 +188,14 @@ const TripDetailPage = () => {
             </div>
           </div>
 
-          <div className='flex w-96 flex-col'>
-            <div className='rounded-lg bg-white p-6 shadow-sm'>
-              <h3 className='mb-4 font-medium text-gray-900'>
+          {/* 지도 및 버튼 영역 */}
+          <div className='flex w-full flex-col lg:w-96'>
+            <div className='rounded-lg bg-white p-4 shadow-sm md:p-6'>
+              <h3 className='mb-3 text-base font-medium text-gray-900 md:mb-4 md:text-lg'>
                 {planDetail.title}
               </h3>
 
-              <div className='mb-4 h-48 w-full rounded-lg'>
+              <div className='mb-4 h-48 w-full rounded-lg md:h-64'>
                 <Map
                   center={mapCenter}
                   style={{
@@ -211,25 +219,30 @@ const TripDetailPage = () => {
                 </Map>
               </div>
 
-              <div className='mb-4 space-y-2 text-sm text-gray-600'>
+              <div className='mb-4 space-y-2 text-xs text-gray-600 md:text-sm'>
                 <p>{planDetail.description}</p>
               </div>
             </div>
 
-            <div className='mt-4 flex gap-2'>
-              <button className='flex-1 rounded-lg bg-[#FF6B7A] px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-[#e55a6e]'>
+            {/* 구글 캘린더 / PDF 버튼 */}
+            <div className='mt-4 flex flex-col gap-2 sm:flex-row'>
+              <button className='flex-1 rounded-lg bg-[#FF6B7A] px-4 py-3 text-xs font-medium text-white transition-colors hover:bg-[#e55a6e] md:text-sm'>
                 {t('common.sync_google_calendar')}
               </button>
-              <button className='flex-1 rounded-lg bg-[#FF6B7A] px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-[#e55a6e]'>
+              <button className='flex-1 rounded-lg bg-[#FF6B7A] px-4 py-3 text-xs font-medium text-white transition-colors hover:bg-[#e55a6e] md:text-sm'>
                 {t('common.save_as_pdf')}
               </button>
             </div>
 
-            <div className='mt-auto flex justify-end gap-4 pt-8'>
-              <Button className='flex h-14 w-14 items-center justify-center rounded-lg bg-white text-[#FF6B7A] transition-colors hover:bg-gray-50'>
-                <TrashIcon className='h-4 w-4' />
+            {/* 삭제 / 수정 버튼 */}
+            <div className='mt-auto flex justify-end gap-3 pt-4 md:gap-4 md:pt-8'>
+              <Button className='flex h-12 w-12 items-center justify-center rounded-lg bg-white text-[#FF6B7A] transition-colors hover:bg-gray-50 md:h-14 md:w-14'>
+                <TrashIcon className='h-4 w-4 md:h-5 md:w-5' />
               </Button>
-              <Button onClick={() => navigate(`/planner/${id}`)}>
+              <Button
+                onClick={() => navigate(`/trip/${id}/edit`)}
+                className='h-12 px-6 md:h-14 md:px-8'
+              >
                 {t('common.edit')}
               </Button>
             </div>

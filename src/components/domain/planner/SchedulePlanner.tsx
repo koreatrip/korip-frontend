@@ -28,19 +28,20 @@ const SchedulePlanner = ({
   const [activeTab, setActiveTab] = useState(1);
 
   const { t } = useTranslation();
-  const { setDateRange } = usePlannerStore();
+
+  const { setDateRange, updateScheduleForDateRange } = usePlannerStore();
 
   const dailySchedule = schedule.filter((item) => item.day === activeTab);
 
   // 날짜 변경 시 Zustand 스토어에도 반영
   const handleStartDateChange = (date: Date) => {
     setStartDate(date);
-    setDateRange(date.toISOString(), endDate.toISOString());
+    updateScheduleForDateRange(date.toISOString(), endDate.toISOString());
   };
 
   const handleEndDateChange = (date: Date) => {
     setEndDate(date);
-    setDateRange(startDate.toISOString(), date.toISOString());
+    updateScheduleForDateRange(startDate.toISOString(), date.toISOString());
   };
 
   // 초기 날짜 설정
@@ -69,10 +70,11 @@ const SchedulePlanner = ({
       end.setHours(0, 0, 0, 0);
 
       const newTabs: TabItem[] = [];
-      let currentDate = start;
+      // let currentDate = start;
       let dayCount = 1;
 
-      while (currentDate <= end) {
+      for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+        const currentDate = new Date(d);
         const dateStr = `${currentDate.getMonth() + 1}/${currentDate.getDate()}`;
         newTabs.push({
           id: dayCount,
@@ -81,20 +83,19 @@ const SchedulePlanner = ({
             date: dateStr,
           }),
         });
-
-        currentDate.setDate(currentDate.getDate() + 1);
         dayCount++;
       }
 
       setTabs(newTabs);
 
+      // activeTab 검증만 하고 state 업데이트는 조건부로
       if (activeTab > newTabs.length && newTabs.length > 0) {
         setActiveTab(1);
       }
     };
 
     generateTabs();
-  }, [startDate, endDate, t, activeTab]);
+  }, [startDate, endDate, t]); // activeTab 제거
 
   return (
     <div className='flex w-full items-center justify-center'>
