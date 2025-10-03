@@ -29,14 +29,14 @@ const PlannerSidebar = ({ places, readOnly = false }: TPlannerSidebarProps) => {
     <div>
       {/* 데스크톱 레이아웃 (1024px 이상) - 기존 순서 유지 */}
       <div className='hidden flex-col gap-y-6 lg:flex'>
-        <SelectedPlacesList places={places} readOnly={readOnly} />
+        <SelectedPlacesList places={places} />
         <TripSummary {...tripSummaryProps} />
       </div>
 
       {/* 모바일/태블릿 레이아웃 (1024px 미만) - 순서 변경 */}
       <div className='flex flex-col gap-y-6 lg:hidden'>
         <TripSummary {...tripSummaryProps} />
-        <SelectedPlacesList places={places} readOnly={readOnly} />
+        <SelectedPlacesList places={places} />
       </div>
     </div>
   );

@@ -17,9 +17,9 @@ import type {
 } from './plannerType';
 import { plannerAPI } from './plannerAPI';
 
-export const usePlansQuery = (options?: any) => {
+export const usePlansQuery = (lang: string = 'ko', options?: any) => {
   return useQuery<PlansResponse>({
-    ...plannerQueries.plans.all(),
+    ...plannerQueries.plans.all(lang),
     ...options,
   });
 };
@@ -72,9 +72,13 @@ export const useAddPlaceToPlanMutation = (
   });
 };
 
-export const usePlanDetailQuery = (planId: string, options?: any) => {
+export const usePlanDetailQuery = (
+  planId: string,
+  lang: string = 'ko',
+  options?: any
+) => {
   return useQuery<PlanDetail>({
-    ...plannerQueries.plans.detail(planId),
+    ...plannerQueries.plans.detail(planId, lang),
     ...options,
   });
 };
@@ -104,6 +108,31 @@ export const useUpdatePlanMutation = (
     },
     onError: (error, variables, context) => {
       options?.onError?.(error, variables, context);
+    },
+    ...options,
+  });
+};
+export const useDeletePlanMutation = (
+  options?: UseMutationOptions<void, Error, string>
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (planId: string) => plannerAPI.deletePlan(planId),
+    onSuccess: (data, planId, context) => {
+      // 전체 목록 무효화
+      queryClient.invalidateQueries({
+        queryKey: plannerQueries.plans.all().queryKey,
+      });
+      // 삭제된 plan의 상세 정보도 제거
+      queryClient.removeQueries({
+        queryKey: plannerQueries.plans.detail(planId).queryKey,
+      });
+
+      options?.onSuccess?.(data, planId, context);
+    },
+    onError: (error, planId, context) => {
+      options?.onError?.(error, planId, context);
     },
     ...options,
   });

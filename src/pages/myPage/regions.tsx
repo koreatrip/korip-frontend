@@ -15,9 +15,8 @@ const Regions = () => {
   const [sortOption, setSortOption] = useState<SortOption>(
     SortOption.DATE_DESC
   );
-  const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
+  const [selectedRegionId, setSelectedRegionId] = useState<number | null>(null);
 
-  // 무한스크롤 훅 사용
   const {
     data,
     fetchNextPage,
@@ -27,32 +26,21 @@ const Regions = () => {
     isError,
   } = useFavoriteRegionsInfiniteQuery({ lang: i18n.language || 'ko' });
 
-  // intersection observer 설정
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0.1,
     triggerOnce: false,
   });
 
-  // 뷰포트에 들어오면 다음 페이지 로드
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  // 모든 페이지의 데이터를 하나의 배열로 합치기
-  const allFavoriteRegions: FavoriteRegion[] = useMemo(() => {
-    const result =
-      data?.pages.flatMap((page) => page.favorite_subregions) ?? [];
-
-    // 전체 데이터 콘솔 출력
-    console.log('=== Regions 컴포넌트 데이터 디버깅 ===');
-    console.log('Raw data from API:', data);
-    console.log('All favorite regions:', result);
-    console.log('Total regions count:', result.length);
-
-    return result;
-  }, [data]);
+  const allFavoriteRegions: FavoriteRegion[] = useMemo(
+    () => data?.pages.flatMap((page) => page.favorite_subregions) ?? [],
+    [data]
+  );
 
   const sortOptions: DropdownItem[] = [
     {
@@ -80,7 +68,6 @@ const Regions = () => {
   const filteredAndSortedData: FavoriteRegion[] = useMemo(() => {
     let filtered = [...allFavoriteRegions];
 
-    // 검색 필터링
     if (searchValue.trim()) {
       const lower = searchValue.toLowerCase();
       filtered = filtered.filter((region) =>
@@ -90,8 +77,7 @@ const Regions = () => {
       );
     }
 
-    // 정렬
-    const sorted = filtered.sort((a, b) => {
+    return filtered.sort((a, b) => {
       switch (sortOption) {
         case SortOption.DATE_DESC:
           return (
@@ -111,79 +97,11 @@ const Regions = () => {
           return 0;
       }
     });
-
-    // 필터링/정렬 결과 콘솔 출력
-    console.log('Search value:', searchValue);
-    console.log('Sort option:', sortOption);
-    console.log('Filtered data:', filtered);
-    console.log('Final sorted data:', sorted);
-    console.log('Final count:', sorted.length);
-
-    // 각 지역의 세부 정보 출력
-    if (sorted.length > 0) {
-      console.log('Region details:');
-      sorted.forEach((region, index) => {
-        console.log(`  ${index + 1}. ${region.name}`, {
-          id: region.id,
-          description: region.description,
-          features: region.features,
-          favorite_count: region.favorite_count,
-          favorited_at: region.favorited_at,
-          latitude: region.latitude,
-          longitude: region.longitude,
-        });
-      });
-    }
-
-    return sorted;
   }, [allFavoriteRegions, searchValue, sortOption]);
 
-  // 상태 변화 감지
-  useEffect(() => {
-    console.log('Selected region ID changed:', selectedPlaceId);
-  }, [selectedPlaceId]);
+  const handleSearch = (value: string) => setSearchValue(value);
 
-  useEffect(() => {
-    console.log('Loading states:', {
-      isLoading,
-      isError,
-      isFetchingNextPage,
-      hasNextPage,
-      inView,
-    });
-  }, [isLoading, isError, isFetchingNextPage, hasNextPage, inView]);
-
-  const handleSearch = (value: string): void => {
-    console.log('Search triggered:', value);
-    setSearchValue(value);
-  };
-
-  const handleCardClick = (id: number): void => {
-    console.log('Card clicked:', id);
-    setSelectedPlaceId((prev) => (prev === id ? null : id));
-  };
-
-  const handleAddSchedule = (id: number): void => {
-    const region = allFavoriteRegions.find((r) => r.id === id);
-    console.log('Add to schedule:', { id, region: region?.name });
-    alert(`"${region?.name}"이(가) 일정에 추가되었습니다.`);
-  };
-
-  const handleViewDetails = (id: number): void => {
-    const region = allFavoriteRegions.find((r) => r.id === id);
-    console.log('View details:', { id, region: region?.name });
-    alert(`"${region?.name}" 상세 정보를 확인합니다.`);
-  };
-
-  // 즐겨찾기 토글은 이제 InfoCard에서 처리하므로 간단한 로그만
-  const handleFavoriteCallback = (id: number): void => {
-    console.log('Favorite callback from InfoCard:', id);
-    // 필요시 추가 로직 (예: 목록 새로고침, 분석 등)
-  };
-
-  // 로딩 상태 처리
   if (isLoading) {
-    console.log('Loading favorite regions...');
     return (
       <div className='max-w-screen-2xl py-8'>
         <div className='animate-pulse space-y-4'>
@@ -191,7 +109,7 @@ const Regions = () => {
           <div className='h-12 rounded bg-gray-200'></div>
           <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
             {[...Array(6)].map((_, i) => (
-              <div key={i} className='h-[200px] rounded bg-gray-200'></div>
+              <div key={i} className='h-[350px] rounded-2xl bg-gray-200'></div>
             ))}
           </div>
         </div>
@@ -199,9 +117,7 @@ const Regions = () => {
     );
   }
 
-  // 에러 상태 처리
   if (isError) {
-    console.error('Error loading favorite regions');
     return (
       <div className='max-w-screen-2xl py-8'>
         <div className='py-16 text-center'>
@@ -215,12 +131,6 @@ const Regions = () => {
       </div>
     );
   }
-
-  console.log(
-    'Rendering Regions component with',
-    filteredAndSortedData.length,
-    'regions'
-  );
 
   return (
     <div className='max-w-screen-2xl py-8'>
@@ -251,25 +161,23 @@ const Regions = () => {
       <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
         {filteredAndSortedData.map((item) => (
           <InfoCard
-            type='region'
             key={item.id}
-            variant='interactive'
+            id={item.id}
+            type='region'
+            variant='selectable'
             title={item.name}
             description={item.description}
-            details={item.features} // 지역은 features를 details로 표시
-            imageUrl={null} // 지역은 기본적으로 이미지가 없음
-            isSelected={selectedPlaceId === item.id}
-            isFavorite={item.is_favorite}
-            id={item.id}
-            onClick={() => handleCardClick(item.id)}
-            onAddSchedule={() => handleAddSchedule(item.id)}
-            onViewDetails={() => handleViewDetails(item.id)}
-            onFavorite={() => handleFavoriteCallback(item.id)}
+            details={item.features}
+            imageUrl={null}
+            isSelected={selectedRegionId === item.id}
+            isFavorite={true}
+            onClick={() =>
+              setSelectedRegionId(item.id === selectedRegionId ? null : item.id)
+            }
           />
         ))}
       </div>
 
-      {/* 무한스크롤 트리거 */}
       {hasNextPage && (
         <div ref={loadMoreRef} className='mt-8 flex justify-center'>
           {isFetchingNextPage ? (
@@ -278,7 +186,7 @@ const Regions = () => {
               <span className='text-sm text-gray-500'>로딩중...</span>
             </div>
           ) : (
-            <div className='h-10'></div> // 트리거 영역
+            <div className='h-10'></div>
           )}
         </div>
       )}

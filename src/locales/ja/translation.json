@@ -79,7 +79,13 @@
     "no_schedule_for_day": "この日に登録された予定はありません。",
     "map_area": "地図エリア",
     "sync_google_calendar": "Googleカレンダー連携",
-    "save_as_pdf": "PDFとして保存"
+    "save_as_pdf": "PDFとして保存",
+    "total_count": "合計 {{count}}件",
+    "delete_schedule": "日程を削除",
+    "delete_schedule_confirm": "本当にこの日程を削除しますか？削除された日程は復元できません。",
+    "plan_example": "例: ソウル夏休み",
+    "deleting": "削除中...",
+    "adding": "追加中..."
   },
 
   "auth": {
@@ -338,7 +344,10 @@
     "search_results": "検索結果",
     "travel_description": "旅行の説明",
     "enter_travel_description": "旅行に関する簡単な説明を入力してください",
-    "search_destination": "旅行先を検索"
+    "search_destination": "旅行先を検索",
+    "created_schedule": "作成された日程",
+    "edit_schedule": "日程を編集する",
+    "try_edit_schedule": "日程を編集してみてください"
   },
 
   "places": {

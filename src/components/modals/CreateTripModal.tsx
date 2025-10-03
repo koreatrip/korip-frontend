@@ -6,21 +6,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useCreatePlanMutation } from '@/api/planner/plannerHooks';
-import { type CreatePlanRequest } from '@/api/planner/plannerType';
 import { useNumericSearchParam } from '@/hooks/useNumericSearchParam';
-import { useToast } from '@/hooks/useToast';
 
 type TCreateTripModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess?: (planId: number) => void; // API 성공시 콜백 추가
-  startDate?: string; // 외부에서 설정된 시작일
-  endDate?: string; // 외부에서 설정된 종료일
   onSubmit: (tripData: TTripData) => void;
+  isPending?: boolean;
 };
 
-type TTripData = {
+export type TTripData = {
   tripName: string;
   tripDescription: string;
   location: string;
@@ -31,10 +26,8 @@ type TTripData = {
 const CreateTripModal = ({
   isOpen,
   onClose,
-  onSuccess,
-  startDate,
-  endDate,
-  // onSubmit,
+  onSubmit,
+  isPending = false,
 }: TCreateTripModalProps) => {
   const [tripName, setTripName] = useState('');
   const [tripDescription, setTripDescription] = useState('');
@@ -47,59 +40,31 @@ const CreateTripModal = ({
   } | null>(null);
 
   const { t } = useTranslation();
-  const { showToast } = useToast();
-  // URL 파라미터에서 지역 정보 가져오기
   const regionId = useNumericSearchParam('region_id');
   const subregionId = useNumericSearchParam('subregion_id');
 
-  // 지역명 매핑 (실제로는 API에서 가져와야 하지만 임시로)
   const regionNames: Record<number, string> = {
     1: '서울특별시',
     2: '부산광역시',
     3: '대구광역시',
     4: '인천광역시',
-    // 필요한 지역 추가
   };
 
-  // 초기 지역 설정
   const initialLocation = useMemo(() => {
     if (!regionId) return '';
-
     const regionName = regionNames[regionId] || `지역 ${regionId}`;
-
-    // subregionId가 있으면 함께 표시 (실제로는 API로 서브리전명을 가져와야 함)
     if (subregionId) {
       return `${regionName}의 구/군`;
     }
-
     return regionName;
   }, [regionId, subregionId]);
 
-  // 초기값 설정
   useEffect(() => {
     if (initialLocation && !location) {
       setLocation(initialLocation);
     }
   }, [initialLocation, location]);
 
-  // 여행 계획 생성 API 훅
-  const createPlanMutation = useCreatePlanMutation({
-    onSuccess: (data) => {
-      console.log('여행 계획 생성 성공:', data.id);
-      showToast(
-        '새로운 일정이 생성되었습니다. 내 여행 일정에서 여행 계획을 세워보세요!',
-        'success'
-      );
-      onSuccess?.(data.id);
-      handleClose();
-    },
-    onError: (error) => {
-      console.error('여행 계획 생성 실패:', error);
-      // 여기에서 에러 토스트나 알림을 표시할 수 있습니다
-    },
-  });
-
-  // 즐겨찾는 지역 데이터 (subregion_id 포함) - fallback용
   const favoriteRegions = useMemo(
     () => [
       { name: '서울특별시', id: 1 },
@@ -113,33 +78,19 @@ const CreateTripModal = ({
     region: { id: number; name: string },
     subregion?: { id: number; name: string }
   ) => {
-    // 화면에 표시할 텍스트 설정
     const locationText = subregion
       ? `${region.name} ${subregion.name}`
       : region.name;
 
     setLocation(locationText);
-
-    // API 호출용 ID 저장
     setSelectedRegionData({
       regionId: region.id,
       subregionId: subregion?.id,
     });
-
-    console.log('선택된 지역:', { region, subregion });
   };
 
   const handleSubmit = () => {
-    console.log('=== handleSubmit 시작 ===');
-    console.log('tripName:', tripName);
-    console.log('location:', location);
-    console.log('startDate:', startDate);
-    console.log('endDate:', endDate);
-    console.log('selectedRegionData:', selectedRegionData);
-
     if (tripName && location) {
-      console.log('✅ 조건 통과 - API 호출 준비');
-
       let apiSubregionId =
         selectedRegionData?.subregionId ||
         selectedRegionData?.regionId ||
@@ -147,24 +98,17 @@ const CreateTripModal = ({
         regionId ||
         1;
 
-      console.log('최종 apiSubregionId:', apiSubregionId);
-
-      const planData: CreatePlanRequest = {
-        name: tripName,
-        description: tripDescription,
-        destination: location,
-        subregion_id: apiSubregionId,
-        // start_date: startDate,
-        // end_date: endDate,
+      const tripData: TTripData = {
+        tripName,
+        tripDescription,
+        location,
+        selectedRegion: String(apiSubregionId),
+        subregionId: apiSubregionId,
       };
 
-      console.log('API 호출 데이터:', planData);
-      console.log('mutation 상태:', createPlanMutation.status);
-
-      createPlanMutation.mutate(planData);
-      console.log('mutate 호출함');
-    } else {
-      console.log('❌ 조건 실패 - 필수 필드 누락');
+      onSubmit(tripData);
+      // 제출 후 폼 초기화
+      resetForm();
     }
   };
 
@@ -182,19 +126,27 @@ const CreateTripModal = ({
   };
 
   const handleClose = () => {
-    // 폼 초기화
     setTripName('');
     setTripDescription('');
     setLocation('');
     setSelectedRegion('');
     setShowResults(false);
+    resetForm();
     onClose();
   };
 
-  // 폼 렌더링 함수 - 렌더링 시마다 새로 생성되지 않도록 메모이제이션
+  // 폼 초기화 함수 분리
+  const resetForm = () => {
+    setTripName('');
+    setTripDescription('');
+    setLocation('');
+    setSelectedRegion('');
+    setShowResults(false);
+    setSelectedRegionData(null);
+  };
+
   const renderFormContent = (isMobile = false) => (
     <div className={`space-y-${isMobile ? '4' : '6'}`}>
-      {/* 여행 이름 입력 */}
       <div>
         <label
           className={`mb-2 block ${isMobile ? 'text-sm' : 'text-base'} text-main-text-navy font-medium`}
@@ -205,11 +157,10 @@ const CreateTripModal = ({
           type='text'
           value={tripName}
           onChange={(e) => setTripName(e.target.value)}
-          placeholder='예: 서울 여름 휴가'
+          placeholder={t('common.plan_example')}
         />
       </div>
 
-      {/* 여행 설명 입력 */}
       <div>
         <label
           className={`mb-2 block ${isMobile ? 'text-sm' : 'text-base'} text-main-text-navy font-medium`}
@@ -225,7 +176,6 @@ const CreateTripModal = ({
         />
       </div>
 
-      {/* 여행지 */}
       <div>
         <label
           className={`mb-2 block ${isMobile ? 'text-sm' : 'text-base'} text-main-text-navy font-medium`}
@@ -241,13 +191,12 @@ const CreateTripModal = ({
           className='w-full'
           height={isMobile ? 'h-10' : 'h-12'}
           showLocationIcon={true}
-          disableNavigation={true} // 🔥 URL 변경 막기
-          onRegionSelect={handleRegionSelectFromSearchBar} // 🔥 지역 선택 콜백
-          onSearch={handleLocationSearch} // 텍스트 검색용
+          disableNavigation={true}
+          onRegionSelect={handleRegionSelectFromSearchBar}
+          onSearch={handleLocationSearch}
         />
       </div>
 
-      {/* 즐겨찾는 지역 */}
       <div className='mb-6'>
         <label
           className={`mb-${isMobile ? '2' : '3'} block ${isMobile ? 'text-sm' : 'text-base'} text-main-text-navy font-medium`}
@@ -268,7 +217,6 @@ const CreateTripModal = ({
         </div>
       </div>
 
-      {/* 검색 결과 */}
       {showResults && location && (
         <div className='mb-6'>
           <label
@@ -301,11 +249,9 @@ const CreateTripModal = ({
 
   return (
     <>
-      {/* 데스크톱/태블릿: 사이드 패널 */}
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* 오버레이 */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -315,7 +261,6 @@ const CreateTripModal = ({
               onClick={handleClose}
             />
 
-            {/* 사이드 패널 */}
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
@@ -323,7 +268,6 @@ const CreateTripModal = ({
               transition={{ type: 'tween', duration: 0.3 }}
               className='tablet-bp:flex bg-bg-white fixed top-0 right-0 z-50 hidden h-full w-96 flex-col shadow-xl'
             >
-              {/* 헤더 */}
               <div className='border-outline-gray flex flex-shrink-0 items-center justify-between border-b p-6'>
                 <h2 className='text-main-text-navy text-xl font-semibold'>
                   {t('travel.create_travel_schedule')}
@@ -336,32 +280,26 @@ const CreateTripModal = ({
                 </button>
               </div>
 
-              {/* 스크롤 가능한 컨텐츠 영역 */}
               <div className='flex-1 overflow-y-auto'>
                 <div className='p-6'>{renderFormContent(false)}</div>
               </div>
 
-              {/* 하단 고정 버튼 영역 */}
               <div className='border-outline-gray flex-shrink-0 border-t p-6'>
                 <div className='flex gap-3'>
                   <Button
                     onClick={handleClose}
                     variant='cancel'
                     className='h-12 flex-1 text-base font-medium'
-                    disabled={createPlanMutation.isPending}
+                    disabled={isPending}
                   >
                     {t('common.cancel')}
                   </Button>
                   <Button
                     onClick={handleSubmit}
-                    disabled={
-                      !tripName || !location || createPlanMutation.isPending
-                    }
+                    disabled={!tripName || !location || isPending}
                     className='bg-sub-green hover:bg-sub-green/90 h-12 flex-1 text-base font-medium text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500'
                   >
-                    {createPlanMutation.isPending
-                      ? '생성 중...'
-                      : t('travel.add_to_plan')}
+                    {isPending ? '생성 중...' : t('travel.add_to_plan')}
                   </Button>
                 </div>
               </div>
@@ -370,30 +308,25 @@ const CreateTripModal = ({
         )}
       </AnimatePresence>
 
-      {/* 모바일: 기존 Modal 컴포넌트 사용 */}
       <div className='tablet-bp:hidden'>
         <Modal isOpen={isOpen} onClose={handleClose}>
-          <Modal.Header> {t('travel.travel_name')}</Modal.Header>
-
+          <Modal.Header>{t('travel.travel_name')}</Modal.Header>
           <Modal.Body>{renderFormContent(true)}</Modal.Body>
-
           <Modal.Footer>
             <Button
               onClick={handleClose}
               variant='cancel'
               className='mr-3'
-              disabled={createPlanMutation.isPending}
+              disabled={isPending}
             >
               {t('common.cancel')}
             </Button>
             <Button
               onClick={handleSubmit}
-              disabled={!tripName || !location || createPlanMutation.isPending}
+              disabled={!tripName || !location || isPending}
               className='bg-sub-green hover:bg-sub-green/90 text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500'
             >
-              {createPlanMutation.isPending
-                ? '생성 중...'
-                : t('travel.add_to_plan')}
+              {isPending ? '생성 중...' : t('travel.add_to_plan')}
             </Button>
           </Modal.Footer>
         </Modal>

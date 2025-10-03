@@ -27,7 +27,7 @@ const PlaceDetailModal = ({
   placeId,
   lang,
 }: PlaceDetailModalProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { showToast } = useToast();
   const { isLoggedIn } = useAuthCheck();
   const { actions: modalActions } = useModalStore();
@@ -39,9 +39,12 @@ const PlaceDetailModal = ({
     { enabled: !!placeId && isOpen }
   );
 
-  const { data: plansData, isLoading: plansLoading } = usePlansQuery({
-    enabled: isLoggedIn,
-  });
+  const { data: plansData, isLoading: plansLoading } = usePlansQuery(
+    i18n.language || 'ko',
+    {
+      enabled: isLoggedIn,
+    }
+  );
 
   const place = placeDetailData?.place;
   const processedHours = place?.use_time
@@ -264,7 +267,7 @@ const PlaceDetailModal = ({
             className='w-1/3 flex-shrink-0'
           >
             {addPlaceToPlanMutation.isPending
-              ? '추가 중...'
+              ? t('common.adding')
               : t('travel.add_to_plan')}
           </Button>
         </div>

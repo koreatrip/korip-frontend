@@ -1,12 +1,6 @@
-// InfoCard.tsx
 import { useAuthCheck } from '@/hooks/useAuthCheck';
 import { useToast } from '@/hooks/useToast';
 import { useModalStore } from '@/stores/useModalStore';
-import { useHeaderStore } from '@/stores/useHeaderStore';
-import {
-  usePlansQuery,
-  useAddPlaceToPlanMutation,
-} from '@/api/planner/plannerHooks';
 import {
   useToggleFavoritePlaceMutation,
   useToggleFavoriteRegionMutation,
@@ -16,9 +10,11 @@ import Dropdown, {
 } from '@/components/common/dropdown/Dropdown';
 import { StarIcon as StarOutline } from '@heroicons/react/24/outline';
 import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState, type RefObject } from 'react';
+import { t } from 'i18next';
 
-type TCard = {
+type TCardProps = {
+  id: number;
   variant?: 'interactive' | 'selectable';
   title?: string;
   description?: string;
@@ -26,16 +22,20 @@ type TCard = {
   imageUrl?: string | null;
   isSelected?: boolean;
   isFavorite?: boolean;
-  id?: number;
   type?: 'place' | 'region';
   onClick?: () => void;
-  onAddSchedule?: () => void;
   onViewDetails?: () => void;
   onFavorite?: () => void;
-  onAddToSchedule?: (planId: string, planName: string) => void;
+  isDropdownOpen?: boolean;
+  onToggleDropdown?: () => void;
+  dropdownItems?: TDropdownItem[];
+  isAddingToSchedule?: boolean;
+  dropdownButtonRef?: RefObject<HTMLButtonElement | null>;
+  dropdownContentRef?: RefObject<HTMLDivElement | null>;
 };
 
 const InfoCard = ({
+  id,
   variant = 'interactive',
   title = '제목 없음',
   description = '설명 없음',
@@ -43,69 +43,35 @@ const InfoCard = ({
   imageUrl = null,
   isSelected = false,
   isFavorite = false,
-  id,
   type = 'place',
   onClick = () => {},
-  onAddSchedule,
   onViewDetails = () => {},
   onFavorite,
-  onAddToSchedule,
-}: TCard) => {
+  isDropdownOpen = false,
+  onToggleDropdown = () => {},
+  dropdownItems = [],
+  isAddingToSchedule = false,
+  dropdownButtonRef,
+  dropdownContentRef,
+}: TCardProps) => {
   const { actions: modalActions } = useModalStore();
-  const { stack, actions } = useHeaderStore();
   const { isLoggedIn } = useAuthCheck();
   const { showToast } = useToast();
 
   const [localIsFavorite, setLocalIsFavorite] = useState(isFavorite);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const { data: plansData, isLoading, error } = usePlansQuery();
   const toggleFavoritePlaceMutation = useToggleFavoritePlaceMutation();
   const toggleFavoriteRegionMutation = useToggleFavoriteRegionMutation();
 
-  // 일정에 장소 추가 mutation
-  const addPlaceToPlanMutation = useAddPlaceToPlanMutation({
-    onSuccess: (data) => {
-      console.log('장소가 일정에 추가되었습니다:', data);
-    },
-    onError: (error) => {
-      console.error('장소 추가 실패:', error);
-      showToast('일정에 장소를 추가하는데 실패했습니다.', 'error');
-    },
-  });
-
-  const isDropdownOpen =
-    stack.isScheduleDropdownOpen && stack.scheduleDropdownCardId === String(id);
-
-  const handleAddSchedule = (e?: React.MouseEvent) => {
-    e?.preventDefault();
-    e?.stopPropagation();
-
-    if (onAddSchedule) {
-      onAddSchedule();
-    } else if (isLoggedIn) {
-      actions.toggleScheduleDropdown(String(id));
-    } else {
-      modalActions.openLoginPrompt();
-    }
-  };
-
-  const handleViewDetails = (e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    onViewDetails();
-  };
+  useEffect(() => {
+    setLocalIsFavorite(isFavorite);
+  }, [isFavorite]);
 
   const handleFavorite = async (e?: React.MouseEvent) => {
     e?.stopPropagation();
 
     if (!isLoggedIn) {
       modalActions.openLoginPrompt();
-      return;
-    }
-
-    if (!id) {
-      console.error('ID is required for favorite toggle');
       return;
     }
 
@@ -118,16 +84,13 @@ const InfoCard = ({
       } else {
         await toggleFavoritePlaceMutation.mutateAsync({ place_id: id });
       }
-
       const itemType = type === 'region' ? '지역이' : '장소가';
       const message = !previousIsFavorite
         ? `즐겨찾기에 추가되었습니다.`
         : `즐겨찾기에서 제거되었습니다.`;
       showToast(`${itemType} ${message}`, 'success');
 
-      if (onFavorite) {
-        onFavorite();
-      }
+      onFavorite?.();
     } catch (error) {
       console.error('즐겨찾기 토글 실패:', error);
       setLocalIsFavorite(previousIsFavorite);
@@ -135,74 +98,10 @@ const InfoCard = ({
     }
   };
 
-  const handleSelectPlan = async (planId: string, planName: string) => {
-    if (!id) {
-      console.error('Place ID is required');
-      showToast('장소 정보를 찾을 수 없습니다.', 'error');
-      return;
-    }
-
-    try {
-      // API 호출: 일정에 장소 추가
-      await addPlaceToPlanMutation.mutateAsync({
-        planId: planId,
-        placeData: { place_id: id },
-      });
-
-      // 드롭다운 닫기
-      actions.closeScheduleDropdown();
-
-      // 성공 토스트 메시지
-      showToast(`"${planName}" 일정에 추가되었습니다.`, 'success');
-
-      // 부모 컴포넌트의 콜백이 있다면 실행
-      if (onAddToSchedule) {
-        onAddToSchedule(planId, planName);
-      }
-    } catch (error) {
-      console.error('일정에 장소 추가 실패:', error);
-      // 에러는 mutation의 onError에서 처리됨
-    }
+  const handleViewDetails = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    onViewDetails();
   };
-
-  const createDropdownItems = (): TDropdownItem[] => {
-    const plans = plansData?.plans;
-    if (isLoading) return [{ value: 'loading', label: '일정 불러오는 중...' }];
-    if (error || !plans || !Array.isArray(plans) || plans.length === 0) {
-      return [{ value: 'empty', label: '생성된 일정이 없습니다' }];
-    }
-    return plans.map((plan) => ({
-      value: String(plan.id),
-      label: plan.title || `일정 ${plan.id}`,
-      onClick: () =>
-        handleSelectPlan(String(plan.id), plan.title || `일정 ${plan.id}`),
-    }));
-  };
-
-  useEffect(() => {
-    setLocalIsFavorite(isFavorite);
-  }, [isFavorite]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(target) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(target)
-      ) {
-        actions.closeScheduleDropdown();
-      }
-    };
-
-    if (isDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [isDropdownOpen, actions]);
 
   const baseCardClasses =
     'relative group rounded-2xl bg-white shadow-medium transition-all duration-300 h-[350px]';
@@ -237,7 +136,9 @@ const InfoCard = ({
       </div>
 
       <div className='overflow-hidden p-5'>
-        <h3 className='text-main-text-navy text-lg font-semibold'>{title}</h3>
+        <h3 className='text-main-text-navy truncate text-lg font-semibold'>
+          {title}
+        </h3>
         <p
           className='text-sub-text-gray mt-1 leading-relaxed font-normal'
           style={{
@@ -261,18 +162,18 @@ const InfoCard = ({
         <div className='bg-main-text-navy/50 absolute inset-0 flex items-center justify-center space-x-4 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
           <div className='relative'>
             <button
-              ref={buttonRef}
-              onClick={handleAddSchedule}
-              className={`bg-main-text-navy hover:bg-main-text-navy/70 cursor-pointer rounded-full px-5 py-2 font-medium text-white transition-colors ${
-                isDropdownOpen ? 'bg-main-text-navy/70' : ''
-              }`}
-              disabled={addPlaceToPlanMutation.isPending}
+              ref={dropdownButtonRef}
+              onClick={onToggleDropdown}
+              disabled={isAddingToSchedule}
+              className={`bg-main-text-navy hover:bg-main-text-navy/70 cursor-pointer rounded-full px-5 py-2 font-medium text-white transition-colors`}
             >
-              {addPlaceToPlanMutation.isPending ? '추가 중...' : '일정 추가'}
+              {isAddingToSchedule
+                ? t('common.adding')
+                : t('travel.add_to_plan')}
             </button>
             {isDropdownOpen && (
               <div
-                ref={dropdownRef}
+                ref={dropdownContentRef}
                 className='absolute top-full left-1/2 mt-2 -translate-x-1/2 transform'
                 style={{
                   minWidth: '200px',
@@ -281,8 +182,8 @@ const InfoCard = ({
               >
                 <Dropdown
                   isOpen={true}
-                  items={createDropdownItems()}
-                  onClose={() => actions.closeScheduleDropdown()}
+                  items={dropdownItems} // map 제거
+                  onClose={onToggleDropdown}
                   position='center'
                   width='w-48'
                 />

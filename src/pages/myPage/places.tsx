@@ -8,6 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { useInView } from 'react-intersection-observer';
 import { useFavoritePlacesInfiniteQuery } from '@/api/favorites/favoriteHooks';
 import type { FavoritePlace } from '@/api/favorites/favoriteType';
+import PlaceDetailModal from '@/components/domain/regions/PlaceDetailModal';
+import { useScheduleDropdown } from '@/hooks/useScheduleDropdown';
 
 const Places = () => {
   const { t, i18n } = useTranslation();
@@ -17,7 +19,15 @@ const Places = () => {
   );
   const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
 
-  // 무한스크롤 훅 사용
+  const {
+    openDropdownId,
+    toggleDropdown,
+    dropdownItems,
+    isAddingToSchedule,
+    dropdownButtonRef,
+    dropdownContentRef,
+  } = useScheduleDropdown();
+
   const {
     data,
     fetchNextPage,
@@ -27,31 +37,21 @@ const Places = () => {
     isError,
   } = useFavoritePlacesInfiniteQuery({ lang: i18n.language || 'ko' });
 
-  // intersection observer 설정
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0.1,
     triggerOnce: false,
   });
 
-  // 뷰포트에 들어오면 다음 페이지 로드
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  // 모든 페이지의 데이터를 하나의 배열로 합치기
-  const allFavoritePlaces: FavoritePlace[] = useMemo(() => {
-    const result = data?.pages.flatMap((page) => page.favorite_places) ?? [];
-
-    // 🔍 전체 데이터 콘솔 출력
-    console.log('=== Places 컴포넌트 데이터 디버깅 ===');
-    console.log('📊 Raw data from API:', data);
-    console.log('📍 All favorite places:', result);
-    console.log('📊 Total places count:', result.length);
-
-    return result;
-  }, [data]);
+  const allFavoritePlaces: FavoritePlace[] = useMemo(
+    () => data?.pages.flatMap((page) => page.favorite_places) ?? [],
+    [data]
+  );
 
   const sortOptions: DropdownItem[] = [
     {
@@ -78,8 +78,6 @@ const Places = () => {
 
   const filteredAndSortedData: FavoritePlace[] = useMemo(() => {
     let filtered = [...allFavoritePlaces];
-
-    // 검색 필터링
     if (searchValue.trim()) {
       const lower = searchValue.toLowerCase();
       filtered = filtered.filter((place) =>
@@ -88,9 +86,7 @@ const Places = () => {
           .some((field) => field!.toLowerCase().includes(lower))
       );
     }
-
-    // 정렬
-    const sorted = filtered.sort((a, b) => {
+    return filtered.sort((a, b) => {
       switch (sortOption) {
         case SortOption.DATE_DESC:
           return (
@@ -110,72 +106,14 @@ const Places = () => {
           return 0;
       }
     });
-
-    // 🔍 필터링/정렬 결과 콘솔 출력
-    console.log('🔍 Search value:', searchValue);
-    console.log('📊 Sort option:', sortOption);
-    console.log('📋 Filtered data:', filtered);
-    console.log('🔄 Final sorted data:', sorted);
-    console.log('📊 Final count:', sorted.length);
-
-    // 각 장소의 세부 정보 출력
-    if (sorted.length > 0) {
-      console.log('📍 Place details:');
-      sorted.forEach((place, index) => {
-        console.log(`  ${index + 1}. ${place.name}`, {
-          id: place.id,
-          address: place.address,
-          category: place.category?.name,
-          description: place.description,
-          favorited_at: place.favorited_at,
-          image_url: place.image_url,
-        });
-      });
-    }
-
-    return sorted;
   }, [allFavoritePlaces, searchValue, sortOption]);
 
-  // 🔍 상태 변화 감지
-  useEffect(() => {
-    console.log('🎯 Selected place ID changed:', selectedPlaceId);
-  }, [selectedPlaceId]);
+  const handleSearch = (value: string) => setSearchValue(value);
+  const handlePlaceDetailOpen = (placeId: number) =>
+    setSelectedPlaceId(placeId);
+  const handlePlaceDetailClose = () => setSelectedPlaceId(null);
 
-  useEffect(() => {
-    console.log('🔄 Loading states:', {
-      isLoading,
-      isError,
-      isFetchingNextPage,
-      hasNextPage,
-      inView,
-    });
-  }, [isLoading, isError, isFetchingNextPage, hasNextPage, inView]);
-
-  const handleSearch = (value: string): void => {
-    console.log('🔍 Search triggered:', value);
-    setSearchValue(value);
-  };
-
-  const handleCardClick = (id: number): void => {
-    console.log('🎯 Card clicked:', id);
-    setSelectedPlaceId((prev) => (prev === id ? null : id));
-  };
-
-  const handleAddSchedule = (id: number): void => {
-    const place = allFavoritePlaces.find((p) => p.id === id);
-    console.log('📅 Add to schedule:', { id, place: place?.name });
-    alert(`"${place?.name}"이(가) 일정에 추가되었습니다.`);
-  };
-
-  const handleViewDetails = (id: number): void => {
-    const place = allFavoritePlaces.find((p) => p.id === id);
-    console.log('👁️ View details:', { id, place: place?.name });
-    alert(`"${place?.name}" 상세 정보를 확인합니다.`);
-  };
-
-  // 로딩 상태 처리
   if (isLoading) {
-    console.log('⏳ Loading favorite places...');
     return (
       <div className='max-w-screen-2xl py-8'>
         <div className='animate-pulse space-y-4'>
@@ -183,7 +121,7 @@ const Places = () => {
           <div className='h-12 rounded bg-gray-200'></div>
           <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
             {[...Array(6)].map((_, i) => (
-              <div key={i} className='h-[200px] rounded bg-gray-200'></div>
+              <div key={i} className='h-[350px] rounded-2xl bg-gray-200'></div>
             ))}
           </div>
         </div>
@@ -191,9 +129,7 @@ const Places = () => {
     );
   }
 
-  // 에러 상태 처리
   if (isError) {
-    console.error('❌ Error loading favorite places');
     return (
       <div className='max-w-screen-2xl py-8'>
         <div className='py-16 text-center'>
@@ -207,12 +143,6 @@ const Places = () => {
       </div>
     );
   }
-
-  console.log(
-    '🎨 Rendering Places component with',
-    filteredAndSortedData.length,
-    'places'
-  );
 
   return (
     <div className='max-w-screen-2xl py-8'>
@@ -244,22 +174,25 @@ const Places = () => {
         {filteredAndSortedData.map((item) => (
           <InfoCard
             key={item.id}
+            id={item.id}
+            type='place'
             variant='interactive'
             title={item.name}
             description={item.description}
             details={item.address}
             imageUrl={item.image_url}
-            isSelected={selectedPlaceId === item.id}
-            isFavorite={true} // 즐겨찾기 페이지이므로 모든 아이템이 즐겨찾기 상태
-            id={item.id}
-            onClick={() => handleCardClick(item.id)}
-            onAddSchedule={() => handleAddSchedule(item.id)}
-            onViewDetails={() => handleViewDetails(item.id)}
+            isFavorite={true}
+            onViewDetails={() => handlePlaceDetailOpen(item.id)}
+            isDropdownOpen={openDropdownId === item.id}
+            onToggleDropdown={() => toggleDropdown(item.id)}
+            dropdownItems={dropdownItems}
+            isAddingToSchedule={isAddingToSchedule}
+            dropdownButtonRef={dropdownButtonRef}
+            dropdownContentRef={dropdownContentRef}
           />
         ))}
       </div>
 
-      {/* 무한스크롤 트리거 */}
       {hasNextPage && (
         <div ref={loadMoreRef} className='mt-8 flex justify-center'>
           {isFetchingNextPage ? (
@@ -268,7 +201,7 @@ const Places = () => {
               <span className='text-sm text-gray-500'>로딩중...</span>
             </div>
           ) : (
-            <div className='h-10'></div> // 트리거 영역
+            <div className='h-10'></div>
           )}
         </div>
       )}
@@ -303,6 +236,13 @@ const Places = () => {
           count: allFavoritePlaces.length,
         })}
       </div>
+
+      <PlaceDetailModal
+        isOpen={selectedPlaceId !== null}
+        onClose={handlePlaceDetailClose}
+        placeId={selectedPlaceId}
+        lang={i18n.language || 'ko'}
+      />
     </div>
   );
 };

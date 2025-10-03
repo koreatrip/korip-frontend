@@ -25,6 +25,7 @@ import OAuthCallbackPage from '@/pages/statusPage/oAuthCallbackPage';
 import ErrorPage from '@/pages/statusPage/errorPage';
 import AttractionsPage from '@/pages/attractionsPage';
 import ProtectedRoute from '@/components/domain/auth/ProtectedRoute';
+import TripEditPage from '@/pages/tripEditPage';
 
 export const router = createBrowserRouter([
   {
@@ -120,7 +121,7 @@ export const router = createBrowserRouter([
           },
           {
             path: 'trip/:id/edit',
-            element: <PlannerPage />,
+            element: <TripEditPage />,
           },
         ],
       },

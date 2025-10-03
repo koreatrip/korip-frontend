@@ -41,11 +41,11 @@ interface PlannerState {
     place: PlannerPlace;
   }) => void;
   removePlace: (timeSlotId: string) => void;
-
-  // 새로 추가
   setDateRange: (startDate: string | null, endDate: string | null) => void;
   getScheduledPlacesCount: () => number;
   getTripDuration: () => number;
+  initializeSchedule: (timeSlots: TimeSlotData[]) => void;
+  updateScheduleForDateRange: (startDate: string, endDate: string) => void;
 }
 
 // --- Zustand 스토어 생성 ---
@@ -56,6 +56,64 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
 
   // 날짜 범위 설정
   setDateRange: (startDate, endDate) => set({ startDate, endDate }),
+
+  // 스케줄 초기화 (기존 저장된 데이터 불러올 때 사용)
+  initializeSchedule: (timeSlots: TimeSlotData[]) =>
+    set({ schedule: timeSlots }),
+
+  // 날짜 범위 변경 시 스케줄 업데이트
+  updateScheduleForDateRange: (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+    const { schedule } = get();
+    const times = [
+      '09:00',
+      '11:00',
+      '13:00',
+      '15:00',
+      '17:00',
+      '19:00',
+      '21:00',
+      '23:00',
+    ];
+
+    // 기존 스케줄을 day별로 그룹화
+    const existingSlotsByDay = new Map<number, TimeSlotData[]>();
+    schedule.forEach((slot) => {
+      if (!existingSlotsByDay.has(slot.day)) {
+        existingSlotsByDay.set(slot.day, []);
+      }
+      existingSlotsByDay.get(slot.day)!.push(slot);
+    });
+
+    // 새로운 스케줄 생성
+    const newSchedule: TimeSlotData[] = [];
+    for (let day = 1; day <= days; day++) {
+      const existingSlots = existingSlotsByDay.get(day) || [];
+
+      times.forEach((time) => {
+        const existingSlot = existingSlots.find((s) => s.time === time);
+
+        if (existingSlot) {
+          // 기존 슬롯이 있으면 그대로 사용
+          newSchedule.push(existingSlot);
+        } else {
+          // 없으면 빈 슬롯 생성
+          newSchedule.push({
+            day,
+            time,
+            place: null,
+            timeSlotId: `day${day}-time${time}`,
+          });
+        }
+      });
+    }
+
+    set({ schedule: newSchedule, startDate, endDate });
+  },
 
   // 스케줄에 배치된 장소 개수 계산
   getScheduledPlacesCount: () => {
@@ -72,7 +130,7 @@ export const usePlannerStore = create<PlannerState>((set, get) => ({
     const end = new Date(endDate);
     const diffTime = Math.abs(end.getTime() - start.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays + 1; // 당일 포함
+    return diffDays + 1;
   },
 
   movePlace: (payload) =>

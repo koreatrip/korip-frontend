@@ -13,8 +13,9 @@ import axiosInstance from '../axiosInstance';
 
 export const plannerAPI = {
   // GET - 계획 목록 조회
-  getAllPlans: async (): Promise<PlansResponse> => {
+  getAllPlans: async (lang: string = 'ko'): Promise<PlansResponse> => {
     const response = await axiosInstance.get('/api/plans/', {
+      params: { lang },
       headers: { Accept: 'application/json' },
     });
     console.log(response.data);
@@ -53,8 +54,12 @@ export const plannerAPI = {
     console.log('Place added to plan:', response.data);
     return response.data;
   },
-  getPlanById: async (planId: string): Promise<PlanDetail> => {
+  getPlanById: async (
+    planId: string,
+    lang: string = 'ko'
+  ): Promise<PlanDetail> => {
     const response = await axiosInstance.get(`/api/plans/${planId}/`, {
+      params: { lang },
       headers: { Accept: 'application/json' },
     });
     console.log('Plan detail:', response.data);
@@ -77,5 +82,11 @@ export const plannerAPI = {
     );
     console.log('Plan updated:', response.data);
     return response.data;
+  },
+  deletePlan: async (planId: string): Promise<void> => {
+    await axiosInstance.delete(`/api/plans/${planId}/`, {
+      headers: { Accept: 'application/json' },
+    });
+    console.log('Plan deleted:', planId);
   },
 };

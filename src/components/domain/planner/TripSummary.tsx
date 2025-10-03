@@ -37,7 +37,7 @@ const TripSummary = ({
   return (
     <div className='bg-bg-white shadow-light w-full rounded-lg p-6'>
       <h3 className='text-main-text-navy text-2xl font-semibold'>
-        {t('travel.selected_places')}
+        {t('travel.schedule_summary')}
       </h3>
       <div className='mt-4'>
         <SummaryItem

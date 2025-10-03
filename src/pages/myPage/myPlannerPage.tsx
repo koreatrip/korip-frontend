@@ -1,14 +1,25 @@
-import { usePlansQuery } from '@/api/planner/plannerHooks';
+import {
+  useCreatePlanMutation,
+  usePlansQuery,
+} from '@/api/planner/plannerHooks';
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
 import SearchBar from '@/components/common/searchBar/SearchBar';
 import Spinner from '@/components/common/Spinner';
 import PlannerAddButton from '@/components/domain/planner/PlannerAddButton';
 import PlannerAddButtonMini from '@/components/domain/planner/PlannerAddButtonMini';
 import PlannerCard from '@/components/domain/planner/PlannerCard';
+import PlannerDeleteModal from '@/components/domain/planner/PlannerDeleteModal';
+import CreateTripModal, {
+  type TTripData,
+} from '@/components/modals/CreateTripModal';
+import { usePlannerDelete } from '@/hooks/usePlannerDelete';
+import { useToast } from '@/hooks/useToast';
 import { SortOption, type DropdownItem } from '@/types/dropdown';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { plannerQueries } from '@/api/planner/plannerQueries';
 
 type TPlannerData = {
   id: number;
@@ -25,13 +36,16 @@ const MyPlannerPage = () => {
   const { data: plansData, isLoading, error } = usePlansQuery();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { showToast } = useToast();
+  const queryClient = useQueryClient();
 
+  const { openDeleteModal, deleteModalProps } = usePlannerDelete();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>(
     SortOption.DATE_DESC
   );
 
-  // 날짜 포맷팅 함수
   const formatDateRange = (
     startDate: string | null,
     endDate: string | null
@@ -56,7 +70,6 @@ const MyPlannerPage = () => {
     return '날짜 미정';
   };
 
-  // API 데이터를 컴포넌트 형식에 맞게 변환
   const planners: TPlannerData[] = useMemo(() => {
     if (!plansData?.plans) return [];
 
@@ -72,7 +85,6 @@ const MyPlannerPage = () => {
     }));
   }, [plansData]);
 
-  // 검색 + 정렬
   const filteredAndSortedPlanners: TPlannerData[] = useMemo(() => {
     const lower = searchValue.trim().toLowerCase();
 
@@ -106,7 +118,6 @@ const MyPlannerPage = () => {
     return sorted;
   }, [planners, searchValue, sortOption]);
 
-  // 드롭다운 옵션
   const sortOptions: DropdownItem[] = [
     {
       value: SortOption.DATE_DESC,
@@ -130,33 +141,52 @@ const MyPlannerPage = () => {
     },
   ];
 
-  // 이벤트 핸들러
   const handleSearchSubmit = (value: string) => setSearchValue(value);
 
-  const handleEditClick = (title: string) => {
-    console.log(`${title} ${t('common.edit')}`);
+  const handleEditClick = (plannerId: number) => {
+    const planner = filteredAndSortedPlanners.find((p) => p.id === plannerId);
+    if (planner?.start_date && planner?.end_date) {
+      navigate(`/trip/${plannerId}/edit`);
+    } else {
+      navigate(`/planner/${plannerId}`);
+    }
   };
 
-  const handleDeleteClick = (title: string) => {
-    console.log(`${title} ${t('common.delete')}`);
-  };
-
-  const handleAddPlannerSubmit = (newPlanner: TPlannerData) => {
-    // TODO: 실제로는 여기서 API 호출해서 새 플래너 추가하고 리프레시해야 함
-    console.log('새 플래너 추가:', newPlanner);
+  const handleDeleteClick = (plannerId: number) => {
+    openDeleteModal(plannerId);
   };
 
   const handlePlannerCardClick = (planner: TPlannerData) => {
-    // start_date와 end_date가 모두 없으면 /planner로 이동
     if (!planner.start_date && !planner.end_date) {
       navigate(`/planner/${planner.id}`);
     } else {
-      // 날짜가 있으면 상세 페이지로 이동
       navigate(`/trip/${planner.id}`);
     }
   };
 
-  // 로딩 상태
+  const createPlanMutation = useCreatePlanMutation({
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
+        queryKey: plannerQueries.plans.all().queryKey,
+      });
+
+      showToast('새 여행 일정이 생성되었습니다.', 'success');
+      setIsCreateModalOpen(false);
+    },
+    onError: (error) => {
+      showToast(error.message || '여행 일정 생성에 실패했습니다.', 'error');
+    },
+  });
+
+  const handleCreatePlanSubmit = (tripData: TTripData) => {
+    createPlanMutation.mutate({
+      name: tripData.tripName,
+      description: tripData.tripDescription || `${tripData.location} 여행`,
+      destination: tripData.location,
+      subregion_id: Number(tripData.selectedRegion),
+    });
+  };
+
   if (isLoading) {
     return (
       <div className='flex min-h-screen w-full items-center justify-center'>
@@ -168,7 +198,6 @@ const MyPlannerPage = () => {
     );
   }
 
-  // 에러 상태
   if (error) {
     return (
       <div className='flex min-h-screen w-full items-center justify-center'>
@@ -185,13 +214,11 @@ const MyPlannerPage = () => {
   return (
     <div className='flex min-h-screen w-full'>
       <div className='w-full flex-1 px-2 py-6'>
-        {/* 헤더 */}
         <div className='mb-6'>
           <h1 className='text-main-text-navy mb-4 text-4xl font-semibold'>
             {t('travel.travel_schedule')}
           </h1>
 
-          {/* 검색/정렬/추가 */}
           <div className='mb-6 flex flex-col gap-4 md:flex-row'>
             <div className='flex-1'>
               <SearchBar
@@ -202,21 +229,22 @@ const MyPlannerPage = () => {
             </div>
             <div className='flex gap-2'>
               <SortDropdown options={sortOptions} current={sortOption} />
-              <PlannerAddButtonMini onAddPlanner={handleAddPlannerSubmit} />
+              <PlannerAddButtonMini
+                onClick={() => setIsCreateModalOpen(true)}
+              />
             </div>
           </div>
 
-          {/* 검색 결과 문구 */}
           {searchValue && (
             <div className='mb-4 text-sm text-gray-600'>
-              "{searchValue}" {t('common.search_results')}{' '}
-              {filteredAndSortedPlanners.length}
-              {t('common.count_suffix')}
+              "{searchValue}"{' '}
+              {t('common.total_planners', {
+                count: filteredAndSortedPlanners.length,
+              })}
             </div>
           )}
         </div>
 
-        {/* 그리드 (고정 w/h 제거 → 반응형) */}
         <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
           {filteredAndSortedPlanners.map((planner) => (
             <div key={planner.id} className='justify-self-start'>
@@ -224,22 +252,19 @@ const MyPlannerPage = () => {
                 title={planner.title}
                 description={planner.description}
                 dateRange={planner.dateRange}
-                isNew={planner.isNew ?? false}
                 hasSchedule={!!(planner.start_date && planner.end_date)}
-                onEdit={() => handleEditClick(planner.title)}
-                onDelete={() => handleDeleteClick(planner.title)}
+                onEdit={() => handleEditClick(planner.id)}
+                onDelete={() => handleDeleteClick(planner.id)}
                 onClick={() => handlePlannerCardClick(planner)}
               />
             </div>
           ))}
 
-          {/* 플래너 추가 카드를 맨 뒤로 배치 */}
           <div className='justify-self-center'>
-            <PlannerAddButton onAddPlanner={handleAddPlannerSubmit} />
+            <PlannerAddButton onClick={() => setIsCreateModalOpen(true)} />
           </div>
         </div>
 
-        {/* 빈 상태 */}
         {filteredAndSortedPlanners.length === 0 && (
           <div className='py-16 text-center'>
             <div className='mb-4 text-gray-300'>
@@ -259,29 +284,36 @@ const MyPlannerPage = () => {
             </div>
             {searchValue ? (
               <>
-                <p className='text-gray-500'>
-                  {t('planner.search_empty_title')}
-                </p>
-                <p className='mt-2 text-sm text-gray-400'>
+                <p className='text-gray-500'>{t('common.no_planner_found')}</p>
+                {/* <p className='mt-2 text-sm text-gray-400'>
                   {t('planner.search_empty_desc')}
-                </p>
+                </p> */}
               </>
             ) : (
               <>
-                <p className='text-gray-500'>{t('planner.empty_title')}</p>
-                <p className='mt-2 text-sm text-gray-400'>
-                  {t('planner.empty_desc')}
+                <p className='text-gray-500'>
+                  {t('common.no_planner_created')}
                 </p>
+                {/* <p className='mt-2 text-sm text-gray-400'>
+                  {t('planner.empty_desc')}
+                </p> */}
               </>
             )}
           </div>
         )}
 
-        {/* 총 개수 */}
         <div className='mt-12 text-right text-sm text-gray-400'>
           {t('common.total_count', { count: filteredAndSortedPlanners.length })}
         </div>
       </div>
+
+      <PlannerDeleteModal {...deleteModalProps} />
+      <CreateTripModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSubmit={handleCreatePlanSubmit}
+        isPending={createPlanMutation.isPending}
+      />
     </div>
   );
 };
