@@ -32,8 +32,8 @@ const CreateTripModal = ({
   const [tripName, setTripName] = useState('');
   const [tripDescription, setTripDescription] = useState('');
   const [location, setLocation] = useState('');
-  const [selectedRegion, setSelectedRegion] = useState('');
-  const [showResults, setShowResults] = useState(false);
+  // const [selectedRegion, setSelectedRegion] = useState('');
+  // const [showResults, setShowResults] = useState(false);
   const [selectedRegionData, setSelectedRegionData] = useState<{
     regionId: number;
     subregionId?: number;
@@ -136,17 +136,17 @@ const CreateTripModal = ({
 
   const handleLocationSearch = (value: string) => {
     setLocation(value);
-    if (value.trim()) {
-      setShowResults(true);
-    }
+    // if (value.trim()) {
+    //   setShowResults(true);
+    // }
   };
 
   const handleClose = () => {
     setTripName('');
     setTripDescription('');
     setLocation('');
-    setSelectedRegion('');
-    setShowResults(false);
+    // setSelectedRegion('');
+    // setShowResults(false);
     resetForm();
     onClose();
   };
@@ -156,8 +156,8 @@ const CreateTripModal = ({
     setTripName('');
     setTripDescription('');
     setLocation('');
-    setSelectedRegion('');
-    setShowResults(false);
+    // setSelectedRegion('');
+    // setShowResults(false);
     setSelectedRegionData(null);
   };
 
@@ -217,7 +217,7 @@ const CreateTripModal = ({
           <div className='mt-2'>
             <div
               className={`border-outline-gray bg-bg-section rounded-lg border ${isMobile ? 'p-3' : 'p-4'} hover:bg-hover-gray cursor-pointer transition-colors`}
-              onClick={() => setShowResults(false)}
+              // onClick={() => setShowResults(false)}
             >
               <div
                 className={`mb-1 ${isMobile ? 'text-sm' : 'text-base'} text-main-text-navy font-medium`}
