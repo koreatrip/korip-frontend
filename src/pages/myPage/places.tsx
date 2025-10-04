@@ -150,7 +150,7 @@ const Places = () => {
         {t('places.favorite_places')}
       </h1>
 
-      <div className='mb-6 flex gap-4'>
+      <div className='mb-6 flex flex-col gap-4 md:flex-row'>
         <div className='flex-1'>
           <SearchBar
             className='!max-w-[932px]'

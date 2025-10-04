@@ -26,7 +26,7 @@ const PlannerCard = ({
 
   return (
     <div
-      className='w-full min-w-[348px] cursor-pointer overflow-hidden rounded-2xl bg-white shadow-md transition-shadow hover:shadow-lg'
+      className='w-full cursor-pointer overflow-hidden rounded-2xl bg-white shadow-md transition-shadow hover:shadow-lg'
       onClick={onClick}
     >
       <div className='px-4 pt-4'>
