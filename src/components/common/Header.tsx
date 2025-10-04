@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { useModalStore } from '@/stores/useModalStore';
 import CreateTripModal from '../modals/CreateTripModal';
 import { useAuthStore } from '@/stores/useAuthStore';
+import LoginPromptModal from '../domain/auth/LoginPromptModal';
 
 // --- Props 타입 정의 ---
 type THeaderProps = {
@@ -114,12 +115,25 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
       submenu: [
         {
           label: t('travel.my_travel_plans'),
-          href: '/mypage/plan',
+          onClick: () => {
+            if (!isLogin) {
+              modalActions.openLoginPrompt();
+              actions.closeMenu();
+            } else {
+              window.location.href = '/mypage/plan';
+            }
+          },
         },
         {
           label: t('travel.create_new_plan'),
           onClick: () => {
-            modalActions.openCreateTrip();
+            if (!isLogin) {
+              modalActions.openLoginPrompt();
+              actions.closeMenu();
+            } else {
+              modalActions.openCreateTrip();
+              actions.closeMenu();
+            }
           },
         },
       ],
@@ -173,14 +187,26 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
     {
       label: t('travel.my_travel_plans'),
       value: 'my-itinerary',
-      href: '/mypage/plan',
+      onClick: () => {
+        if (!isLogin) {
+          modalActions.openLoginPrompt();
+          actions.closeTravelDropdown();
+        } else {
+          window.location.href = '/mypage/plan';
+        }
+      },
     },
     {
       label: t('travel.create_new_plan'),
       value: 'new-itinerary',
       onClick: () => {
-        modalActions.openCreateTrip();
-        actions.closeTravelDropdown();
+        if (!isLogin) {
+          modalActions.openLoginPrompt();
+          actions.closeTravelDropdown();
+        } else {
+          modalActions.openCreateTrip();
+          actions.closeTravelDropdown();
+        }
       },
     },
   ];
@@ -449,6 +475,11 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
         isOpen={modalStack.isCreateTripOpen}
         onClose={modalActions.closeCreateTrip}
         onSubmit={handleCreateTrip}
+      />
+
+      <LoginPromptModal
+        isOpen={modalStack.isLoginPromptOpen}
+        onClose={modalActions.closeLoginPrompt}
       />
     </div>
   );
