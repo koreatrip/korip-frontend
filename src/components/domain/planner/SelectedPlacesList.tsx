@@ -8,11 +8,13 @@ type ListType = 'selected' | 'favorites';
 type TSelectedPlacesListProps = {
   places: PlannerPlace[];
   listType?: ListType;
+  onRemovePlace?: (placeId: string) => void;
 };
 
 const SelectedPlacesList = ({
   places,
   listType = 'selected',
+  onRemovePlace,
 }: TSelectedPlacesListProps) => {
   const { t } = useTranslation();
 
@@ -36,6 +38,9 @@ const SelectedPlacesList = ({
               key={place.id}
               place={place}
               isOccupied={false}
+              onRemove={
+                onRemovePlace ? () => onRemovePlace(place.id) : undefined
+              } // X 버튼 활성화
             />
           );
         })}

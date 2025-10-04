@@ -9,6 +9,7 @@ import { usePlannerStore } from '@/stores/usePlannerStore';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
+  useDeletePlaceFromPlanMutation,
   usePlanDetailQuery,
   useUpdatePlanMutation,
 } from '@/api/planner/plannerHooks';
@@ -16,8 +17,11 @@ import Spinner from '@/components/common/Spinner';
 import ItineraryMap from '@/components/domain/planner/ItineraryMap';
 import { useToast } from '@/hooks/useToast';
 import type { UpdatePlanRequest } from '@/api/planner/plannerType';
+import { useQueryClient } from '@tanstack/react-query';
 
 const PlannerPage = () => {
+  const queryClient = useQueryClient();
+
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { planId } = useParams<{ planId: string }>();
@@ -113,6 +117,31 @@ const PlannerPage = () => {
     }
   };
 
+  // 장소 삭제 mutation 추가
+  const deletePlaceMutation = useDeletePlaceFromPlanMutation({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['plans'],
+      });
+
+      // invalidate 완료 후 토스트
+      showToast('장소가 삭제되었습니다.', 'success');
+    },
+    onError: () => {
+      showToast('장소 삭제에 실패했습니다.', 'error');
+    },
+  });
+
+  // 장소 삭제 핸들러
+  const handleRemovePlaceFromPlan = (placeId: string) => {
+    if (!planId) return;
+
+    deletePlaceMutation.mutate({
+      planId: planId,
+      placeId: placeId,
+    });
+  };
+
   useEffect(() => {
     const cleanup = monitorForElements({
       onDrop(args) {
@@ -198,7 +227,10 @@ const PlannerPage = () => {
           {/* 모바일 레이아웃 */}
           <div className='flex flex-col gap-4 md:hidden'>
             <div className='w-full'>
-              <PlannerSidebar places={availablePlaces} />
+              <PlannerSidebar
+                places={availablePlaces}
+                onRemovePlace={handleRemovePlaceFromPlan} // 전달
+              />
             </div>
             <div className='w-full'>
               <SchedulePlanner
@@ -228,7 +260,10 @@ const PlannerPage = () => {
           {/* 태블릿 레이아웃 */}
           <div className='hidden flex-col gap-4 md:flex lg:hidden'>
             <div className='w-full'>
-              <PlannerSidebar places={availablePlaces} />
+              <PlannerSidebar
+                places={availablePlaces}
+                onRemovePlace={handleRemovePlaceFromPlan} // 전달
+              />
             </div>
             <div className='flex gap-4'>
               <div className='flex-1'>
@@ -260,7 +295,10 @@ const PlannerPage = () => {
           {/* 데스크톱 레이아웃 */}
           <div className='hidden w-full gap-4 lg:flex'>
             <div className='w-80 flex-shrink-0'>
-              <PlannerSidebar places={availablePlaces} />
+              <PlannerSidebar
+                places={availablePlaces}
+                onRemovePlace={handleRemovePlaceFromPlan} // 전달
+              />
             </div>
             <div className='flex-1'>
               <SchedulePlanner

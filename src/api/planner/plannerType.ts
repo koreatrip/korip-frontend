@@ -114,3 +114,8 @@ export type UpdatePlanRequest = {
 };
 
 export type UpdatePlanResponse = PlanDetail;
+
+export type DeletePlaceFromPlanRequest = {
+  planId: string;
+  placeId: string;
+};

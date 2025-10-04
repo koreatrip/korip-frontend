@@ -32,8 +32,8 @@ const CreateTripModal = ({
   const [tripName, setTripName] = useState('');
   const [tripDescription, setTripDescription] = useState('');
   const [location, setLocation] = useState('');
-  const [selectedRegion, setSelectedRegion] = useState('');
-  const [showResults, setShowResults] = useState(false);
+  // const [selectedRegion, setSelectedRegion] = useState('');
+  // const [showResults, setShowResults] = useState(false);
   const [selectedRegionData, setSelectedRegionData] = useState<{
     regionId: number;
     subregionId?: number;
@@ -42,6 +42,14 @@ const CreateTripModal = ({
   const { t } = useTranslation();
   const regionId = useNumericSearchParam('region_id');
   const subregionId = useNumericSearchParam('subregion_id');
+
+  // const {
+  //   data: favoriteRegionsData,
+  //   isLoading,
+  //   error,
+  // } = useFavoriteRegionsQuery({
+  //   lang: i18n.language || 'ko',
+  // });
 
   const regionNames: Record<number, string> = {
     1: '서울특별시',
@@ -65,14 +73,22 @@ const CreateTripModal = ({
     }
   }, [initialLocation, location]);
 
-  const favoriteRegions = useMemo(
-    () => [
-      { name: '서울특별시', id: 1 },
-      { name: '부산광역시', id: 2 },
-      { name: '대구광역시', id: 3 },
-    ],
-    []
-  );
+  // const favoriteRegions = useMemo(() => {
+  //   if (!favoriteRegionsData?.favorite_subregions) {
+  //     // 데이터 없으면 기본값
+  //     return [
+  //       { name: '서울특별시', id: 1 },
+  //       { name: '부산광역시', id: 2 },
+  //       { name: '대구광역시', id: 3 },
+  //     ];
+  //   }
+
+  //   // API 데이터를 버튼 형식으로 변환
+  //   return favoriteRegionsData.favorite_subregions.map((region) => ({
+  //     name: region.name,
+  //     id: region.id,
+  //   }));
+  // }, [favoriteRegionsData]);
 
   const handleRegionSelectFromSearchBar = (
     region: { id: number; name: string },
@@ -112,25 +128,25 @@ const CreateTripModal = ({
     }
   };
 
-  const handleRegionSelect = (region: { name: string; id: number }) => {
-    setSelectedRegion(region.name);
-    setLocation(region.name);
-    setShowResults(true);
-  };
+  // const handleRegionSelect = (region: { name: string; id: number }) => {
+  //   setSelectedRegion(region.name);
+  //   setLocation(region.name);
+  //   setShowResults(true);
+  // };
 
   const handleLocationSearch = (value: string) => {
     setLocation(value);
-    if (value.trim()) {
-      setShowResults(true);
-    }
+    // if (value.trim()) {
+    //   setShowResults(true);
+    // }
   };
 
   const handleClose = () => {
     setTripName('');
     setTripDescription('');
     setLocation('');
-    setSelectedRegion('');
-    setShowResults(false);
+    // setSelectedRegion('');
+    // setShowResults(false);
     resetForm();
     onClose();
   };
@@ -140,8 +156,8 @@ const CreateTripModal = ({
     setTripName('');
     setTripDescription('');
     setLocation('');
-    setSelectedRegion('');
-    setShowResults(false);
+    // setSelectedRegion('');
+    // setShowResults(false);
     setSelectedRegionData(null);
   };
 
@@ -195,55 +211,28 @@ const CreateTripModal = ({
           onRegionSelect={handleRegionSelectFromSearchBar}
           onSearch={handleLocationSearch}
         />
-      </div>
 
-      <div className='mb-6'>
-        <label
-          className={`mb-${isMobile ? '2' : '3'} block ${isMobile ? 'text-sm' : 'text-base'} text-main-text-navy font-medium`}
-        >
-          {t('places.favorite_regions')}
-        </label>
-        <div className='flex flex-wrap gap-2'>
-          {favoriteRegions.map((region) => (
-            <Button
-              key={region.id}
-              onClick={() => handleRegionSelect(region)}
-              variant={selectedRegion === region.name ? 'active' : 'cancel'}
-              className={`rounded-full ${isMobile ? 'px-3 py-1.5 text-xs' : 'px-4 py-2 text-sm'} w-auto font-medium transition-all duration-200`}
-            >
-              {region.name}
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      {showResults && location && (
-        <div className='mb-6'>
-          <label
-            className={`mb-2 block ${isMobile ? 'text-sm' : 'text-base'} text-main-text-navy font-medium`}
-          >
-            검색 결과
-          </label>
-          <div
-            className={`border-outline-gray bg-bg-section rounded-lg border ${isMobile ? 'p-3' : 'p-4'} hover:bg-hover-gray cursor-pointer transition-colors`}
-            onClick={() => {
-              setLocation(location);
-              setShowResults(false);
-            }}
-          >
+        {/* 검색 결과를 SearchBar 바로 아래에 표시 */}
+        {location && selectedRegionData && (
+          <div className='mt-2'>
             <div
-              className={`mb-1 ${isMobile ? 'text-sm' : 'text-base'} text-main-text-navy font-medium`}
+              className={`border-outline-gray bg-bg-section rounded-lg border ${isMobile ? 'p-3' : 'p-4'} hover:bg-hover-gray cursor-pointer transition-colors`}
+              // onClick={() => setShowResults(false)}
             >
-              {location}
-            </div>
-            <div
-              className={`${isMobile ? 'text-xs' : 'text-sm'} text-sub-text-gray`}
-            >
-              선택된 지역
+              <div
+                className={`mb-1 ${isMobile ? 'text-sm' : 'text-base'} text-main-text-navy font-medium`}
+              >
+                {location}
+              </div>
+              <div
+                className={`${isMobile ? 'text-xs' : 'text-sm'} text-sub-text-gray`}
+              >
+                선택된 지역
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 

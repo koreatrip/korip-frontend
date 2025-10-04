@@ -31,9 +31,10 @@ export const useCreatePlanMutation = (
 
   return useMutation<CreatePlanResponse, Error, CreatePlanRequest>({
     mutationFn: plannerAPI.createPlan,
-    onSuccess: (data, variables, context) => {
-      queryClient.invalidateQueries({
-        queryKey: plannerQueries.plans.all().queryKey,
+    onSuccess: async (data, variables, context) => {
+      // plans로 시작하는 모든 쿼리 무효화
+      await queryClient.invalidateQueries({
+        queryKey: ['plans'],
       });
 
       options?.onSuccess?.(data, variables, context);
@@ -45,7 +46,6 @@ export const useCreatePlanMutation = (
   });
 };
 
-// plannerHooks.ts에 추가
 export const useAddPlaceToPlanMutation = (
   options?: UseMutationOptions<
     AddPlaceToPlanResponse,
@@ -58,9 +58,9 @@ export const useAddPlaceToPlanMutation = (
   return useMutation({
     mutationFn: ({ planId, placeData }) =>
       plannerAPI.addPlaceToPlan(planId, placeData),
-    onSuccess: (data, variables, context) => {
-      queryClient.invalidateQueries({
-        queryKey: plannerQueries.plans.all().queryKey,
+    onSuccess: async (data, variables, context) => {
+      await queryClient.invalidateQueries({
+        queryKey: ['plans'],
       });
 
       options?.onSuccess?.(data, variables, context);
@@ -95,13 +95,9 @@ export const useUpdatePlanMutation = (
   return useMutation({
     mutationFn: ({ planId, planData }) =>
       plannerAPI.updatePlan(planId, planData),
-    onSuccess: (data, variables, context) => {
-      // 전체 목록과 상세 정보 모두 무효화
-      queryClient.invalidateQueries({
-        queryKey: plannerQueries.plans.all().queryKey,
-      });
-      queryClient.invalidateQueries({
-        queryKey: plannerQueries.plans.detail(variables.planId).queryKey,
+    onSuccess: async (data, variables, context) => {
+      await queryClient.invalidateQueries({
+        queryKey: ['plans'],
       });
 
       options?.onSuccess?.(data, variables, context);
@@ -112,6 +108,7 @@ export const useUpdatePlanMutation = (
     ...options,
   });
 };
+
 export const useDeletePlanMutation = (
   options?: UseMutationOptions<void, Error, string>
 ) => {
@@ -119,14 +116,9 @@ export const useDeletePlanMutation = (
 
   return useMutation({
     mutationFn: (planId: string) => plannerAPI.deletePlan(planId),
-    onSuccess: (data, planId, context) => {
-      // 전체 목록 무효화
-      queryClient.invalidateQueries({
-        queryKey: plannerQueries.plans.all().queryKey,
-      });
-      // 삭제된 plan의 상세 정보도 제거
-      queryClient.removeQueries({
-        queryKey: plannerQueries.plans.detail(planId).queryKey,
+    onSuccess: async (data, planId, context) => {
+      await queryClient.invalidateQueries({
+        queryKey: ['plans'],
       });
 
       options?.onSuccess?.(data, planId, context);
@@ -134,6 +126,16 @@ export const useDeletePlanMutation = (
     onError: (error, planId, context) => {
       options?.onError?.(error, planId, context);
     },
+    ...options,
+  });
+};
+
+export const useDeletePlaceFromPlanMutation = (
+  options?: UseMutationOptions<void, Error, { planId: string; placeId: string }>
+) => {
+  return useMutation({
+    mutationFn: ({ planId, placeId }) =>
+      plannerAPI.deletePlaceFromPlan(planId, placeId),
     ...options,
   });
 };

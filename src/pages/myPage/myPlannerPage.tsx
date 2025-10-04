@@ -247,7 +247,7 @@ const MyPlannerPage = () => {
 
         <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
           {filteredAndSortedPlanners.map((planner) => (
-            <div key={planner.id} className='justify-self-start'>
+            <div key={planner.id} className='min-w-0'>
               <PlannerCard
                 title={planner.title}
                 description={planner.description}

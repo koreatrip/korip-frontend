@@ -15,6 +15,11 @@ import { useTranslation } from 'react-i18next';
 import { useModalStore } from '@/stores/useModalStore';
 import CreateTripModal from '../modals/CreateTripModal';
 import { useAuthStore } from '@/stores/useAuthStore';
+import LoginPromptModal from '../domain/auth/LoginPromptModal';
+import { useCreatePlanMutation } from '@/api/planner/plannerHooks';
+import { useQueryClient } from '@tanstack/react-query';
+import { useToast } from '@/hooks/useToast';
+import { plannerQueries } from '@/api/planner/plannerQueries';
 
 // --- Props 타입 정의 ---
 type THeaderProps = {
@@ -44,6 +49,9 @@ type TSideMenuItem = {
 // --- 단일 Header 컴포넌트 ---
 const Header = ({ variant = 'default' }: THeaderProps) => {
   const { t, i18n } = useTranslation();
+
+  const queryClient = useQueryClient();
+  const { showToast } = useToast();
 
   const { stack, actions } = useHeaderStore();
   const { stack: modalStack, actions: modalActions } = useModalStore();
@@ -87,9 +95,26 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
   };
 
   // 여행 일정 생성 핸들러
-  const handleCreateTrip = (tripData: TTripData) => {
-    console.log('여행 일정 생성:', tripData);
-    // 여기에 API 호출 또는 다른 로직 추가
+  const createPlanMutation = useCreatePlanMutation({
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
+        queryKey: plannerQueries.plans.all().queryKey,
+      });
+      showToast('새 여행 일정이 생성되었습니다.', 'success');
+      modalActions.closeCreateTrip();
+    },
+    onError: (error) => {
+      showToast(error.message || '여행 일정 생성에 실패했습니다.', 'error');
+    },
+  });
+
+  const handleCreatePlanSubmit = (tripData: TTripData) => {
+    createPlanMutation.mutate({
+      name: tripData.tripName,
+      description: tripData.tripDescription || `${tripData.location} 여행`,
+      destination: tripData.location,
+      subregion_id: Number(tripData.selectedRegion),
+    });
   };
 
   // 데스크톱 헤더용 메뉴 아이템들
@@ -114,12 +139,25 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
       submenu: [
         {
           label: t('travel.my_travel_plans'),
-          href: '/mypage/plan',
+          onClick: () => {
+            if (!isLogin) {
+              modalActions.openLoginPrompt();
+              actions.closeMenu();
+            } else {
+              window.location.href = '/mypage/plan';
+            }
+          },
         },
         {
           label: t('travel.create_new_plan'),
           onClick: () => {
-            modalActions.openCreateTrip();
+            if (!isLogin) {
+              modalActions.openLoginPrompt();
+              actions.closeMenu();
+            } else {
+              modalActions.openCreateTrip();
+              actions.closeMenu();
+            }
           },
         },
       ],
@@ -173,14 +211,26 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
     {
       label: t('travel.my_travel_plans'),
       value: 'my-itinerary',
-      href: '/mypage/plan',
+      onClick: () => {
+        if (!isLogin) {
+          modalActions.openLoginPrompt();
+          actions.closeTravelDropdown();
+        } else {
+          window.location.href = '/mypage/plan';
+        }
+      },
     },
     {
       label: t('travel.create_new_plan'),
       value: 'new-itinerary',
       onClick: () => {
-        modalActions.openCreateTrip();
-        actions.closeTravelDropdown();
+        if (!isLogin) {
+          modalActions.openLoginPrompt();
+          actions.closeTravelDropdown();
+        } else {
+          modalActions.openCreateTrip();
+          actions.closeTravelDropdown();
+        }
       },
     },
   ];
@@ -448,7 +498,12 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
       <CreateTripModal
         isOpen={modalStack.isCreateTripOpen}
         onClose={modalActions.closeCreateTrip}
-        onSubmit={handleCreateTrip}
+        onSubmit={handleCreatePlanSubmit}
+      />
+
+      <LoginPromptModal
+        isOpen={modalStack.isLoginPromptOpen}
+        onClose={modalActions.closeLoginPrompt}
       />
     </div>
   );
