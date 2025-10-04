@@ -39,7 +39,7 @@ const CreateTripModal = ({
     subregionId?: number;
   } | null>(null);
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const regionId = useNumericSearchParam('region_id');
   const subregionId = useNumericSearchParam('subregion_id');
 
