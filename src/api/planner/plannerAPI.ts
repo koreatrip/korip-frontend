@@ -13,7 +13,7 @@ import axiosInstance from '../axiosInstance';
 
 export const plannerAPI = {
   // GET - 계획 목록 조회
-  getAllPlans: async (lang: string = 'ko'): Promise<PlansResponse> => {
+  getAllPlans: async ({ lang }: { lang: string }): Promise<PlansResponse> => {
     const response = await axiosInstance.get('/api/plans/', {
       params: { lang },
       headers: { Accept: 'application/json' },
@@ -54,10 +54,13 @@ export const plannerAPI = {
     console.log('Place added to plan:', response.data);
     return response.data;
   },
-  getPlanById: async (
-    planId: string,
-    lang: string = 'ko'
-  ): Promise<PlanDetail> => {
+  getPlanById: async ({
+    planId,
+    lang,
+  }: {
+    planId: string;
+    lang: string;
+  }): Promise<PlanDetail> => {
     const response = await axiosInstance.get(`/api/plans/${planId}/`, {
       params: { lang },
       headers: { Accept: 'application/json' },
@@ -88,5 +91,15 @@ export const plannerAPI = {
       headers: { Accept: 'application/json' },
     });
     console.log('Plan deleted:', planId);
+  },
+  // DELETE - 계획에서 장소 삭제
+  deletePlaceFromPlan: async (
+    planId: string,
+    placeId: string
+  ): Promise<void> => {
+    await axiosInstance.delete(`/api/plans/${planId}/places/${placeId}/`, {
+      headers: { Accept: 'application/json' },
+    });
+    console.log('Place deleted from plan:', { planId, placeId });
   },
 };

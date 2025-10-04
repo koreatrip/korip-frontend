@@ -1,4 +1,5 @@
 import {
+  useDeletePlaceFromPlanMutation,
   usePlanDetailQuery,
   useUpdatePlanMutation,
 } from '@/api/planner/plannerHooks';
@@ -17,8 +18,11 @@ import Button from '@/components/common/Button';
 import { useFavoritePlacesQuery } from '@/api/favorites/favoriteHooks';
 import { Trans, useTranslation } from 'react-i18next';
 import LoadingPage from './statusPage/loadingPage';
+import { useQueryClient } from '@tanstack/react-query';
 
 const TripEditPage: React.FC = () => {
+  const queryClient = useQueryClient();
+
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { schedule, removePlace, movePlace, initializeSchedule } =
@@ -162,6 +166,29 @@ const TripEditPage: React.FC = () => {
     },
   });
 
+  const deletePlaceMutation = useDeletePlaceFromPlanMutation({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['plans'],
+      });
+
+      // invalidate 완료 후 토스트
+      showToast('장소가 삭제되었습니다.', 'success');
+    },
+    onError: () => {
+      showToast('장소 삭제에 실패했습니다.', 'error');
+    },
+  });
+
+  const handleRemovePlaceFromPlan = (placeId: string) => {
+    if (!id) return;
+
+    deletePlaceMutation.mutate({
+      planId: id,
+      placeId: placeId,
+    });
+  };
+
   useEffect(() => {
     const cleanup = monitorForElements({
       onDrop(args) {
@@ -220,7 +247,11 @@ const TripEditPage: React.FC = () => {
                 : 0
             }
           />
-          <SelectedPlacesList listType='selected' places={availablePlaces} />
+          <SelectedPlacesList
+            listType='selected'
+            places={availablePlaces}
+            onRemovePlace={handleRemovePlaceFromPlan} // 전달
+          />
           <SelectedPlacesList listType='favorites' places={favoritePlaces} />
         </div>
 
@@ -293,7 +324,11 @@ const TripEditPage: React.FC = () => {
                   : 0
               }
             />
-            <SelectedPlacesList listType='selected' places={availablePlaces} />
+            <SelectedPlacesList
+              listType='selected'
+              places={availablePlaces}
+              onRemovePlace={handleRemovePlaceFromPlan} // 전달
+            />
             <SelectedPlacesList listType='favorites' places={favoritePlaces} />
           </div>
           <SchedulePlanner
@@ -339,7 +374,11 @@ const TripEditPage: React.FC = () => {
             initialStartDate={initialStartDate}
             initialEndDate={initialEndDate}
           />
-          <SelectedPlacesList listType='selected' places={availablePlaces} />
+          <SelectedPlacesList
+            listType='selected'
+            places={availablePlaces}
+            onRemovePlace={handleRemovePlaceFromPlan} // 전달
+          />
           <SelectedPlacesList listType='favorites' places={favoritePlaces} />
           <button
             onClick={handleSave}
