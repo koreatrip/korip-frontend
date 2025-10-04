@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useInView } from 'react-intersection-observer';
 import { useFavoriteRegionsInfiniteQuery } from '@/api/favorites/favoriteHooks';
 import type { FavoriteRegion } from '@/api/favorites/favoriteType';
+import Spinner from '@/components/common/Spinner';
 
 const Regions = () => {
   const { t, i18n } = useTranslation();
@@ -183,7 +184,7 @@ const Regions = () => {
           {isFetchingNextPage ? (
             <div className='flex items-center gap-2'>
               <div className='border-t-sub-green h-5 w-5 animate-spin rounded-full border-2 border-gray-300'></div>
-              <span className='text-sm text-gray-500'>로딩중...</span>
+              <Spinner />
             </div>
           ) : (
             <div className='h-10'></div>
