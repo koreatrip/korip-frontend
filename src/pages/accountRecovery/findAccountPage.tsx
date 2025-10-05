@@ -1,6 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useToast } from '@/hooks/useToast';
 import { useFindAccountMutation } from '@/api/auth/account/accountHooks';
 import { logo_sm } from '@/assets/assets';
 import Button from '@/components/common/Button';
@@ -10,7 +9,6 @@ import PhoneInput from '@/components/domain/auth/PhoneInput';
 
 const FindAccountPage = () => {
   const navigate = useNavigate();
-  const { showToast } = useToast();
   const { t } = useTranslation();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [fullPhoneNumber, setFullPhoneNumber] = useState('');

@@ -1,6 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useToast } from '@/hooks/useToast';
 import { useFindPasswordMutation } from '@/api/auth/account/accountHooks';
 import { logo_sm } from '@/assets/assets';
 import AuthInput from '@/components/domain/auth/AuthInput';
@@ -11,7 +10,6 @@ import { Trans, useTranslation } from 'react-i18next';
 
 const FindPasswordPage = () => {
   const navigate = useNavigate();
-  const { showToast } = useToast();
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
