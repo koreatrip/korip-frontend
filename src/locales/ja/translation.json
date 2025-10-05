@@ -59,7 +59,7 @@
     "view_details_alert": "{{place?.title}} の詳細情報を確認します。",
     "select_region": "地域を選択してください。",
     "temp_password_issued": "仮パスワードが発行されました。",
-    "temp_password_sent": "ご入力いただいたメールアドレスに仮パスワードを送信しました。",
+    "temp_password_sent": "<Email>{{email}}</Email>に仮パスワードを送信しました。",
     "change_after_login": "ログイン後、新しいパスワードに変更してください。",
     "email_not_received": "メールを受信できませんでしたか？",
     "check_spam_or_retry": "迷惑メールフォルダを確認するか、数分後にもう一度お試しください。",
@@ -85,7 +85,8 @@
     "delete_schedule_confirm": "本当にこの日程を削除しますか？削除された日程は復元できません。",
     "plan_example": "例: ソウル夏休み",
     "deleting": "削除中...",
-    "adding": "追加中..."
+    "adding": "追加中...",
+    "back_to_login": "ログインに戻る"
   },
 
   "auth": {
@@ -140,7 +141,10 @@
     "password_changed_success": "パスワードが正常に変更されました。",
     "password_change_failed": "パスワードの変更に失敗しました。",
     "account_deleted_success": "会員退会が正常に処理されました。\nこれまで当サービスをご利用いただき、ありがとうございました。",
-    "password_incorrect": "入力されたパスワードが正しくありません。\n大文字と小文字を確認して、もう一度お試しください。"
+    "password_incorrect": "入力されたパスワードが正しくありません。\n大文字と小文字を確認して、もう一度お試しください。",
+    "enter_signup_email": "登録時に使用したメールアドレスを入力してください。",
+    "receive_reset_email": "パスワード再発行メールを受け取る",
+    "please_enter_email": "メールアドレスを入力してください"
   },
 
   "agreement": {

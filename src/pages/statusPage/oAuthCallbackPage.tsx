@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { snsLoginAPI } from '@/api/auth/snsLogin/snsLoginAPI.ts';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useToast } from '@/hooks/useToast';
-import Modal, { Body, Header } from '@/components/common/Modal';
 import { PulseLoader } from 'react-spinners';
 
 const OAuthCallbackPage = () => {
