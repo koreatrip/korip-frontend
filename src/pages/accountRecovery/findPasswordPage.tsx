@@ -118,12 +118,16 @@ const FindPasswordPage = () => {
               </Button>
             </form>
 
-            <div className='mt-6 text-center text-sm'>
-              <Link
-                to='/login'
-                className='font-medium text-gray-600 hover:text-gray-900'
-              >
+            <div className='mt-6 flex items-center justify-center gap-x-2.5 text-sm'>
+              <Link to='/login' className='text-main-text-navy font-medium'>
                 {t('common.back_to_login')}
+              </Link>
+              <span className='text-main-text-navy'>/</span>
+              <Link
+                to='/find-account'
+                className='text-main-text-navy font-medium'
+              >
+                {t('auth.find_email')}
               </Link>
             </div>
           </div>

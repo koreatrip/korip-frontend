@@ -144,7 +144,11 @@
     "password_incorrect": "您输入的密码不正确。\n请检查大小写后再试一次。",
     "enter_signup_email": "请输入您注册时使用的邮箱地址。",
     "receive_reset_email": "接收密码重置邮件",
-    "please_enter_email": "请输入电子邮件"
+    "please_enter_email": "请输入电子邮件",
+    " forgot_ email ": "您忘记邮件了吗？ ",
+    "enter_signup_phone": "请输入您注册时使用的手机号码",
+    "find_email": "查找邮件",
+    "login_type": "登录方式"
   },
 
   "agreement": {

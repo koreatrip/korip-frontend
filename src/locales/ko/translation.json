@@ -141,7 +141,11 @@
     "password_incorrect": "입력하신 비밀번호가 정확하지 않습니다.\n대소문자를 확인하여 다시 시도해주세요.",
     "enter_signup_email": "가입 시 사용한 이메일 주소를 입력해 주세요.",
     "receive_reset_email": "비밀번호 재발급 이메일 받기",
-    "please_enter_email": "이메일을 입력해주세요"
+    "please_enter_email": "이메일을 입력해주세요",
+    "forgot_email": "이메일을 잊으셨나요?",
+    "enter_signup_phone": "가입시 사용한 휴대폰 번호를 입력해주세요",
+    "find_email": "이메일 찾기",
+    "login_type": "로그인 수단"
   },
 
   "agreement": {

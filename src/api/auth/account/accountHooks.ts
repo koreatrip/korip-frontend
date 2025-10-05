@@ -1,5 +1,9 @@
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
-import type { FindPasswordRequest } from './accountType';
+import type {
+  FindAccountRequest,
+  FindAccountResponse,
+  FindPasswordRequest,
+} from './accountType';
 import { accountAPI } from './accountAPI';
 
 export const useFindPasswordMutation = (
@@ -7,6 +11,15 @@ export const useFindPasswordMutation = (
 ) => {
   return useMutation({
     mutationFn: (email: FindPasswordRequest) => accountAPI.findPassword(email),
+    ...options,
+  });
+};
+
+export const useFindAccountMutation = (
+  options?: UseMutationOptions<FindAccountResponse, Error, FindAccountRequest>
+) => {
+  return useMutation({
+    mutationFn: (data: FindAccountRequest) => accountAPI.findAccount(data),
     ...options,
   });
 };

@@ -144,7 +144,11 @@
     "password_incorrect": "入力されたパスワードが正しくありません。\n大文字と小文字を確認して、もう一度お試しください。",
     "enter_signup_email": "登録時に使用したメールアドレスを入力してください。",
     "receive_reset_email": "パスワード再発行メールを受け取る",
-    "please_enter_email": "メールアドレスを入力してください"
+    "please_enter_email": "メールアドレスを入力してください",
+    "forgot_email": "メールアドレスをお忘れですか？",
+    "enter_signup_phone": "登録時に使用した携帯電話番号を入力してください",
+    "find_email": "メールアドレスを探す",
+    "login_type": "ログイン手段"
   },
 
   "agreement": {

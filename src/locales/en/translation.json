@@ -141,7 +141,11 @@
     "password_incorrect": "The password you entered is incorrect.\nPlease check the capitalization and try again.",
     "enter_signup_email": "Please enter the email address you used when signing up.",
     "receive_reset_email": "Receive password reset email",
-    "please_enter_email": "Please enter your email"
+    "please_enter_email": "Please enter your email",
+    "forgot_email": "Forgot your email?",
+    "enter_signup_phone": "Please enter the mobile phone number you used when signing up",
+    "find_email": "Find Email",
+    "login_type": "Login Option"
   },
 
   "agreement": {
