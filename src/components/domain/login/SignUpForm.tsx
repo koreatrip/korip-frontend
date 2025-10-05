@@ -15,8 +15,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useSignupMutation } from '@/api/auth/signup/signupHooks';
 import { useNavigate } from 'react-router';
 import { AxiosError } from 'axios';
+import Spinner from '@/components/common/Spinner';
 
-// 상수로 조건 정의
 const PASSWORD_MIN_LENGTH = 8;
 const PASSWORD_MAX_LENGTH = 20;
 const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/;
@@ -45,7 +45,6 @@ const signUpSchema = z
     path: ['confirmPassword'],
   });
 
-// Zod 스키마로부터 폼 데이터 타입 추론
 export type SignUpFormInputs = z.infer<typeof signUpSchema>;
 
 const SignUpForm = () => {
@@ -54,6 +53,7 @@ const SignUpForm = () => {
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [fullPhoneNumber, setFullPhoneNumber] = useState('');
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
 
@@ -88,9 +88,7 @@ const SignUpForm = () => {
       );
       navigate('/login', { replace: true });
     },
-    onError: (
-      error: Error /* variables: SignupRequest, context: unknown */
-    ) => {
+    onError: (error: Error) => {
       const axiosError = error as AxiosError;
       const errorMessage =
         String(
@@ -108,11 +106,7 @@ const SignUpForm = () => {
         setIsVerifying(true);
         setTimeLeft(60);
       },
-      onError: (
-        error: Error
-        /* variables: emailSendRequest,
-        context: unknown */
-      ) => {
+      onError: (error: Error) => {
         const axiosError = error as AxiosError;
         const errorMessage =
           String(
@@ -133,11 +127,7 @@ const SignUpForm = () => {
           clearInterval(timerRef.current);
         }
       },
-      onError: (
-        error: Error
-        /* variables: emailCheckRequset,
-        context: unknown */
-      ) => {
+      onError: (error: Error) => {
         const axiosError = error as AxiosError;
         const errorMessage =
           String(
@@ -180,7 +170,7 @@ const SignUpForm = () => {
   const allAgreementsChecked = (agreements?.[0] && agreements?.[1]) ?? false;
 
   const getErrorMessage = (error: string | undefined) => {
-    if (!error) return ''; // Handle undefined or null error messages
+    if (!error) return '';
     const errorMap: Record<string, string> = {
       '유효한 이메일 주소를 입력해주세요.': t('auth.invalid_email_format'),
       '이름은 최소 2자 이상이어야 합니다.': t('auth.name_min_length'),
@@ -207,7 +197,7 @@ const SignUpForm = () => {
     signupMutate({
       email: data.email,
       nickname: data.name,
-      phone_number: data.phoneNumber || '',
+      phone_number: fullPhoneNumber || data.phoneNumber || '',
       password: data.password,
     });
   };
@@ -221,7 +211,6 @@ const SignUpForm = () => {
   };
 
   const handleEmailSend = async () => {
-    // email 필드의 유효성 검사만 실행
     const isValidEmail = await trigger('email');
     if (!isValidEmail) {
       return;
@@ -236,7 +225,6 @@ const SignUpForm = () => {
     const email = getValues('email');
     const code = getValues('verificationCode') ?? '';
 
-    // 이메일과 인증 코드 필드 유효성 검사
     const isValidEmailAndCode = await trigger(['email', 'verificationCode']);
     if (!isValidEmailAndCode) {
       return;
@@ -245,7 +233,6 @@ const SignUpForm = () => {
     checkMutate({ email, code });
   };
 
-  // 모든 필수 조건이 충족되었는지 확인하는 변수
   const isFormValid = isValid && isEmailVerified && allAgreementsChecked;
 
   return (
@@ -271,7 +258,7 @@ const SignUpForm = () => {
               onClick={handleEmailSend}
               disabled={isSendingEmail || isVerifying || isEmailVerified}
             >
-              {isSendingEmail ? '전송 중...' : t('auth.email_send')}
+              {isSendingEmail ? <Spinner /> : t('auth.email_send')}
             </Button>
           </div>
 
@@ -287,6 +274,7 @@ const SignUpForm = () => {
             </p>
           )}
         </div>
+
         <div className=''>
           <div className='flex items-center justify-between gap-2'>
             <AuthInput
@@ -304,7 +292,7 @@ const SignUpForm = () => {
               onClick={handleEmailCheck}
               disabled={isCheckingEmail || !isVerifying || isEmailVerified}
             >
-              {isCheckingEmail ? '확인 중...' : t('auth.email_verification')}
+              {isCheckingEmail ? <Spinner /> : t('auth.email_verification')}
             </Button>
           </div>
           {errors.verificationCode && (
@@ -330,15 +318,20 @@ const SignUpForm = () => {
             </p>
           )}
         </div>
+
         <div className=''>
           <PhoneInput
             label={t('auth.phone_number')}
             placeholder={t('auth.phone_number_placeholder')}
             value={watch('phoneNumber')}
-            onChange={(phoneValue) => {
-              setValue('phoneNumber', phoneValue, { shouldValidate: true });
+            onChange={(cleanValue, fullNumber) => {
+              setValue('phoneNumber', cleanValue, { shouldValidate: true });
+              setFullPhoneNumber(fullNumber);
             }}
-            onClear={() => handleAuthInputClear('phoneNumber')}
+            onClear={() => {
+              handleAuthInputClear('phoneNumber');
+              setFullPhoneNumber('');
+            }}
             defaultCountry='KR'
             name='phoneNumber'
             id='phoneNumber'
@@ -385,6 +378,7 @@ const SignUpForm = () => {
             </div>
           </div>
         </div>
+
         <div className=''>
           <AuthInput
             {...register('confirmPassword')}
@@ -401,6 +395,7 @@ const SignUpForm = () => {
             </p>
           )}
         </div>
+
         <AgreementForm control={control} />
 
         <Button

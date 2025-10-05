@@ -59,7 +59,7 @@
     "view_details_alert": "Viewing details for {{place?.title}}.",
     "select_region": "Please select a region.",
     "temp_password_issued": "A temporary password has been issued.",
-    "temp_password_sent": "We have sent the temporary password to the email address you provided.",
+    "temp_password_sent": "We have sent the temporary password to <Email>{{email}}</Email>.",
     "change_after_login": "Please log in and change it to a new password.",
     "email_not_received": "Didn't receive the email?",
     "check_spam_or_retry": "Check your spam folder or try again in a few minutes.",
@@ -85,7 +85,8 @@
     "delete_schedule_confirm": "Are you sure you want to delete this schedule? Deleted schedules cannot be recovered.",
     "plan_example": "Example: Seoul Summer Vacation",
     "deleting": "Deleting...",
-    "adding": "Adding..."
+    "adding": "Adding...",
+    "back_to_login": "Back to Login"
   },
 
   "auth": {
@@ -137,7 +138,14 @@
     "password_changed_success": "Your password has been successfully changed.",
     "password_change_failed": "Password change failed.",
     "account_deleted_success": "Your account has been successfully deleted.\nThank you for using our service.",
-    "password_incorrect": "The password you entered is incorrect.\nPlease check the capitalization and try again."
+    "password_incorrect": "The password you entered is incorrect.\nPlease check the capitalization and try again.",
+    "enter_signup_email": "Please enter the email address you used when signing up.",
+    "receive_reset_email": "Receive password reset email",
+    "please_enter_email": "Please enter your email",
+    "forgot_email": "Forgot your email?",
+    "enter_signup_phone": "Please enter the mobile phone number you used when signing up",
+    "find_email": "Find Email",
+    "login_type": "Login Option"
   },
 
   "agreement": {

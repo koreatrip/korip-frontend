@@ -26,6 +26,8 @@ import ErrorPage from '@/pages/statusPage/errorPage';
 import AttractionsPage from '@/pages/attractionsPage';
 import ProtectedRoute from '@/components/domain/auth/ProtectedRoute';
 import TripEditPage from '@/pages/tripEditPage';
+import FindPasswordPage from '@/pages/accountRecovery/findPasswordPage';
+import FindAccountPage from '@/pages/accountRecovery/findAccountPage';
 
 export const router = createBrowserRouter([
   {
@@ -84,6 +86,14 @@ export const router = createBrowserRouter([
       {
         path: 'callback',
         element: <OAuthCallbackPage />,
+      },
+      {
+        path: '/forgot-password',
+        element: <FindPasswordPage />,
+      },
+      {
+        path: '/find-account',
+        element: <FindAccountPage />,
       },
 
       // 보호된 페이지들
