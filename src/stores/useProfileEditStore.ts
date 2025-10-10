@@ -62,14 +62,25 @@ export const useProfileEditStore = create<ProfileEditStore>((set) => ({
 
     // input 값 변경 (이름, 전화번호)
     setInputValue: (field, value) =>
-      set((store) => ({
-        state: {
-          ...store.state,
-          tempFormData: store.state.tempFormData
-            ? { ...store.state.tempFormData, [field]: value }
-            : null,
-        },
-      })),
+      set((store) => {
+        console.log('🏪 Store setInputValue:', {
+          field,
+          value,
+          current: store.state.tempFormData?.[field],
+        });
+
+        if (!store.state.tempFormData) return store;
+
+        return {
+          state: {
+            ...store.state,
+            tempFormData: {
+              ...store.state.tempFormData,
+              [field]: value,
+            },
+          },
+        };
+      }),
 
     // 관심사 추가
     addInterest: (interest) =>
