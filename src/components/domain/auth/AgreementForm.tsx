@@ -23,7 +23,7 @@ const AgreementForm = ({ control }: AgreementFormProps) => {
         {/* 필수 동의 */}
         <div>
           <h3 className='text-main-text-navy mb-2 text-sm font-medium'>
-            필수 동의
+            {t('auth.required_agreement')}
           </h3>
           <div className='space-y-1'>
             {/* Controller를 사용하여 폼 상태와 연결 */}
@@ -62,7 +62,7 @@ const AgreementForm = ({ control }: AgreementFormProps) => {
         {/* 선택 동의 */}
         <div>
           <h3 className='text-main-text-navy mb-2 text-sm font-medium'>
-            선택 동의
+            {t('auth.optional_agreement')}
           </h3>
           <div className='space-y-1'>
             <Controller

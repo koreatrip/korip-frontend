@@ -181,9 +181,7 @@ const SignUpForm = () => {
       '비밀번호는 최소 8자 이상이어야 합니다.': t(
         'auth.password_min_8_characters'
       ),
-      '비밀번호는 최대 20자 이하여야 합니다.': t(
-        'auth.password_max_20_characters'
-      ),
+      '비밀번호는 최대 20자 이하여야 합니다.': t('auth.password_max_length'),
       '영문, 숫자, 특수문자를 포함해야 합니다.': t(
         'auth.letter_number_special_combo'
       ),
@@ -374,7 +372,7 @@ const SignUpForm = () => {
               }`}
             >
               <span className='mr-2'>•</span>
-              {t('auth.letter_number_special_combo')}
+              {t('auth.password_requirements_includes')}
             </div>
           </div>
         </div>

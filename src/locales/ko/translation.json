@@ -110,7 +110,7 @@
     "enter_verification_code": "인증번호를 입력하세요.",
     "verification_code_mismatch": "인증번호가 일치하지 않습니다.",
     "min_8_characters": "8자 이상",
-    "letter_number_special_combo": "영문,숫자,특수문자 조합",
+    "letter_number_special_combo": "영문, 숫자, 특수문자를 포함해야 합니다.",
     "welcome_message_title": "Korip에 오신 것을 환영합니다.",
     "welcome_message_content": "계정이 없으신가요?",
     "create_account": "계정을 생성하세요.",
@@ -145,7 +145,10 @@
     "forgot_email": "이메일을 잊으셨나요?",
     "enter_signup_phone": "가입시 사용한 휴대폰 번호를 입력해주세요",
     "find_email": "이메일 찾기",
-    "login_type": "로그인 수단"
+    "login_type": "로그인 수단",
+    "password_requirements_includes": "영문, 숫자, 특수문자를 포함",
+    "required_agreement": "필수동의",
+    "optional_agreement": "선택동의"
   },
 
   "agreement": {
