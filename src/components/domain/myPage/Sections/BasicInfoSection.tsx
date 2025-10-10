@@ -67,7 +67,11 @@ const BasicInfoSection = ({ onSave }: BasicInfoSectionProps) => {
           label={t('auth.phone_number')}
           value={tempFormData.phone_number}
           isEditing={isEditing}
-          onChange={(value) => setInputValue('phone_number', value)}
+          type='tel'
+          onPhoneChange={(_cleanValue, fullNumber) => {
+            console.log('🔥 fullNumber from BasicInfoSection:', fullNumber);
+            setInputValue('phone_number', fullNumber); // 전체 번호를 저장
+          }}
         />
         <InterestsField />
       </div>

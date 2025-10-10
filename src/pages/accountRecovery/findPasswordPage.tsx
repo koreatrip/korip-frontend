@@ -45,7 +45,7 @@ const FindPasswordPage = () => {
 
   return (
     <div className='flex min-h-screen items-center justify-center sm:px-6 lg:px-8'>
-      <div className='w-full max-w-md space-y-8'>
+      <div className='w-full max-w-md space-y-8 px-8 sm:px-6 lg:px-8'>
         <div className='text-center'>
           <img src={logo_sm} alt='KORIP Logo' className='mx-auto mb-4 h-8' />
         </div>
@@ -56,7 +56,7 @@ const FindPasswordPage = () => {
               <CheckBadgeIcon className='text-sub-green h-12 w-12' />
             </div> */}
 
-            <h2 className='text-main-text-navy mt-6 text-2xl font-semibold'>
+            <h2 className='text-main-text-navy mb-4 text-center text-xl font-semibold md:text-2xl lg:text-3xl'>
               {t('auth.forgot_password')}
             </h2>
 
@@ -80,7 +80,7 @@ const FindPasswordPage = () => {
         ) : (
           <div className='w-full'>
             <div className='text-center'>
-              <h2 className='text-main-text-navy text-3xl font-bold'>
+              <h2 className='text-main-text-navy mb-4 text-center text-xl font-semibold md:text-2xl lg:text-3xl'>
                 {t('auth.forgot_password')}
               </h2>
               <p className='text-sub-text-gray mt-2'>

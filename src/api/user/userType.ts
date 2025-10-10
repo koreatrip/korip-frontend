@@ -17,6 +17,9 @@ export type UserProfileResponse = {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  my_total_favorites: number;
+  my_total_plans: number;
+  visited_places: number;
   preferences_display: UserPreference[];
 };
 

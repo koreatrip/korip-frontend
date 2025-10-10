@@ -1,4 +1,5 @@
 import React from 'react';
+import PhoneInput from '@/components/domain/auth/PhoneInput';
 
 type EditableFieldProps = {
   label: string;
@@ -7,6 +8,7 @@ type EditableFieldProps = {
   type?: 'text' | 'email' | 'tel';
   placeholder?: string;
   onChange?: (value: string) => void;
+  onPhoneChange?: (cleanValue: string, fullNumber: string) => void;
   disabled?: boolean;
 };
 
@@ -17,8 +19,24 @@ const EditableField: React.FC<EditableFieldProps> = ({
   type = 'text',
   placeholder,
   onChange,
+  onPhoneChange,
 }) => {
   if (isEditing) {
+    // 전화번호 타입일 때는 PhoneInput 사용
+    if (type === 'tel' && onPhoneChange) {
+      return (
+        <div>
+          <PhoneInput
+            label={label}
+            value={value} // 국가번호 제거
+            onChange={onPhoneChange}
+            placeholder={placeholder}
+          />
+        </div>
+      );
+    }
+
+    // 일반 input
     return (
       <div className='focus-within:border-main-pink focus-within:ring-main-pink bg-bg-white border-outline-gray flex h-10 items-center rounded-lg border px-4 focus-within:ring-1'>
         <div className='flex w-full items-center justify-between'>

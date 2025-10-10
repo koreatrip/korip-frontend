@@ -3,6 +3,7 @@ import React, {
   useRef,
   forwardRef,
   useImperativeHandle,
+  useEffect,
 } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { XCircleIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
@@ -134,11 +135,26 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
   ) => {
     const [isFocused, setIsFocused] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [selectedCountry, setSelectedCountry] = useState<CountryCode>(
-      COUNTRY_CODES.find((country) => country.code === defaultCountry) ||
+    const [selectedCountry, setSelectedCountry] = useState<CountryCode>(() => {
+      // ✨ 1. 초기 렌더링 시 value를 기반으로 selectedCountry를 설정합니다.
+      const initialCountry = COUNTRY_CODES.find((c) =>
+        value.startsWith(c.dialCode)
+      );
+      return (
+        initialCountry ||
+        COUNTRY_CODES.find((c) => c.code === defaultCountry) ||
         COUNTRY_CODES[0]
-    );
-    const [phoneNumber, setPhoneNumber] = useState(value);
+      );
+    });
+    const [phoneNumber, setPhoneNumber] = useState(() => {
+      // ✨ 2. 초기 렌더링 시 value를 기반으로 phoneNumber를 설정합니다.
+      const initialCountry = COUNTRY_CODES.find((c) =>
+        value.startsWith(c.dialCode)
+      );
+      return initialCountry
+        ? value.substring(initialCountry.dialCode.length)
+        : value;
+    });
 
     const inputRef = useRef<HTMLInputElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -211,6 +227,17 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
         setIsDropdownOpen(!isDropdownOpen);
       }
     };
+
+    useEffect(() => {
+      const country = COUNTRY_CODES.find((c) => value.startsWith(c.dialCode));
+      if (country) {
+        setSelectedCountry(country);
+        setPhoneNumber(value.substring(country.dialCode.length));
+      } else {
+        // 국가 코드가 없는 번호가 들어오면 현재 선택된 국가를 기준으로 처리
+        setPhoneNumber(value);
+      }
+    }, [value]);
 
     return (
       <div className='flex w-full flex-col items-start'>
