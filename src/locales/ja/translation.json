@@ -148,7 +148,9 @@
     "forgot_email": "メールアドレスをお忘れですか？",
     "enter_signup_phone": "登録時に使用した携帯電話番号を入力してください",
     "find_email": "メールアドレスを探す",
-    "login_type": "ログイン手段"
+    "login_type": "ログイン手段",
+    "required_agreement": "必須同意",
+    "optional_agreement": "任意同意"
   },
 
   "agreement": {

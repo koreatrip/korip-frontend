@@ -145,7 +145,10 @@
     "forgot_email": "Forgot your email?",
     "enter_signup_phone": "Please enter the mobile phone number you used when signing up",
     "find_email": "Find Email",
-    "login_type": "Login Option"
+    "login_type": "Login Option",
+    "password_requirements_includes": "Include letters, numbers, and special characters",
+    "required_agreement": "Required Agreement",
+    "optional_agreement": "Optional Agreement"
   },
 
   "agreement": {

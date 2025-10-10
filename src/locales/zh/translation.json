@@ -148,7 +148,10 @@
     " forgot_ email ": "您忘记邮件了吗？ ",
     "enter_signup_phone": "请输入您注册时使用的手机号码",
     "find_email": "查找邮件",
-    "login_type": "登录方式"
+    "login_type": "登录方式",
+    "password_requirements_includes": "包含字母、数字和特殊字符",
+    "required_agreement": "必需同意",
+    "optional_agreement": "可选同意"
   },
 
   "agreement": {

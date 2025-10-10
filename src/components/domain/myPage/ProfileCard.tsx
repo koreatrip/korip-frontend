@@ -69,9 +69,9 @@ const ProfileCard = () => {
         <AccountStatsSection
           joinDate={new Date(formData.created_at).toLocaleDateString('ko-KR')}
           stats={{
-            travelPlans: 0,
-            favorites: formData.preferences_display.length,
-            visitedPlaces: 0,
+            travelPlans: userProfileData?.my_total_plans ?? 0,
+            favorites: userProfileData?.my_total_favorites ?? 0,
+            visitedPlaces: userProfileData?.visited_places ?? 0,
           }}
         />
         <SecuritySection
