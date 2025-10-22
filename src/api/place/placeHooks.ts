@@ -3,6 +3,7 @@ import { placesQueries } from './placeQueries';
 import type {
   SubregionPlacesResponse,
   SubcategoryPlacesResponse,
+  StayPlacesParams,
 } from './placeType';
 
 export const usePlacesQuery = (
@@ -126,6 +127,37 @@ export const usePlaceDetailQuery = (
     enabled: !!params.place_id,
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
+    ...options,
+  });
+};
+
+export const useStayPlacesQuery = (params: StayPlacesParams, options = {}) => {
+  return useQuery({
+    ...placesQueries.places.stay(params),
+    enabled: !!params.subregionId,
+    ...options,
+    staleTime: 5 * 60 * 1000, // 5분
+    gcTime: 15 * 60 * 1000, // 15분
+  });
+};
+// useInfiniteStayPlacesQuery 수정
+export const useInfiniteStayPlacesQuery = (
+  params: Omit<StayPlacesParams, 'page'>,
+  options = {}
+) => {
+  return useInfiniteQuery({
+    ...placesQueries.places.infiniteStay(params),
+    enabled: !!params.subregionId,
+    getNextPageParam: (
+      lastPage: SubcategoryPlacesResponse
+    ): number | undefined => {
+      const currentPage = lastPage.page;
+      const totalPages = lastPage.total_pages;
+      return currentPage < totalPages ? currentPage + 1 : undefined;
+    },
+    initialPageParam: 1,
+    staleTime: 5 * 60 * 1000, // 5분
+    gcTime: 15 * 60 * 1000, // 15분
     ...options,
   });
 };

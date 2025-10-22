@@ -28,6 +28,7 @@ import ProtectedRoute from '@/components/domain/auth/ProtectedRoute';
 import TripEditPage from '@/pages/tripEditPage';
 import FindPasswordPage from '@/pages/accountRecovery/findPasswordPage';
 import FindAccountPage from '@/pages/accountRecovery/findAccountPage';
+import StayListPage from '@/pages/stayListPage';
 
 export const router = createBrowserRouter([
   {
@@ -66,6 +67,10 @@ export const router = createBrowserRouter([
       {
         path: 'explore/districts',
         element: <DistrictListPage />,
+      },
+      {
+        path: 'explore/stays',
+        element: <StayListPage />,
       },
       {
         path: 'explore/attractions',

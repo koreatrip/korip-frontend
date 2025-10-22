@@ -85,3 +85,66 @@ export type SubcategoryPlacesResponse = {
 export type PlaceDetailResponse = {
   place: Place;
 };
+
+// placesType.ts
+
+export type Category = {
+  id: number;
+  name: string;
+};
+
+export type SubCategory = {
+  id: number;
+  name: string;
+} | null;
+
+export type PlaceRegion = {
+  id: number;
+  name: string;
+};
+
+export type PlaceSubRegion = {
+  id: number;
+  name: string;
+};
+
+export type StayPlace = {
+  id: number;
+  content_id: string;
+  name: string;
+  description: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  phone_number: string;
+  use_time: string;
+  link_url: string;
+  image_url: string;
+  category: Category;
+  sub_category: SubCategory;
+  region: PlaceRegion;
+  sub_region: PlaceSubRegion;
+  favorite_count: number;
+  is_favorite: boolean;
+  idol_names: string[] | null;
+  idol_visits: any | null; // 실제 타입에 맞게 수정 필요
+  created_at: string;
+  updated_at: string;
+};
+
+export type StayPlacesResponse = {
+  count: number;
+  total_pages: number;
+  page: number;
+  page_size: number;
+  next: string | null;
+  previous: string | null;
+  places: StayPlace[];
+};
+
+export type StayPlacesParams = {
+  subregionId: number;
+  lang?: string;
+  page?: number;
+  page_size?: number;
+};

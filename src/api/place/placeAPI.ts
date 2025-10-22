@@ -3,6 +3,8 @@ import type {
   PlacesResponse,
   SubregionPlacesResponse,
   SubcategoryPlacesResponse,
+  StayPlacesParams,
+  StayPlacesResponse,
 } from './placeType';
 import axiosInstance from '../axiosInstance';
 
@@ -147,6 +149,42 @@ export const placesAPI = {
     } catch (error) {
       console.error(
         `Error fetching place detail for ID ${params.place_id}:`,
+        error
+      );
+      throw error;
+    }
+  },
+  getStayPlaces: async ({
+    subregionId,
+    lang = 'ko',
+    page = 1,
+    page_size = 24,
+  }: StayPlacesParams): Promise<StayPlacesResponse> => {
+    try {
+      const params = {
+        lang,
+        page,
+        page_size,
+      };
+
+      console.log(`Calling API: /api/places/stay/${subregionId}/`, params);
+
+      const response = await axiosInstance.get(
+        `/api/places/stay/${subregionId}/`,
+        {
+          params,
+          headers: { Accept: 'application/json' },
+        }
+      );
+
+      console.log(
+        `Stay places response for subregion ${subregionId}:`,
+        response.data
+      );
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error fetching stay places for subregion ID ${subregionId}:`,
         error
       );
       throw error;

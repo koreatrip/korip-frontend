@@ -156,6 +156,25 @@ const RegionsPage = () => {
                   </li>
                 ))}
           </ul>
+          <div className='mt-2 flex w-full justify-end'>
+            <button
+              className='cursor-pointer font-medium'
+              onClick={() => {
+                const params = new URLSearchParams({ lang: currentLanguage });
+                if (regionId) params.set('region_id', String(regionId));
+
+                const targetSubregionId =
+                  subregionId || popularSubregions[0]?.id;
+                if (targetSubregionId) {
+                  params.set('subregion_id', String(targetSubregionId));
+                }
+
+                navigate(`/explore/districts?${params.toString()}`);
+              }}
+            >
+              {t('common.view_all')}
+            </button>
+          </div>
         </div>
 
         <h1 className='tablet-bp:text-4xl mt-14 text-2xl font-semibold'>
@@ -283,6 +302,25 @@ const RegionsPage = () => {
                   </li>
                 ))}
           </ul>
+          <div className='mt-2 flex w-full justify-end'>
+            <button
+              className='cursor-pointer font-medium'
+              onClick={() => {
+                const params = new URLSearchParams({ lang: currentLanguage });
+                if (regionId) params.set('region_id', String(regionId));
+
+                const targetSubregionId =
+                  subregionId || popularSubregions[0]?.id;
+                if (targetSubregionId) {
+                  params.set('subregion_id', String(targetSubregionId));
+                }
+
+                navigate(`/explore/stays?${params.toString()}`);
+              }}
+            >
+              {t('common.view_all')}
+            </button>
+          </div>
         </div>
       </Container>
 

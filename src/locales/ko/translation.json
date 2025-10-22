@@ -384,7 +384,9 @@
     "currently_viewing": "지금은 {{location}}만 보고있어요",
     "search_results": "\"{{searchValue}}\"에 대한 검색 결과: {{count}}개",
     "total_favorites": "총 {{count}}개의 즐겨찾기 장소",
-    "total_favorite_regions": "총 {{count}}개의 즐겨찾기 지역"
+    "total_favorite_regions": "총 {{count}}개의 즐겨찾기 지역",
+    "explore_stay_places": "{{region}} 숙박 시설",
+    "total_stay_places": "총 {{count}}개 숙박 시설"
   },
 
   "themes": {
