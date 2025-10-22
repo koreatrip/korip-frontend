@@ -1,94 +1,143 @@
-import {
-  useRegionDetailQuery,
-  useRegionsQuery,
-} from '@/api/regions/regionsHooks';
-import DistrictCard from '@/components/domain/regions/DistrictCard';
 import { useNumericSearchParam } from '@/hooks/useNumericSearchParam';
 import { useTranslation } from 'react-i18next';
 import LoadingPage from './statusPage/loadingPage';
 import i18n from '@/i18n/i18n';
 import ListPageLayout from '@/layouts/listPageLayout';
-import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
+import PlaceCard from '@/components/domain/regions/PlaceCard';
+import { useInfiniteStayPlacesQuery } from '@/api/place/placeHooks';
+import { useInView } from 'react-intersection-observer';
+import Spinner from '@/components/common/Spinner';
+import PlaceDetailModal from '@/components/domain/regions/PlaceDetailModal';
 
 const StayListPage = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
-  const regionId = useNumericSearchParam('region_id');
+  const subregionId = useNumericSearchParam('subregion_id');
   const currentLanguage = i18n.language || 'ko';
-  // 시/도 목록 조회
-  const {
-    data: regionsResponse,
-    isLoading: isRegionsLoading,
-    error: isRegionsError,
-  } = useRegionsQuery(currentLanguage);
+  const { ref, inView } = useInView();
 
-  // 선택된 시/도의 구/군 목록 조회
+  // 모달 상태 관리
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
+
+  // 무한 스크롤용 쿼리
   const {
-    data: regionDetail,
-    isLoading: isRegionDetailLoading,
-    error: isRegionDetailError,
-  } = useRegionDetailQuery(regionId, currentLanguage, {
-    enabled: !!regionId,
-  });
-  console.log('dddd', regionDetail);
-  const regions = regionsResponse?.regions || [];
-  const subregions = regionDetail?.regions?.subregions.regions || [];
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error,
+  } = useInfiniteStayPlacesQuery(
+    {
+      subregionId: subregionId!,
+      lang: currentLanguage,
+      page_size: 24,
+    },
+    {
+      enabled: !!subregionId,
+    }
+  );
+
+  // 스크롤 감지하여 다음 페이지 로드
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  // 모든 페이지의 places를 하나의 배열로 합치기
+  const stayPlaces = data?.pages.flatMap((page) => page.places) || [];
+  const totalCount = data?.pages[0]?.count || 0;
 
   // 현재 선택된 지역 이름 찾기
   const getCurrentRegionName = () => {
-    if (!regionId) return '전체';
-
-    // API 데이터에서 지역 이름 찾기
-    if (regionDetail?.regions?.name) {
-      return regionDetail.regions.name;
+    if (subregionId && stayPlaces.length > 0) {
+      const place = stayPlaces[0];
+      return `${place.region.name} ${place.sub_region.name}`;
     }
-
-    // fallback으로 regions 목록에서 찾기
-    const currentRegion = regions.find((region) => region.id === regionId);
-    return currentRegion?.name || '선택된 지역';
+    return '';
   };
 
-  if (isRegionsLoading) return <LoadingPage />;
-  if (regionId && isRegionDetailLoading) return <LoadingPage />; // 스켈레톤으로 바꿔야함
-  if (isRegionsError) return <div>error: {isRegionsError.message}</div>;
-  if (isRegionDetailError)
-    return <div>error: {isRegionDetailError.message}</div>;
+  // 페이지 제목
+  const getPageTitle = () => {
+    return t('places.explore_stay_places', {
+      region: getCurrentRegionName(),
+    });
+  };
+
+  // 페이지 부제목
+  const getPageSubtitle = () => {
+    return t('places.total_stay_places', {
+      count: totalCount,
+    });
+  };
+
+  // PlaceCard 클릭 핸들러
+  const handlePlaceClick = (placeId: number) => {
+    setSelectedPlaceId(placeId);
+    setIsModalOpen(true);
+  };
+
+  // 모달 닫기 핸들러
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setSelectedPlaceId(null);
+  };
+
+  // subregionId가 없으면 에러 표시
+  if (!subregionId) {
+    return (
+      <ListPageLayout title={t('places.stay_title')} subtitle=''>
+        <div className='col-span-full text-center text-gray-500'>
+          지역을 선택해주세요.
+        </div>
+      </ListPageLayout>
+    );
+  }
+
+  // 로딩 상태
+  if (isLoading) return <LoadingPage />;
+
+  // 에러 상태
+  if (error) return <div>error: {error.message}</div>;
 
   return (
-    <ListPageLayout
-      title={t('places.explore_all_areas', { regions: getCurrentRegionName() })}
-      subtitle={t('places.total_districts', {
-        count: regionId ? subregions.length : regions.length,
-      })}
-    >
-      {/* 카드들만 렌더링 */}
-      {regionId ? (
-        // 특정 지역의 구/군 목록 표시
-        subregions.length > 0 ? (
-          subregions.map((subregion) => (
-            <DistrictCard
-              key={subregion.id}
-              data={subregion}
-              type='subregion'
-              onClick={() =>
-                navigate(
-                  `/explore/attractions?subregion_id=${subregion.id}&lang=${currentLanguage}`
-                )
-              }
-            />
-          ))
+    <>
+      <ListPageLayout title={getPageTitle()} subtitle={getPageSubtitle()}>
+        {stayPlaces.length > 0 ? (
+          <>
+            {stayPlaces.map((place) => (
+              <PlaceCard
+                key={place.id}
+                data={place}
+                onClick={() => handlePlaceClick(place.id)}
+              />
+            ))}
+
+            {/* 무한 스크롤 트리거 */}
+            <div
+              ref={ref}
+              className='col-span-full flex h-10 items-center justify-center'
+            >
+              {isFetchingNextPage && <Spinner />}
+            </div>
+          </>
         ) : (
           <div className='col-span-full text-center text-gray-500'>
-            해당 지역의 구역 정보가 없습니다.
+            해당 지역의 숙박 시설 정보가 없습니다.
           </div>
-        )
-      ) : (
-        // 전체 지역 목록 표시
-        regions.map((region) => (
-          <DistrictCard key={region.id} data={region} type='region' />
-        ))
-      )}
-    </ListPageLayout>
+        )}
+      </ListPageLayout>
+
+      {/* 장소 상세 모달 */}
+      <PlaceDetailModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        placeId={selectedPlaceId}
+        lang={currentLanguage}
+      />
+    </>
   );
 };
 

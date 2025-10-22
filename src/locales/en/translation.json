@@ -384,7 +384,9 @@
     "currently_viewing": "You're currently viewing {{location}} only",
     "search_results": "Search results for \"{{searchValue}}\": {{count}} items",
     "total_favorites": "Total {{count}} favorite places",
-    "total_favorite_regions": "Total {{count}} favorite regions"
+    "total_favorite_regions": "Total {{count}} favorite regions",
+    "explore_stay_places": "Accommodations in {{region}}",
+    "total_stay_places": "Total {{count}} accommodations"
   },
 
   "themes": {

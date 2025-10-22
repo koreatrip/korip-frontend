@@ -388,7 +388,9 @@
     "currently_viewing": "目前仅显示{{location}}",
     "search_results": "“{{searchValue}}”的搜索结果: {{count}}个",
     "total_favorites": "共{{count}}个收藏地点",
-    "total_favorite_regions": "共 {{count}} 个收藏地区"
+    "total_favorite_regions": "共 {{count}} 个收藏地区",
+    "explore_stay_places": "{{region}}住宿设施",
+    "total_stay_places": "共{{count}}个住宿设施"
   },
 
   "themes": {

@@ -387,7 +387,9 @@
     "currently_viewing": "現在は{{location}}のみを表示しています",
     "search_results": "「{{searchValue}}」の検索結果: {{count}}件",
     "total_favorites": "合計{{count}}件のお気に入りの場所",
-    "total_favorite_regions": "合計 {{count}} 件のお気に入り地域"
+    "total_favorite_regions": "合計 {{count}} 件のお気に入り地域",
+    "explore_stay_places": "{{region}}の宿泊施設",
+    "total_stay_places": "全{{count}}宿泊施設"
   },
 
   "themes": {

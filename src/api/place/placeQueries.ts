@@ -1,5 +1,6 @@
 import { createQueryKeyStore } from '@lukemorales/query-key-factory';
 import { placesAPI } from './placeAPI';
+import type { StayPlacesParams } from './placeType';
 
 export const placesQueries = createQueryKeyStore({
   places: {
@@ -107,6 +108,32 @@ export const placesQueries = createQueryKeyStore({
           lang: params.lang,
         });
       },
+    }),
+    stay: (params: StayPlacesParams) => ({
+      queryKey: [
+        'places',
+        'stay',
+        params.subregionId,
+        params.lang,
+        params.page,
+        params.page_size,
+      ],
+      queryFn: () => placesAPI.getStayPlaces(params),
+    }),
+    infiniteStay: (params: Omit<StayPlacesParams, 'page'>) => ({
+      queryKey: [
+        'places',
+        'stay',
+        'infinite',
+        params.subregionId,
+        params.lang,
+        params.page_size,
+      ],
+      queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
+        placesAPI.getStayPlaces({
+          ...params,
+          page: pageParam,
+        }),
     }),
   },
 });
