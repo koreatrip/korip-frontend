@@ -139,6 +139,9 @@ const Places = () => {
           <p className='text-sub-text-gray mt-2 text-sm'>
             잠시 후 다시 시도해주세요.
           </p>
+          <p className='text-sub-text-gray mt-2 text-sm'>
+            잠시 후 다시 시도해주세요.
+          </p>
         </div>
       </div>
     );

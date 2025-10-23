@@ -9,6 +9,7 @@ import { useInfiniteStayPlacesQuery } from '@/api/place/placeHooks';
 import { useInView } from 'react-intersection-observer';
 import Spinner from '@/components/common/Spinner';
 import PlaceDetailModal from '@/components/domain/regions/PlaceDetailModal';
+import Button from '@/components/common/Button';
 
 const StayListPage = () => {
   const { t } = useTranslation();
@@ -100,7 +101,20 @@ const StayListPage = () => {
   if (isLoading) return <LoadingPage />;
 
   // 에러 상태
-  if (error) return <div>error: {error.message}</div>;
+  if (error)
+    return (
+      <ListPageLayout title={t('places.stay_title')} subtitle=''>
+        <div className='col-span-full py-8 text-center'>
+          <h3 className='mb-2 text-xl font-semibold text-red-600'>
+            데이터를 불러오는데 실패했습니다
+          </h3>
+          <p className='mb-4 text-gray-600'>
+            {error.message || '일시적인 문제가 발생했습니다'}
+          </p>
+          <Button onClick={() => window.location.reload()}>다시 시도</Button>
+        </div>
+      </ListPageLayout>
+    );
 
   return (
     <>
