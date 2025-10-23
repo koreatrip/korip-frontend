@@ -38,6 +38,7 @@ const ErrorPage = ({ error, errorCode, resetError }: ErrorPageProps = {}) => {
         <p className='text-sub-text-gray mb-8'>
           {t('common.error_generic_description')}
         </p>
+        <p className='text-sub-text-gray mb-8'>{error?.message}</p>
 
         <div className='flex w-full gap-3'>
           <Button onClick={handleTryAgain}>{t('common.refresh_button')}</Button>
@@ -47,10 +48,7 @@ const ErrorPage = ({ error, errorCode, resetError }: ErrorPageProps = {}) => {
 
       <div className='text-sub-text-gray absolute bottom-10 text-center text-xs'>
         <p className='mb-1'>Error Code: {displayErrorCode}</p>
-        <p>
-          If the problem persists, please share this code with our support team
-          along with what you were trying to do.
-        </p>
+        <p>{t('common.error_support_message')}</p>
       </div>
     </div>
   );
