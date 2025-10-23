@@ -86,7 +86,8 @@
     "plan_example": "例: 首尔夏季假期",
     "deleting": "正在删除...",
     "adding": "正在添加...",
-    "back_to_login": "返回登录"
+    "back_to_login": "返回登录",
+    "error_support_message": "如果问题仍然存在，请将此代码和您尝试执行的操作一起告知我们的客服团队。"
   },
 
   "auth": {

@@ -86,7 +86,8 @@
     "plan_example": "例: ソウル夏休み",
     "deleting": "削除中...",
     "adding": "追加中...",
-    "back_to_login": "ログインに戻る"
+    "back_to_login": "ログインに戻る",
+    "error_support_message": "問題が解決しない場合は、このコードと行おうとしていた操作をサポートチームにお知らせください。"
   },
 
   "auth": {

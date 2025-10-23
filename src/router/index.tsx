@@ -34,6 +34,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     Component: defaultLayout,
+    errorElement: <ErrorPage />,
     children: [
       // 공개 페이지들
       {
@@ -139,6 +140,10 @@ export const router = createBrowserRouter([
             element: <TripEditPage />,
           },
         ],
+      },
+      {
+        path: '*',
+        element: <NotFoundPage />,
       },
     ],
   },

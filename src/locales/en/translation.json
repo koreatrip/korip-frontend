@@ -86,7 +86,8 @@
     "plan_example": "Example: Seoul Summer Vacation",
     "deleting": "Deleting...",
     "adding": "Adding...",
-    "back_to_login": "Back to Login"
+    "back_to_login": "Back to Login",
+    "error_support_message": "If the problem persists, please share this code with our support team along with what you were trying to do."
   },
 
   "auth": {
