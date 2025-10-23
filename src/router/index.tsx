@@ -42,14 +42,6 @@ export const router = createBrowserRouter([
         element: <FirstSearchingPage />,
       },
       {
-        path: '404',
-        element: <NotFoundPage />,
-      },
-      {
-        path: 'error',
-        element: <ErrorPage />,
-      },
-      {
         path: 'login',
         element: <LoginPage />,
       },

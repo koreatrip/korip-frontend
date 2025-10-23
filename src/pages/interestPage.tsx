@@ -14,9 +14,11 @@ import { useToast } from '@/hooks/useToast';
 import IdolCateBox from '@/components/domain/interest/IdolCateBox';
 import { interestAPI } from '@/api/interest/interestAPI';
 import { useUserProfileQuery } from '@/api/user/userHooks';
+import { useNavigate } from 'react-router';
 
 const InterestPage = () => {
   const { showToast } = useToast();
+  const navigate = useNavigate();
   const { data, isLoading, isError, error } = useAllCategoriesQuery('ko'); // 메인 카테고리 불러옴.
   const [selectedId, setSelectedId] = useState<number>(); // 서브 카테고리 선택시 (역할 1. 핑크, 2. get)
   const [subSelected, setSubSelected] = useState<Category[]>([]); // 1.post 로 보낼 데이터 목록 2. 핑크
@@ -41,6 +43,7 @@ const InterestPage = () => {
     try {
       await interestAPI(userId, requestPayload);
       showToast('관심사 선택이 완료되었습니다!', 'success');
+      navigate('/language');
     } catch (error) {
       console.error('관심사 선택 전송 실패:', error);
       showToast('관심사 전송에 실패했습니다. 다시 시도해주세요.', 'error');
