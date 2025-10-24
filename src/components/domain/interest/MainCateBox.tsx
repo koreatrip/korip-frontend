@@ -14,7 +14,7 @@ const MainCateBox = ({
   handleClickMainCate,
 }: MainCateBoxProps) => {
   return (
-    <div className='mb-2 flex flex-row flex-wrap justify-between gap-y-2 text-sm'>
+    <div className='mb-2 flex flex-row flex-wrap gap-2 text-sm'>
       {mainData.map((item) => (
         <SelectButton
           key={item.id}

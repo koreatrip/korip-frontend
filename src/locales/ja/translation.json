@@ -87,7 +87,9 @@
     "deleting": "削除中...",
     "adding": "追加中...",
     "back_to_login": "ログインに戻る",
-    "error_support_message": "問題が解決しない場合は、このコードと行おうとしていた操作をサポートチームにお知らせください。"
+    "error_support_message": "問題が解決しない場合は、このコードと行おうとしていた操作をサポートチームにお知らせください。",
+    "no_selected_interests": "選択された関心事項がありません。",
+    "final_selected_interests": "最終的に選択された関心事項"
   },
 
   "auth": {
@@ -437,11 +439,20 @@
     "idol_not_in_list": "欲しいアイドル／グループがリストにありませんか？",
     "request_idol": "アイドルをリクエスト",
     "idol_group_name": "アイドル／グループ名",
-    "agency_optional": "所属事務所（任意）",
-    "related_info_optional": "関連情報（任意）",
-    "remarks_optional": "備考／コメント（任意）",
+    "agency_optional": "所属事務所 <optional>(任意)</optional>",
+    "related_info_optional": "関連情報 <optional>（任意）</optional>",
+    "remarks_optional": "備考／コメント <optional>（任意）</optional>",
     "idol_request_will_be_reviewed": "お申し込みいただいたアイドル／グループは、審査後に更新されます。",
-    "please_be_patient": "時間がかかる場合がありますのでご了承ください。"
+    "please_be_patient": "時間がかかる場合がありますのでご了承ください。",
+    "idol_request_success": "アイドルの申請が完了しました。",
+    "idol_request_failed": "アイドルの申請に失敗しました。もう一度お試しください。",
+    "enter_idol_name": "アイドル/グループ名を入力してください。",
+    "enter_within_100_characters": "100文字以内で入力してください。",
+    "example_agency": "例: SM、HYBE",
+    "example_description": "例: HYBEの新しいガールズグループ",
+    "idol_request_review_notice": "申請されたアイドル/グループは確認後に更新される予定です。",
+    "idol_request_time_notice": "処理には時間がかかる場合がありますので、ご了承ください。",
+    "optional_message": "追加で伝えたい内容があれば、ご自由にご記入ください。"
   },
 
   "languages": {

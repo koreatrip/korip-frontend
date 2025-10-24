@@ -87,7 +87,9 @@
     "deleting": "正在删除...",
     "adding": "正在添加...",
     "back_to_login": "返回登录",
-    "error_support_message": "如果问题仍然存在，请将此代码和您尝试执行的操作一起告知我们的客服团队。"
+    "error_support_message": "如果问题仍然存在，请将此代码和您尝试执行的操作一起告知我们的客服团队。",
+    "no_selected_interests": "尚未选择任何兴趣。",
+    "final_selected_interests": "最终选择的兴趣"
   },
 
   "auth": {
@@ -438,11 +440,20 @@
     "idol_not_in_list": "想要的爱豆/组合不在列表中吗?",
     "request_idol": "申请爱豆",
     "idol_group_name": "爱豆/组合名称",
-    "agency_optional": "所属公司 (可选)",
-    "related_info_optional": "相关信息 (可选)",
-    "remarks_optional": "备注/想说的话 (可选)",
+    "agency_optional": "所属公司 <optional>(可选)</optional>",
+    "related_info_optional": "相关信息 <optional>(可选)</optional>",
+    "remarks_optional": "备注/想说的话 <optional>(可选)</optional>",
     "idol_request_will_be_reviewed": "您申请的爱豆/组合将在审核后更新。",
-    "please_be_patient": "可能需要一定时间，敬请谅解。"
+    "please_be_patient": "可能需要一定时间，敬请谅解。",
+    "idol_request_success": "偶像申请已成功提交。",
+    "idol_request_failed": "偶像申请失败。请重试。",
+    "enter_idol_name": "请输入偶像/组合名称。",
+    "enter_within_100_characters": "请输入100字以内。",
+    "example_agency": "例如: SM, HYBE",
+    "example_description": "例如: HYBE 新女团",
+    "idol_request_review_notice": "您申请的偶像/组合将在审核后更新。",
+    "idol_request_time_notice": "此过程可能需要一些时间，敬请谅解。",
+    "optional_message": "如果您还有其他想要补充的内容，请自由填写。"
   },
 
   "languages": {

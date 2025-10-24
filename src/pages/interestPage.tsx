@@ -15,11 +15,15 @@ import IdolCateBox from '@/components/domain/interest/IdolCateBox';
 import { interestAPI } from '@/api/interest/interestAPI';
 import { useUserProfileQuery } from '@/api/user/userHooks';
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 const InterestPage = () => {
   const { showToast } = useToast();
   const navigate = useNavigate();
-  const { data, isLoading, isError, error } = useAllCategoriesQuery('ko'); // 메인 카테고리 불러옴.
+  const { i18n, t } = useTranslation();
+  const { data, isLoading, isError, error } = useAllCategoriesQuery(
+    i18n.language
+  ); // 메인 카테고리 불러옴.
   const [selectedId, setSelectedId] = useState<number>(); // 서브 카테고리 선택시 (역할 1. 핑크, 2. get)
   const [subSelected, setSubSelected] = useState<Category[]>([]); // 1.post 로 보낼 데이터 목록 2. 핑크
   const { data: userProfileData } = useUserProfileQuery();
@@ -65,8 +69,8 @@ const InterestPage = () => {
     <Container>
       <div className='m-auto max-w-[540px] flex-col items-center justify-center p-8'>
         <WelcomeCard
-          mainText='관심사를 선택하세요'
-          accountQuestionText='Korip에서 추천하는 관심사예요.'
+          mainText={t('user.select_interests')}
+          accountQuestionText={t('user.korip_recommended_interests')}
         />
         {/* 대분류 해시태그 뿌림 */}
         {mainData && mainData.length > 0 && (
@@ -93,7 +97,9 @@ const InterestPage = () => {
             setSubSelected={setSubSelected}
           />
         )}
-        <h3 className='mt-6 mb-2 text-lg font-semibold'>최종 선택된 관심사</h3>
+        <h3 className='mt-6 mb-2 text-lg font-semibold'>
+          {t('common.no_selected_interests')}
+        </h3>
 
         <SelectedBox
           subSelected={subSelected}
@@ -102,7 +108,7 @@ const InterestPage = () => {
 
         <div className='mt-8'>
           <Button className='w-full' onClick={handleSubmit}>
-            완료
+            {t('common.submit')}
           </Button>
         </div>
       </div>
