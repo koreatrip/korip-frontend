@@ -4,10 +4,12 @@ import CarouselForCard from '@/components/domain/regions/CarouselForCard';
 import FirstInfoCard from '@/components/domain/regions/FirstInfoCard';
 import { useRegionMajorQuery } from '@/api/regions/regionsHooks';
 import { useAllCategoriesQuery } from '@/api/category/categoryHooks';
-
+import { useTranslation } from 'react-i18next';
+import { CATEGORY_IMAGES } from '@/constants/categoryImages';
 const FirstSearchingPage = () => {
-  const { data: major } = useRegionMajorQuery('ko');
-  const { data: theme } = useAllCategoriesQuery('ko');
+  const { t, i18n } = useTranslation();
+  const { data: major } = useRegionMajorQuery(i18n.language);
+  const { data: theme } = useAllCategoriesQuery(i18n.language);
 
   // 데이터가 로딩 중일 경우 로딩 메시지를 표시
   // if (isLoading) {
@@ -22,20 +24,25 @@ const FirstSearchingPage = () => {
     <Container>
       <div className='m-auto flex flex-col items-center justify-center gap-5 p-10'>
         <h1 className='mt-16 text-4xl font-semibold'>
-          어느 지역을 여행하나요?
+          {t('places.which_region_travel')}
         </h1>
-        <p className='-mt-2'>한국의 아름다운 지역을 선택해보세요.</p>
-        <SearchBar className='mt-8' />
+        <p className='-mt-2'>{t('places.select_beautiful_regions')}</p>
+        <SearchBar
+          className='mt-8'
+          placeholder={t('places.search_region_placeholder')}
+        />
       </div>
 
       <div className='my-16 px-4'>
-        <h2 className='mb-5 text-[32px] font-semibold'>지역 둘러보기</h2>
+        <h2 className='mb-5 text-[32px] font-semibold'>
+          {t('places.explore_regions')}
+        </h2>
         <div className='grid w-full grid-cols-2 gap-5 lg:grid-cols-4'>
           {major?.regions?.map((place) => (
             <FirstInfoCard
               key={place.id}
               title={place.name}
-              imageUrl={''}
+              imageUrl={place.image || ''}
               isSelected={false}
               id={place.id}
               isRegion={true}
@@ -45,7 +52,9 @@ const FirstSearchingPage = () => {
       </div>
 
       <div className='my-16 px-4'>
-        <h2 className='mb-5 text-[32px] font-semibold'>테마별 여행</h2>
+        <h2 className='mb-5 text-[32px] font-semibold'>
+          {t('themes.theme_travel')}
+        </h2>
 
         <CarouselForCard length={theme?.categories?.length || 0}>
           {theme?.categories?.map((place) => (
@@ -53,7 +62,7 @@ const FirstSearchingPage = () => {
               key={place.id}
               id={place.id}
               title={place.name}
-              imageUrl={''}
+              imageUrl={CATEGORY_IMAGES[place.id] || '/placeholder.jpg'}
               isSelected={false}
               isRegion={false}
             />

@@ -8,6 +8,7 @@ export type Region = {
   feature: string;
   created_at: string;
   updated_at: string;
+  image: string;
 };
 
 // 페이지네이션된 리전 목록 응답 타입
