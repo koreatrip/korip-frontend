@@ -387,7 +387,13 @@
     "total_favorites": "Total {{count}} favorite places",
     "total_favorite_regions": "Total {{count}} favorite regions",
     "explore_stay_places": "Accommodations in {{region}}",
-    "total_stay_places": "Total {{count}} accommodations"
+    "total_stay_places": "Total {{count}} accommodations",
+    "added_to_favorites": "Added to favorites.",
+    "removed_from_favorites": "Removed from favorites.",
+    "failed_to_update_favorites": "Failed to update favorites.",
+    "no_idol_visit_record": "No idol visit records.",
+    "idol_visit_count": "{{count}} visit record(s)",
+    "no_visit_record": "0 visit records"
   },
 
   "themes": {

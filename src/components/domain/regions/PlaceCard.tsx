@@ -5,40 +5,30 @@ import { useToggleFavoritePlaceMutation } from '@/api/favorites/favoriteHooks';
 import { StarIcon as StarOutline } from '@heroicons/react/24/outline';
 import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
 import { useState, useEffect } from 'react';
+import type { Place } from '@/api/place/placeType';
+import { useUserProfileQuery } from '@/api/user/userHooks';
+import { IDOL_GROUPS } from '@/constants/idolGroup';
+import { useTranslation } from 'react-i18next';
 
-type PlaceCardProps = {
-  data: {
-    id: number;
-    name: string;
-    description: string | null;
-    address: string;
-    category: {
-      id: number;
-      name: string;
-    };
-    sub_category: {
-      id: number;
-      name: string;
-    } | null;
-    region: {
-      id: number;
-      name: string;
-    };
-    sub_region: {
-      id: number;
-      name: string;
-    };
-    favorite_count: number;
-    is_favorite?: boolean; // 즐겨찾기 상태 추가
-  };
+type PlaceCardBaseProps = {
   onClick?: () => void;
-  onFavoriteChange?: (id: number, isFavorite: boolean) => void; // 외부 콜백
+  onFavoriteChange?: (id: number, isFavorite: boolean) => void;
+};
+
+type PlaceCardProps = PlaceCardBaseProps & {
+  data: Place;
 };
 
 const PlaceCard = ({ data, onClick, onFavoriteChange }: PlaceCardProps) => {
   const { actions: modalActions } = useModalStore();
   const { isLoggedIn } = useAuthCheck();
   const { showToast } = useToast();
+  const { t } = useTranslation();
+  const { data: userData } = useUserProfileQuery();
+
+  const isIdolInterested = userData?.preferences_display?.some((pref) =>
+    IDOL_GROUPS.includes(pref.name)
+  );
 
   // 내부 즐겨찾기 상태 관리
   const [localIsFavorite, setLocalIsFavorite] = useState(
@@ -63,13 +53,6 @@ const PlaceCard = ({ data, onClick, onFavoriteChange }: PlaceCardProps) => {
     }
 
     try {
-      console.log(
-        '❤️ Toggle favorite place:',
-        data.id,
-        'Current state:',
-        localIsFavorite
-      );
-
       // 낙관적 업데이트 (즉시 UI 반영)
       setLocalIsFavorite(!localIsFavorite);
 
@@ -78,8 +61,8 @@ const PlaceCard = ({ data, onClick, onFavoriteChange }: PlaceCardProps) => {
 
       // 성공 토스트
       const message = !localIsFavorite
-        ? '즐겨찾기에 추가되었습니다.'
-        : '즐겨찾기에서 제거되었습니다.';
+        ? t('places.added_to_favorites')
+        : t('places.removed_from_favorites');
       showToast(message, 'success');
 
       console.log('✅ Favorite place toggled successfully');
@@ -89,12 +72,12 @@ const PlaceCard = ({ data, onClick, onFavoriteChange }: PlaceCardProps) => {
         onFavoriteChange(data.id, !localIsFavorite);
       }
     } catch (error) {
-      console.error('❌ 즐겨찾기 토글 실패:', error);
+      console.error('즐겨찾기 토글 실패:', error);
 
       // 에러 발생 시 상태 롤백
       setLocalIsFavorite(localIsFavorite);
 
-      showToast('즐겨찾기 처리에 실패했습니다.', 'error');
+      showToast(t('places.failed_to_update_favorites"'), 'error');
     }
   };
 
@@ -124,18 +107,38 @@ const PlaceCard = ({ data, onClick, onFavoriteChange }: PlaceCardProps) => {
       </div>
 
       <div className='bg-bg-section mt-2 mb-4 flex flex-col gap-y-1 rounded-lg p-2'>
-        <p className='text-sub-text-gray text-sm font-medium'>특징</p>
+        <p className='text-sub-text-gray text-sm font-medium'>
+          {t('common.features')}
+        </p>
         <p className='text-sm'>{data.description || '설명이 없습니다.'}</p>
       </div>
 
-      <div className='flex flex-wrap gap-x-1.5'>
-        <span className='bg-sub-green/15 text-sub-green rounded-lg px-2 py-1.5 text-sm'>
-          {data.category?.name}
-        </span>
-        {data.sub_category?.name && (
+      <div className='flex flex-col gap-y-1.5'>
+        <div className='flex gap-x-1.5'>
           <span className='bg-sub-green/15 text-sub-green rounded-lg px-2 py-1.5 text-sm'>
-            {data.sub_category.name}
+            {data.category?.name}
           </span>
+          {data.sub_category?.name && (
+            <span className='bg-sub-green/15 text-sub-green rounded-lg px-2 py-1.5 text-sm'>
+              {data.sub_category.name}
+            </span>
+          )}
+        </div>
+        {isIdolInterested && (
+          <div className='flex gap-x-1.5'>
+            <span className='bg-main-pink/15 text-main-pink rounded-lg px-2 py-1.5 text-sm'>
+              {data.idol_names?.length
+                ? data.idol_names.join(', ')
+                : t('places.no_idol_visit_record')}
+            </span>
+            <span className='bg-main-pink/15 text-main-pink rounded-lg px-2 py-1.5 text-sm'>
+              {data.idol_visits && data.idol_visits.length > 0
+                ? t('places.idol_visit_count', {
+                    count: data.idol_visits.length,
+                  })
+                : t('places.no_visit_record')}
+            </span>
+          </div>
         )}
       </div>
     </div>

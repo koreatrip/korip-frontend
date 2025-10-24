@@ -12,6 +12,8 @@ export type Place = {
   link_url: string;
   image_url: string | null;
   is_favorite: boolean;
+  idol_names: string[] | null;
+  idol_visits: IdolVisit[] | null;
   category: {
     id: number;
     name: string;
@@ -147,4 +149,13 @@ export type StayPlacesParams = {
   lang?: string;
   page?: number;
   page_size?: number;
+};
+
+export type IdolVisit = {
+  id: number;
+  idol_name: string;
+  idol_group: string;
+  description: string;
+  visit_date: string | null;
+  source_url: string;
 };

@@ -387,7 +387,13 @@
     "total_favorites": "총 {{count}}개의 즐겨찾기 장소",
     "total_favorite_regions": "총 {{count}}개의 즐겨찾기 지역",
     "explore_stay_places": "{{region}} 숙박 시설",
-    "total_stay_places": "총 {{count}}개 숙박 시설"
+    "total_stay_places": "총 {{count}}개 숙박 시설",
+    "added_to_favorites": "즐겨찾기에 추가되었습니다.",
+    "removed_from_favorites": "즐겨찾기에서 제거되었습니다.",
+    "failed_to_update_favorites": "즐겨찾기 처리에 실패했습니다.",
+    "no_idol_visit_record": "아이돌 방문 기록 없음",
+    "idol_visit_count": "{{count}}건의 방문 기록",
+    "no_visit_record": "0건의 방문 기록"
   },
 
   "themes": {

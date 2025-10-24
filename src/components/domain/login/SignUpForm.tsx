@@ -82,10 +82,7 @@ const SignUpForm = () => {
 
   const { mutate: signupMutate } = useSignupMutation({
     onSuccess: () => {
-      showToast(
-        '회원가입에 성공했습니다! 로그인 페이지로 이동합니다.',
-        'success'
-      );
+      showToast('반갑습니다! 회원가입이 완료되었습니다.', 'success');
       navigate('/login', { replace: true });
     },
     onError: (error: Error) => {

@@ -390,7 +390,13 @@
     "total_favorites": "合計{{count}}件のお気に入りの場所",
     "total_favorite_regions": "合計 {{count}} 件のお気に入り地域",
     "explore_stay_places": "{{region}}の宿泊施設",
-    "total_stay_places": "全{{count}}宿泊施設"
+    "total_stay_places": "全{{count}}宿泊施設",
+    "added_to_favorites": "お気に入りに追加しました。",
+    "removed_from_favorites": "お気に入りから削除しました。",
+    "failed_to_update_favorites": "お気に入りの更新に失敗しました。",
+    "no_idol_visit_record": "アイドルの訪問記録はありません。",
+    "idol_visit_count": "{{count}}件の訪問記録",
+    "no_visit_record": "0件の訪問記録"
   },
 
   "themes": {
