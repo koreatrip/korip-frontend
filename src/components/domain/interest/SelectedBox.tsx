@@ -1,6 +1,7 @@
 import type { Category } from '@/api/category/categoryType';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import type { Dispatch, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type SelectedBoxProps = {
   subSelected: any[];
@@ -8,6 +9,7 @@ type SelectedBoxProps = {
 };
 
 const SelectedBox = ({ subSelected, setSubSelected }: SelectedBoxProps) => {
+  const { t } = useTranslation();
   const handleRemoveSlected = (id: number) => {
     setSubSelected((prev) => prev.filter((item) => item.id !== id));
   };
@@ -31,7 +33,9 @@ const SelectedBox = ({ subSelected, setSubSelected }: SelectedBoxProps) => {
           </div>
         ))
       ) : (
-        <p className='self-center text-gray-500'>선택된 관심사가 없습니다.</p>
+        <p className='self-center text-gray-500'>
+          {t('common.final_selected_interests')}
+        </p>
       )}
     </div>
   );

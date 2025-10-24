@@ -8,6 +8,7 @@ import Button from '@/components/common/Button';
 import IdolRequestModal from '@/components/domain/interest/IdolRequestModal';
 import SelectButton from './selectButton/SelectButton';
 import { useToast } from '@/hooks/useToast';
+import { useTranslation } from 'react-i18next';
 
 type IdolCateBoxProps = {
   selectedId: number;
@@ -22,13 +23,14 @@ const IdolCateBox = ({
 }: IdolCateBoxProps) => {
   const [idolInput, setIdolInput] = useState<string>('');
   const [isModalOpen, setModalOpen] = useState(false); // 아이돌 모달 온오프 여부
+  const { t, i18n } = useTranslation();
   const handleSerchIdol = (value: string) => {
     setIdolInput(value);
   };
   const { showToast } = useToast();
   const { data, isLoading, isError, error } = useSubcategoriesQuery(
     selectedId,
-    'ko'
+    i18n.language
   ); // 서브 카테고리 불러옴.
 
   if (isLoading) {
@@ -52,10 +54,10 @@ const IdolCateBox = ({
     <>
       <div>
         <div className='border-main-pink bg-main-pink/2 my-6 rounded-3xl border p-6'>
-          <p className='mb-4'>관심있는 K-POP 아이돌/그룹을 선택하세요</p>
+          <p className='mb-4'>{t('kpop.select_favorite_kpop_idol')}</p>
           <Input
             type='text'
-            placeholder='아이돌 그룹 검색 (예: BTS, BLACKPINK)'
+            placeholder={t('kpop.search_idol_placeholder')}
             value={idolInput}
             onChange={(e) => handleSerchIdol(e.target.value)}
           />
@@ -89,13 +91,13 @@ const IdolCateBox = ({
             })}
           </div>
           <hr className='text-outline-gray my-5' />
-          <p className='my-2 text-center'>원하는 아이돌이 없나요?</p>
+          <p className='my-2 text-center'>{t('kpop.idol_not_in_list')}</p>
           <Button
             variant='active'
             onClick={() => setModalOpen(true)}
             className='m-auto mt-4 h-12 w-fit rounded-full px-5'
           >
-            아이돌 신청하기
+            {t('kpop.request_idol')}
           </Button>
         </div>
       </div>

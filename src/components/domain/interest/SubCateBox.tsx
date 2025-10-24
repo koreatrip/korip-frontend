@@ -4,6 +4,7 @@ import SelectButton from './selectButton/SelectButton';
 import type { Dispatch, SetStateAction } from 'react';
 import { useToast } from '@/hooks/useToast';
 import type { Category } from '@/api/category/categoryType';
+import { useTranslation } from 'react-i18next';
 
 type SubCateBoxProps = {
   selectedId: number;
@@ -17,10 +18,10 @@ const SubCateBox = ({
   setSubSelected,
 }: SubCateBoxProps) => {
   const { showToast } = useToast();
-
+  const { i18n } = useTranslation();
   const { data, isLoading, isError, error } = useSubcategoriesQuery(
     selectedId,
-    'ko'
+    i18n.language
   ); // 서브 카테고리 불러옴.
 
   if (isLoading) {

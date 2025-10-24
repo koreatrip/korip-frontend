@@ -87,7 +87,9 @@
     "deleting": "Deleting...",
     "adding": "Adding...",
     "back_to_login": "Back to Login",
-    "error_support_message": "If the problem persists, please share this code with our support team along with what you were trying to do."
+    "error_support_message": "If the problem persists, please share this code with our support team along with what you were trying to do.",
+    "no_selected_interests": "No interests selected.",
+    "final_selected_interests": "Final selected interests"
   },
 
   "auth": {
@@ -434,11 +436,21 @@
     "idol_not_in_list": "Can't find your idol/group?",
     "request_idol": "Request an Idol",
     "idol_group_name": "Idol/Group Name",
-    "agency_optional": "Agency (optional)",
-    "related_info_optional": "Related Information (optional)",
-    "remarks_optional": "Remarks / Comments (optional)",
+    "agency_optional": "Agency <optional>(optional)</optional>",
+    "related_info_optional": "Related Information <optional>(optional)</optional>",
+    "remarks_optional": "Remarks / Comments <optional>(optional)</optional>",
     "idol_request_will_be_reviewed": "Your request will be reviewed and updated later.",
-    "please_be_patient": "Thank you for your patience."
+    "please_be_patient": "Thank you for your patience.",
+
+    "idol_request_success": "Idol request has been submitted successfully.",
+    "idol_request_failed": "Failed to submit idol request. Please try again.",
+    "enter_idol_name": "Please enter the idol/group name.",
+    "enter_within_100_characters": "Please enter within 100 characters.",
+    "example_agency": "e.g., SM, HYBE",
+    "example_description": "e.g., HYBE's new girl group",
+    "idol_request_review_notice": "The idol/group you requested will be reviewed and updated after approval.",
+    "idol_request_time_notice": "Please note that this process may take some time.",
+    "optional_message": "If there's anything else you'd like to share, feel free to write it here."
   },
 
   "languages": {
