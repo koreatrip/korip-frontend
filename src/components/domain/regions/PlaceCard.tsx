@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import type { Place } from '@/api/place/placeType';
 import { useUserProfileQuery } from '@/api/user/userHooks';
 import { IDOL_GROUPS } from '@/constants/idolGroup';
+import { useTranslation } from 'react-i18next';
 
 type PlaceCardBaseProps = {
   onClick?: () => void;
@@ -22,6 +23,7 @@ const PlaceCard = ({ data, onClick, onFavoriteChange }: PlaceCardProps) => {
   const { actions: modalActions } = useModalStore();
   const { isLoggedIn } = useAuthCheck();
   const { showToast } = useToast();
+  const { t } = useTranslation();
   const { data: userData } = useUserProfileQuery();
 
   const isIdolInterested = userData?.preferences_display?.some((pref) =>
@@ -59,8 +61,8 @@ const PlaceCard = ({ data, onClick, onFavoriteChange }: PlaceCardProps) => {
 
       // 성공 토스트
       const message = !localIsFavorite
-        ? '즐겨찾기에 추가되었습니다.'
-        : '즐겨찾기에서 제거되었습니다.';
+        ? t('places.added_to_favorites')
+        : t('places.removed_from_favorites');
       showToast(message, 'success');
 
       console.log('✅ Favorite place toggled successfully');
@@ -75,7 +77,7 @@ const PlaceCard = ({ data, onClick, onFavoriteChange }: PlaceCardProps) => {
       // 에러 발생 시 상태 롤백
       setLocalIsFavorite(localIsFavorite);
 
-      showToast('즐겨찾기 처리에 실패했습니다.', 'error');
+      showToast(t('places.failed_to_update_favorites"'), 'error');
     }
   };
 
@@ -105,7 +107,9 @@ const PlaceCard = ({ data, onClick, onFavoriteChange }: PlaceCardProps) => {
       </div>
 
       <div className='bg-bg-section mt-2 mb-4 flex flex-col gap-y-1 rounded-lg p-2'>
-        <p className='text-sub-text-gray text-sm font-medium'>특징</p>
+        <p className='text-sub-text-gray text-sm font-medium'>
+          {t('common.features')}
+        </p>
         <p className='text-sm'>{data.description || '설명이 없습니다.'}</p>
       </div>
 
@@ -125,12 +129,14 @@ const PlaceCard = ({ data, onClick, onFavoriteChange }: PlaceCardProps) => {
             <span className='bg-main-pink/15 text-main-pink rounded-lg px-2 py-1.5 text-sm'>
               {data.idol_names?.length
                 ? data.idol_names.join(', ')
-                : '아이돌 방문 기록 없음'}
+                : t('places.no_idol_visit_record')}
             </span>
             <span className='bg-main-pink/15 text-main-pink rounded-lg px-2 py-1.5 text-sm'>
               {data.idol_visits && data.idol_visits.length > 0
-                ? `${data.idol_visits.length}건의 방문 기록`
-                : '0건의 방문 기록'}
+                ? t('places.idol_visit_count', {
+                    count: data.idol_visits.length,
+                  })
+                : t('places.no_visit_record')}
             </span>
           </div>
         )}

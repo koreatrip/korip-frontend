@@ -391,7 +391,13 @@
     "total_favorites": "共{{count}}个收藏地点",
     "total_favorite_regions": "共 {{count}} 个收藏地区",
     "explore_stay_places": "{{region}}住宿设施",
-    "total_stay_places": "共{{count}}个住宿设施"
+    "total_stay_places": "共{{count}}个住宿设施",
+    "added_to_favorites": "已添加到收藏夹。",
+    "removed_from_favorites": "已从收藏夹中移除。",
+    "failed_to_update_favorites": "收藏夹更新失败。",
+    "no_idol_visit_record": "没有偶像访问记录。",
+    "idol_visit_count": "{{count}}条访问记录",
+    "no_visit_record": "0条访问记录"
   },
 
   "themes": {
