@@ -1,5 +1,6 @@
 // import star from '@/assets/star/star.svg';
 import { useToast } from '@/hooks/useToast';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
 type TFirstCard = {
@@ -12,6 +13,7 @@ type TFirstCard = {
 
 const FirstInfoCard = ({ id, isRegion, title, imageUrl }: TFirstCard) => {
   const { showToast } = useToast();
+  const { t } = useTranslation();
 
   function handleClickDetail() {
     // console.log('View details for item with id:', id);
@@ -41,7 +43,7 @@ const FirstInfoCard = ({ id, isRegion, title, imageUrl }: TFirstCard) => {
           onClick={() => handleClickDetail()}
           className='text-main-text-navy bg-bg-white border-outline-gray shadow-light text-md cursor-pointer rounded-full border px-3 py-2 font-medium whitespace-nowrap duration-300 hover:bg-gray-200 lg:px-5'
         >
-          둘러보기
+          {t('common.explore')}
         </button>
       </div>
     </div>
