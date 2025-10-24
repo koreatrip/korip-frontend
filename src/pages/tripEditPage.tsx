@@ -42,7 +42,9 @@ const TripEditPage: React.FC = () => {
     enabled: !!id,
   });
 
-  const { data: favoritePlacesData } = useFavoritePlacesQuery();
+  const { data: favoritePlacesData } = useFavoritePlacesQuery({
+    lang: i18n.language,
+  });
 
   const handleSave = async () => {
     if (!id || !planDetail) {
@@ -232,27 +234,29 @@ const TripEditPage: React.FC = () => {
         {/* 왼쪽 컬럼 */}
         <div className='flex flex-col gap-y-6'>
           <MyPageMenu />
-          <TripSummary
-            duration={calculateDuration(
-              planDetail.start_date,
-              planDetail.end_date
-            )}
-            totalPlaces={planDetail.selected_places.length}
-            completedPlaces={scheduledCount}
-            progress={
-              planDetail.selected_places.length
-                ? Math.round(
-                    (scheduledCount / planDetail.selected_places.length) * 100
-                  )
-                : 0
-            }
-          />
-          <SelectedPlacesList
-            listType='selected'
-            places={availablePlaces}
-            onRemovePlace={handleRemovePlaceFromPlan} // 전달
-          />
-          <SelectedPlacesList listType='favorites' places={favoritePlaces} />
+          <div className='w-72 space-y-6'>
+            <TripSummary
+              duration={calculateDuration(
+                planDetail.start_date,
+                planDetail.end_date
+              )}
+              totalPlaces={planDetail.selected_places.length}
+              completedPlaces={scheduledCount}
+              progress={
+                planDetail.selected_places.length
+                  ? Math.round(
+                      (scheduledCount / planDetail.selected_places.length) * 100
+                    )
+                  : 0
+              }
+            />
+            <SelectedPlacesList
+              listType='selected'
+              places={availablePlaces}
+              onRemovePlace={handleRemovePlaceFromPlan} // 전달
+            />
+            <SelectedPlacesList listType='favorites' places={favoritePlaces} />
+          </div>
         </div>
 
         {/* 메인 콘텐츠 */}

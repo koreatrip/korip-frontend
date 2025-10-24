@@ -89,7 +89,9 @@
     "back_to_login": "ログインに戻る",
     "error_support_message": "問題が解決しない場合は、このコードと行おうとしていた操作をサポートチームにお知らせください。",
     "no_selected_interests": "選択された関心事項がありません。",
-    "final_selected_interests": "最終的に選択された関心事項"
+    "final_selected_interests": "最終的に選択された関心事項",
+    "pdf_generating": "PDFを生成中...",
+    "pdf_saved": "PDFの保存が完了しました"
   },
 
   "auth": {

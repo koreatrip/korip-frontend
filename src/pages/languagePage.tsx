@@ -18,8 +18,8 @@ const LanguagePage = () => {
   const codeLangMap: { [key: string]: string } = {
     ko: '한국어',
     en: 'English',
-    ja: '日本語',
-    zh: '中文',
+    jp: '日本語',
+    cn: '中文',
   };
 
   const [selectedLanguage, setSelectedLanguage] = useState(

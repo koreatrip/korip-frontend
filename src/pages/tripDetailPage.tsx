@@ -9,12 +9,13 @@ import Button from '@/components/common/Button';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import PlannerDeleteModal from '@/components/domain/planner/PlannerDeleteModal';
 import { usePlannerDelete } from '@/hooks/usePlannerDelete';
-
+import { usePdfExport } from '@/hooks/usePdfExport';
 const TripDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [selectedDay, setSelectedDay] = useState(1);
   const { t, i18n } = useTranslation();
+  const { generatePdf, isLoading: isPdfLoading } = usePdfExport();
   const { openDeleteModal, deleteModalProps } = usePlannerDelete({
     onSuccess: () => navigate('/mypage/plan'), // 삭제 성공 시 목록 페이지로 이동
   });
@@ -115,6 +116,16 @@ const TripDetailPage = () => {
   };
 
   const period = `${formatDate(planDetail.start_date)} ~ ${formatDate(planDetail.end_date)}`;
+
+  // 디버깅용
+  console.log('📱 현재 페이지 언어:', i18n.language);
+
+  const handleSavePdf = () => {
+    if (id) {
+      console.log('🎯 generatePdf 호출 시 언어:', i18n.language);
+      generatePdf(id); // 언어를 명시적으로 전달하지 않음 - hook 내부에서 i18n.language 사용
+    }
+  };
 
   return (
     <MyPageLayout>
@@ -227,8 +238,12 @@ const TripDetailPage = () => {
               <button className='flex-1 rounded-lg bg-[#FF6B7A] px-4 py-3 text-xs font-medium text-white transition-colors hover:bg-[#e55a6e] md:text-sm'>
                 {t('common.sync_google_calendar')}
               </button>
-              <button className='flex-1 rounded-lg bg-[#FF6B7A] px-4 py-3 text-xs font-medium text-white transition-colors hover:bg-[#e55a6e] md:text-sm'>
-                {t('common.save_as_pdf')}
+              <button
+                onClick={handleSavePdf}
+                disabled={isPdfLoading}
+                className='flex-1 rounded-lg bg-[#FF6B7A] px-4 py-3 text-xs font-medium text-white transition-colors hover:bg-[#e55a6e] disabled:opacity-50 md:text-sm'
+              >
+                {isPdfLoading ? <Spinner /> : t('common.save_as_pdf')}
               </button>
             </div>
 

@@ -89,7 +89,9 @@
     "back_to_login": "Back to Login",
     "error_support_message": "If the problem persists, please share this code with our support team along with what you were trying to do.",
     "no_selected_interests": "No interests selected.",
-    "final_selected_interests": "Final selected interests"
+    "final_selected_interests": "Final selected interests",
+    "pdf_generating": "Generating PDF...",
+    "pdf_saved": "PDF saved successfully"
   },
 
   "auth": {
