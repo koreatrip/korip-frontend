@@ -3,6 +3,7 @@ import {
   GlobeAltIcon,
   Bars3Icon,
   XMarkIcon,
+  UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { useHeaderStore } from '@/stores/useHeaderStore';
 import { useState, useEffect } from 'react';
@@ -129,6 +130,10 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
 
   // SideMenu용 메뉴 아이템들 (서브메뉴 포함)
   const sideMenuItems: TSideMenuItem[] = [
+    {
+      label: t('common.mypage'),
+      href: '/mypage',
+    },
     {
       label: t('places.explore_regions'),
       href: `/explore/regions?region_id=1&lang=${i18n.language || 'ko'}`,
@@ -313,12 +318,20 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
                     </li>
                   ))
                 ) : (
-                  <li
-                    key={logoutMenuItem.label}
-                    className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
-                  >
-                    <p onClick={handleLogout}>{logoutMenuItem.label}</p>
-                  </li>
+                  <>
+                    <li className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'>
+                      <a href='/mypage' className='flex items-center gap-x-1'>
+                        <UserCircleIcon className='text-main-text-navy h-6 w-6 stroke-2' />
+                        {/* <p>{t('common.mypage')}</p> */}
+                      </a>
+                    </li>
+                    <li
+                      key={logoutMenuItem.label}
+                      className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
+                    >
+                      <p onClick={handleLogout}>{logoutMenuItem.label}</p>
+                    </li>
+                  </>
                 )}
 
                 <li className='relative'>
@@ -347,12 +360,21 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
                     <p>{authMenuItems[0].label}</p>
                   </a>
                 ) : (
-                  <a
-                    className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-medium'
-                    onClick={handleLogout}
-                  >
-                    <p>{logoutMenuItem.label}</p>
-                  </a>
+                  <>
+                    <a
+                      href='/mypage'
+                      className='hover:bg-hover-gray cursor-pointer rounded-lg p-2'
+                      title={t('common.mypage')}
+                    >
+                      <UserCircleIcon className='text-main-text-navy h-6 w-6' />
+                    </a>
+                    <a
+                      className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-medium'
+                      onClick={handleLogout}
+                    >
+                      <p>{logoutMenuItem.label}</p>
+                    </a>
+                  </>
                 )}
 
                 <button
@@ -397,12 +419,20 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
                     </li>
                   ))
                 ) : (
-                  <li
-                    key={logoutMenuItem.label}
-                    className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
-                  >
-                    <p onClick={handleLogout}>{logoutMenuItem.label}</p>
-                  </li>
+                  <>
+                    <li className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'>
+                      <a href='/mypage' className='flex items-center gap-x-1'>
+                        <UserCircleIcon className='text-main-text-navy h-6 w-6 stroke-2' />
+                        {/* <p>{t('common.mypage')}</p> */}
+                      </a>
+                    </li>
+                    <li
+                      key={logoutMenuItem.label}
+                      className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
+                    >
+                      <p onClick={handleLogout}>{logoutMenuItem.label}</p>
+                    </li>
+                  </>
                 )}
 
                 <li className='relative'>
@@ -423,12 +453,20 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
 
               {/* 태블릿: 우측 메뉴 (로그인 + 햄버거만) */}
               <div className='tablet-bp:flex desktop-bp:hidden hidden items-center gap-x-2'>
-                {!isLogin && (
+                {!isLogin ? (
                   <a
                     href={authMenuItems[0].href}
                     className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-medium'
                   >
                     <p>{authMenuItems[0].label}</p>
+                  </a>
+                ) : (
+                  <a
+                    href='/mypage'
+                    className='hover:bg-hover-gray cursor-pointer rounded-lg p-2'
+                    title={t('common.mypage')}
+                  >
+                    <UserCircleIcon className='text-main-text-navy h-6 w-6' />
                   </a>
                 )}
 
@@ -456,9 +494,18 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
                 <p>{t('auth.login')}</p>
               </a>
             ) : (
-              <a className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-semibold'>
-                <p onClick={handleLogout}>{t('auth.logout')}</p>
-              </a>
+              <>
+                <a
+                  href='/mypage'
+                  className='hover:bg-hover-gray cursor-pointer rounded-lg p-2'
+                  title={t('common.mypage')}
+                >
+                  <UserCircleIcon className='text-main-text-navy h-6 w-6' />
+                </a>
+                <a className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5 font-semibold'>
+                  <p onClick={handleLogout}>{t('auth.logout')}</p>
+                </a>
+              </>
             )}
 
             <button

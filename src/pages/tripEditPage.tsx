@@ -260,7 +260,7 @@ const TripEditPage: React.FC = () => {
         </div>
 
         {/* 메인 콘텐츠 */}
-        <div className='flex-1 space-y-6'>
+        <div className='min-w-0 flex-1 space-y-6'>
           <div>
             <h1 className='text-main-text-navy mb-2 text-3xl font-semibold'>
               {t('travel.edit_schedule')}
