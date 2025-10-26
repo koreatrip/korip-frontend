@@ -82,11 +82,18 @@ const PlannerPage = () => {
     const start = new Date(effectiveStartDate);
     const end = new Date(effectiveEndDate);
 
+    const formatLocalDate = (date: Date): string => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
     // day를 실제 날짜로 변환하는 함수
     const getDayDate = (day: number): string => {
       const date = new Date(start);
       date.setDate(start.getDate() + (day - 1));
-      return date.toISOString().split('T')[0];
+      return formatLocalDate(date); // ✅ 여기도 수정
     };
 
     // Zustand schedule을 API 형식으로 변환
@@ -99,11 +106,10 @@ const PlannerPage = () => {
     const updateData: UpdatePlanRequest = {
       title: planDetail.title,
       description: planDetail.description,
-      start_date: start.toISOString().split('T')[0],
-      end_date: end.toISOString().split('T')[0],
+      start_date: formatLocalDate(start), // ✅ toISOString 대신 formatLocalDate 사용
+      end_date: formatLocalDate(end), // ✅ toISOString 대신 formatLocalDate 사용
       places: places,
     };
-
     console.log('저장할 데이터:', updateData);
 
     try {
