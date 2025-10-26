@@ -8,7 +8,10 @@ import {
 import Dropdown, {
   type TDropdownItem,
 } from '@/components/common/dropdown/Dropdown';
-import { StarIcon as StarOutline } from '@heroicons/react/24/outline';
+import {
+  PhotoIcon,
+  StarIcon as StarOutline,
+} from '@heroicons/react/24/outline';
 import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
 import { useEffect, useState, type RefObject } from 'react';
 import { t } from 'i18next';
@@ -115,12 +118,20 @@ const InfoCard = ({
       className={`${baseCardClasses} ${variantClasses[variant]}`}
       onClick={variant === 'selectable' ? onClick : undefined}
     >
-      <div
-        className='bg-bg-section relative h-[223px] w-full overflow-hidden rounded-t-2xl bg-cover bg-center'
-        style={{
-          backgroundImage: `url(${imageUrl || 'https://via.placeholder.com/300x200'})`,
-        }}
-      >
+      <div className='bg-bg-section relative h-[223px] w-full overflow-hidden rounded-t-2xl bg-cover bg-center'>
+        {imageUrl ? (
+          <div
+            className='h-full w-full bg-cover bg-center'
+            style={{
+              backgroundImage: `url(${imageUrl})`,
+            }}
+          />
+        ) : (
+          <div className='flex h-full w-full flex-col items-center justify-center bg-gradient-to-br'>
+            <PhotoIcon className='text-sub-text-gray mb-2 h-12 w-12' />
+            <p className='text-sub-text-gray text-sm'>이미지 준비중</p>
+          </div>
+        )}
         <button
           onClick={handleFavorite}
           className='absolute top-3 right-3 z-10 cursor-pointer'

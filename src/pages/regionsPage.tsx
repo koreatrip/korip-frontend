@@ -196,7 +196,7 @@ const RegionsPage = () => {
                       title={place.name}
                       description={place.description ?? ''}
                       details={place.feature ?? ''}
-                      imageUrl={place.image_url}
+                      imageUrl={place.image_url || ''}
                       isFavorite={place.is_favorite}
                       onViewDetails={() => handlePlaceDetailOpen(place.id)}
                       isDropdownOpen={openDropdownId === place.id}
@@ -260,7 +260,7 @@ const RegionsPage = () => {
                         type='place'
                         variant='selectable'
                         title={place.name}
-                        imageUrl={place.image_url}
+                        imageUrl={place.image_url || ''}
                         description={place.description ?? ''}
                         details={place.feature ?? ''}
                         isFavorite={place.is_favorite}
@@ -288,7 +288,7 @@ const RegionsPage = () => {
                       id={accommodation.id}
                       type='place'
                       variant='selectable'
-                      imageUrl={accommodation.image_url}
+                      imageUrl={accommodation.image_url || ''}
                       title={accommodation.name}
                       description={accommodation.description ?? undefined}
                       details={accommodation.feature ?? undefined}

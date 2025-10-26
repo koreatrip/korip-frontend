@@ -29,6 +29,7 @@ import TripEditPage from '@/pages/tripEditPage';
 import FindPasswordPage from '@/pages/accountRecovery/findPasswordPage';
 import FindAccountPage from '@/pages/accountRecovery/findAccountPage';
 import StayListPage from '@/pages/stayListPage';
+import GoogleCalendarCallbackPage from '@/pages/statusPage/googleCalendarCallbackPage';
 
 export const router = createBrowserRouter([
   {
@@ -84,6 +85,10 @@ export const router = createBrowserRouter([
       {
         path: 'callback',
         element: <OAuthCallbackPage />,
+      },
+      {
+        path: '/calendar/google/callback',
+        element: <GoogleCalendarCallbackPage />,
       },
       {
         path: '/forgot-password',

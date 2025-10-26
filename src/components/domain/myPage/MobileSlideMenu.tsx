@@ -57,7 +57,7 @@ const MobileSlideMenu = () => {
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {menuItems.map((item) => (
-            <li key={item.to} className='h-[65px] w-[107px] shrink-0'>
+            <li key={item.to} className='flex-1 py-5'>
               <NavLink
                 to={item.to}
                 className={({ isActive }) =>

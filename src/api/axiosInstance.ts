@@ -38,6 +38,7 @@ const refreshTokenInstance = axios.create({
 
 const axiosInstance = axios.create({
   baseURL: VITE_BASE_URL,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
