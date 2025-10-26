@@ -10,12 +10,15 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import PlannerDeleteModal from '@/components/domain/planner/PlannerDeleteModal';
 import { usePlannerDelete } from '@/hooks/usePlannerDelete';
 import { usePdfExport } from '@/hooks/usePdfExport';
+import { useGoogleCalendarSync } from '@/hooks/useGoogleCalendarSync';
 const TripDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [selectedDay, setSelectedDay] = useState(1);
   const { t, i18n } = useTranslation();
   const { generatePdf, isLoading: isPdfLoading } = usePdfExport();
+  const { startGoogleAuth, isLoading: isCalendarLoading } =
+    useGoogleCalendarSync();
   const { openDeleteModal, deleteModalProps } = usePlannerDelete({
     onSuccess: () => navigate('/mypage/plan'), // 삭제 성공 시 목록 페이지로 이동
   });
@@ -27,6 +30,12 @@ const TripDetailPage = () => {
   } = usePlanDetailQuery(id!, i18n.language || 'ko', {
     enabled: !!id,
   });
+
+  const handleSyncGoogleCalendar = () => {
+    if (id) {
+      startGoogleAuth(id);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -235,8 +244,16 @@ const TripDetailPage = () => {
             </div>
 
             <div className='mt-4 flex flex-col gap-2 sm:flex-row'>
-              <button className='flex-1 rounded-lg bg-[#FF6B7A] px-4 py-3 text-xs font-medium text-white transition-colors hover:bg-[#e55a6e] md:text-sm'>
-                {t('common.sync_google_calendar')}
+              <button
+                onClick={handleSyncGoogleCalendar}
+                disabled={isCalendarLoading}
+                className='flex-1 rounded-lg bg-[#FF6B7A] px-4 py-3 text-xs font-medium text-white transition-colors hover:bg-[#e55a6e] disabled:opacity-50 md:text-sm'
+              >
+                {isCalendarLoading ? (
+                  <Spinner />
+                ) : (
+                  t('common.sync_google_calendar')
+                )}
               </button>
               <button
                 onClick={handleSavePdf}

@@ -91,7 +91,8 @@
     "no_selected_interests": "尚未选择任何兴趣。",
     "final_selected_interests": "最终选择的兴趣",
     "pdf_generating": "正在生成PDF...",
-    "pdf_saved": "PDF已成功保存"
+    "pdf_saved": "PDF已成功保存",
+    "mypage": "我的页面"
   },
 
   "auth": {

@@ -91,7 +91,8 @@
     "no_selected_interests": "選択された関心事項がありません。",
     "final_selected_interests": "最終的に選択された関心事項",
     "pdf_generating": "PDFを生成中...",
-    "pdf_saved": "PDFの保存が完了しました"
+    "pdf_saved": "PDFの保存が完了しました",
+    "mypage": "マイページ"
   },
 
   "auth": {

@@ -91,7 +91,8 @@
     "no_selected_interests": "No interests selected.",
     "final_selected_interests": "Final selected interests",
     "pdf_generating": "Generating PDF...",
-    "pdf_saved": "PDF saved successfully"
+    "pdf_saved": "PDF saved successfully",
+    "mypage": "My Page"
   },
 
   "auth": {

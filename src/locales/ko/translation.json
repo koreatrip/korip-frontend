@@ -91,7 +91,8 @@
     "no_selected_interests": "선택된 관심사가 없습니다.",
     "final_selected_interests": "최종 선택된 관심사",
     "pdf_generating": "PDF 생성중...",
-    "pdf_saved": "PDF 저장 완료"
+    "pdf_saved": "PDF 저장 완료",
+    "mypage": "마이페이지"
   },
 
   "auth": {
