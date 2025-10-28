@@ -15,7 +15,7 @@ type DistrictCardProps = {
     description: string;
     feature: string;
     favorite_count?: number;
-    attractions_count?: number;
+    place_count?: number;
     subregions_count?: number;
     is_favorite?: boolean; // 즐겨찾기 상태 추가
   };
@@ -51,11 +51,13 @@ const DistrictCard = ({
   // attractions 수 결정
   const getAttractionsCount = () => {
     if (type === 'subregion') {
-      return data.attractions_count || 0;
+      return data.place_count || 0;
     } else {
-      return data.subregions_count || 0;
+      return data.place_count || 0;
     }
   };
+
+  console.log('attractions_count', data);
 
   const attractionsCount = getAttractionsCount();
 
@@ -137,7 +139,9 @@ const DistrictCard = ({
       <p className='mt-2 text-sm text-gray-600'>{data.description}</p>
 
       <div className='bg-bg-section mt-3 flex flex-col gap-y-1 rounded-lg p-3'>
-        <p className='text-sub-text-gray text-sm font-medium'>특징</p>
+        <p className='text-sub-text-gray text-sm font-medium'>
+          {t('common.features')}
+        </p>
         <p className='text-sm'>{data.feature}</p>
       </div>
     </div>
