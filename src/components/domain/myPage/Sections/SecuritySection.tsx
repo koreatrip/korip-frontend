@@ -1,31 +1,41 @@
 import Button from '@/components/common/Button';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 type SecuritySectionProps = {
   onPasswordChange: () => void;
   onAccountDelete?: () => void;
+  isSocialLogin?: boolean;
 };
 
 const SecuritySection: React.FC<SecuritySectionProps> = ({
   onPasswordChange,
   onAccountDelete,
+  isSocialLogin = false,
 }) => {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <section className='mb-6 rounded-md bg-gray-50 p-6 shadow-md'>
-      <h3 className='text-main-text-navy mb-4 text-lg font-bold'>보안 설정</h3>
+      <h3 className='text-main-text-navy mb-4 text-lg font-bold'>
+        {t('user.security_settings')}
+      </h3>
 
       <div className='space-y-4'>
         <div className='flex items-center justify-between'>
-          <span className='text-main-text-navy font-medium'>비밀번호</span>
-          <span className='text-gray-400'>*********</span>
+          <span className='text-main-text-navy font-medium'>
+            {t('auth.password')}
+          </span>
+          <span className='text-gray-400'>
+            {isSocialLogin ? '소셜 로그인' : '*********'}
+          </span>
         </div>
         <hr className='border-outline-gray -mt-3 border-t' />
 
         {/* 이메일 인증 */}
         <div className='flex items-center justify-between'>
-          <span className='text-main-text-navy font-medium'>이메일 인증</span>
+          <span className='text-main-text-navy font-medium'>
+            {t('auth.email_verification')}
+          </span>
           <span
             className='flex w-auto items-center justify-center rounded-lg px-3 py-1 font-light text-white'
             style={{ backgroundColor: '#4A9B8E' }}
@@ -41,6 +51,7 @@ const SecuritySection: React.FC<SecuritySectionProps> = ({
             variant='cancel'
             className='h-[52px] w-[164px]'
             onClick={onPasswordChange}
+            disabled={isSocialLogin}
           >
             {t('user.change_password')}
           </Button>
