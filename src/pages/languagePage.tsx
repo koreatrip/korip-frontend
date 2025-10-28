@@ -43,7 +43,7 @@ const LanguagePage = () => {
   };
 
   const handleConfirm = () => {
-    navigate('/');
+    navigate('/interest');
   };
 
   return (

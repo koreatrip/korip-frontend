@@ -47,7 +47,7 @@ const InterestPage = () => {
     try {
       await interestAPI(userId, requestPayload);
       showToast('관심사 선택이 완료되었습니다!', 'success');
-      navigate('/language');
+      navigate('/');
     } catch (error) {
       console.error('관심사 선택 전송 실패:', error);
       showToast('관심사 전송에 실패했습니다. 다시 시도해주세요.', 'error');

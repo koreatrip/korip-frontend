@@ -26,6 +26,10 @@ const ProfileCard = () => {
   const { data: userProfileData, isLoading, error } = useUserProfileQuery();
   const updateUserProfile = useUpdateUserProfileMutation();
 
+  const isSocialLogin =
+    userProfileData?.is_social === true ||
+    userProfileData?.login_type === 'google';
+
   useEffect(() => {
     if (userProfileData) {
       initializeForm(userProfileData);
@@ -77,6 +81,7 @@ const ProfileCard = () => {
         <SecuritySection
           onPasswordChange={() => setShowPasswordModal(true)}
           onAccountDelete={handleAccountDelete}
+          isSocialLogin={isSocialLogin}
         />
       </section>
 

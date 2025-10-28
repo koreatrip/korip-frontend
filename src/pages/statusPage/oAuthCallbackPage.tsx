@@ -47,7 +47,7 @@ const OAuthCallbackPage = () => {
         showToast('환영합니다!', 'success');
 
         const redirectTo = response.first_login
-          ? '/interest'
+          ? '/language'
           : '/first-region-search';
         navigate(redirectTo);
       } catch (err: unknown) {
