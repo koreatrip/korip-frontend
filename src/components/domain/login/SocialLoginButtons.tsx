@@ -4,10 +4,10 @@ import { useToast } from '@/hooks/useToast';
 import { twMerge } from 'tailwind-merge';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_PUBLIC_GOOGLE_CLIENT_ID;
-const GOOGLE_REDIRECT_URI = 'http://localhost:5173/callback'; // 콜백 페이지로 변경
+// const GOOGLE_REDIRECT_URI = 'http://localhost:5173/callback'; // 콜백 페이지로 변경
 
 // 배포용 주소
-// const GOOGLE_REDIRECT_URI = 'https://korip.me/callback';
+const GOOGLE_REDIRECT_URI = 'https://korip.me/callback';
 
 type SocialButton = {
   id: string;
