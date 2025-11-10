@@ -6,7 +6,7 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { useHeaderStore } from '@/stores/useHeaderStore';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import SideMenu from './sideMenu/SideMenu';
 import SearchBar from '../domain/searchBar/SearchBar';
 import type { TDropdownItem } from './dropdown/Dropdown';
@@ -62,6 +62,10 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
   const isLogin = useAuthStore((state) => state.auth.isLogin);
   const { setLogout } = useAuthStore((state) => state.actions);
 
+  // 드롭다운 외부 클릭 감지를 위한 ref
+  const travelDropdownRef = useRef<HTMLLIElement>(null);
+  const langDropdownRef = useRef<HTMLLIElement>(null);
+
   // 스크롤 감지
   useEffect(() => {
     const handleScroll = () => {
@@ -72,6 +76,48 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // 여행 드롭다운 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        stack.isTravelDropdownOpen &&
+        travelDropdownRef.current &&
+        !travelDropdownRef.current.contains(event.target as Node)
+      ) {
+        actions.closeTravelDropdown();
+      }
+    };
+
+    if (stack.isTravelDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [stack.isTravelDropdownOpen, actions]);
+
+  // 언어 드롭다운 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        stack.isLangDropdownOpen &&
+        langDropdownRef.current &&
+        !langDropdownRef.current.contains(event.target as Node)
+      ) {
+        actions.closeLangDropdown();
+      }
+    };
+
+    if (stack.isLangDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [stack.isLangDropdownOpen, actions]);
 
   // 언어 변경 핸들러
   const handleLanguageChange = (languageCode: string) => {
@@ -130,10 +176,10 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
 
   // SideMenu용 메뉴 아이템들 (서브메뉴 포함)
   const sideMenuItems: TSideMenuItem[] = [
-    {
-      label: t('common.mypage'),
-      href: '/mypage',
-    },
+    // {
+    //   label: t('common.mypage'),
+    //   href: '/mypage',
+    // },
     {
       label: t('places.explore_regions'),
       href: `/explore/regions?region_id=1&lang=${i18n.language || 'ko'}`,
@@ -252,6 +298,7 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
       {mainMenuItems.map((item) => (
         <li
           key={item.label}
+          ref={item.label === t('common.travel') ? travelDropdownRef : null}
           className='hover:bg-hover-gray relative cursor-pointer rounded-lg px-5 py-[10px]'
         >
           {item.label === t('common.travel') ? (
@@ -285,70 +332,73 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
       {/* 메인 헤더 */}
       <div className='flex h-20 w-full items-center justify-center'>
         <div className='flex w-full max-w-[1440px] items-center justify-between px-4'>
-          {/* 로고 (공통) */}
-          <Link to='/'>
-            <img src={logo_sm} alt='Koriplogo' />
-          </Link>
+          {/* 로고 (공통) - 데스크톱에서는 flex-1 적용 */}
+          <div className='desktop-bp:flex-1'>
+            <Link to='/'>
+              <img src={logo_sm} alt='Koriplogo' />
+            </Link>
+          </div>
 
           {/* variant에 따라 데스크톱의 가운데와 오른쪽 메뉴를 다르게 렌더링 --- */}
 
           {/* 기본 헤더 레이아웃 */}
           {variant === 'default' && (
             <>
-              {/* 데스크톱: 중앙 메뉴 */}
-              <div className='desktop-bp:flex hidden flex-grow justify-center'>
+              {/* 데스크톱: 중앙 메뉴 - flex-1로 공간 확보하고 center 정렬 */}
+              <div className='desktop-bp:flex desktop-bp:flex-1 desktop-bp:justify-center hidden'>
                 <MainMenu />
               </div>
 
               {/* 태블릿: 빈 공간 (검색바 제거) */}
               <div className='tablet-bp:flex desktop-bp:hidden hidden flex-grow'></div>
 
-              {/* 데스크톱: 우측 메뉴 */}
+              {/* 데스크톱: 우측 메뉴 - flex-1로 공간 확보하고 end 정렬 */}
+              <div className='desktop-bp:flex desktop-bp:flex-1 desktop-bp:justify-end hidden'>
+                <ul className='flex items-center font-medium'>
+                  {!isLogin ? (
+                    authMenuItems.map((item) => (
+                      <li
+                        key={item.label}
+                        className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
+                      >
+                        <a href={item.href}>
+                          <p>{item.label}</p>
+                        </a>
+                      </li>
+                    ))
+                  ) : (
+                    <>
+                      <li className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'>
+                        <a href='/mypage' className='flex items-center gap-x-1'>
+                          <UserCircleIcon className='text-main-text-navy h-6 w-6 stroke-2' />
+                          {/* <p>{t('common.mypage')}</p> */}
+                        </a>
+                      </li>
+                      <li
+                        key={logoutMenuItem.label}
+                        className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
+                      >
+                        <p onClick={handleLogout}>{logoutMenuItem.label}</p>
+                      </li>
+                    </>
+                  )}
 
-              <ul className='desktop-bp:flex hidden items-center font-medium'>
-                {!isLogin ? (
-                  authMenuItems.map((item) => (
-                    <li
-                      key={item.label}
-                      className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
+                  <li className='relative' ref={langDropdownRef}>
+                    <button
+                      onClick={actions.toggleLangDropdown}
+                      className='hover:bg-hover-gray flex cursor-pointer items-center gap-x-1 rounded-lg px-3 py-1.5'
                     >
-                      <a href={item.href}>
-                        <p>{item.label}</p>
-                      </a>
-                    </li>
-                  ))
-                ) : (
-                  <>
-                    <li className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'>
-                      <a href='/mypage' className='flex items-center gap-x-1'>
-                        <UserCircleIcon className='text-main-text-navy h-6 w-6 stroke-2' />
-                        {/* <p>{t('common.mypage')}</p> */}
-                      </a>
-                    </li>
-                    <li
-                      key={logoutMenuItem.label}
-                      className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
-                    >
-                      <p onClick={handleLogout}>{logoutMenuItem.label}</p>
-                    </li>
-                  </>
-                )}
-
-                <li className='relative'>
-                  <button
-                    onClick={actions.toggleLangDropdown}
-                    className='hover:bg-hover-gray flex cursor-pointer items-center gap-x-1 rounded-lg px-3 py-1.5'
-                  >
-                    <GlobeAltIcon className='h-5 w-5 stroke-2' />
-                    <p>{getCurrentLanguageLabel()}</p>
-                  </button>
-                  <Dropdown
-                    isOpen={stack.isLangDropdownOpen}
-                    items={languages}
-                    onClose={actions.closeLangDropdown}
-                  />
-                </li>
-              </ul>
+                      <GlobeAltIcon className='h-5 w-5 stroke-2' />
+                      <p>{getCurrentLanguageLabel()}</p>
+                    </button>
+                    <Dropdown
+                      isOpen={stack.isLangDropdownOpen}
+                      items={languages}
+                      onClose={actions.closeLangDropdown}
+                    />
+                  </li>
+                </ul>
+              </div>
 
               {/* 태블릿: 우측 메뉴 (로그인 + 햄버거만) */}
               <div className='tablet-bp:flex desktop-bp:hidden hidden items-center gap-x-2'>
@@ -406,50 +456,52 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
               </div>
 
               {/* 데스크톱: 우측 메뉴 (햄버거 없음) */}
-              <ul className='desktop-bp:flex hidden items-center font-medium'>
-                {!isLogin ? (
-                  authMenuItems.map((item) => (
-                    <li
-                      key={item.label}
-                      className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
-                    >
-                      <a href={item.href}>
-                        <p>{item.label}</p>
-                      </a>
-                    </li>
-                  ))
-                ) : (
-                  <>
-                    <li className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'>
-                      <a href='/mypage' className='flex items-center gap-x-1'>
-                        <UserCircleIcon className='text-main-text-navy h-6 w-6 stroke-2' />
-                        {/* <p>{t('common.mypage')}</p> */}
-                      </a>
-                    </li>
-                    <li
-                      key={logoutMenuItem.label}
-                      className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
-                    >
-                      <p onClick={handleLogout}>{logoutMenuItem.label}</p>
-                    </li>
-                  </>
-                )}
+              <div className='desktop-bp:flex desktop-bp:flex-1 desktop-bp:justify-end hidden'>
+                <ul className='flex items-center font-medium'>
+                  {!isLogin ? (
+                    authMenuItems.map((item) => (
+                      <li
+                        key={item.label}
+                        className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
+                      >
+                        <a href={item.href}>
+                          <p>{item.label}</p>
+                        </a>
+                      </li>
+                    ))
+                  ) : (
+                    <>
+                      <li className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'>
+                        <a href='/mypage' className='flex items-center gap-x-1'>
+                          <UserCircleIcon className='text-main-text-navy h-6 w-6 stroke-2' />
+                          {/* <p>{t('common.mypage')}</p> */}
+                        </a>
+                      </li>
+                      <li
+                        key={logoutMenuItem.label}
+                        className='hover:bg-hover-gray cursor-pointer rounded-lg px-3 py-1.5'
+                      >
+                        <p onClick={handleLogout}>{logoutMenuItem.label}</p>
+                      </li>
+                    </>
+                  )}
 
-                <li className='relative'>
-                  <button
-                    onClick={actions.toggleLangDropdown}
-                    className='hover:bg-hover-gray flex cursor-pointer items-center gap-x-1 rounded-lg px-3 py-1.5'
-                  >
-                    <GlobeAltIcon className='h-5 w-5 stroke-2' />
-                    <p>{getCurrentLanguageLabel()}</p>
-                  </button>
-                  <Dropdown
-                    isOpen={stack.isLangDropdownOpen}
-                    items={languages}
-                    onClose={actions.closeLangDropdown}
-                  />
-                </li>
-              </ul>
+                  <li className='relative' ref={langDropdownRef}>
+                    <button
+                      onClick={actions.toggleLangDropdown}
+                      className='hover:bg-hover-gray flex cursor-pointer items-center gap-x-1 rounded-lg px-3 py-1.5'
+                    >
+                      <GlobeAltIcon className='h-5 w-5 stroke-2' />
+                      <p>{getCurrentLanguageLabel()}</p>
+                    </button>
+                    <Dropdown
+                      isOpen={stack.isLangDropdownOpen}
+                      items={languages}
+                      onClose={actions.closeLangDropdown}
+                    />
+                  </li>
+                </ul>
+              </div>
 
               {/* 태블릿: 우측 메뉴 (로그인 + 햄버거만) */}
               <div className='tablet-bp:flex desktop-bp:hidden hidden items-center gap-x-2'>

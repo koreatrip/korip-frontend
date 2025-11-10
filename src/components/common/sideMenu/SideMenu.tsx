@@ -42,6 +42,7 @@ const SideMenu = ({
 }: TSideMenuProps) => {
   const isLogin = useAuthStore((state) => state.auth.isLogin);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
+  const [isLanguageExpanded, setIsLanguageExpanded] = useState(false);
 
   const handleMenuClick = (item: TMenuItem) => {
     if (item.hasSubmenu) {
@@ -151,28 +152,42 @@ const SideMenu = ({
                   </button>
                 ))}
 
-              {/* 언어 선택 */}
-              <div className='px-6 py-4'>
-                <div className='mb-3 flex items-center gap-x-2'>
-                  <GlobeAltIcon className='h-5 w-5 stroke-2' />
-                  <span className='font-medium'>언어 선택</span>
-                </div>
-                <div className='space-y-2'>
-                  {languages.map((lang) => (
-                    <button
-                      key={lang.value}
-                      onClick={() => {
-                        if (lang.onClick) {
-                          lang.onClick();
-                        }
-                        onClose();
-                      }}
-                      className='text-main-text-navy hover:bg-hover-gray block w-full rounded-lg px-4 py-2 text-left'
-                    >
-                      {lang.label}
-                    </button>
-                  ))}
-                </div>
+              {/* 언어 선택 - 아코디언 형태 */}
+              <div>
+                <button
+                  onClick={() => setIsLanguageExpanded(!isLanguageExpanded)}
+                  className='border-outline-gray text-main-text-navy hover:bg-hover-gray flex w-full items-center justify-between border-b px-6 py-4 text-left'
+                >
+                  <div className='flex items-center gap-x-2'>
+                    <GlobeAltIcon className='h-5 w-5 stroke-2' />
+                    <span className='font-medium'>언어 선택</span>
+                  </div>
+                  <ChevronDownIcon
+                    className={`h-4 w-4 transform transition-transform ${
+                      isLanguageExpanded ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+
+                {/* 언어 목록 */}
+                {isLanguageExpanded && (
+                  <div className='bg-bg-section'>
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.value}
+                        onClick={() => {
+                          if (lang.onClick) {
+                            lang.onClick();
+                          }
+                          onClose();
+                        }}
+                        className='text-main-text-navy hover:bg-hover-gray border-outline-gray/50 w-full border-b px-8 py-3 text-left text-sm'
+                      >
+                        {lang.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>
