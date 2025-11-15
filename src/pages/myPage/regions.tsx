@@ -16,7 +16,9 @@ const Regions = () => {
   const [sortOption, setSortOption] = useState<SortOption>(
     SortOption.DATE_DESC
   );
-  const [selectedRegionId, setSelectedRegionId] = useState<number | null>(null);
+  const [selectedRegionId, _setSelectedRegionId] = useState<number | null>(
+    null
+  );
 
   const {
     data,
