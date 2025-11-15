@@ -67,7 +67,7 @@ const PlannerAddButton = ({ onClick }: TPlannerAddButtonProps) => {
       <div className='flex h-full items-center justify-center'>
         <button
           onClick={onClick} // 부모에게서 받은 onClick 함수를 실행
-          className='flex h-[177px] w-[177px] flex-col items-center justify-center rounded-full bg-gray-200 transition-colors duration-200 hover:bg-gray-300'
+          className='flex h-[177px] w-[177px] cursor-pointer flex-col items-center justify-center rounded-full bg-gray-200 transition-colors duration-200 hover:bg-gray-300'
         >
           <svg
             className='h-[91px] w-[91px] text-white'
