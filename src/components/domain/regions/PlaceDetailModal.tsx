@@ -93,13 +93,6 @@ const PlaceDetailModal = ({
   };
 
   const renderPlanOptions = () => {
-    if (!isLoggedIn) {
-      return (
-        <option disabled value=''>
-          로그인 후 이용 가능합니다.
-        </option>
-      );
-    }
     if (plansLoading) {
       return <option disabled>일정 불러오는 중...</option>;
     }
@@ -243,34 +236,50 @@ const PlaceDetailModal = ({
         )}
       </Modal.Body>
       <Modal.Footer>
-        <div className='mt-4 flex w-full items-center gap-x-2'>
-          <select
-            value={selectedPlanId}
-            onChange={(e) => setSelectedPlanId(e.target.value)}
-            className='focus:border-sub-green focus:ring-sub-green flex-grow rounded-md border border-gray-300 p-2 focus:ring-1 focus:outline-none'
-            disabled={
-              !isLoggedIn ||
-              plansLoading ||
-              !plansData?.plans ||
-              plansData.plans.length === 0
-            }
-          >
-            {renderPlanOptions()}
-          </select>
-          <Button
-            onClick={handleAddToPlan}
-            disabled={
-              addPlaceToPlanMutation.isPending ||
-              isLoading ||
-              (isLoggedIn && !selectedPlanId)
-            }
-            className='w-1/3 flex-shrink-0'
-          >
-            {addPlaceToPlanMutation.isPending
-              ? t('common.adding')
-              : t('travel.add_to_plan')}
-          </Button>
-        </div>
+        {!isLoggedIn ? (
+          <div className='mt-4 flex w-full flex-col items-center gap-y-3'>
+            <p className='text-sm text-gray-600'>
+              일정에 장소를 추가하려면 로그인이 필요합니다.
+            </p>
+            <Button
+              onClick={() => {
+                onClose(); // 디테일 모달 먼저 닫기
+                setTimeout(() => {
+                  modalActions.openLoginPrompt();
+                }, 200);
+              }}
+              className='w-full'
+            >
+              로그인하기
+            </Button>
+          </div>
+        ) : (
+          <div className='mt-4 flex w-full items-center gap-x-2'>
+            <select
+              value={selectedPlanId}
+              onChange={(e) => setSelectedPlanId(e.target.value)}
+              className='focus:border-sub-green focus:ring-sub-green flex-grow rounded-md border border-gray-300 p-2 focus:ring-1 focus:outline-none'
+              disabled={
+                plansLoading ||
+                !plansData?.plans ||
+                plansData.plans.length === 0
+              }
+            >
+              {renderPlanOptions()}
+            </select>
+            <Button
+              onClick={handleAddToPlan}
+              disabled={
+                addPlaceToPlanMutation.isPending || isLoading || !selectedPlanId
+              }
+              className='w-1/3 flex-shrink-0'
+            >
+              {addPlaceToPlanMutation.isPending
+                ? t('common.adding')
+                : t('travel.add_to_plan')}
+            </Button>
+          </div>
+        )}
       </Modal.Footer>
     </Modal>
   );

@@ -66,7 +66,7 @@ const PlannerCard = ({
                 e.stopPropagation();
                 onEdit();
               }}
-              className='flex h-[24px] w-[24px] items-center justify-center rounded-full text-gray-500 transition-colors hover:text-gray-700'
+              className='flex h-[24px] w-[24px] cursor-pointer items-center justify-center rounded-full text-gray-500 transition-colors hover:text-gray-700'
               aria-label='편집'
             >
               <PencilIcon className='h-5 w-5 stroke-2' />
@@ -76,7 +76,7 @@ const PlannerCard = ({
                 e.stopPropagation();
                 onDelete();
               }}
-              className='flex h-[24px] w-[24px] items-center justify-center rounded-full text-gray-500 transition-colors hover:text-gray-700'
+              className='flex h-[24px] w-[24px] cursor-pointer items-center justify-center rounded-full text-gray-500 transition-colors hover:text-gray-700'
               aria-label='삭제'
             >
               <TrashIcon className='h-5 w-5 stroke-2' />

@@ -37,7 +37,7 @@ const SortDropdown: React.FC<SortDropdownProps> = ({ options, current }) => {
     <div ref={dropdownRef} className='relative'>
       <button
         onClick={handleToggle}
-        className={`text-md flex h-14 w-32 items-center justify-center gap-2 rounded-4xl border bg-[#FF6B7A] px-4 py-2 font-light text-white transition-colors ${
+        className={`text-md flex h-14 w-32 cursor-pointer items-center justify-center gap-2 rounded-4xl border bg-[#FF6B7A] px-4 py-2 font-light text-white transition-colors ${
           isOpen ? '' : 'hover:bg-[#ff5a6b]'
         }`}
       >
@@ -66,7 +66,7 @@ const SortDropdown: React.FC<SortDropdownProps> = ({ options, current }) => {
                 item.onClick();
                 handleClose();
               }}
-              className={`w-full px-4 py-2 text-left text-sm transition-colors ${
+              className={`w-full cursor-pointer px-4 py-2 text-left text-sm transition-colors ${
                 current === item.value
                   ? 'bg-gray-100 font-medium text-gray-700'
                   : 'text-gray-700 hover:bg-gray-50'

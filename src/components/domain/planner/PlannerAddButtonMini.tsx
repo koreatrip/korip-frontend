@@ -18,7 +18,7 @@ const PlannerAddButtonMini = ({
     <button
       onClick={onClick}
       disabled={disabled}
-      className='bg-main-pink hover:bg-main-hover-pink flex h-14 w-14 items-center justify-center rounded-full text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50'
+      className='bg-main-pink hover:bg-main-hover-pink flex h-14 w-14 cursor-pointer items-center justify-center rounded-full text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50'
     >
       {/* isPending 상태를 직접 관리하지 않으므로, 
         항상 '+' 아이콘만 보여주면 됩니다. 

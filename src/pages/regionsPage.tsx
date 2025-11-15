@@ -135,7 +135,26 @@ const RegionsPage = () => {
           <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
             {t('places.popular_area_info')}
           </h2>
-          <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-4 mt-7 grid grid-cols-1 gap-4'>
+          <div className='mt-2 flex w-full justify-end'>
+            <button
+              className='cursor-pointer font-medium'
+              onClick={() => {
+                const params = new URLSearchParams({ lang: currentLanguage });
+                if (regionId) params.set('region_id', String(regionId));
+
+                const targetSubregionId =
+                  subregionId || popularSubregions[0]?.id;
+                if (targetSubregionId) {
+                  params.set('subregion_id', String(targetSubregionId));
+                }
+
+                navigate(`/explore/districts?${params.toString()}`);
+              }}
+            >
+              {t('common.view_all')}
+            </button>
+          </div>
+          <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-4 mt-4 grid grid-cols-1 gap-4'>
             {popularSubregions.length > 0
               ? popularSubregions.map((sub) => (
                   <li key={sub.id}>
@@ -156,6 +175,16 @@ const RegionsPage = () => {
                   </li>
                 ))}
           </ul>
+        </div>
+
+        <h1 className='tablet-bp:text-4xl mt-14 text-2xl font-semibold'>
+          {t('places.currently_viewing', { location: getCurrentRegionName() })}
+        </h1>
+
+        <div className='mt-16'>
+          <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
+            {t('places.main_attractions')}
+          </h2>
           <div className='mt-2 flex w-full justify-end'>
             <button
               className='cursor-pointer font-medium'
@@ -169,23 +198,13 @@ const RegionsPage = () => {
                   params.set('subregion_id', String(targetSubregionId));
                 }
 
-                navigate(`/explore/districts?${params.toString()}`);
+                navigate(`/explore/attractions?${params.toString()}`);
               }}
             >
               {t('common.view_all')}
             </button>
           </div>
-        </div>
-
-        <h1 className='tablet-bp:text-4xl mt-14 text-2xl font-semibold'>
-          {t('places.currently_viewing', { location: getCurrentRegionName() })}
-        </h1>
-
-        <div className='mt-16'>
-          <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
-            {t('places.main_attractions')}
-          </h2>
-          <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-4 mt-7 grid grid-cols-1 gap-4'>
+          <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-4 mt-4 grid grid-cols-1 gap-4'>
             {majorPlaces.length > 0
               ? majorPlaces.slice(0, 4).map((place) => (
                   <li key={place.id}>
@@ -214,25 +233,6 @@ const RegionsPage = () => {
                   </li>
                 ))}
           </ul>
-          <div className='mt-2 flex w-full justify-end'>
-            <button
-              className='cursor-pointer font-medium'
-              onClick={() => {
-                const params = new URLSearchParams({ lang: currentLanguage });
-                if (regionId) params.set('region_id', String(regionId));
-
-                const targetSubregionId =
-                  subregionId || popularSubregions[0]?.id;
-                if (targetSubregionId) {
-                  params.set('subregion_id', String(targetSubregionId));
-                }
-
-                navigate(`/explore/attractions?${params.toString()}`);
-              }}
-            >
-              {t('common.view_all')}
-            </button>
-          </div>
         </div>
 
         {isLoggedIn && (
@@ -258,12 +258,19 @@ const RegionsPage = () => {
                       <InfoCard
                         id={place.id}
                         type='place'
-                        variant='selectable'
+                        variant='interactive'
                         title={place.name}
                         imageUrl={place.image_url || ''}
                         description={place.description ?? ''}
                         details={place.feature ?? ''}
                         isFavorite={place.is_favorite}
+                        onViewDetails={() => handlePlaceDetailOpen(place.id)}
+                        isDropdownOpen={openDropdownId === place.id}
+                        onToggleDropdown={() => toggleDropdown(place.id)}
+                        dropdownItems={dropdownItems}
+                        isAddingToSchedule={isAddingToSchedule}
+                        dropdownButtonRef={dropdownButtonRef}
+                        dropdownContentRef={dropdownContentRef}
                       />
                     </li>
                   ))
@@ -280,28 +287,6 @@ const RegionsPage = () => {
           <h2 className='tablet-bp:text-[32px] text-xl font-semibold'>
             {t('places.recommended_accommodations')}
           </h2>
-          <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-4 mt-7 grid grid-cols-1 gap-4'>
-            {accommodations.length > 0
-              ? accommodations.map((accommodation) => (
-                  <li key={accommodation.id}>
-                    <InfoCard
-                      id={accommodation.id}
-                      type='place'
-                      variant='selectable'
-                      imageUrl={accommodation.image_url || ''}
-                      title={accommodation.name}
-                      description={accommodation.description ?? undefined}
-                      details={accommodation.feature ?? undefined}
-                      isFavorite={accommodation.is_favorite}
-                    />
-                  </li>
-                ))
-              : Array.from({ length: 4 }).map((_, i) => (
-                  <li key={`empty-accommodation-${i}`}>
-                    <EmptyCard type='accommodations' />
-                  </li>
-                ))}
-          </ul>
           <div className='mt-2 flex w-full justify-end'>
             <button
               className='cursor-pointer font-medium'
@@ -321,6 +306,37 @@ const RegionsPage = () => {
               {t('common.view_all')}
             </button>
           </div>
+          <ul className='tablet-bp:grid-cols-2 desktop-bp:grid-cols-4 mt-4 grid grid-cols-1 gap-4'>
+            {accommodations.length > 0
+              ? accommodations.map((accommodation) => (
+                  <li key={accommodation.id}>
+                    <InfoCard
+                      id={accommodation.id}
+                      type='place'
+                      variant='interactive'
+                      imageUrl={accommodation.image_url || ''}
+                      title={accommodation.name}
+                      description={accommodation.description ?? undefined}
+                      details={accommodation.feature ?? undefined}
+                      isFavorite={accommodation.is_favorite}
+                      onViewDetails={() =>
+                        handlePlaceDetailOpen(accommodation.id)
+                      }
+                      isDropdownOpen={openDropdownId === accommodation.id}
+                      onToggleDropdown={() => toggleDropdown(accommodation.id)}
+                      dropdownItems={dropdownItems}
+                      isAddingToSchedule={isAddingToSchedule}
+                      dropdownButtonRef={dropdownButtonRef}
+                      dropdownContentRef={dropdownContentRef}
+                    />
+                  </li>
+                ))
+              : Array.from({ length: 4 }).map((_, i) => (
+                  <li key={`empty-accommodation-${i}`}>
+                    <EmptyCard type='accommodations' />
+                  </li>
+                ))}
+          </ul>
         </div>
       </Container>
 

@@ -1,5 +1,5 @@
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 
 type TModalContextType = {
   onClose: () => void;
@@ -22,10 +22,27 @@ const ModalContext = createContext<TModalContextType | null>(null);
  * 메인 Modal 컴포넌트
  */
 export const Modal = ({ isOpen, onClose, children }: TModalProps) => {
+  // ESC 키로 모달 닫기
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
-    <ModalContext value={{ onClose }}>
+    <ModalContext.Provider value={{ onClose }}>
       {/* Modal Backdrop (배경) */}
       <div
         className='bg-main-text-navy/40 fixed inset-0 z-50 flex items-center justify-center'
@@ -39,13 +56,16 @@ export const Modal = ({ isOpen, onClose, children }: TModalProps) => {
           {children}
         </div>
       </div>
-    </ModalContext>
+    </ModalContext.Provider>
   );
 };
 
 // --- Modal Header ---
 export const Header = ({ children }: { children?: React.ReactNode }) => {
-  const { onClose } = useContext(ModalContext)!;
+  const context = useContext(ModalContext);
+  if (!context) return null;
+  const { onClose } = context;
+
   return (
     <div className='flex items-center px-9 pt-8 pb-5'>
       <div className='border-outline-gray flex w-full items-center justify-between border-b pb-4'>

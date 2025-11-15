@@ -16,7 +16,9 @@ const Regions = () => {
   const [sortOption, setSortOption] = useState<SortOption>(
     SortOption.DATE_DESC
   );
-  const [selectedRegionId, setSelectedRegionId] = useState<number | null>(null);
+  const [selectedRegionId, _setSelectedRegionId] = useState<number | null>(
+    null
+  );
 
   const {
     data,
@@ -172,9 +174,9 @@ const Regions = () => {
             imageUrl={null}
             isSelected={selectedRegionId === item.id}
             isFavorite={true}
-            onClick={() =>
-              setSelectedRegionId(item.id === selectedRegionId ? null : item.id)
-            }
+            // onClick={() =>
+            //   setSelectedRegionId(item.id === selectedRegionId ? null : item.id)
+            // }
           />
         ))}
       </div>

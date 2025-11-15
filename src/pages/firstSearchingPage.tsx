@@ -22,8 +22,8 @@ const FirstSearchingPage = () => {
 
   return (
     <Container>
-      <div className='m-auto flex flex-col items-center justify-center gap-5 p-10'>
-        <h1 className='mt-16 text-4xl font-semibold'>
+      <div className='m-auto flex flex-col items-center justify-center gap-5 py-10'>
+        <h1 className='mt-16 text-center text-4xl font-semibold'>
           {t('places.which_region_travel')}
         </h1>
         <p className='-mt-2'>{t('places.select_beautiful_regions')}</p>

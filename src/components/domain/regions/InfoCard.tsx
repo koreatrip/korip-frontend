@@ -107,10 +107,10 @@ const InfoCard = ({
   };
 
   const baseCardClasses =
-    'relative group rounded-2xl bg-white shadow-medium transition-all duration-300 h-[350px]';
+    'relative group rounded-2xl bg-white shadow-medium transition-all duration-300 h-[350px] min-w-0';
   const variantClasses = {
     interactive: 'hover:shadow-xl overflow-visible',
-    selectable: `cursor-pointer overflow-hidden ${isSelected ? 'border-sub-green border' : 'border-transparent'}`,
+    selectable: `overflow-hidden ${isSelected ? 'border-sub-green border' : 'border-transparent'}`,
   };
 
   return (
@@ -146,24 +146,25 @@ const InfoCard = ({
         </button>
       </div>
 
-      <div className='overflow-hidden p-5'>
-        <h3 className='text-main-text-navy truncate text-lg font-semibold'>
+      <div className='flex h-[127px] min-w-0 flex-col overflow-hidden p-5'>
+        <h3 className='text-main-text-navy min-w-0 truncate text-lg leading-tight font-semibold'>
           {title}
         </h3>
         <p
-          className='text-sub-text-gray mt-1 leading-relaxed font-normal'
+          className='text-sub-text-gray mt-1 min-w-0 flex-1 text-sm font-normal'
           style={{
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
+            lineHeight: '1.4',
           }}
         >
           {description}
         </p>
         {details && (
-          <div className='text-sub-text-gray flex items-center'>
+          <div className='text-sub-text-gray mt-1 flex min-w-0 items-center text-xs'>
             <span className='truncate'>{details}</span>
           </div>
         )}
@@ -171,41 +172,43 @@ const InfoCard = ({
 
       {variant === 'interactive' && (
         <div className='bg-main-text-navy/50 absolute inset-0 flex items-center justify-center space-x-4 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
-          <div className='relative'>
-            <button
-              ref={dropdownButtonRef}
-              onClick={onToggleDropdown}
-              disabled={isAddingToSchedule}
-              className={`bg-main-text-navy hover:bg-main-text-navy/70 cursor-pointer rounded-full px-5 py-2 font-medium text-white transition-colors`}
-            >
-              {isAddingToSchedule
-                ? t('common.adding')
-                : t('travel.add_to_plan')}
-            </button>
-            {isDropdownOpen && (
-              <div
-                ref={dropdownContentRef}
-                className='absolute top-full left-1/2 mt-2 -translate-x-1/2 transform'
-                style={{
-                  minWidth: '200px',
-                  zIndex: 9999,
-                }}
+          {isLoggedIn && (
+            <div className='relative'>
+              <button
+                ref={dropdownButtonRef}
+                onClick={onToggleDropdown}
+                disabled={isAddingToSchedule}
+                className={`bg-main-text-navy hover:bg-main-text-navy/70 cursor-pointer rounded-full px-5 py-2 font-medium text-white transition-colors`}
               >
-                <Dropdown
-                  isOpen={true}
-                  items={dropdownItems} // map 제거
-                  onClose={onToggleDropdown}
-                  position='center'
-                  width='w-48'
-                />
-              </div>
-            )}
-          </div>
+                {isAddingToSchedule
+                  ? t('common.adding')
+                  : t('travel.add_to_plan')}
+              </button>
+              {isDropdownOpen && (
+                <div
+                  ref={dropdownContentRef}
+                  className='absolute top-full left-1/2 mt-2 -translate-x-1/2 transform'
+                  style={{
+                    minWidth: '200px',
+                    zIndex: 9999,
+                  }}
+                >
+                  <Dropdown
+                    isOpen={true}
+                    items={dropdownItems} // map 제거
+                    onClose={onToggleDropdown}
+                    position='center'
+                    width='w-48'
+                  />
+                </div>
+              )}
+            </div>
+          )}
           <button
             onClick={handleViewDetails}
             className='text-main-text-navy bg-bg-white cursor-pointer rounded-full px-5 py-2 font-medium hover:bg-gray-200'
           >
-            상세보기
+            {t('common.view_details')}
           </button>
         </div>
       )}
