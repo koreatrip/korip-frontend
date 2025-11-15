@@ -77,7 +77,7 @@ const CarouselForCard = ({ children, length }: CarouselProps) => {
 
   // 드래그 종료 시 페이지 전환 처리
   const handleDragEnd = (
-    event: MouseEvent | TouchEvent | PointerEvent,
+    _event: MouseEvent | TouchEvent | PointerEvent,
     {
       offset,
       velocity,
