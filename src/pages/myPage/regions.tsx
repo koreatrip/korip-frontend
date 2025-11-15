@@ -172,9 +172,9 @@ const Regions = () => {
             imageUrl={null}
             isSelected={selectedRegionId === item.id}
             isFavorite={true}
-            onClick={() =>
-              setSelectedRegionId(item.id === selectedRegionId ? null : item.id)
-            }
+            // onClick={() =>
+            //   setSelectedRegionId(item.id === selectedRegionId ? null : item.id)
+            // }
           />
         ))}
       </div>

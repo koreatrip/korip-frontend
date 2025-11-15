@@ -20,10 +20,10 @@ const TravelTipsPage = () => {
   const mainHospitalsList = getList('hospital.mainHospitalsList');
   console.log(ezlList);
   return (
-    <Container className='mt-8'>
-      <div className='mb-20 flex flex-col items-center justify-center'>
+    <Container className='mb-10'>
+      <div className='flex flex-col items-center justify-center py-10'>
         <h1 className='mb-4 text-4xl font-semibold'>{t('tips.title')}</h1>
-        <div className='text-main-text-navy mt-4'>{t('tips.subtitle')}</div>
+        <div className='text-main-text-navy'>{t('tips.subtitle')}</div>
       </div>
       <div className='w-full space-y-4'>
         {/* 첫 번째 아코디언: 결제 안내 */}
