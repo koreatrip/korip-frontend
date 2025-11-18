@@ -2,15 +2,13 @@ import {
   useRegionDetailQuery,
   useRegionsQuery,
 } from '@/api/regions/regionsHooks';
-import { useToast } from '@/hooks/useToast';
 import {
   ChevronRightIcon,
-  MagnifyingGlassIcon,
   ExclamationCircleIcon,
   ArrowPathIcon,
 } from '@heroicons/react/24/outline';
 import { MapPinIcon } from '@heroicons/react/24/solid';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { twMerge } from 'tailwind-merge';
@@ -29,11 +27,11 @@ type TSearchBarProps = {
 };
 
 const SearchBar = ({
-  placeholder = '지역명을 검색해보세요 (예: 서울, 강남구, 대전 서구)',
+  placeholder = '지역을 선택해주세요',
   className = '',
   height = 'h-14',
   showLocationIcon = true,
-  onSearch,
+  // onSearch,
   disableNavigation = false,
   onRegionSelect,
 }: TSearchBarProps) => {
@@ -44,10 +42,9 @@ const SearchBar = ({
     name: string;
   } | null>(null);
   const [currentView, setCurrentView] = useState<'city' | 'district'>('city');
-  const [isLoading, setIsLoading] = useState(false);
   const searchBarRef = useRef<HTMLDivElement>(null);
 
-  const { showToast } = useToast();
+  // const { showToast } = useToast();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
 
@@ -125,40 +122,14 @@ const SearchBar = ({
     };
   }, []);
 
-  const handleSearch = async (query?: string) => {
-    const searchTerm = query || searchQuery;
-    if (!searchTerm.trim()) return;
-    if (disableNavigation && onSearch) {
-      onSearch(searchTerm);
-      setIsDropdownOpen(false);
-      return;
-    }
-    setIsLoading(true);
+  // const handleInputFocus = () => {
+  //   setIsDropdownOpen(true);
+  //   setCurrentView('city');
+  //   setSelectedRegion(null);
+  // };
 
-    try {
-      const params = new URLSearchParams({
-        q: searchTerm,
-        lang: currentLanguage,
-      });
-
-      navigate(`/explore/regions?${params.toString()}`);
-      showToast('');
-    } catch (error) {
-      console.error('페이지 이동 실패:', error);
-      showToast('페이지 이동 중 오류가 발생했습니다.', 'error');
-    } finally {
-      setIsLoading(false);
-      setIsDropdownOpen(false);
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
-
-  const handleInputFocus = () => {
+  // ✨ 입력 클릭 시에만 드롭다운 열기 (읽기 전용으로 변경)
+  const handleInputClick = () => {
     setIsDropdownOpen(true);
     setCurrentView('city');
     setSelectedRegion(null);
@@ -277,30 +248,18 @@ const SearchBar = ({
             <MapPinIcon className='text-main-pink h-6 w-6' />
           </div>
         )}
+        {/* ✨ 읽기 전용 input으로 변경 - 직접 입력 불가, 클릭만 가능 */}
         <input
           type='text'
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onKeyPress={handleKeyPress}
-          onFocus={handleInputFocus}
+          onClick={handleInputClick}
+          readOnly
           placeholder={placeholder}
           className={twMerge(
-            'placeholder-ph-gray flex-1 border-none bg-transparent py-4 text-base outline-none',
+            'placeholder-ph-gray flex-1 cursor-pointer border-none bg-transparent py-4 text-base outline-none',
             showLocationIcon ? 'px-2' : 'px-6'
           )}
         />
-        <button
-          onClick={() => handleSearch()}
-          disabled={isLoading}
-          className='flex items-center justify-center p-4 transition-colors duration-200 hover:bg-gray-50 disabled:opacity-50'
-          aria-label='검색'
-        >
-          {isLoading ? (
-            <div className='h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600'></div>
-          ) : (
-            <MagnifyingGlassIcon className='text-outline-gray h-6 w-6' />
-          )}
-        </button>
       </div>
 
       {isDropdownOpen && (
