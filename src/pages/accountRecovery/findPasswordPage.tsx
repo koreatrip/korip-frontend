@@ -1,47 +1,18 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { useFindPasswordMutation } from '@/api/auth/account/accountHooks';
 import { logo_sm } from '@/assets/assets';
 import AuthInput from '@/components/domain/auth/AuthInput';
 
 import Button from '@/components/common/Button';
 import Spinner from '@/components/common/Spinner';
 import { Trans, useTranslation } from 'react-i18next';
+import { useFindPassword } from './useFindPassword';
 
 const FindPasswordPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { formState, handlers, isLoading } = useFindPassword();
 
-  const forgotPasswordMutation = useFindPasswordMutation({
-    onSuccess: () => {
-      setIsSubmitted(true);
-      setError('');
-    },
-    onError: (error: any) => {
-      setError(error.response?.data?.message || '이메일 발송에 실패했습니다.');
-    },
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!email) {
-      setError(t('auth.please_enter_email'));
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError(t('auth.invalid_email_format'));
-      return;
-    }
-
-    setError('');
-    forgotPasswordMutation.mutate({ email });
-  };
+  const { email, error, isSubmitted } = formState;
 
   return (
     <div className='flex min-h-screen items-center justify-center sm:px-6 lg:px-8'>
@@ -88,31 +59,21 @@ const FindPasswordPage = () => {
               </p>
             </div>
 
-            <form className='mt-8 space-y-6' onSubmit={handleSubmit}>
+            <form className='mt-8 space-y-6' onSubmit={handlers.handleSubmit}>
               <div>
                 <AuthInput
                   type='email'
                   placeholder='k@example.com'
                   label={t('auth.email')}
                   value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setError('');
-                  }}
-                  onClear={() => {
-                    setEmail('');
-                    setError('');
-                  }}
+                  onChange={handlers.handleEmailChange}
+                  onClear={handlers.handleReset}
                 />
                 {error && <p className='mt-2 text-sm text-red-600'>{error}</p>}
               </div>
 
-              <Button type='submit' disabled={forgotPasswordMutation.isPending}>
-                {forgotPasswordMutation.isPending ? (
-                  <Spinner />
-                ) : (
-                  t('auth.receive_reset_email')
-                )}
+              <Button type='submit' disabled={isLoading} className='w-full'>
+                {isLoading ? <Spinner /> : t('auth.receive_reset_email')}
               </Button>
             </form>
 
