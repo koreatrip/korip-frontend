@@ -18,12 +18,10 @@ const DateRangePicker: FC<DateRangePickerProps> = ({
   onDateChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  // The initial month shown in the calendar can be based on the selected date
+
   const [currentMonth, setCurrentMonth] = useState(selectedDate || new Date());
 
-  // ✅ FIX: Add a check to prevent crash if date is undefined
   const formatDate = (date: Date) => {
-    // If the date is not valid, return a placeholder text instead of crashing.
     if (!date || !(date instanceof Date)) {
       return '날짜 선택...';
     }
@@ -56,14 +54,14 @@ const DateRangePicker: FC<DateRangePickerProps> = ({
     return days;
   };
 
-  // ✅ 오늘 이전인지 확인하는 헬퍼 함수
+  // 오늘 이전인지 확인하는 헬퍼 함수
   const isBeforeToday = (date: Date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0); // 시간을 0으로 설정하여 날짜만 비교
     return date < today;
   };
 
-  // ✅ 이전 날짜는 클릭되지 않도록 수정
+  // 이전 날짜는 클릭되지 않도록 수정
   const handleDateClick = (date: Date | null) => {
     // 날짜가 존재하고, 오늘 이전 날짜가 아닐 때만 상태 변경
     if (date && !isBeforeToday(date)) {
@@ -100,7 +98,7 @@ const DateRangePicker: FC<DateRangePickerProps> = ({
   const days = getDaysInMonth(currentMonth);
   const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
 
-  // ✅ 이전 달로 넘어가지 못하게 막는 조건
+  // 이전 달로 넘어가지 못하게 막는 조건
   const todayForMonthCheck = new Date();
   const isPrevMonthDisabled =
     currentMonth.getFullYear() === todayForMonthCheck.getFullYear() &&

@@ -1,6 +1,7 @@
 // components/common/ErrorBoundary.tsx
-import { Component, type ErrorInfo, type ReactNode } from 'react';
-import ErrorPage from '@/pages/statusPage/errorPage';
+import { Component, lazy, type ErrorInfo, type ReactNode } from 'react';
+
+const ErrorPage = lazy(() => import('@/pages/statusPage/errorPage'));
 
 interface Props {
   children?: ReactNode;

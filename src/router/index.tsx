@@ -1,102 +1,144 @@
-import ProfileCard from '@/components/domain/myPage/ProfileCard';
+import { lazy, Suspense } from 'react';
+import { createBrowserRouter } from 'react-router-dom';
 
 import defaultLayout from '@/layouts/defaultLayout';
-
-import MyPage from '@/pages/myPage';
-import FavoritePlacesPage from '@/pages/myPage/places';
-import MyPlannerPage from '@/pages/myPage/myPlannerPage';
-import FavoriteRegionsPage from '@/pages/myPage/regions';
-
-import { InterestProvider } from '@/context/InterestContext';
-import DistrictListPage from '@/pages/districtListPage';
-import InterestPage from '@/pages/interestPage';
-import PlannerPage from '@/pages/plannerPage';
-import RegionsPage from '@/pages/regionsPage';
-import SignUpPage from '@/pages/signUpPage';
-import TravelTipsPage from '@/pages/travelTipsPage';
-import TripDetailPage from '@/pages/tripDetailPage';
-import { createBrowserRouter } from 'react-router-dom';
-import LoginPage from '../pages/loginPage';
-import FirstSearchingPage from '@/pages/firstSearchingPage';
-import LanguagePage from '@/pages/languagePage';
-import ResetPasswordPage from '@/pages/resetPasswordPage';
-import NotFoundPage from '@/pages/statusPage/notFoundPage';
-import OAuthCallbackPage from '@/pages/statusPage/oAuthCallbackPage';
-import ErrorPage from '@/pages/statusPage/errorPage';
-import AttractionsPage from '@/pages/attractionsPage';
 import ProtectedRoute from '@/components/domain/auth/ProtectedRoute';
-import TripEditPage from '@/pages/tripEditPage';
-import FindPasswordPage from '@/pages/accountRecovery/findPasswordPage';
-import FindAccountPage from '@/pages/accountRecovery/findAccountPage';
-import StayListPage from '@/pages/stayListPage';
-import GoogleCalendarCallbackPage from '@/pages/statusPage/googleCalendarCallbackPage';
+import Spinner from '@/components/common/Spinner';
+import { InterestProvider } from '@/context/InterestContext';
 
+// =================================================================
+// [1] 페이지들을 Lazy Load로 변환 (사용자가 해당 페이지 갈 때 다운로드)
+// =================================================================
+
+// 공개 페이지
+const FirstSearchingPage = lazy(() => import('@/pages/firstSearchingPage'));
+const LoginPage = lazy(() => import('@/pages/loginPage'));
+const SignUpPage = lazy(() => import('@/pages/signUpPage'));
+const ResetPasswordPage = lazy(() => import('@/pages/resetPasswordPage'));
+const RegionsPage = lazy(() => import('@/pages/regionsPage'));
+const DistrictListPage = lazy(() => import('@/pages/districtListPage'));
+const StayListPage = lazy(() => import('@/pages/stayListPage'));
+const AttractionsPage = lazy(() => import('@/pages/attractionsPage'));
+const TravelTipsPage = lazy(() => import('@/pages/travelTipsPage'));
+const LanguagePage = lazy(() => import('@/pages/languagePage'));
+const FindPasswordPage = lazy(
+  () => import('@/pages/accountRecovery/findPasswordPage')
+);
+const FindAccountPage = lazy(
+  () => import('@/pages/accountRecovery/findAccountPage')
+);
+
+// Status / Callback 페이지
+const OAuthCallbackPage = lazy(
+  () => import('@/pages/statusPage/oAuthCallbackPage')
+);
+const GoogleCalendarCallbackPage = lazy(
+  () => import('@/pages/statusPage/googleCalendarCallbackPage')
+);
+const NotFoundPage = lazy(() => import('@/pages/statusPage/notFoundPage'));
+const ErrorPage = lazy(() => import('@/pages/statusPage/errorPage'));
+
+// 보호된 페이지 / 마이페이지
+const PlannerPage = lazy(() => import('@/pages/plannerPage'));
+const MyPage = lazy(() => import('@/pages/myPage'));
+const ProfileCard = lazy(
+  () => import('@/components/domain/myPage/ProfileCard')
+);
+const MyPlannerPage = lazy(() => import('@/pages/myPage/myPlannerPage'));
+const FavoritePlacesPage = lazy(() => import('@/pages/myPage/places'));
+const FavoriteRegionsPage = lazy(() => import('@/pages/myPage/regions'));
+const InterestPage = lazy(() => import('@/pages/interestPage'));
+const TripDetailPage = lazy(() => import('@/pages/tripDetailPage'));
+const TripEditPage = lazy(() => import('@/pages/tripEditPage'));
+
+// =================================================================
+// [2] 로딩 중일 때 보여줄 스피너 래퍼 (Suspense)
+// =================================================================
+const Load = (
+  Component: React.LazyExoticComponent<any> | React.ComponentType<any>
+) => {
+  return (
+    <Suspense
+      fallback={
+        <div className='flex h-[calc(100vh-80px)] items-center justify-center'>
+          <Spinner />
+        </div>
+      }
+    >
+      <Component />
+    </Suspense>
+  );
+};
+
+// =================================================================
+// [3] 라우터 설정 (element 부분에 Load() 함수 사용)
+// =================================================================
 export const router = createBrowserRouter([
   {
     path: '/',
     Component: defaultLayout,
-    errorElement: <ErrorPage />,
+    errorElement: Load(ErrorPage),
     children: [
       // 공개 페이지들
       {
         index: true,
-        element: <FirstSearchingPage />,
+        element: Load(FirstSearchingPage),
       },
       {
         path: 'login',
-        element: <LoginPage />,
+        element: Load(LoginPage),
       },
       {
         path: 'register',
-        element: <SignUpPage />,
+        element: Load(SignUpPage),
       },
       {
         path: 'auth/password-reset-success',
-        element: <ResetPasswordPage />,
+        element: Load(ResetPasswordPage),
       },
       {
         path: 'explore/regions',
-        element: <RegionsPage />,
+        element: Load(RegionsPage),
       },
       {
         path: 'explore/districts',
-        element: <DistrictListPage />,
+        element: Load(DistrictListPage),
       },
       {
         path: 'explore/stays',
-        element: <StayListPage />,
+        element: Load(StayListPage),
       },
       {
         path: 'explore/attractions',
-        element: <AttractionsPage />,
+        element: Load(AttractionsPage),
       },
       {
         path: 'tips',
-        element: <TravelTipsPage />,
+        element: Load(TravelTipsPage),
       },
       {
         path: 'first-region-search',
-        element: <FirstSearchingPage />,
+        element: Load(FirstSearchingPage),
       },
       {
         path: 'language',
-        element: <LanguagePage />,
+        element: Load(LanguagePage),
       },
       {
         path: 'callback',
-        element: <OAuthCallbackPage />,
+        element: Load(OAuthCallbackPage),
       },
       {
         path: '/calendar/google/callback',
-        element: <GoogleCalendarCallbackPage />,
+        element: Load(GoogleCalendarCallbackPage),
       },
       {
         path: '/forgot-password',
-        element: <FindPasswordPage />,
+        element: Load(FindPasswordPage),
       },
       {
         path: '/find-account',
-        element: <FindAccountPage />,
+        element: Load(FindAccountPage),
       },
 
       // 보호된 페이지들
@@ -105,42 +147,43 @@ export const router = createBrowserRouter([
         children: [
           {
             path: 'planner/:planId',
-            element: <PlannerPage />,
+            element: Load(PlannerPage),
           },
           {
             path: 'mypage',
-            element: <MyPage />,
+            element: Load(MyPage),
             children: [
               {
                 index: true,
-                element: <ProfileCard />,
+                element: Load(ProfileCard),
               },
-              { path: 'plan', element: <MyPlannerPage /> },
-              { path: 'places', element: <FavoritePlacesPage /> },
-              { path: 'regions', element: <FavoriteRegionsPage /> },
+              { path: 'plan', element: Load(MyPlannerPage) },
+              { path: 'places', element: Load(FavoritePlacesPage) },
+              { path: 'regions', element: Load(FavoriteRegionsPage) },
             ],
           },
           {
             path: 'interest',
             element: (
               <InterestProvider>
-                <InterestPage />
+                {/* Provider 안쪽만 Lazy Loading 적용 */}
+                {Load(InterestPage)}
               </InterestProvider>
             ),
           },
           {
             path: 'trip/:id',
-            element: <TripDetailPage />,
+            element: Load(TripDetailPage),
           },
           {
             path: 'trip/:id/edit',
-            element: <TripEditPage />,
+            element: Load(TripEditPage),
           },
         ],
       },
       {
         path: '*',
-        element: <NotFoundPage />,
+        element: Load(NotFoundPage),
       },
     ],
   },
