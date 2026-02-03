@@ -101,6 +101,8 @@ const Carousel = () => {
             <img
               src={sampleItems[currentIndex].image}
               alt={sampleItems[currentIndex].title}
+              decoding='async'
+              loading='lazy'
               className='h-full w-full object-cover'
               draggable={false}
             />
