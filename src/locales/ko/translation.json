@@ -152,7 +152,9 @@
     "login_type": "로그인 수단",
     "password_requirements_includes": "영문, 숫자, 특수문자를 포함",
     "required_agreement": "필수동의",
-    "optional_agreement": "선택동의"
+    "optional_agreement": "선택동의",
+    "please_enter_name": "이름을 입력해주세요",
+    "enter_verification_code": "인증번호를 입력해주세요"
   },
 
   "agreement": {
