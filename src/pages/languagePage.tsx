@@ -1,5 +1,6 @@
 import Container from '@/components/common/Container';
-import bg from '@assets/lagnage_bg.png';
+import bgWebp from '@assets/lagnage_bg.webp';
+import bgFallback from '@assets/lagnage_bg.png';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -50,13 +51,22 @@ const LanguagePage = () => {
     <div>
       <div
         className='relative flex h-[360px] w-full items-center justify-center'
-        style={{
-          backgroundImage: `url(${bg})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
+        // style={{
+        //   backgroundImage: `url(${bg})`,
+        //   backgroundSize: 'cover',
+        //   backgroundPosition: 'center',
+        //   backgroundRepeat: 'no-repeat',
+        // }}
       >
+        <picture className='absolute inset-0 z-0 h-full w-full'>
+          <source srcSet={bgWebp} type='image/webp' />
+          <img
+            src={bgFallback}
+            alt='언어선택 배경 이미지'
+            className='h-full w-full object-cover'
+            fetchPriority='high'
+          />
+        </picture>
         <div className='absolute top-0 left-0 h-full w-full bg-black opacity-30'></div>
         <p className='text-bg-white relative z-10 text-5xl'>
           {t('auth.welcome_message_title')}
