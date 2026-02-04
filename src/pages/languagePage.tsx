@@ -1,6 +1,5 @@
 import Container from '@/components/common/Container';
 import bgWebp from '@assets/lagnage_bg.webp';
-import bgFallback from '@assets/lagnage_bg.png';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -61,7 +60,7 @@ const LanguagePage = () => {
         <picture className='absolute inset-0 z-0 h-full w-full'>
           <source srcSet={bgWebp} type='image/webp' />
           <img
-            src={bgFallback}
+            src='/lagnage_bg.webp'
             alt='언어선택 배경 이미지'
             className='h-full w-full object-cover'
             fetchPriority='high'
