@@ -1,5 +1,5 @@
 import Container from '@/components/common/Container';
-import bg from '@assets/lagnage_bg.png';
+import bg from '@assets/lagnage_bg.webp';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
