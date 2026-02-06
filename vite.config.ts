@@ -22,4 +22,13 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    minify: 'terser', // "Terser야, 네가 마무리해라"
+    terserOptions: {
+      compress: {
+        drop_console: false, // 일단 콘솔 자체를 다 날리는 거 막는 용
+        pure_funcs: ['console.log', 'console.info'], // log랑 info 함수만 찾아서 제거!
+      },
+    },
+  },
 });
