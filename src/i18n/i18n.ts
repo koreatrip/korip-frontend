@@ -12,6 +12,9 @@ i18n
     resources,
     // lng: 'ko',
     fallbackLng: 'ko',
+    load: 'languageOnly',
+    // 지원하는 언어 코드만 명시
+    supportedLngs: ['ko', 'en', 'jp', 'cn'],
     returnObjects: true,
     interpolation: {
       escapeValue: false,
@@ -22,7 +25,7 @@ i18n
       // 언어를 감지할 순서
       order: ['querystring', 'localStorage', 'navigator'],
       // URL 쿼리스트링에서 언어를 찾을 때 사용할 키
-      lookupQuerystring: 'language',
+      lookupQuerystring: 'lang',
       // 감지된 언어를 저장할 위치 (선택 사항)
       caches: ['localStorage'],
       // 캐시에서 사용할 키 (선택 사항)
