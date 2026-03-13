@@ -1,5 +1,9 @@
 {
   "common": {
+    "home": "ホームページ",
+    "go_to_main_page": "メインページへ移動してください",
+    "contact_us": "お問い合わせ",
+    "need_help": "お困りですか？",
     "search": "検索",
     "search_result": "検索結果",
     "confirm_selection": "選択確認",
@@ -482,7 +486,11 @@
     "looking_for_amazing_spots": "韓国の素晴らしい旅行スポットを探しています",
     "discovering_hidden_gems": "隠れスポットを見つけています",
     "maybe_later": "また今度にします",
-    "lost_in_korea": "韓国で道に迷いましたか？"
+    "lost_way": "道에 迷ってしまいました",
+    "not_on_map": "この目的地は地図にありません",
+    "page_not_found": "ご指定のページは見つかりませんでした。",
+    "explore_new_destination": "新しい目的地を探索してみましょう！",
+    "search_destination": "目的地を探す"
   },
   "tips": {
     "title": "韓国旅行のコツ",

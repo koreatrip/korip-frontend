@@ -1,5 +1,9 @@
 {
   "common": {
+    "home": "Home",
+    "go_to_main_page": "Go to the main page",
+    "contact_us": "Contact Us",
+    "need_help": "Need help?",
     "search": "Search",
     "search_result": "Search Results",
     "confirm_selection": "Confirm",
@@ -480,7 +484,11 @@
     "looking_for_amazing_spots": "Looking for amazing travel spots in Korea",
     "discovering_hidden_gems": "Discovering hidden gems",
     "maybe_later": "Maybe Later",
-    "lost_in_korea": "Lost in Korea?"
+    "lost_way": "You've lost your way",
+    "not_on_map": "This destination isn't on the map",
+    "page_not_found": "The page you requested could not be found.",
+    "explore_new_destination": "Try exploring a new destination!",
+    "search_destination": "Explore Destinations"
   },
 
   "tips": {

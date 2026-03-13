@@ -1,5 +1,9 @@
 {
   "common": {
+    "home": "首页",
+    "go_to_main_page": "前往主页",
+    "contact_us": "联系我们",
+    "need_help": "需要帮助吗？",
     "search": "搜索",
     "search_result": "搜索结果",
     "confirm_selection": "选择确认",
@@ -483,7 +487,11 @@
     "looking_for_amazing_spots": "正在寻找韩国的精彩旅行地",
     "discovering_hidden_gems": "正在发现隐藏景点",
     "maybe_later": "稍后进行。",
-    "lost_in_korea": "Lost in Korea? 迷路了吗?"
+    "lost_way": "迷路了",
+    "not_on_map": "这个目的地不在地图上",
+    "page_not_found": "找不到您请求的页面",
+    "explore_new_destination": "去探索新的目的地吧！",
+    "search_destination": "探索目的地"
   },
 
   "tips": {
