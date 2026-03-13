@@ -34,6 +34,7 @@ export const clearTokens = (): void => {
 // 토큰 갱신 요청에 인터셉터가 적용되지 않도록 별도의 인스턴스 생성
 const refreshTokenInstance = axios.create({
   baseURL: VITE_BASE_URL,
+  timeout: 10000,
 });
 
 const axiosInstance = axios.create({
@@ -42,6 +43,7 @@ const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000,
 });
 
 // 요청 인터셉터 (타입 정의 추가)
