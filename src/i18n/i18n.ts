@@ -30,6 +30,7 @@ i18n
       caches: [],
       // 캐시에서 사용할 키 (선택 사항)
       lookupLocalStorage: 'i18nextLng',
+      convertDetectedLanguage: (lng: string) => lng.split('-')[0],
     },
   });
 
