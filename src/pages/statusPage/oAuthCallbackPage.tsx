@@ -46,9 +46,7 @@ const OAuthCallbackPage = () => {
         );
         showToast('환영합니다!', 'success');
 
-        const redirectTo = response.first_login
-          ? '/language'
-          : '/first-region-search';
+        const redirectTo = response.first_login ? '/language' : '/';
         navigate(redirectTo);
       } catch (err: unknown) {
         // ✅ 사용자 친화적인 에러 메시지 생성
