@@ -17,6 +17,8 @@ import PlaceDetailModal from '@/components/domain/regions/PlaceDetailModal';
 import { useScheduleDropdown } from '@/hooks/useScheduleDropdown';
 import ErrorPage from './statusPage/errorPage';
 import { ERROR_CODES } from '@/constants/errorCodes';
+import type { AxiosError } from 'axios';
+import { NetworkError } from '@/components/NetworkError';
 
 const RegionsPage = () => {
   const navigate = useNavigate();
@@ -103,10 +105,16 @@ const RegionsPage = () => {
     }
   }, [regionId, currentLanguage, navigate, error]);
 
-  if (error)
+  if (error) {
+    const axiosError = error as AxiosError;
+    if (
+      axiosError?.code === 'ERR_NETWORK' ||
+      axiosError?.response?.status === 504
+    )
+      return <NetworkError onRetry={() => window.location.reload()} />;
     return <ErrorPage error={error} errorCode={ERROR_CODES.DATA_NOT_FOUND} />;
+  }
   if (isLoading || !regionId) return <LoadingPage />;
-
   return (
     <div className='mt-8 w-full'>
       <Container>

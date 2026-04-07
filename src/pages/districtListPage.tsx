@@ -12,6 +12,7 @@ import Button from '@/components/common/Button';
 import { HomeIcon } from '@heroicons/react/24/outline';
 import { NetworkError } from '@/components/NetworkError';
 import type { AxiosError } from 'axios';
+import LoadingPage from './statusPage/loadingPage';
 
 const DistrictListPage = () => {
   const navigate = useNavigate();
@@ -52,12 +53,14 @@ const DistrictListPage = () => {
   };
 
   //** 백엔드 돌아오면 주석풀기
-  // if (isRegionsLoading) return <LoadingPage />;
-  // if (regionId && isRegionDetailLoading) return <LoadingPage />; //
+  if (isRegionsLoading) return <LoadingPage />;
+  if (regionId && isRegionDetailLoading) return <LoadingPage />; //
 
   const currentError = regionsError || regionDetailError;
   const axiosError = currentError as AxiosError;
   if (axiosError?.code === 'ERR_NETWORK') return <NetworkError />;
+  if (axiosError?.response?.status === 504)
+    return <NetworkError onRetry={() => window.location.reload()} />;
   if (currentError)
     return (
       <ListPageLayout
