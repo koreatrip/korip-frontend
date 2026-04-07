@@ -27,7 +27,7 @@ i18n
       // URL 쿼리스트링에서 언어를 찾을 때 사용할 키
       lookupQuerystring: 'lang',
       // 감지된 언어를 저장할 위치 (선택 사항)
-      caches: ['localStorage'],
+      caches: [],
       // 캐시에서 사용할 키 (선택 사항)
       lookupLocalStorage: 'i18nextLng',
     },

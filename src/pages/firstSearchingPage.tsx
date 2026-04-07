@@ -6,6 +6,7 @@ import { useRegionMajorQuery } from '@/api/regions/regionsHooks';
 import { useAllCategoriesQuery } from '@/api/category/categoryHooks';
 import { useTranslation } from 'react-i18next';
 import { CATEGORY_IMAGES } from '@/constants/categoryImages';
+
 const FirstSearchingPage = () => {
   const { t, i18n } = useTranslation();
   const { data: major } = useRegionMajorQuery(i18n.language);
@@ -46,6 +47,7 @@ const FirstSearchingPage = () => {
               isSelected={false}
               id={place.id}
               isRegion={true}
+              priority={true}
             />
           ))}
         </div>
@@ -65,6 +67,7 @@ const FirstSearchingPage = () => {
               imageUrl={CATEGORY_IMAGES[place.id] || '/placeholder.jpg'}
               isSelected={false}
               isRegion={false}
+              priority={false}
             />
           ))}
         </CarouselForCard>
