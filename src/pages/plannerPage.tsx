@@ -18,6 +18,8 @@ import ItineraryMap from '@/components/domain/planner/ItineraryMap';
 import { useToast } from '@/hooks/useToast';
 import type { UpdatePlanRequest } from '@/api/planner/plannerType';
 import { useQueryClient } from '@tanstack/react-query';
+import ErrorPage from './statusPage/errorPage';
+import { ERROR_CODES } from '@/constants/errorCodes';
 
 const PlannerPage = () => {
   const queryClient = useQueryClient();
@@ -186,24 +188,9 @@ const PlannerPage = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className='flex min-h-screen items-center justify-center'>
-        <div className='text-center'>
-          <p className='text-error-red mb-2'>플랜을 불러오는데 실패했습니다.</p>
-          <p className='text-sm text-gray-500'>페이지를 새로고침해주세요.</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!planDetail) {
-    return (
-      <div className='flex min-h-screen items-center justify-center'>
-        <p className='text-gray-500'>플랜을 찾을 수 없습니다.</p>
-      </div>
-    );
-  }
+  if (error)
+    return <ErrorPage error={error} errorCode={ERROR_CODES.DATA_NOT_FOUND} />;
+  if (!planDetail) return <ErrorPage errorCode={ERROR_CODES.DATA_NOT_FOUND} />;
 
   return (
     <div className='bg-bg-section'>

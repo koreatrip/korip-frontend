@@ -1,4 +1,6 @@
 // components/common/ErrorBoundary.tsx
+import { ERROR_CODES } from '@/constants/errorCodes';
+import type { AxiosError } from 'axios';
 import { Component, lazy, type ErrorInfo, type ReactNode } from 'react';
 
 const ErrorPage = lazy(() => import('@/pages/statusPage/errorPage'));
@@ -34,11 +36,28 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   private getErrorCode(error: Error): string {
-    if (error.name === 'ChunkLoadError') return 'KR-CHUNK-001';
-    if (error.message?.includes('Network')) return 'KR-NET-001';
-    if (error.message?.includes('Cannot read')) return 'KR-RUNTIME-001';
-    if (error.message?.includes('undefined')) return 'KR-RUNTIME-002';
-    return 'KR-500-TRAVEL';
+    const status = (error as AxiosError).response?.status;
+
+    switch (status) {
+      case 400:
+        return ERROR_CODES.INVALID_DATA;
+      case 401:
+        return ERROR_CODES.AUTH_FAILED;
+      case 403:
+        return ERROR_CODES.AUTH_FAILED;
+      case 404:
+        return ERROR_CODES.DATA_NOT_FOUND;
+      case 500:
+        return ERROR_CODES.RUNTIME_ERROR;
+      default:
+        break;
+    }
+
+    // 상태코드 없으면 메시지로 추측
+    if (error.message?.includes('timeout')) return ERROR_CODES.API_TIMEOUT;
+    if (error.message?.includes('Network')) return ERROR_CODES.NETWORK_ERROR;
+
+    return ERROR_CODES.UNKNOWN_ERROR;
   }
 
   private resetError = () => {

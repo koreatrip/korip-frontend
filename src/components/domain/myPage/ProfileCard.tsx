@@ -11,6 +11,9 @@ import AccountDeleteModal from './Modals/AccountDeleteModal';
 import AccountStatsSection from './Sections/AccountStatsSection';
 import BasicInfoSection from './Sections/BasicInfoSection';
 import SecuritySection from './Sections/SecuritySection';
+import ProfileCardSkeleton from './ProfileCardSkeleton';
+import ErrorPage from '@/pages/statusPage/errorPage';
+import { ERROR_CODES } from '@/constants/errorCodes';
 
 const ProfileCard = () => {
   const { state, actions } = useProfileEditStore();
@@ -55,13 +58,10 @@ const ProfileCard = () => {
 
   const handleAccountDelete = () => setShowAccountDeleteModal(true);
 
-  if (isLoading || !formData) {
-    return <section>...로딩 UI...</section>;
-  }
+  if (isLoading || !formData) return <ProfileCardSkeleton />;
 
-  if (error) {
-    return <section>...에러 UI...</section>;
-  }
+  if (error)
+    return <ErrorPage error={error} errorCode={ERROR_CODES.DATA_NOT_FOUND} />;
 
   return (
     <>

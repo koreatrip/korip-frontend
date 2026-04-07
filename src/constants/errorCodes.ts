@@ -1,20 +1,20 @@
 export const ERROR_CODES = {
-  // 네트워크 에러
+  // 네트워크
   NETWORK_ERROR: 'KR-NET-001',
   API_TIMEOUT: 'KR-NET-002',
 
-  // 인증 에러
+  // 인증
   AUTH_FAILED: 'KR-AUTH-001',
   TOKEN_EXPIRED: 'KR-AUTH-002',
 
-  // 데이터 에러
+  // 데이터
   DATA_NOT_FOUND: 'KR-DATA-404',
   INVALID_DATA: 'KR-DATA-400',
 
-  // 앱 에러
+  // 앱
   CHUNK_LOAD_ERROR: 'KR-APP-001',
   RUNTIME_ERROR: 'KR-APP-500',
 
   // 기본값
-  UNKNOWN_ERROR: 'KR-500-TRAVEL',
-};
+  UNKNOWN_ERROR: 'KR-UNK-000',
+} as const;

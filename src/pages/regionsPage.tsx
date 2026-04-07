@@ -15,6 +15,8 @@ import { useUserProfileQuery } from '@/api/user/userHooks';
 import { useAuthCheck } from '@/hooks/useAuthCheck';
 import PlaceDetailModal from '@/components/domain/regions/PlaceDetailModal';
 import { useScheduleDropdown } from '@/hooks/useScheduleDropdown';
+import ErrorPage from './statusPage/errorPage';
+import { ERROR_CODES } from '@/constants/errorCodes';
 
 const RegionsPage = () => {
   const navigate = useNavigate();
@@ -93,17 +95,17 @@ const RegionsPage = () => {
     '관심사 없음';
 
   useEffect(() => {
-    if (!regionId) {
+    if (!regionId && !error) {
+      // error 있으면 리다이렉트 안 하게
       navigate(`/explore/regions?region_id=1&lang=${currentLanguage}`, {
         replace: true,
       });
     }
-  }, [regionId, currentLanguage, navigate]);
+  }, [regionId, currentLanguage, navigate, error]);
 
-  console.log('유저정보보보보보ㅗㅂ보', userProfile);
-
+  if (error)
+    return <ErrorPage error={error} errorCode={ERROR_CODES.DATA_NOT_FOUND} />;
   if (isLoading || !regionId) return <LoadingPage />;
-  if (error) return <div>Error occurred</div>;
 
   return (
     <div className='mt-8 w-full'>

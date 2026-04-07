@@ -11,6 +11,8 @@ import { useEffect, useRef } from 'react';
 import Spinner from '@/components/common/Spinner';
 import { useLocation, useNavigate } from 'react-router';
 import PlaceDetailModal from '@/components/domain/regions/PlaceDetailModal';
+import ErrorPage from './statusPage/errorPage';
+import { ERROR_CODES } from '@/constants/errorCodes';
 
 const AttractionsPage = () => {
   const { t, i18n } = useTranslation();
@@ -222,7 +224,8 @@ const AttractionsPage = () => {
   }, [categoryId, subcategoryId, subregionId]);
 
   if (isLoading) return <LoadingPage />;
-  if (error) return <div>error: {error.message}</div>;
+  if (error)
+    return <ErrorPage error={error} errorCode={ERROR_CODES.DATA_NOT_FOUND} />;
 
   return (
     <>

@@ -8,7 +8,7 @@ const MyPageMenu = () => {
 
   console.log('유저 정보', userProfileData);
 
-  if (error) return <div>{error.message}</div>;
+  if (error) return null; // 에러 발생 시 메뉴 숨김
 
   return (
     <nav className='hidden w-64 rounded-xl bg-white p-10 shadow-md md:block'>

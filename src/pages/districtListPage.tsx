@@ -5,10 +5,13 @@ import {
 import DistrictCard from '@/components/domain/regions/DistrictCard';
 import { useNumericSearchParam } from '@/hooks/useNumericSearchParam';
 import { useTranslation } from 'react-i18next';
-import LoadingPage from './statusPage/loadingPage';
 import i18n from '@/i18n/i18n';
 import ListPageLayout from '@/layouts/listPageLayout';
 import { useNavigate } from 'react-router';
+import Button from '@/components/common/Button';
+import { HomeIcon } from '@heroicons/react/24/outline';
+import { NetworkError } from '@/components/NetworkError';
+import type { AxiosError } from 'axios';
 
 const DistrictListPage = () => {
   const navigate = useNavigate();
@@ -19,14 +22,14 @@ const DistrictListPage = () => {
   const {
     data: regionsResponse,
     isLoading: isRegionsLoading,
-    error: isRegionsError,
+    error: regionsError,
   } = useRegionsQuery(currentLanguage);
 
   // 선택된 시/도의 구/군 목록 조회
   const {
     data: regionDetail,
     isLoading: isRegionDetailLoading,
-    error: isRegionDetailError,
+    error: regionDetailError,
   } = useRegionDetailQuery(regionId, currentLanguage, {
     enabled: !!regionId,
   });
@@ -48,11 +51,34 @@ const DistrictListPage = () => {
     return currentRegion?.name || '선택된 지역';
   };
 
-  if (isRegionsLoading) return <LoadingPage />;
-  if (regionId && isRegionDetailLoading) return <LoadingPage />; // 스켈레톤으로 바꿔야함
-  if (isRegionsError) return <div>error: {isRegionsError.message}</div>;
-  if (isRegionDetailError)
-    return <div>error: {isRegionDetailError.message}</div>;
+  //** 백엔드 돌아오면 주석풀기
+  // if (isRegionsLoading) return <LoadingPage />;
+  // if (regionId && isRegionDetailLoading) return <LoadingPage />; //
+
+  const currentError = regionsError || regionDetailError;
+  const axiosError = currentError as AxiosError;
+  if (axiosError?.code === 'ERR_NETWORK') return <NetworkError />;
+  if (currentError)
+    return (
+      <ListPageLayout
+        title={t('places.explore_all_areas', {
+          regions: getCurrentRegionName(),
+        })}
+        subtitle=''
+      >
+        <div className='col-span-full flex flex-col items-center py-16 text-gray-500'>
+          <p>{t('common.error_generic_description')}</p>
+
+          <Button
+            onClick={() => window.location.reload()}
+            className='group flex min-w-[200px] items-center justify-center gap-2 rounded-xl px-6 py-3 shadow-md transition-all duration-300 hover:shadow-lg'
+          >
+            <HomeIcon className='h-5 w-5' />
+            <span>{t('common.button')}</span>
+          </Button>
+        </div>
+      </ListPageLayout>
+    );
 
   return (
     <ListPageLayout
