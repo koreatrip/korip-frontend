@@ -13,6 +13,8 @@ import { useLocation, useNavigate } from 'react-router';
 import PlaceDetailModal from '@/components/domain/regions/PlaceDetailModal';
 import ErrorPage from './statusPage/errorPage';
 import { ERROR_CODES } from '@/constants/errorCodes';
+import { Helmet } from 'react-helmet-async';
+import { BASE_URL } from '@/constants/seo';
 
 const AttractionsPage = () => {
   const { t, i18n } = useTranslation();
@@ -229,6 +231,9 @@ const AttractionsPage = () => {
 
   return (
     <>
+      <Helmet>
+        <link rel='canonical' href={`${BASE_URL}/explore/attractions`} />
+      </Helmet>
       <ListPageLayout
         title={t('places.explore_attractions', {
           regions: getPageTitle(),

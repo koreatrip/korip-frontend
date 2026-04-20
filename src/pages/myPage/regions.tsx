@@ -136,95 +136,97 @@ const Regions = () => {
   }
 
   return (
-    <div className='max-w-screen-2xl py-8'>
-      <h1 className='mb-6 text-2xl font-semibold'>
-        {t('places.favorite_regions')}
-      </h1>
+    <>
+      <div className='max-w-screen-2xl py-8'>
+        <h1 className='mb-6 text-2xl font-semibold'>
+          {t('places.favorite_regions')}
+        </h1>
 
-      <div className='mb-6 flex flex-col gap-4 md:flex-row'>
-        <div className='flex-1'>
-          <SearchBar
-            className='!max-w-[932px]'
-            placeholder={t('places.search_region_placeholder')}
-            onSearch={handleSearch}
-          />
+        <div className='mb-6 flex flex-col gap-4 md:flex-row'>
+          <div className='flex-1'>
+            <SearchBar
+              className='!max-w-[932px]'
+              placeholder={t('places.search_region_placeholder')}
+              onSearch={handleSearch}
+            />
+          </div>
+          <SortDropdown options={sortOptions} current={sortOption} />
         </div>
-        <SortDropdown options={sortOptions} current={sortOption} />
-      </div>
 
-      {searchValue && (
-        <div className='mb-4 text-sm text-gray-600'>
-          {t('places.search_results', {
-            searchValue,
-            count: filteredAndSortedData.length,
+        {searchValue && (
+          <div className='mb-4 text-sm text-gray-600'>
+            {t('places.search_results', {
+              searchValue,
+              count: filteredAndSortedData.length,
+            })}
+          </div>
+        )}
+
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+          {filteredAndSortedData.map((item) => (
+            <InfoCard
+              key={item.id}
+              id={item.id}
+              type='region'
+              variant='selectable'
+              title={item.name}
+              description={item.description}
+              details={item.features}
+              imageUrl={null}
+              isSelected={selectedRegionId === item.id}
+              isFavorite={true}
+              // onClick={() =>
+              //   setSelectedRegionId(item.id === selectedRegionId ? null : item.id)
+              // }
+            />
+          ))}
+        </div>
+
+        {hasNextPage && (
+          <div ref={loadMoreRef} className='mt-8 flex justify-center'>
+            {isFetchingNextPage ? (
+              <div className='flex items-center gap-2'>
+                <div className='border-t-sub-green h-5 w-5 animate-spin rounded-full border-2 border-gray-300'></div>
+                <Spinner />
+              </div>
+            ) : (
+              <div className='h-10'></div>
+            )}
+          </div>
+        )}
+
+        {filteredAndSortedData.length === 0 && !isLoading && (
+          <div className='py-16 text-center'>
+            <div className='mb-4 flex w-full justify-center'>
+              <HeartIcon className='text-sub-text-gray h-8 w-8' />
+            </div>
+            {searchValue ? (
+              <>
+                <p className='text-sub-text-gray'>
+                  {t('common.no_search_favorites')}
+                </p>
+                <p className='text-sub-text-gray mt-2 text-sm'>
+                  {t('common.try_other_keywords')}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className='text-gray-500'>{t('common.no_favorites_yet')}</p>
+                <p className='mt-2 text-sm text-gray-400'>
+                  {t('common.explore_and_add_favorites')}
+                </p>
+              </>
+            )}
+          </div>
+        )}
+
+        <div className='mt-12 text-right text-sm text-gray-400'>
+          {t('places.total_favorite_regions', {
+            count: allFavoriteRegions.length,
           })}
         </div>
-      )}
-
-      <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
-        {filteredAndSortedData.map((item) => (
-          <InfoCard
-            key={item.id}
-            id={item.id}
-            type='region'
-            variant='selectable'
-            title={item.name}
-            description={item.description}
-            details={item.features}
-            imageUrl={null}
-            isSelected={selectedRegionId === item.id}
-            isFavorite={true}
-            // onClick={() =>
-            //   setSelectedRegionId(item.id === selectedRegionId ? null : item.id)
-            // }
-          />
-        ))}
       </div>
-
-      {hasNextPage && (
-        <div ref={loadMoreRef} className='mt-8 flex justify-center'>
-          {isFetchingNextPage ? (
-            <div className='flex items-center gap-2'>
-              <div className='border-t-sub-green h-5 w-5 animate-spin rounded-full border-2 border-gray-300'></div>
-              <Spinner />
-            </div>
-          ) : (
-            <div className='h-10'></div>
-          )}
-        </div>
-      )}
-
-      {filteredAndSortedData.length === 0 && !isLoading && (
-        <div className='py-16 text-center'>
-          <div className='mb-4 flex w-full justify-center'>
-            <HeartIcon className='text-sub-text-gray h-8 w-8' />
-          </div>
-          {searchValue ? (
-            <>
-              <p className='text-sub-text-gray'>
-                {t('common.no_search_favorites')}
-              </p>
-              <p className='text-sub-text-gray mt-2 text-sm'>
-                {t('common.try_other_keywords')}
-              </p>
-            </>
-          ) : (
-            <>
-              <p className='text-gray-500'>{t('common.no_favorites_yet')}</p>
-              <p className='mt-2 text-sm text-gray-400'>
-                {t('common.explore_and_add_favorites')}
-              </p>
-            </>
-          )}
-        </div>
-      )}
-
-      <div className='mt-12 text-right text-sm text-gray-400'>
-        {t('places.total_favorite_regions', {
-          count: allFavoriteRegions.length,
-        })}
-      </div>
-    </div>
+    </>
   );
 };
 

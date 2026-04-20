@@ -13,6 +13,8 @@ import { HomeIcon } from '@heroicons/react/24/outline';
 import { NetworkError } from '@/components/NetworkError';
 import type { AxiosError } from 'axios';
 import LoadingPage from './statusPage/loadingPage';
+import { Helmet } from 'react-helmet-async';
+import { BASE_URL } from '@/constants/seo';
 
 const DistrictListPage = () => {
   const navigate = useNavigate();
@@ -84,40 +86,47 @@ const DistrictListPage = () => {
     );
 
   return (
-    <ListPageLayout
-      title={t('places.explore_all_areas', { regions: getCurrentRegionName() })}
-      subtitle={t('places.total_districts', {
-        count: regionId ? subregions.length : regions.length,
-      })}
-    >
-      {/* 카드들만 렌더링 */}
-      {regionId ? (
-        // 특정 지역의 구/군 목록 표시
-        subregions.length > 0 ? (
-          subregions.map((subregion) => (
-            <DistrictCard
-              key={subregion.id}
-              data={subregion}
-              type='subregion'
-              onClick={() =>
-                navigate(
-                  `/explore/attractions?subregion_id=${subregion.id}&lang=${currentLanguage}`
-                )
-              }
-            />
-          ))
+    <>
+      <Helmet>
+        <link rel='canonical' href={`${BASE_URL}explore/districts`} />
+      </Helmet>
+      <ListPageLayout
+        title={t('places.explore_all_areas', {
+          regions: getCurrentRegionName(),
+        })}
+        subtitle={t('places.total_districts', {
+          count: regionId ? subregions.length : regions.length,
+        })}
+      >
+        {/* 카드들만 렌더링 */}
+        {regionId ? (
+          // 특정 지역의 구/군 목록 표시
+          subregions.length > 0 ? (
+            subregions.map((subregion) => (
+              <DistrictCard
+                key={subregion.id}
+                data={subregion}
+                type='subregion'
+                onClick={() =>
+                  navigate(
+                    `/explore/attractions?subregion_id=${subregion.id}&lang=${currentLanguage}`
+                  )
+                }
+              />
+            ))
+          ) : (
+            <div className='col-span-full text-center text-gray-500'>
+              해당 지역의 구역 정보가 없습니다.
+            </div>
+          )
         ) : (
-          <div className='col-span-full text-center text-gray-500'>
-            해당 지역의 구역 정보가 없습니다.
-          </div>
-        )
-      ) : (
-        // 전체 지역 목록 표시
-        regions.map((region) => (
-          <DistrictCard key={region.id} data={region} type='region' />
-        ))
-      )}
-    </ListPageLayout>
+          // 전체 지역 목록 표시
+          regions.map((region) => (
+            <DistrictCard key={region.id} data={region} type='region' />
+          ))
+        )}
+      </ListPageLayout>
+    </>
   );
 };
 

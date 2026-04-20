@@ -10,6 +10,8 @@ import { useInView } from 'react-intersection-observer';
 import Spinner from '@/components/common/Spinner';
 import PlaceDetailModal from '@/components/domain/regions/PlaceDetailModal';
 import Button from '@/components/common/Button';
+import { Helmet } from 'react-helmet-async';
+import { BASE_URL } from '@/constants/seo';
 
 const StayListPage = () => {
   const { t } = useTranslation();
@@ -118,6 +120,9 @@ const StayListPage = () => {
 
   return (
     <>
+      <Helmet>
+        <link rel='canonical' href={`${BASE_URL}/explore/stays`} />
+      </Helmet>
       <ListPageLayout title={getPageTitle()} subtitle={getPageSubtitle()}>
         {stayPlaces.length > 0 ? (
           <>

@@ -2,9 +2,24 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import sitemap from 'vite-plugin-sitemap';
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), tsconfigPaths()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    tsconfigPaths(),
+    sitemap({
+      hostname: 'https://korip.com',
+      dynamicRoutes: [
+        '/korip.me/',
+        '/korip.me/?lang=ko',
+        '/korip.me?lang=en',
+        '/korip.me?lang=ja',
+        '/korip.me?lang=cn',
+      ],
+    }),
+  ],
   base: '/',
   server: {
     proxy: {
