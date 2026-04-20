@@ -21,6 +21,7 @@ import { useCreatePlanMutation } from '@/api/planner/plannerHooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/useToast';
 import { plannerQueries } from '@/api/planner/plannerQueries';
+import useClickOutside from '@/hooks/useClickOutside';
 
 // --- Props 타입 정의 ---
 type THeaderProps = {
@@ -77,47 +78,17 @@ const Header = ({ variant = 'default' }: THeaderProps) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 여행 드롭다운 외부 클릭 감지
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        stack.isTravelDropdownOpen &&
-        travelDropdownRef.current &&
-        !travelDropdownRef.current.contains(event.target as Node)
-      ) {
-        actions.closeTravelDropdown();
-      }
-    };
-
-    if (stack.isTravelDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [stack.isTravelDropdownOpen, actions]);
-
-  // 언어 드롭다운 외부 클릭 감지
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        stack.isLangDropdownOpen &&
-        langDropdownRef.current &&
-        !langDropdownRef.current.contains(event.target as Node)
-      ) {
-        actions.closeLangDropdown();
-      }
-    };
-
-    if (stack.isLangDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [stack.isLangDropdownOpen, actions]);
+  //드롭다운 외부 클릭 감지
+  useClickOutside(
+    travelDropdownRef,
+    actions.closeTravelDropdown,
+    stack.isTravelDropdownOpen
+  );
+  useClickOutside(
+    langDropdownRef,
+    actions.closeLangDropdown,
+    stack.isLangDropdownOpen
+  );
 
   // 언어 변경 핸들러
   const handleLanguageChange = (languageCode: string) => {
