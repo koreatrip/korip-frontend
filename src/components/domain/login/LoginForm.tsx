@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { Link, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useLoginMutation } from '@/api/auth/login/loginHooks';
-import Cookies from 'js-cookie';
+import { setAccessToken, setRefreshToken } from '@/api/axiosInstance';
 import { useAuthStore } from '@store/useAuthStore';
 import { useToast } from '@/hooks/useToast';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,8 +25,8 @@ const LogInForm = () => {
 
   const { mutate, isPending } = useLoginMutation({
     onSuccess: (response) => {
-      Cookies.set('access_token', response.access_token);
-      Cookies.set('refresh_token', response.refresh_token);
+      setAccessToken(response.access_token);
+      setRefreshToken(response.refresh_token);
       setLogin();
       navigate(response.first_login ? '/language' : '/');
     },

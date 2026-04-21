@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
-import Cookies from 'js-cookie';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { snsLoginAPI } from '@/api/auth/snsLogin/snsLoginAPI.ts';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useToast } from '@/hooks/useToast';
 import { PulseLoader } from 'react-spinners';
-
+import { setAccessToken, setRefreshToken } from '@/api/axiosInstance';
 const OAuthCallbackPage = () => {
   const { actions } = useAuthStore();
   const navigate = useNavigate();
@@ -35,8 +34,8 @@ const OAuthCallbackPage = () => {
 
         const response = await snsLoginAPI(loginData);
 
-        Cookies.set('access_token', response.access_token, { expires: 7 });
-        Cookies.set('refresh_token', response.refresh_token, { expires: 30 });
+        setAccessToken(response.access_token);
+        setRefreshToken(response.refresh_token);
         actions.setLogin();
 
         window.history.replaceState(

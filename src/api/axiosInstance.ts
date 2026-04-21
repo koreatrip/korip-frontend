@@ -12,7 +12,7 @@ export const getRefreshToken = (): string | undefined =>
 
 export const setAccessToken = (token: string): void => {
   Cookies.set('access_token', token, {
-    secure: true,
+    secure: import.meta.env.PROD,
     sameSite: 'strict',
     path: '/',
   });
@@ -20,7 +20,7 @@ export const setAccessToken = (token: string): void => {
 
 export const setRefreshToken = (token: string): void => {
   Cookies.set('refresh_token', token, {
-    secure: true,
+    secure: import.meta.env.PROD,
     sameSite: 'strict',
     path: '/',
   });
