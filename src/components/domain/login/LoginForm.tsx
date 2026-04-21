@@ -28,7 +28,7 @@ const LogInForm = () => {
       Cookies.set('access_token', response.access_token);
       Cookies.set('refresh_token', response.refresh_token);
       setLogin();
-      navigate(response.first_login ? '/language' : '/first-region-search');
+      navigate(response.first_login ? '/language' : '/');
     },
     onError: () => {
       showToast('아이디 또는 비밀번호가 일치하지않습니다.', 'error');

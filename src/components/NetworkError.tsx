@@ -68,7 +68,6 @@ export function NetworkError({
           <Button
             onClick={onRetry}
             // variant='outline'
-            className='rounded-xl border-[#e2e8f0] bg-white text-[#2c3e50] transition-all duration-200 hover:border-[#ff6b7a]/20 hover:bg-[#f8f9fa]'
           >
             다시 시도
           </Button>

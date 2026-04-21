@@ -26,7 +26,13 @@ const Weather = () => {
   if (isError)
     return (
       <div className='p-4 text-center text-red-500'>
-        {error?.message || '날씨 데이터를 불러올 수 없습니다.'}
+        {error &&
+        typeof error === 'object' &&
+        error !== null &&
+        'response' in error &&
+        (error as any).response.data?.error
+          ? (error as any).response.data.error
+          : '날씨 데이터를 불러올 수 없습니다.'}
       </div>
     );
 
