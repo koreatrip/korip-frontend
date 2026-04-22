@@ -14,9 +14,11 @@ import SecuritySection from './Sections/SecuritySection';
 import ProfileCardSkeleton from './ProfileCardSkeleton';
 import ErrorPage from '@/pages/statusPage/errorPage';
 import { ERROR_CODES } from '@/constants/errorCodes';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 const ProfileCard = () => {
   const { state, actions } = useProfileEditStore();
+  const { setUser } = useAuthStore((state) => state.actions);
   const { formData, tempFormData } = state;
   const { initializeForm, commitChanges } = actions;
 
@@ -49,6 +51,7 @@ const ProfileCard = () => {
       };
       await updateUserProfile.mutateAsync(updateData);
       commitChanges();
+      setUser(tempFormData);
       showToast(t('user.profile_updated_success'), 'success');
     } catch (error) {
       console.error('프로필 업데이트 실패:', error);
