@@ -108,12 +108,12 @@ const RegionsPage = () => {
   }, [regionId, currentLanguage, navigate, error]);
 
   if (error) {
-    const axiosError = error as AxiosError;
-    if (
-      axiosError?.code === 'ERR_NETWORK' ||
-      axiosError?.response?.status === 504
-    )
+    const axiosError = error as AxiosError & { isTimeout?: boolean };
+
+    if (axiosError.isTimeout || axiosError?.response?.status === 504) {
       return <NetworkError onRetry={() => window.location.reload()} />;
+    }
+
     return <ErrorPage error={error} errorCode={ERROR_CODES.DATA_NOT_FOUND} />;
   }
   if (isLoading || !regionId) return <LoadingPage />;

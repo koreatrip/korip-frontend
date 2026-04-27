@@ -62,6 +62,11 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
+    if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+      (error as any).isTimeout = true;
+      return Promise.reject(error);
+    }
+
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean;
     }; // 401 에러이고, 재시도한 요청이 아닐 때
