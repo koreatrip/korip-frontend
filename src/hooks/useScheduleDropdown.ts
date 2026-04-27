@@ -8,17 +8,20 @@ import { plannerQueries } from '@/api/planner/plannerQueries';
 import { useToast } from './useToast';
 import { useTranslation } from 'react-i18next';
 import type { TDropdownItem } from '@/components/common/dropdown/Dropdown';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 export const useScheduleDropdown = () => {
   const { showToast } = useToast();
   const { i18n } = useTranslation();
   const queryClient = useQueryClient();
+  const isLogin = useAuthStore((state) => state.auth.isLogin);
   const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
   const dropdownButtonRef = useRef<HTMLButtonElement>(null);
   const dropdownContentRef = useRef<HTMLDivElement>(null);
 
   const { data: plansData, isLoading: isPlansLoading } = usePlansQuery(
-    i18n.language || 'ko'
+    i18n.language || 'ko',
+    { enabled: isLogin }
   );
 
   const addPlaceToPlanMutation = useAddPlaceToPlanMutation({
