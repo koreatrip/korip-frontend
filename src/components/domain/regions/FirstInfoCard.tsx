@@ -50,7 +50,7 @@ const FirstInfoCard = ({
           <img
             src={imageUrl || 'https://via.placeholder.com/300x200'}
             alt={title}
-            {...(priority ? { fetchpriority: 'high' } : { loading: 'lazy' })}
+            {...(priority ? { fetchPriority: 'high' } : { loading: 'lazy' })}
             className='h-full w-full object-cover transition-opacity duration-500'
           />
         )}
